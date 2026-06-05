@@ -21,6 +21,7 @@ import Menu from '@/components/navigation/Menu';
  *
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Page content to render in the main area
+ * @param {Object} [props.footerProps] - Footer navigation, social, and copyright data
  *
  * @returns {JSX.Element} Complete page layout with navigation, content, and footer
  *
@@ -40,12 +41,12 @@ import Menu from '@/components/navigation/Menu';
  *   );
  * }
  */
-const LayoutWrapper = ({ children }) => (
+const LayoutWrapper = ({ children, footerProps }) => (
   <div className='relative isolate overflow-x-hidden'>
     <div className='flex h-screen flex-col justify-between'>
       <Menu />
       <main className='mb-8'>{children}</main>
-      <Footer />
+      <Footer { ...footerProps } />
     </div>
   </div>
 

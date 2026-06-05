@@ -77,7 +77,7 @@ const NewsletterForm = ({ className, classNames = {}, title = 'Subscribe to the 
         The latest articles, readings, and resources, sent to your inbox monthly
       </p>
       <form className={ cn('mt-4 sm:flex sm:max-w-md', classNames.form) } onSubmit={ subscribe }>
-        <label htmlFor='email-address' className='sr-only'>
+        <label htmlFor='email-input' className='sr-only'>
           Email address
         </label>
         <input
