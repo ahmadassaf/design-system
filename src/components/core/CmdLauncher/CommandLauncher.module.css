@@ -27,12 +27,12 @@
   display: none;
 }
 
-.root :global(.command-palette .max-w-xl) {
+:global(.command-palette .max-w-xl) {
   max-width: min(64rem, calc(100vw - 2rem)) !important;
   width: min(64rem, calc(100vw - 2rem)) !important;
 }
 
-.root :global([data-cmdk-item] > div:first-child) {
+:global(.command-palette [data-cmdk-item] > div:first-child) {
   min-width: 0;
   width: 100%;
 }
