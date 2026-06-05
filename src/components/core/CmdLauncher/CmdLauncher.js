@@ -28,7 +28,8 @@ const commandItemProps = ({ closeOnSelect, href, onClick }) => {
   return {
     ...(typeof closeOnSelect === 'boolean' ? { closeOnSelect } : {}),
     ...(href ? { href } : {}),
-    ...(onClick ? { onClick } : {})
+    ...(onClick ? { onClick } : {}),
+    'showType': false
   };
 };
 
