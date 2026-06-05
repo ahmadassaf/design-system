@@ -1,36 +1,38 @@
 import Footer from '../../src/components/layout/Footer';
-import { Button, Field, FieldInput, Icon, Link, Pill, Typography } from '../../src/index';
+import { Button, Field, FieldInput, Link, Pill } from '../../src/index';
 
 import { Page, pageParameters, Section } from './StoryDocs';
 
-const footerLinks = {
-  'About': [
-    [ 'Summary', '' ],
-    [ 'Publications', '' ],
-    [ 'Projects', '' ]
-  ],
-  'Blog': [
-    [ 'Engineering', '' ],
-    [ 'Data', '' ],
-    [ 'Productivity', '' ]
-  ],
-  'Projects': [
-    [ 'Gaudi', '' ]
-  ]
-};
+const editorialSections = [
+  {
+    'links': [
+      { 'href': '/about', 'label': 'Summary' },
+      { 'href': '/blog/publications', 'label': 'Publications' },
+      { 'href': '/blog/projects', 'label': 'Projects' }
+    ],
+    'title': 'About'
+  },
+  {
+    'links': [
+      { 'href': '/blog/categories/engineering', 'label': 'Engineering' },
+      { 'href': '/blog/categories/data', 'label': 'Data' },
+      { 'href': '/blog/categories/productivity', 'label': 'Productivity' }
+    ],
+    'title': 'Blog'
+  },
+  {
+    'links': [
+      { 'href': '/blog/projects/gaudi', 'label': 'Gaudi' }
+    ],
+    'title': 'Projects'
+  }
+];
 
-const FooterLinkGroup = ({ links, title }) => (
-  <div>
-    <h3 className='text-sm font-semibold text-gray-950 dark:text-white'>{title}</h3>
-    <ul className='mt-4 space-y-3'>
-      {links.map(([ label, href ]) => (
-        <li key={ label }>
-          <Link href={ href } tone='gray' variant='muted' className='text-sm font-normal'>{label}</Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+const editorialSocialLinks = [
+  { 'href': 'https://github.com/ahmadassaf', 'kind': 'github' },
+  { 'href': 'https://www.linkedin.com/in/ahmadassaf', 'kind': 'linkedin' },
+  { 'href': 'https://twitter.com/ahmadaassaf', 'kind': 'twitter' }
+];
 
 const CurrentFooter = () => (
   <div className='rounded-lg border border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-950'>
@@ -39,25 +41,9 @@ const CurrentFooter = () => (
 );
 
 const EditorialFooter = () => (
-  <footer className='rounded-lg border border-gray-200 bg-white p-8 dark:border-gray-800 dark:bg-gray-950'>
-    <div className='grid gap-10 lg:grid-cols-[1.4fr_2fr]'>
-      <div>
-        <Typography variant='heading-lg'>Ahmad Assaf</Typography>
-        <p className='mt-3 max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300'>Writing about AI, semantic systems, data products, and engineering practice.</p>
-        <div className='mt-6 flex gap-3'>
-          <Icon kind='github' href='' />
-          <Icon kind='linkedin' href='' />
-          <Icon kind='twitter' href='' />
-        </div>
-      </div>
-      <nav className='grid gap-8 sm:grid-cols-3' aria-label='Footer navigation'>
-        {Object.entries(footerLinks).map(([ title, links ]) => <FooterLinkGroup key={ title } title={ title } links={ links } />)}
-      </nav>
-    </div>
-    <div className='mt-10 border-t border-gray-100 pt-6 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400'>
-      &copy; 2026 Ahmad Assaf. All rights reserved.
-    </div>
-  </footer>
+  <div className='rounded-lg border border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-950'>
+    <Footer copyrightName='Ahmad Assaf' sections={ editorialSections } socialLinks={ editorialSocialLinks } variant='editorial' />
+  </div>
 );
 
 const NewsletterFooter = () => (

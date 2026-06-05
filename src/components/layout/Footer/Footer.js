@@ -70,20 +70,9 @@ const resolveCopyrightName = (value) => {
   return 'Ahmad Assaf';
 };
 
-/**
- * Footer component with navigation and social links
- *
- * @returns {JSX.Element} Complete footer with responsive grid layout
- *
- * @example
- * <Footer />
- */
-const Footer = ({
-  copyrightName = 'Ahmad Assaf',
-  newsletterProps = {},
-  sections = defaultSections,
-  socialLinks = defaultSocialLinks
-}) => (
+const socialIconLinks = (links = defaultSocialLinks) => links.filter((link) => link.href);
+
+const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks }) => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
     <h2 id='footer-heading' className='sr-only'>Footer</h2>
     <div className='mx-auto py-10 lg:py-14'>
@@ -109,7 +98,7 @@ const Footer = ({
       <div className='mt-8 border-t border-gray-200 dark:border-border-dark pt-8 md:flex md:items-center md:justify-between max-sm:border-none max-sm:p-0 max-sm:m-0 max-md:border-0'>
 
         <div className='flex gap-5 md:order-2 sm:justify-center'>
-          {socialLinks.filter((link) => link.href).map((link) => (
+          {socialIconLinks(socialLinks).map((link) => (
             <Icon key={ link.kind } kind={ link.kind } href={ link.href } />
           ))}
         </div>
@@ -122,5 +111,64 @@ const Footer = ({
     </div>
   </footer>
 );
+
+const EditorialFooter = ({
+  brandDescription = 'Writing about AI, semantic systems, data products, and engineering practice.',
+  brandTitle,
+  copyrightName,
+  sections,
+  socialLinks
+}) => (
+  <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
+    <h2 id='footer-heading' className='sr-only'>Footer</h2>
+    <div className='mx-auto py-10 lg:py-14'>
+      <div className='grid gap-10 lg:grid-cols-[1.2fr_2fr]'>
+        <div>
+          <h3 className='text-3xl font-bold tracking-tight text-gray-950 dark:text-white'>{brandTitle || resolveCopyrightName(copyrightName)}</h3>
+          <p className='mt-4 max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300'>{brandDescription}</p>
+          <div className='mt-6 flex gap-4'>
+            {socialIconLinks(socialLinks).map((link) => (
+              <Icon key={ link.kind } kind={ link.kind } href={ link.href } />
+            ))}
+          </div>
+        </div>
+
+        <nav aria-label='Footer navigation' className='grid gap-8 sm:grid-cols-3'>
+          {sections.filter((section) => section.links?.length).map((section) => (
+            <FooterSection key={ section.title } links={ section.links } title={ section.title } />
+          ))}
+        </nav>
+      </div>
+
+      <p className='mt-10 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-border-dark dark:text-gray-400'>
+        &copy; {new Date().getFullYear()} {resolveCopyrightName(copyrightName)}. All rights reserved.
+      </p>
+    </div>
+  </footer>
+);
+
+/**
+ * Footer component with navigation and social links
+ *
+ * @returns {JSX.Element} Complete footer with responsive grid layout
+ *
+ * @example
+ * <Footer />
+ */
+const Footer = ({
+  brandDescription,
+  brandTitle,
+  copyrightName = 'Ahmad Assaf',
+  newsletterProps = {},
+  sections = defaultSections,
+  socialLinks = defaultSocialLinks,
+  variant = 'standard'
+}) => {
+  const footerProps = { brandDescription, brandTitle, copyrightName, newsletterProps, sections, socialLinks };
+
+  if (variant === 'editorial') return <EditorialFooter { ...footerProps } />;
+
+  return <StandardFooter { ...footerProps } />;
+};
 
 export default Footer;
