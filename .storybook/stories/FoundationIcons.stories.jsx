@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+
 import { Icon } from '../../src/index';
 
 import { CheckList, CodeBlock, InlineCode, Page, Section, Table, Td, Th } from './StoryDocs';
@@ -29,14 +31,79 @@ const iconGroups = [
   }
 ];
 
-const IconTile = ({ name }) => (
-  <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
-    <div className='mb-3 flex h-12 items-center justify-center rounded-md bg-gray-50 dark:bg-gray-800'>
-      <Icon name={ name } size='lg' decorative className='text-gray-800 dark:text-gray-100' />
+const copyWithTextArea = (value) => {
+  const textarea = document.createElement('textarea');
+
+  textarea.value = value;
+  textarea.setAttribute('readonly', '');
+  textarea.style.left = '-9999px';
+  textarea.style.position = 'fixed';
+  textarea.style.top = '0';
+
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    return document.execCommand('copy');
+  } finally {
+    document.body.removeChild(textarea);
+  }
+};
+
+const CopyButton = ({ children, label, value }) => {
+  const [ copied, setCopied ] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+  }, []);
+
+  const handleCopy = async() => {
+    let didCopy = false;
+
+    if (navigator.clipboard?.writeText)
+      try {
+        await navigator.clipboard.writeText(value);
+        didCopy = true;
+      } catch {
+        didCopy = false;
+      }
+
+    if (!didCopy) copyWithTextArea(value);
+
+    setCopied(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 1200);
+  };
+
+  return (
+    <button
+      type='button'
+      className='rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-700 dark:hover:text-blue-300'
+      aria-label={ `Copy ${label}` }
+      title={ `Copy ${label}` }
+      onClick={ handleCopy }
+    >
+      {copied ? 'Copied' : children}
+    </button>
+  );
+};
+
+const IconTile = ({ name }) => {
+  const jsx = `<Icon name='${name}' decorative />`;
+
+  return (
+    <div className='group rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:border-gray-300 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700'>
+      <div className='relative mb-3 flex h-16 items-center justify-center rounded-md bg-gray-50 dark:bg-gray-800'>
+        <Icon name={ name } size='lg' decorative className='text-gray-800 dark:text-gray-100' />
+        <div className='absolute right-1.5 top-1.5 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'>
+          <CopyButton label={ `${name} JSX` } value={ jsx }>JSX</CopyButton>
+        </div>
+      </div>
+      <div className='truncate font-mono text-xs text-gray-600 dark:text-gray-300' title={ name }>{name}</div>
     </div>
-    <div className='truncate font-mono text-xs text-gray-600 dark:text-gray-300'>{name}</div>
-  </div>
-);
+  );
+};
 
 export default {
   parameters: {

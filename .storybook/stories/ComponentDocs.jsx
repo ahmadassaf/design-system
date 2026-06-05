@@ -53,7 +53,7 @@ const usageExamples = {
   'MDX/Footnote': "A compact aside can live in a footnote marker.\n\n<Footnote />",
   'MDX/Video': "<Video\n  animationStyle='from-center'\n  videoSrc='https://www.youtube.com/embed/qh3NGpYRG3I'\n  thumbnailSrc='/static/images/og-card.jpg'\n  thumbnailAlt='Knowledge graph article video preview'\n  title='Knowledge graph walkthrough'\n/>",
   'MDX/Highlight': 'Use <Highlight>inline emphasis</Highlight> inside normal article prose.',
-  'MDX/Image': "<Image\n  src='/static/images/posts/gaudi.svg'\n  darkSrc='/static/images/posts/gaudi-dark.svg'\n  alt='Gaudi diagram'\n  caption='Project architecture diagram.'\n  width={420}\n  height={260}\n/>",
+  'MDX/Image': "<Image\n  src='/static/images/posts/gaudi.svg'\n  fallback='/static/images/logo.svg'\n  darkSrc='/static/images/posts/gaudi-dark.svg'\n  alt='Gaudi diagram'\n  caption='Project architecture diagram.'\n  width={420}\n  height={260}\n/>",
   'MDX/ImageModal': "<ImageModal src='/static/images/diagram.png' alt='Architecture diagram' />",
   'MDX/LatexText': '<LatexText>11$^{th}$ International Conference</LatexText>',
   'MDX/Mermaid': "<Mermaid\n  id='architecture-flow'\n  chart={`graph TD; A[Draft] --> B[Review];`}\n/>",
@@ -93,7 +93,6 @@ const usageExamples = {
   'Core/Grid': "import { Grid, GridItem } from '@gaudi/design-system';\n\n<Grid columns='3' gap='md'>\n  <GridItem title='Tokens' description='Color, type, spacing, and shape definitions.' />\n</Grid>",
   'Core/HoverCard': "import { Button, HoverCard } from '@gaudi/design-system';\n\n<HoverCard trigger={<Button variant='soft' tone='gray'>Knowledge graphs</Button>}>\n  Graph-shaped context for concepts and sources.\n</HoverCard>",
   'Core/Icon': "import { Icon } from '@gaudi/design-system';\n\n<Icon name='Info' label='More information' color='primary' size='lg' />",
-  'Core/ImageFallback': "import { ImageFallback } from '@gaudi/design-system';\n\n<ImageFallback src='/static/images/logo.svg' fallback='/static/images/logo.svg' alt='Blog logo' width={96} height={96} />",
   'Core/Kbd': "import { Kbd } from '@gaudi/design-system';\n\n<Kbd keys='command,shift,k' size='sm' variant='raised' />",
   'Core/Link': "import { Link } from '@gaudi/design-system';\n\n<Link href='/blog' variant='inline' tone='blue'>Read the blog</Link>",
   'Core/NavigationMenu': "import { NavigationMenu, NavigationMenuDropdown, NavigationMenuLink, NavigationMenuList, NavigationMenuPanel } from '@gaudi/design-system';\n\n<NavigationMenu>\n  <NavigationMenuList>\n    <NavigationMenuLink href='' active>Blog</NavigationMenuLink>\n    <NavigationMenuDropdown label='Categories' width='xl'>\n      <NavigationMenuPanel columns={2}>\n        <NavigationMenuLink href='' variant='panel' description='Knowledge graphs, semantic web, and linked data.'>\n          Data\n        </NavigationMenuLink>\n        <NavigationMenuLink href='' variant='panel' description='Implementation notes and developer tooling.'>\n          Engineering\n        </NavigationMenuLink>\n      </NavigationMenuPanel>\n    </NavigationMenuDropdown>\n  </NavigationMenuList>\n</NavigationMenu>",
@@ -242,6 +241,19 @@ const componentDocs = {
       [ 'data-citation-texts', 'JSON string[]', '-', 'HTML/text snippets shown in the popover.' ]
     ]
   },
+  'MDX/Image': {
+    'accessibility': 'Image keeps article images semantic with alt text, figure captions, and a button trigger for the modal preview.',
+    'description': 'Image renders editorial MDX images with caption, dark-mode source, fallback source, and click-to-open modal behavior.',
+    'props': [
+      [ 'src', 'string', '-', 'Primary image source.' ],
+      [ 'fallback', 'string', '-', 'Fallback image source used after load failure.' ],
+      [ 'darkSrc', 'string', '-', 'Optional image source shown in dark mode.' ],
+      [ 'alt', 'string', 'post-image', 'Accessible alt text for informative images.' ],
+      [ 'caption', 'ReactNode', '-', 'Optional visible figure caption.' ],
+      [ 'width / height', 'number', '-', 'Required dimensions for Next image rendering unless fill is supplied.' ],
+      [ 'className', 'string', '-', 'Image class override.' ]
+    ]
+  },
   'Core/Carousel': {
     'accessibility': 'Carousel exposes a labelled carousel region, native previous/next buttons, aria-live status updates, keyboard arrow support, and named indicators.',
     'description': 'Carousel renders standard feature slides and Apple-style editorial card rails.',
@@ -346,20 +358,6 @@ const componentDocs = {
       [ 'color', 'neutral | muted | primary | blue | green | yellow | red | danger | warning | dim', 'currentColor', 'Token color shortcut.' ],
       [ 'strokeWidth', 'number', 'icon default', 'Adjusts line icon stroke width when the registry entry supports it.' ],
       [ 'className', 'string', '-', 'Root class override.' ]
-    ]
-  },
-  'Core/ImageFallback': {
-    'accessibility': 'ImageFallback requires meaningful alt text for informative images and empty alt text for decorative images.',
-    'description': 'ImageFallback swaps to a fallback source when the primary image fails.',
-    'props': [
-      [ 'src', 'string', '-', 'Primary image source.' ],
-      [ 'fallback', 'string', '-', 'Fallback image source used after load failure.' ],
-      [ 'alt', 'string', '-', 'Required alt text for informative images; use empty string for decorative images.' ],
-      [ 'width / height', 'number', '-', 'Required dimensions for Next image rendering unless fill is supplied.' ],
-      [ 'loading', 'lazy | eager', 'lazy', 'Native image loading hint.' ],
-      [ 'radius', 'none | sm | md | lg', 'none', 'Image corner radius.' ],
-      [ 'sizes', 'string', 'responsive default', 'Responsive image sizes attribute.' ],
-      [ 'className', 'string', '-', 'Image class override.' ]
     ]
   },
   'Core/Kbd': {

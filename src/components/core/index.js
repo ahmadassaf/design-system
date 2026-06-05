@@ -14,7 +14,6 @@ export { default as Field, FieldDescription, FieldError, FieldInput, FieldLabel 
 export { Grid, GridItem, gridItemVariants, gridVariants } from './Grid';
 export { default as HoverCard, HoverCardContent, HoverCardTrigger } from './HoverCard';
 export { default as Icon } from './Icon';
-export { default as ImageFallback } from './ImageFallback';
 export { default as Kbd, kbdVariants } from './Kbd';
 export { default as Link, linkVariants } from './Link';
 export { default as NavigationMenu, NavigationMenuDropdown, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuPanel } from './NavigationMenu';

@@ -2,8 +2,8 @@
  * Image Component
  *
  * @description Wrapper around Next.js Image component for use in MDX content.
- * Supports captions, optional dark-mode image sources, and opens images in a
- * full-screen modal when clicked.
+ * Supports captions, optional fallback and dark-mode image sources, and opens
+ * images in a full-screen modal when clicked.
  *
  * @author Ahmad Assaf
  * @version 1.0.0
@@ -11,7 +11,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NextImageModule from 'next/image';
 
 import ImageModal from '@/components/mdx/ImageModal';
@@ -27,6 +27,7 @@ const NextImage = resolveNextImage(NextImageModule);
  * @param {string} [props.alt='post-image'] - Alt text for the image
  * @param {string} [props.caption] - Optional image caption
  * @param {string} [props.darkSrc] - Optional dark-mode image source
+ * @param {string} [props.fallback] - Optional fallback image source after load failure
  * @param {string} props.src - Image source URL
  * @param {...Object} props.rest - All standard Next.js Image props (width, height, etc.)
  * @returns {JSX.Element} A Next.js Image component with optimized loading and modal
@@ -35,9 +36,17 @@ const NextImage = resolveNextImage(NextImageModule);
  * // In MDX content:
  * <Image src="/static/images/example.jpg" width={500} height={300} />
  */
-const Image = ({ alt = 'post-image', caption, darkSrc, src, ...rest }) => {
+const Image = ({ alt = 'post-image', caption, darkSrc, fallback, src, ...rest }) => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ currentSrc, setCurrentSrc ] = useState(src);
+  const [ erroredSources, setErroredSources ] = useState({});
+
+  useEffect(() => {
+    setCurrentSrc(src);
+    setErroredSources({});
+  }, [ darkSrc, fallback, src ]);
+
+  const getDisplaySrc = (imageSrc) => (fallback && erroredSources[imageSrc] ? fallback : imageSrc);
 
   const handleImageClick = (imageSrc) => {
     setCurrentSrc(imageSrc);
@@ -51,6 +60,9 @@ const Image = ({ alt = 'post-image', caption, darkSrc, src, ...rest }) => {
       'blurDataURL': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
       className,
       'loading': 'lazy',
+      'onError': () => {
+        if (fallback && imageSrc !== fallback) setErroredSources((sources) => ({ ...sources, [imageSrc]: true }));
+      },
       'placeholder': 'blur',
       'priority': false,
       'sizes': '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
@@ -59,7 +71,7 @@ const Image = ({ alt = 'post-image', caption, darkSrc, src, ...rest }) => {
   };
 
   const renderImage = (imageSrc, className = '') => {
-    const imageProps = createImageProps(imageSrc, `cursor-pointer hover:opacity-90 transition-opacity duration-200 ${className || rest.className || ''}`);
+    const imageProps = createImageProps(getDisplaySrc(imageSrc), `cursor-pointer hover:opacity-90 transition-opacity duration-200 ${className || rest.className || ''}`);
     const nativeImageProps = { ...imageProps };
 
     delete nativeImageProps.blurDataURL;
@@ -71,11 +83,11 @@ const Image = ({ alt = 'post-image', caption, darkSrc, src, ...rest }) => {
 
   return (
     <figure>
-      <Button variant='ghost' tone='gray' size='sm' className='block max-w-full p-0 hover:bg-transparent dark:hover:bg-transparent' onClick={ () => handleImageClick(src) } aria-label={ `Open image: ${alt}` }>
+      <Button variant='ghost' tone='gray' size='sm' className='block max-w-full p-0 hover:bg-transparent dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(src)) } aria-label={ `Open image: ${alt}` }>
         {renderImage(src, darkSrc ? `${rest.className || ''} dark:hidden` : rest.className)}
       </Button>
       {darkSrc && (
-        <Button variant='ghost' tone='gray' size='sm' className='hidden max-w-full p-0 hover:bg-transparent dark:block dark:hover:bg-transparent' onClick={ () => handleImageClick(darkSrc) } aria-label={ `Open image: ${alt}` }>
+        <Button variant='ghost' tone='gray' size='sm' className='hidden max-w-full p-0 hover:bg-transparent dark:block dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(darkSrc)) } aria-label={ `Open image: ${alt}` }>
           {renderImage(darkSrc, rest.className)}
         </Button>
       )}

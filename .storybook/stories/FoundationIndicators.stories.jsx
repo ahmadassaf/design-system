@@ -1,4 +1,8 @@
+import { useEffect, useRef, useState } from 'react';
+
 import { Pill, Typography } from '../../src/index';
+
+import { CodeBlock, InlineCode } from './StoryDocs';
 
 const statuses = [
   { 'color': 'green', 'description': 'Available, published, complete, or healthy.', 'label': 'Published', 'tone': 'bg-green-500' },
@@ -8,6 +12,64 @@ const statuses = [
   { 'color': 'gray', 'description': 'Inactive, archived, unavailable, or neutral.', 'label': 'Inactive', 'tone': 'bg-gray-400' }
 ];
 
+const copyWithTextArea = (value) => {
+  const textarea = document.createElement('textarea');
+
+  textarea.value = value;
+  textarea.setAttribute('readonly', '');
+  textarea.style.left = '-9999px';
+  textarea.style.position = 'fixed';
+  textarea.style.top = '0';
+
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    return document.execCommand('copy');
+  } finally {
+    document.body.removeChild(textarea);
+  }
+};
+
+const CopyButton = ({ children, label, value }) => {
+  const [ copied, setCopied ] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+  }, []);
+
+  const handleCopy = async() => {
+    let didCopy = false;
+
+    if (navigator.clipboard?.writeText)
+      try {
+        await navigator.clipboard.writeText(value);
+        didCopy = true;
+      } catch {
+        didCopy = false;
+      }
+
+    if (!didCopy) copyWithTextArea(value);
+
+    setCopied(true);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 1200);
+  };
+
+  return (
+    <button
+      type='button'
+      className='rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-700 dark:hover:text-blue-300'
+      aria-label={ `Copy ${label}` }
+      title={ `Copy ${label}` }
+      onClick={ handleCopy }
+    >
+      {copied ? 'Copied' : children}
+    </button>
+  );
+};
+
 const StatusDot = ({ label, tone }) => (
   <span className='inline-flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-100'>
     <span className={ `h-2.5 w-2.5 rounded-full ${tone}` } aria-hidden='true' />
@@ -15,15 +77,37 @@ const StatusDot = ({ label, tone }) => (
   </span>
 );
 
-const PulsingStatusDot = ({ label, tone }) => (
-  <span className='inline-flex items-center gap-2 text-sm font-medium text-gray-800 dark:text-gray-100'>
-    <span className='relative flex h-2.5 w-2.5' aria-hidden='true'>
-      <span className={ `absolute inline-flex h-full w-full rounded-full opacity-60 motion-safe:animate-ping ${tone}` } />
-      <span className={ `relative inline-flex h-2.5 w-2.5 rounded-full ${tone}` } />
-    </span>
-    <span>{label}</span>
-  </span>
-);
+const statusDotSnippet = (status) => `<span className='inline-flex items-center gap-2 text-sm font-medium'>
+  <span className='h-2.5 w-2.5 rounded-full ${status.tone}' aria-hidden='true' />
+  <span>${status.label}</span>
+</span>`;
+
+const pillSnippet = (status) => `<Pill tone='${status.color}' size='sm'>${status.label}</Pill>`;
+
+const StatusRow = ({ status }) => {
+  const dotSnippet = statusDotSnippet(status);
+  const statusPillSnippet = pillSnippet(status);
+
+  return (
+    <div className='group grid grid-cols-[160px_160px_1fr] gap-4 border-b border-gray-100 px-4 py-4 text-sm last:border-b-0 dark:border-gray-800'>
+      <div className='relative'>
+        <StatusDot label={ status.label } tone={ status.tone } />
+        <div className='absolute -right-1 top-1/2 flex -translate-y-1/2 gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'>
+          <CopyButton label={ `${status.label} dot JSX` } value={ dotSnippet }>Dot</CopyButton>
+        </div>
+      </div>
+      <div className='relative'>
+        <Pill tone={ status.color } size='sm'>{status.label}</Pill>
+        <div className='absolute right-0 top-1/2 flex -translate-y-1/2 gap-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'>
+          <CopyButton label={ `${status.label} pill JSX` } value={ statusPillSnippet }>Pill</CopyButton>
+        </div>
+      </div>
+      <div className='flex items-start justify-between gap-3'>
+        <p className='text-gray-600 dark:text-gray-300'>{status.description}</p>
+      </div>
+    </div>
+  );
+};
 
 export default {
   parameters: {
@@ -51,24 +135,38 @@ export const Default = {
           <div>Pill</div>
           <div>Use</div>
         </div>
-        {statuses.map((status) => (
-          <div key={ status.label } className='grid grid-cols-[160px_160px_1fr] gap-4 border-b border-gray-100 px-4 py-4 text-sm last:border-b-0 dark:border-gray-800'>
-            <StatusDot label={ status.label } tone={ status.tone } />
-            <div><Pill tone={ status.color }>{status.label}</Pill></div>
-            <p className='text-gray-600 dark:text-gray-300'>{status.description}</p>
-          </div>
-        ))}
+        {statuses.map((status) => <StatusRow key={ status.label } status={ status } />)}
+      </section>
+
+      <section className='grid gap-4 lg:grid-cols-2'>
+        <CodeBlock code={ `// Dot + text
+<span className='inline-flex items-center gap-2 text-sm font-medium'>
+  <span className='h-2.5 w-2.5 rounded-full bg-green-500' aria-hidden='true' />
+  <span>Published</span>
+</span>` } />
+        <CodeBlock code={ `// Package pill
+import { Pill } from '@gaudi/design-system';
+
+<Pill tone='green' size='sm'>Published</Pill>
+<Pill tone='yellow' size='sm'>Pending</Pill>
+<Pill tone='red' size='sm'>Blocked</Pill>
+<Pill tone='green' variant='soft' size='sm' pulse>Live</Pill>` } />
       </section>
 
       <section className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
-        <Typography variant='heading-md'>Pulsing Dot</Typography>
+        <Typography variant='heading-md'>Pulsing Pill</Typography>
         <p className='mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300'>
-          Use only for live, active, or transient states. The pulse is decorative; the text still carries the status.
+          Use the Pill pulse modifier for live, active, or transient states. The pulse is decorative; the label still carries the status.
         </p>
         <div className='mt-4 flex flex-wrap gap-5'>
-          <PulsingStatusDot label='Live' tone='bg-green-500' />
-          <PulsingStatusDot label='Syncing' tone='bg-blue-500' />
-          <PulsingStatusDot label='Needs review' tone='bg-yellow-500' />
+          <Pill tone='green' variant='soft' size='sm' pulse>Live</Pill>
+          <Pill tone='blue' variant='soft' size='sm' pulse>Syncing</Pill>
+          <Pill tone='yellow' variant='soft' size='sm' pulse>Needs review</Pill>
+        </div>
+        <div className='mt-4'>
+          <CodeBlock code={ `<Pill tone='green' variant='soft' size='sm' pulse>Live</Pill>
+<Pill tone='blue' variant='soft' size='sm' pulse>Syncing</Pill>
+<Pill tone='yellow' variant='soft' size='sm' pulse>Needs review</Pill>` } />
         </div>
       </section>
 
@@ -91,8 +189,8 @@ export const Default = {
         <Typography variant='heading-md'>Implementation Alignment</Typography>
         <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>
           Indicators are intentionally small: visible text plus an approved Gaudi palette color. The reusable pill is
-          <code> Pill</code> from the package; dots are lightweight status patterns for docs, tables, and metadata.
-          Pulsing dots use <code>motion-safe:animate-ping</code> so reduced-motion users do not receive decorative animation.
+          <InlineCode>Pill</InlineCode> from the package; dots are lightweight status patterns for docs, tables, and metadata.
+          Pulsing state uses <InlineCode>{ '<Pill pulse>' }</InlineCode> so status motion stays inside the component API.
         </p>
       </section>
     </div>
