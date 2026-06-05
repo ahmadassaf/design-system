@@ -10,8 +10,7 @@ import { LiaChartAreaSolid,
   LiaHandshake,
   LiaRobotSolid } from 'react-icons/lia';
 import { RiMailOpenFill, RiMoonClearFill, RiSunFill, RiTwitterXFill } from 'react-icons/ri';
-import { SiCss,
-  SiDocker,
+import { SiDocker,
   SiGit,
   SiHtml5,
   SiJavascript,
@@ -158,7 +157,7 @@ export const iconRegistry = {
   'Warning': TriangleAlert,
   'X': X,
   'Youtube': FaYoutube,
-  'css': SiCss,
+  'css': Code,
   'docker': SiDocker,
   'file': VscFile,
   'folder': VscFolder,
