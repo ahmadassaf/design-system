@@ -15,7 +15,7 @@ import React from 'react';
 import Button from '@/components/core/Button';
 import Icon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
-import NewsletterForm from '@/components/forms/NewsletterForm';
+import NewsletterForm from '@/components/layout/NewsletterForm';
 import MenuSearch from '@/components/navigation/MenuSearch';
 
 /**

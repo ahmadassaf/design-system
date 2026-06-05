@@ -11,7 +11,7 @@
 
 import Button from '@/components/core/Button';
 import Kbd from '@/components/core/Kbd';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 /**
  * Renders a search input button that opens the command palette

@@ -24,6 +24,10 @@
       "import": "./src/components/core/index.js",
       "default": "./src/components/core/index.js"
     },
+    "./blocks": {
+      "import": "./src/components/blocks/index.js",
+      "default": "./src/components/blocks/index.js"
+    },
     "./icons": {
       "import": "./src/icons/index.jsx",
       "default": "./src/icons/index.jsx"
@@ -35,6 +39,14 @@
     "./mdx": {
       "import": "./src/components/mdx/index.js",
       "default": "./src/components/mdx/index.js"
+    },
+    "./navigation": {
+      "import": "./src/components/navigation/index.js",
+      "default": "./src/components/navigation/index.js"
+    },
+    "./post": {
+      "import": "./src/components/post/index.js",
+      "default": "./src/components/post/index.js"
     },
     "./tailwind/addVariablesColors": {
       "require": "./src/tailwind/addVariablesColors.cjs",
@@ -55,7 +67,7 @@
   },
   "scripts": {
     "build-storybook": "storybook build",
-    "test:contracts": "node --test $(find src/components -name '*.contract.test.js' | sort)",
+    "test:contracts": "node --test $(find src -name '*.contract.test.js' | sort)",
     "storybook": "storybook dev -p 6006"
   },
   "peerDependencies": {

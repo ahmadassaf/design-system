@@ -3,7 +3,7 @@
 import { Children, isValidElement, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import Icon from '@/components/core/Icon';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 const normalizeOptions = (children, options) => {
   const optionList = options || [];

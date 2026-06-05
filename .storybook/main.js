@@ -108,6 +108,14 @@ const config = {
             'replacement': `${resolve(sourceDir, 'components')}/$1`
           },
           {
+            'find': /^@\/foundations\/(?<path>.*)$/,
+            'replacement': `${resolve(sourceDir, 'foundations')}/$1`
+          },
+          {
+            'find': /^@\/utilities\/(?<path>.*)$/,
+            'replacement': `${resolve(sourceDir, 'utilities')}/$1`
+          },
+          {
             'find': /^@\/css\/(?<path>.*)$/,
             'replacement': `${resolve(sourceDir, 'styles')}/$1`
           },

@@ -1,4 +1,4 @@
-import Footer from '../../src/components/content/Footer';
+import Footer from '../../src/components/layout/Footer';
 import { Button, Field, FieldInput, Icon, Link, Pill, Typography } from '../../src/index';
 
 import { Page, pageParameters, Section } from './StoryDocs';

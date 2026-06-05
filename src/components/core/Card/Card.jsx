@@ -1,5 +1,5 @@
-import { cn } from '@/components/utilities/cn';
-import { createVariants } from '@/components/utilities/variants';
+import { cn } from '@/utilities/cn';
+import { createVariants } from '@/utilities/variants';
 
 export const cardVariants = createVariants({
   'base': 'h-full w-full overflow-hidden border transition-shadow duration-200',

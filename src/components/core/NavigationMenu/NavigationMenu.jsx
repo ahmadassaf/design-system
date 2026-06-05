@@ -3,7 +3,7 @@
 import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import Link from '@/components/core/Link';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 export const NavigationMenu = ({ children, className, label = 'Main navigation' }) => (
   <nav aria-label={ label } className={ cn('relative z-10 flex w-full items-center', className) }>{children}</nav>

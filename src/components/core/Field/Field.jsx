@@ -1,4 +1,4 @@
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 export const Field = ({ children, className }) => <div className={ cn('grid gap-2', className) }>{children}</div>;
 

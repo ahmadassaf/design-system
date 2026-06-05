@@ -1,6 +1,6 @@
 import Icon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 export const POSTS_PER_PAGE = 7;
 

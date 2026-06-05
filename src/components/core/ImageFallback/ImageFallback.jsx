@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import NextImageModule from 'next/image';
 
-import { cn } from '@/components/utilities/cn';
-import resolveNextImage from '@/components/utilities/resolveNextImage';
+import { cn } from '@/utilities/cn';
+import resolveNextImage from '@/utilities/resolveNextImage';
 
 const NextImage = resolveNextImage(NextImageModule);
 

@@ -2,7 +2,7 @@
 
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 export const Popover = forwardRef(({ children, className }, ref) => <div ref={ ref } className={ cn('relative inline-block', className) }>{children}</div>);
 Popover.displayName = 'Popover';

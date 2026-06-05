@@ -7,6 +7,8 @@
       "@/app/content/publications": [".storybook/fixtures/site/publications.json"],
       "@/app/content/tags": [".storybook/fixtures/site/tags.json"],
       "@/components/*": ["src/components/*"],
+      "@/foundations/*": ["src/foundations/*"],
+      "@/utilities/*": ["src/utilities/*"],
       "@/data/meta/JSON-LD/website": [".storybook/fixtures/site/website.js"],
       "@/data/meta/metadata": [".storybook/fixtures/site/metadata.js"],
       "@/data/meta/navigationMetadata": [".storybook/fixtures/site/navigationMetadata.mjs"],

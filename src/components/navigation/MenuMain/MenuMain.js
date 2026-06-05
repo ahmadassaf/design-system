@@ -12,7 +12,7 @@
 
 import React from 'react';
 
-import MenuDropDown from '@/components/content/DropDown';
+import MenuDropDown from '@/components/navigation/DropDown';
 import Link from '@/components/core/Link';
 import formatDate from '@/lib/utils/formatDate';
 

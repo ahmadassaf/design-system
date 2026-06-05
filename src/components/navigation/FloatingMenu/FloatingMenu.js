@@ -17,7 +17,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '@/components/core/Button';
 import Icon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
-import { cn } from '@/components/utilities/TailwindUtils';
+import { cn } from '@/utilities/TailwindUtils';
 import NavigationMetadata from '@/data/meta/navigationMetadata';
 
 /**

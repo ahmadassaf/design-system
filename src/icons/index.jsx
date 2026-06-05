@@ -66,7 +66,7 @@ import { ArrowDown,
   Users,
   X } from 'lucide-react';
 
-import { cn } from '../components/utilities/cn';
+import { cn } from '../utilities/cn';
 
 export const iconRegistry = {
   'ArrowDown': ArrowDown,

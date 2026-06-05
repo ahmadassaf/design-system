@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import Icon from '@/components/core/Icon';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 export const Accordion = ({ children, className, defaultValue, type = 'single', value, onValueChange }) => {
   const [ internalValue, setInternalValue ] = useState(defaultValue || (type === 'multiple' ? [] : undefined));

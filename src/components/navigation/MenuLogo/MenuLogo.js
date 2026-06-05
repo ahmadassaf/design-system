@@ -29,7 +29,7 @@
  *   <MenuLogo />
  * </div>
  */
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 const Logo = ({ className }) => (
   <svg

@@ -17,18 +17,20 @@ import * as _jsx_runtime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
 
 import CustomLink from '@/components/core/Link';
-import { BlogNewsletterForm } from '@/components/forms/NewsletterForm';
+import { BlogNewsletterForm } from '@/components/layout/NewsletterForm';
 import Aside from '@/components/mdx/Aside';
 import Callout from '@/components/mdx/Callout';
 import Chart, { AreaChart, BarChart, ComposedChart, DonutChart, LineChart, PieChart, RadialBarChart, ScatterChart } from '@/components/mdx/Chart';
 import CitationPopover from '@/components/mdx/CitationPopover';
 import CitationTracker from '@/components/mdx/CitationTracker';
+import CodeGroupTabs from '@/components/mdx/CodeGroupTabs';
 import Details from '@/components/mdx/Details';
 import Faq from '@/components/mdx/Faq';
 import FileTree from '@/components/mdx/FileTree';
 import FootnotePopover from '@/components/mdx/FootnotePopover';
 import Highlight from '@/components/mdx/Highlight';
 import Image from '@/components/mdx/Image';
+import ImageModal from '@/components/mdx/ImageModal';
 import Mermaid from '@/components/mdx/Mermaid';
 import Pre from '@/components/mdx/Pre';
 import Preview from '@/components/mdx/Preview';
@@ -52,6 +54,7 @@ export const MDXComponents = {
   Chart,
   CitationPopover,
   CitationTracker,
+  CodeGroupTabs,
   ComposedChart,
   Details,
   DonutChart,
@@ -60,6 +63,7 @@ export const MDXComponents = {
   FootnotePopover,
   Highlight,
   Image,
+  ImageModal,
   LineChart,
   Mermaid,
   PieChart,
@@ -87,6 +91,7 @@ export { AreaChart,
   Chart,
   CitationPopover,
   CitationTracker,
+  CodeGroupTabs,
   ComposedChart,
   Details,
   DonutChart,
@@ -95,6 +100,7 @@ export { AreaChart,
   FootnotePopover,
   Highlight,
   Image,
+  ImageModal,
   LineChart,
   Mermaid,
   PieChart,

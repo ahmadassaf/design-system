@@ -13,7 +13,7 @@
 
 import SocialIcon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 /**
  * Post sharing component with social media and GitHub integration

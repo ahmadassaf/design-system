@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 const switchSizes = {
   'lg': {

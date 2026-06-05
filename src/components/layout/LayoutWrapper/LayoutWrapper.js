@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-import Footer from '@/components/content/Footer';
+import Footer from '@/components/layout/Footer';
 import Menu from '@/components/navigation/Menu';
 
 /**

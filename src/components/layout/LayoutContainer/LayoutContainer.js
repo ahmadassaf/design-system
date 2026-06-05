@@ -13,14 +13,14 @@ import { Analytics } from '@vercel/analytics/react';
 import dynamic from 'next/dynamic';
 import { cookies } from 'next/headers';
 
-import Aurora from '@/components/content/Aurora';
-import Footer from '@/components/content/Footer';
+import Aurora from '@/components/layout/Aurora';
+import Footer from '@/components/layout/Footer';
 import FloatingMenu from '@/components/navigation/FloatingMenu';
 import Menu from '@/components/navigation/Menu';
 import { website } from '@/data/meta/JSON-LD/website';
 import siteMetadata from '@/data/meta/metadata';
 
-const ThemeProvider = dynamic(() => import('@/components/utilities/ThemeProvider'));
+const ThemeProvider = dynamic(() => import('@/utilities/ThemeProvider'));
 
 /**
  * Main layout container component that wraps all page content

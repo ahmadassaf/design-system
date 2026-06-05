@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { cn } from '@/components/utilities/cn';
-import { createVariants } from '@/components/utilities/variants';
+import { cn } from '@/utilities/cn';
+import { createVariants } from '@/utilities/variants';
 
 export const terminalVariants = createVariants({
   'base': 'overflow-hidden border bg-gray-950 text-gray-100 shadow-sm',

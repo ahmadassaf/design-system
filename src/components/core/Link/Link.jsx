@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import NextLink from 'next/link';
 
-import { createVariants } from '@/components/utilities/variants';
+import { createVariants } from '@/utilities/variants';
 
 export const linkVariants = createVariants({
   'base': 'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950',

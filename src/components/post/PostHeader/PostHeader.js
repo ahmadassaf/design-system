@@ -13,8 +13,8 @@ import Icon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
 import Pill from '@/components/core/Pill';
 import PostSeriesBox from '@/components/post/PostSeriesBox';
-import Typography from '@/components/primitives/Typography';
-import { cn } from '@/components/utilities/cn';
+import Typography from '@/foundations/Typography';
+import { cn } from '@/utilities/cn';
 
 /**
  * Renders the complete blog post header with metadata and navigation

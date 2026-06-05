@@ -14,9 +14,9 @@
 import { useState } from 'react';
 import NextImageModule from 'next/image';
 
-import ImageModal from '@/components/content/ImageModal';
+import ImageModal from '@/components/mdx/ImageModal';
 import Button from '@/components/core/Button';
-import resolveNextImage from '@/components/utilities/resolveNextImage';
+import resolveNextImage from '@/utilities/resolveNextImage';
 
 const NextImage = resolveNextImage(NextImageModule);
 

@@ -16,7 +16,7 @@ import { useState } from 'react';
 import Button from '@/components/core/Button';
 import Icon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 /**
  * Renders a beautiful, collapsible series navigation box with related posts

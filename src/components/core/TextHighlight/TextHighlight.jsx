@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-import { createVariants } from '@/components/utilities/variants';
+import { createVariants } from '@/utilities/variants';
 
 export const textHighlightVariants = createVariants({
   'base': 'relative inline rounded bg-[length:100%_100%] bg-left bg-no-repeat',

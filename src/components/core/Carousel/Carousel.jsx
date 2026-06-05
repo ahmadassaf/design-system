@@ -5,8 +5,8 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import Button from '@/components/core/Button';
 import Icon from '@/components/core/Icon';
 import Link from '@/components/core/Link';
-import { cn } from '@/components/utilities/cn';
-import { createVariants } from '@/components/utilities/variants';
+import { cn } from '@/utilities/cn';
+import { createVariants } from '@/utilities/variants';
 
 export const carouselVariants = createVariants({
   'base': 'relative w-full',

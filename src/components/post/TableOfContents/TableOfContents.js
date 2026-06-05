@@ -13,7 +13,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { cn } from '@/components/utilities/cn';
+import { cn } from '@/utilities/cn';
 
 /**
  * Renders an interactive table of contents with scroll tracking

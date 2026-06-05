@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import { cn } from '@/components/utilities/cn';
-import { createVariants } from '@/components/utilities/variants';
+import { cn } from '@/utilities/cn';
+import { createVariants } from '@/utilities/variants';
 
 export const avatarVariants = createVariants({
   'base': 'inline-flex shrink-0 items-center justify-center overflow-hidden font-semibold text-white',
