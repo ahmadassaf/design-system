@@ -46,10 +46,6 @@ const preview = {
           'Core',
           [ 'Overview', '*' ],
           'Blocks',
-          'Content',
-          [ 'Overview', '*' ],
-          'Command',
-          [ 'Overview', '*' ],
           'MDX',
           [ 'Overview', '*' ],
           'Navigation',
@@ -57,8 +53,6 @@ const preview = {
           'Post',
           [ 'Overview', '*' ],
           'Layout',
-          [ 'Overview', '*' ],
-          'Utilities',
           [ 'Overview', '*' ]
         ]
       }

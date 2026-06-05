@@ -1,5 +1,6 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const sourceDir = resolve(rootDir, 'src');
@@ -68,6 +69,10 @@ const config = {
           }
         }
       },
+      'plugins': [
+        ...(viteConfig.plugins || []),
+        tailwindcss()
+      ],
       'resolve': {
         ...viteConfig.resolve,
         'alias': [
