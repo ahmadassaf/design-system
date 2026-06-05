@@ -90,7 +90,7 @@ const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks 
             ...newsletterProps.classNames,
             'form': 'mt-5 flex gap-3',
             'input': 'min-h-11',
-            'root': newsletterProps.classNames?.root,
+            'root': `xl:col-span-1! ${newsletterProps.classNames?.root || ''}`,
             'title': 'text-sm font-semibold text-gray-950 dark:text-white'
           }}
         />
