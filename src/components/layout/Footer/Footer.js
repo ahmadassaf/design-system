@@ -124,8 +124,10 @@ const EditorialFooter = ({
     <div className='mx-auto py-10 lg:py-14'>
       <div className='grid gap-10 lg:grid-cols-[1.2fr_2fr]'>
         <div>
-          <h3 className='text-3xl font-bold tracking-tight text-gray-950 dark:text-white'>{brandTitle || resolveCopyrightName(copyrightName)}</h3>
-          <p className='mt-4 max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300'>{brandDescription}</p>
+          {brandTitle ? (
+            <h3 className='text-3xl font-bold tracking-tight text-gray-950 dark:text-white'>{brandTitle}</h3>
+          ) : null}
+          <p className={ `${brandTitle ? 'mt-4 ' : ''}max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
           <div className='mt-6 flex gap-4'>
             {socialIconLinks(socialLinks).map((link) => (
               <Icon
