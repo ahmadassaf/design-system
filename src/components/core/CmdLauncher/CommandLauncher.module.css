@@ -28,8 +28,8 @@
 }
 
 :global(.command-palette .max-w-xl) {
-  max-width: min(64rem, calc(100vw - 2rem)) !important;
-  width: min(64rem, calc(100vw - 2rem)) !important;
+  max-width: min(48rem, calc(100vw - 2rem)) !important;
+  width: min(48rem, calc(100vw - 2rem)) !important;
 }
 
 :global(.command-palette [data-cmdk-item] > div:first-child) {

@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import CommandPaletteModule, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
 import { useTheme } from 'next-themes';
 
-import Icon, { getIcon } from '@/components/core/Icon';
 import Kbd from '@/components/core/Kbd';
 import { cn } from '@/utilities/cn';
 
@@ -34,33 +33,25 @@ const commandItemProps = ({ closeOnSelect, href, onClick }) => {
 };
 
 const itemConfig = {
-  'navigation': { 'iconColor': 'text-gray-500 dark:text-gray-400' },
-  'post': { 'iconColor': 'text-green-600 dark:text-green-400', 'showCategory': true },
-  'project': { 'iconColor': 'text-blue-600 dark:text-blue-400', 'showSubtitle': true },
-  'publication': { 'iconColor': 'text-yellow-700 dark:text-yellow-300', 'showSubtitle': true },
-  'tag': { 'iconColor': 'text-blue-600 dark:text-blue-400', 'showCount': true },
-  'thought': { 'iconColor': 'text-indigo-600 dark:text-indigo-400', 'showSubtitle': true }
+  'navigation': {},
+  'post': { 'showSubtitle': true },
+  'project': { 'showSubtitle': true },
+  'publication': { 'showSubtitle': true },
+  'tag': { 'showSubtitle': true },
+  'thought': { 'showSubtitle': true }
 };
 
-const CmdItem = ({ category, children, count, icon, subtitle, title, type = 'navigation' }) => {
+const CmdItem = ({ category, children, count, subtitle, title, type = 'navigation' }) => {
   const config = itemConfig[type] || itemConfig.navigation;
-  const IconComponent = icon && getIcon(icon);
+  const resolvedSubtitle = subtitle || (type === 'post' && category ? category.replace(/[-_]/g, ' ') : null) || (type === 'tag' && typeof count !== 'undefined' ? `${count} ${count === 1 ? 'post' : 'posts'}` : null);
 
   return (
-    <div className='group grid w-full grid-cols-[auto_minmax(0,1fr)_minmax(0,9rem)] items-center gap-3 rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
-      {IconComponent ? (
-        <Icon name={ icon } size='md' decorative className={ cn('shrink-0', config.iconColor) } />
-      ) : null}
+    <div className='group flex w-full items-center rounded-lg px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
       <div className='min-w-0 flex-1'>
         <div className='truncate text-sm font-medium text-gray-950 dark:text-gray-100'>{title || children}</div>
-        {config.showSubtitle && subtitle ? (
-          <div className='mt-0.5 truncate text-xs text-gray-500 dark:text-gray-400'>{subtitle}</div>
+        {config.showSubtitle && resolvedSubtitle ? (
+          <div className='mt-0.5 truncate text-xs capitalize text-gray-500 dark:text-gray-400'>{resolvedSubtitle}</div>
         ) : null}
-      </div>
-      <div className='flex min-w-0 shrink-0 items-center justify-end gap-3 text-xs text-gray-500 dark:text-gray-400'>
-        {config.showCategory && category ? <span className='truncate capitalize'>{category.replace(/[-_]/g, ' ')}</span> : null}
-        {config.showCount && typeof count !== 'undefined' ? <span>{count} {count === 1 ? 'post' : 'posts'}</span> : null}
-        {type === 'project' || type === 'publication' ? <span className='capitalize'>{type}</span> : null}
       </div>
     </div>
   );
@@ -208,21 +199,21 @@ const CommandLauncher = ({
       'heading': 'Explore content',
       'id': 'cmdLauncher',
       'items': [
-        { 'children': 'Home', 'cmdIcon': 'HomeIcon', 'href': '/', 'id': 'home' },
-        { 'children': 'Blog', 'cmdIcon': 'BookOpenIcon', 'href': '/blog', 'id': 'blog' },
-        { 'children': 'Projects', 'closeOnSelect': false, 'cmdIcon': 'RectangleGroupIcon', 'id': 'projects', 'onClick': () => {
+        { 'children': 'Home', 'href': '/', 'id': 'home' },
+        { 'children': 'Blog', 'href': '/blog', 'id': 'blog' },
+        { 'children': 'Projects', 'closeOnSelect': false, 'id': 'projects', 'onClick': () => {
           setPage('projects'); setSearch('');
         } },
-        { 'children': 'Posts', 'closeOnSelect': false, 'cmdIcon': 'RectangleStackIcon', 'id': 'posts_list', 'onClick': () => {
+        { 'children': 'Posts', 'closeOnSelect': false, 'id': 'posts_list', 'onClick': () => {
           setPage('posts'); setSearch('');
         } },
-        { 'children': 'Thoughts', 'closeOnSelect': false, 'cmdIcon': 'LightBulbIcon', 'id': 'thoughts', 'onClick': () => {
+        { 'children': 'Thoughts', 'closeOnSelect': false, 'id': 'thoughts', 'onClick': () => {
           setPage('thoughts'); setSearch('');
         } },
-        { 'children': 'Publications', 'closeOnSelect': false, 'cmdIcon': 'NewspaperIcon', 'id': 'publications', 'onClick': () => {
+        { 'children': 'Publications', 'closeOnSelect': false, 'id': 'publications', 'onClick': () => {
           setPage('publications'); setSearch('');
         } },
-        { 'children': 'Tags', 'closeOnSelect': false, 'cmdIcon': 'TagIcon', 'id': 'tags', 'onClick': () => {
+        { 'children': 'Tags', 'closeOnSelect': false, 'id': 'tags', 'onClick': () => {
           setPage('tags'); setSearch('');
         } }
       ]
@@ -231,11 +222,11 @@ const CommandLauncher = ({
       'heading': 'Other',
       'id': 'other',
       'items': [
-        { 'children': 'About me', 'cmdIcon': 'FingerPrintIcon', 'href': '/about', 'id': 'about_me' },
-        { 'children': 'Reach out', 'closeOnSelect': false, 'cmdIcon': 'IdentificationIcon', 'id': 'reach_out', 'onClick': () => {
+        { 'children': 'About me', 'href': '/about', 'id': 'about_me' },
+        { 'children': 'Reach out', 'closeOnSelect': false, 'id': 'reach_out', 'onClick': () => {
           setPage('contact'); setSearch('');
         } },
-        { 'children': 'Switch theme', 'closeOnSelect': false, 'cmdIcon': 'ArrowRightOnRectangleIcon', 'id': 'switch_theme', 'onClick': () => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark') }
+        { 'children': 'Switch theme', 'closeOnSelect': false, 'id': 'switch_theme', 'onClick': () => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark') }
       ]
     },
     { 'heading': 'Posts', 'hidden': true, 'id': 'posts_fullTextSearch', 'items': collections.posts, 'options': { 'filterOnListHeading': true } },
