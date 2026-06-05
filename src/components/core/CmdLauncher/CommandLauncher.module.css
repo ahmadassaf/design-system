@@ -15,12 +15,16 @@
   color: rgb(243, 244, 246);
 }
 
-.keyboardMode :global([cmdk-item]) {
+.keyboardMode :global([data-cmdk-item]) {
   pointer-events: none;
 }
 
-.keyboardMode :global([cmdk-item][aria-selected='true']) {
+.keyboardMode :global([data-cmdk-item][aria-selected='true']) {
   pointer-events: auto;
+}
+
+.keyboardMode :global([data-cmdk-item] > div:hover) {
+  background: transparent;
 }
 
 .root :global(.commandPallete-hidden) {
@@ -67,7 +71,8 @@
 .root :global([data-cmdk-list]) {
   max-height: 400px;
   overflow-y: auto;
-  padding: 8px;
+  padding: 8px 8px 16px;
+  scroll-padding-block: 8px 16px;
 }
 
 .root :global([data-cmdk-item]) {
