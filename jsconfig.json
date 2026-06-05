@@ -2,14 +2,19 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "contentlayer/generated": [".contentlayer/generated"],
-      "@/app/*": ["app/*"],
+      "contentlayer/generated": [".storybook/fixtures/site/contentlayer-generated.mjs"],
+      "@/app/content/categories": [".storybook/fixtures/site/categories.json"],
+      "@/app/content/publications": [".storybook/fixtures/site/publications.json"],
+      "@/app/content/tags": [".storybook/fixtures/site/tags.json"],
       "@/components/*": ["src/components/*"],
-      "@/data/*": ["data/*"],
-      "@/lib/*": ["lib/*"],
+      "@/data/meta/JSON-LD/website": [".storybook/fixtures/site/website.js"],
+      "@/data/meta/metadata": [".storybook/fixtures/site/metadata.js"],
+      "@/data/meta/navigationMetadata": [".storybook/fixtures/site/navigationMetadata.mjs"],
+      "@/lib/utils/contentlayer": [".storybook/fixtures/site/contentlayer.js"],
+      "@/lib/utils/formatDate": [".storybook/fixtures/site/formatDate.js"],
       "@gaudi/design-system": ["src/index.js"],
       "@gaudi/design-system/*": ["src/*"]
     }
   },
-  "include": [".", ".contentlayer/generated"]
+  "include": [".", ".storybook/fixtures/site"]
 }

@@ -3,7 +3,7 @@
 
 @source '../src/**/*.{js,jsx,mdx}';
 @source './**/*.{js,jsx,mdx}';
-@source '../app/**/*.{js,jsx}';
+@source './fixtures/site/**/*.{js,mjs,json}';
 
 .sbdocs-wrapper:has(.ds-docs-page),
 .sbdocs-wrapper:has(.ds-docs-blocks) {

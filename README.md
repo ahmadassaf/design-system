@@ -41,4 +41,4 @@ pnpm test:contracts
 pnpm build-storybook
 ```
 
-Storybook uses local fixtures under `app/`, `data/`, `lib/`, `.contentlayer/`, and `public/` to document site-aware components such as navigation and footer without depending on the blog repository.
+Storybook uses local fixtures under `.storybook/fixtures/site/` and static assets under `.storybook/public/` to document site-aware components such as navigation and footer without depending on the blog repository. Those fixtures are not part of the design-system runtime API.
