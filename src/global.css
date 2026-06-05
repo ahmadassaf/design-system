@@ -9,7 +9,7 @@
  */
 
 @import 'tailwindcss';
-@config '../../../tailwind.config.js';
+@config '../tailwind.config.cjs';
 @import './styles.css';
 
 /**
