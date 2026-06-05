@@ -1,5 +1,5 @@
 /**
- * Footnote Popover Component
+ * Footnote Component
  *
  * @description Displays a popover preview of footnotes when hovering over footnote numbers.
  * Works with data attributes added by the rehype-footnote-popover plugin.
@@ -12,12 +12,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import styles from './FootnotePopover.module.css';
+import styles from './Footnote.module.css';
 
 /**
  * Component that adds popover functionality to footnote references
  */
-const FootnotePopover = () => {
+const Footnote = () => {
   const [ popover, setPopover ] = useState(null);
   const [ isReady, setIsReady ] = useState(false);
   const popoverRef = useRef(null);
@@ -135,4 +135,4 @@ const FootnotePopover = () => {
   );
 };
 
-export default FootnotePopover;
+export default Footnote;

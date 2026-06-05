@@ -3,7 +3,7 @@ import { renderComponentExample } from '../../../../.storybook/stories/Component
 
 import * as componentModule from './index';
 
-const componentDocs = getComponentDocs('MDX/CitationPopover');
+const componentDocs = getComponentDocs('MDX/Citation');
 
 export default {
   parameters: {
@@ -15,9 +15,9 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
-  title: 'MDX/CitationPopover'
+  title: 'MDX/Citation'
 };
 
 export const Example = {
-  'render': () => renderComponentExample('MDX/CitationPopover', componentModule)
+  'render': () => renderComponentExample('MDX/Citation', componentModule)
 };

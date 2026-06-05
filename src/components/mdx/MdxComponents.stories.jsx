@@ -70,7 +70,7 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
             <tr><Td mono>Inline explanation</Td><Td><InlineCode>{'<Tooltip>'}</InlineCode>, <InlineCode>{'<Highlight>'}</InlineCode>, or <InlineCode>{'<LatexText>'}</InlineCode></Td></tr>
             <tr><Td mono>Media</Td><Td><InlineCode>{'<Image>'}</InlineCode>, <InlineCode>{'<Video>'}</InlineCode>, or <InlineCode>{'<Preview>'}</InlineCode></Td></tr>
             <tr><Td mono>Data and diagrams</Td><Td><InlineCode>{'<Chart>'}</InlineCode> variants, markdown tables, <InlineCode>{'<FileTree>'}</InlineCode>, or <InlineCode>{'<Mermaid>'}</InlineCode></Td></tr>
-            <tr><Td mono>References</Td><Td><InlineCode>{'<CitationPopover>'}</InlineCode>, <InlineCode>{'<CitationTracker>'}</InlineCode>, and reference-list output from the blog pipeline.</Td></tr>
+            <tr><Td mono>References</Td><Td><InlineCode>{'<CitationPopover>'}</InlineCode> with <InlineCode>{'<CitationTracker>'}</InlineCode> support, <InlineCode>{'<Footnote>'}</InlineCode>, and reference-list output from the blog pipeline.</Td></tr>
           </tbody>
         </Table>
       </Section>
@@ -93,7 +93,7 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
           <QuickLink title='Chart' description='Recharts-powered article data visualization.' storyId='mdx-chart--bar' />
           <QuickLink title='Table' description='Markdown and component-rendered article tables.' storyId='mdx-table--example' />
           <QuickLink title='Video' description='Thumbnail-triggered article video embeds.' storyId='mdx-video--example' />
-          <QuickLink title='Citation Popover' description='Reference markers and source popovers.' storyId='mdx-citationpopover--example' />
+          <QuickLink title='Citation' description='Reference markers, source popovers, and tracked back-links.' storyId='mdx-citation--example' />
           <QuickLink title='Mermaid' description='Diagram snippets embedded in prose.' storyId='mdx-mermaid--example' />
         </div>
       </Section>

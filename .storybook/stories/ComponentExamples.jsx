@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import CitationPopoverRuntime from '../../src/components/mdx/CitationPopover';
 import CitationTrackerRuntime from '../../src/components/mdx/CitationTracker';
 import { Button } from '../../src/index';
 
@@ -374,7 +373,7 @@ const renderMdxExample = (name, componentModule) => {
         />
       </ExampleFrame>
     );
-  case 'CitationPopover':
+  case 'Citation':
     return (
       <MdxArticleFrame>
         <p>
@@ -401,6 +400,16 @@ const renderMdxExample = (name, componentModule) => {
           >
             2 3
           </CitationMarker>
+          . Later in the same article, the first source can appear again
+          <CitationMarker
+            id='cite-ref-story-3'
+            href='#citation-smith-2026'
+            keys={ [ 'smith-2026' ] }
+            numbers={ [ 1 ] }
+            texts={ [ 'Smith (2026). <strong>Durable identifiers in linked data</strong>. Journal of Knowledge Systems.' ] }
+          >
+            1
+          </CitationMarker>
           .
         </p>
         <ReferenceList
@@ -412,37 +421,6 @@ const renderMdxExample = (name, componentModule) => {
         />
         <CitationTrackerRuntime />
         <Component />
-      </MdxArticleFrame>
-    );
-  case 'CitationTracker':
-    return (
-      <MdxArticleFrame>
-        <p>
-          Clicking different instances of the same source updates the bibliography back-link target
-          <CitationMarker
-            id='cite-ref-tracker-1'
-            href='#citation-tracker-1'
-            keys={ [ 'tracker-1' ] }
-            numbers={ [ 1 ] }
-            texts={ [ 'Tracked reference used by multiple citation instances.' ] }
-          >
-            1
-          </CitationMarker>
-          . Later in the same article, the source can appear again
-          <CitationMarker
-            id='cite-ref-tracker-2'
-            href='#citation-tracker-1'
-            keys={ [ 'tracker-1' ] }
-            numbers={ [ 1 ] }
-            texts={ [ 'Tracked reference used by multiple citation instances.' ] }
-          >
-            1
-          </CitationMarker>
-          .
-        </p>
-        <ReferenceList references={ [{ 'href': '#cite-ref-tracker-1', 'key': 'tracker-1', 'text': 'Tracked reference used by multiple citation instances.' }] } />
-        <Component />
-        <CitationPopoverRuntime />
       </MdxArticleFrame>
     );
   case 'Details':
@@ -463,7 +441,7 @@ const renderMdxExample = (name, componentModule) => {
         />
       </ExampleFrame>
     );
-  case 'FootnotePopover':
+  case 'Footnote':
     return (
       <MdxArticleFrame>
         <p>

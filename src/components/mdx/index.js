@@ -27,7 +27,7 @@ import CodeGroupTabs from '@/components/mdx/CodeGroupTabs';
 import Details from '@/components/mdx/Details';
 import Faq from '@/components/mdx/Faq';
 import FileTree from '@/components/mdx/FileTree';
-import FootnotePopover from '@/components/mdx/FootnotePopover';
+import Footnote from '@/components/mdx/Footnote';
 import Highlight from '@/components/mdx/Highlight';
 import Image from '@/components/mdx/Image';
 import ImageModal from '@/components/mdx/ImageModal';
@@ -60,7 +60,7 @@ export const MDXComponents = {
   DonutChart,
   Faq,
   FileTree,
-  FootnotePopover,
+  Footnote,
   Highlight,
   Image,
   ImageModal,
@@ -97,7 +97,7 @@ export { AreaChart,
   DonutChart,
   Faq,
   FileTree,
-  FootnotePopover,
+  Footnote,
   Highlight,
   Image,
   ImageModal,

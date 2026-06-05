@@ -6,10 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 const componentDir = dirname(fileURLToPath(import.meta.url));
 
-test('CitationTracker owns its component folder contract', () => {
+test('CitationTracker owns its support runtime folder contract', () => {
   const files = readdirSync(componentDir);
 
   assert.ok(existsSync(join(componentDir, 'index.js')));
-  assert.ok(files.some((file) => file.endsWith('.stories.jsx') || file.endsWith('.stories.js') || file.endsWith('.stories.mdx')));
   assert.ok(files.some((file) => file.endsWith('.js') || file.endsWith('.jsx')));
 });

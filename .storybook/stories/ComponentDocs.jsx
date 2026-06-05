@@ -46,12 +46,11 @@ const usageExamples = {
   'MDX/Aside': '<Aside>\n  Additional context for the article that should sit outside the main argument.\n</Aside>',
   'MDX/Callout': "<Callout type='info'>\n  Useful article context that readers should notice before continuing.\n</Callout>",
   'MDX/Chart': "<BarChart\n  title='Article views'\n  ariaLabel='Article views by day'\n  data={[\n    { label: 'Mon', views: 124 },\n    { label: 'Tue', views: 168 },\n  ]}\n  yKey='views'\n/>\n\n<LineChart\n  title='Subscriber trend'\n  ariaLabel='Subscribers by day'\n  data={[\n    { label: 'Mon', subscribers: 8 },\n    { label: 'Tue', subscribers: 12 },\n  ]}\n  yKey='subscribers'\n/>",
-  'MDX/CitationPopover': "import { CitationPopover, CitationTracker } from '@gaudi/design-system/mdx';\n\n<article>\n  <p>\n    Knowledge graphs need durable identifiers\n    <sup>\n      <a\n        id='cite-ref-1'\n        className='citation-link'\n        href='#citation-source-1'\n        data-citation-popover='true'\n        data-citation-keys='[\"source-1\"]'\n        data-citation-numbers='[1]'\n        data-citation-texts='[\"Source metadata rendered in the popover.\"]'\n      >1</a>\n    </sup>.\n  </p>\n  <CitationTracker />\n  <CitationPopover />\n</article>",
-  'MDX/CitationTracker': "import { CitationPopover, CitationTracker } from '@gaudi/design-system/mdx';\n\n<article>\n  <p>\n    Repeat citations can update bibliography back-links\n    <sup>\n      <a\n        id='cite-ref-1'\n        className='citation-link'\n        href='#citation-source-1'\n        data-citation-popover='true'\n        data-citation-keys='[\"source-1\"]'\n        data-citation-numbers='[1]'\n        data-citation-texts='[\"Tracked source metadata.\"]'\n      >1</a>\n    </sup>.\n  </p>\n  <CitationTracker />\n  <CitationPopover />\n</article>",
+  'MDX/Citation': "import { CitationPopover, CitationTracker } from '@gaudi/design-system/mdx';\n\n<article>\n  <p>\n    Knowledge graphs need durable identifiers\n    <sup>\n      <a\n        id='cite-ref-1'\n        className='citation-link'\n        href='#citation-source-1'\n        data-citation-popover='true'\n        data-citation-keys='[\"source-1\"]'\n        data-citation-numbers='[1]'\n        data-citation-texts='[\"Source metadata rendered in the popover.\"]'\n      >1</a>\n    </sup>.\n  </p>\n  <CitationTracker />\n  <CitationPopover />\n</article>",
   'MDX/Details': "<Details title='Implementation detail'>\n  Expanded article content that is useful but not required for the main reading path.\n</Details>",
   'MDX/Faq': "<Faq questions={[\n  {\n    question: 'Why use FAQ blocks?',\n    answer: 'They structure repeated article answers.'\n  }\n]} />",
   'MDX/FileTree': "<FileTree data={[\n  { name: 'content', isFolder: true, childrenProp: [{ name: 'post.mdx' }] },\n  { name: 'package.json' }\n]} />",
-  'MDX/FootnotePopover': "A compact aside can live in a footnote <FootnotePopover id='note-1'>More context.</FootnotePopover>.",
+  'MDX/Footnote': "A compact aside can live in a footnote marker.\n\n<Footnote />",
   'MDX/Video': "<Video\n  animationStyle='from-center'\n  videoSrc='https://www.youtube.com/embed/qh3NGpYRG3I'\n  thumbnailSrc='/static/images/og-card.jpg'\n  thumbnailAlt='Knowledge graph article video preview'\n  title='Knowledge graph walkthrough'\n/>",
   'MDX/Highlight': 'Use <Highlight>inline emphasis</Highlight> inside normal article prose.',
   'MDX/Image': "<Image\n  src='/static/images/posts/gaudi.svg'\n  darkSrc='/static/images/posts/gaudi-dark.svg'\n  alt='Gaudi diagram'\n  caption='Project architecture diagram.'\n  width={420}\n  height={260}\n/>",
@@ -228,6 +227,19 @@ const componentDocs = {
       [ 'showLegend', 'boolean', 'false', 'Shows a Recharts legend when useful.' ],
       [ 'showTooltip', 'boolean', 'true', 'Shows a token-styled tooltip.' ],
       [ 'className', 'string', '-', 'Root figure class override.' ]
+    ]
+  },
+  'MDX/Citation': {
+    'accessibility': 'Citation links are real anchors with readable labels. Popovers open on hover or focus, grouped references remain individually reachable, and CitationTracker keeps bibliography back-links pointed at the most recent citation instance.',
+    'description': 'CitationPopover renders source popovers for citation markers; CitationTracker is the paired page-level support runtime for tracked bibliography back-links.',
+    'overview': 'Use CitationPopover and CitationTracker together once per article page. The visible citation markers and reference list are emitted by the blog citation pipeline; the DS runtime only owns interaction and back-link behavior.',
+    'props': [
+      [ 'CitationPopover', 'component', '-', 'Mount once near the article to bind citation popovers to citation marker data attributes.' ],
+      [ 'CitationTracker', 'component', '-', 'Mount once near the article to track clicked citation instances and update bibliography back-links.' ],
+      [ 'data-citation-popover', 'true', '-', 'Marker attribute that opts a citation anchor into popover behavior.' ],
+      [ 'data-citation-keys', 'JSON string[]', '-', 'Reference keys used to map the marker to bibliography entries.' ],
+      [ 'data-citation-numbers', 'JSON number[]', '-', 'Visible citation numbers for single or grouped markers.' ],
+      [ 'data-citation-texts', 'JSON string[]', '-', 'HTML/text snippets shown in the popover.' ]
     ]
   },
   'Core/Carousel': {
