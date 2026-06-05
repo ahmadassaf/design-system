@@ -128,7 +128,12 @@ const EditorialFooter = ({
           <p className='mt-4 max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300'>{brandDescription}</p>
           <div className='mt-6 flex gap-4'>
             {socialIconLinks(socialLinks).map((link) => (
-              <Icon key={ link.kind } kind={ link.kind } href={ link.href } />
+              <Icon
+                key={ link.kind }
+                kind={ link.kind }
+                href={ link.href }
+                linkClassName='text-gray-950 hover:text-blue-600 dark:text-white dark:hover:text-blue-400'
+              />
             ))}
           </div>
         </div>

@@ -223,6 +223,7 @@ const Icon = ({
   href,
   kind,
   label,
+  linkClassName,
   name,
   rel,
   size = 'md',
@@ -251,7 +252,7 @@ const Icon = ({
 
   return (
     <a
-      className='inline-flex items-center text-sm text-gray-500 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400'
+      className={ cn('inline-flex items-center text-sm text-gray-500 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400', linkClassName) }
       target={ target || (href.startsWith('http') ? '_blank' : undefined) }
       rel={ rel || (href.startsWith('http') ? 'noopener noreferrer' : undefined) }
       href={ href }
