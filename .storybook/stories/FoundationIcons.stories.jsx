@@ -66,14 +66,14 @@ export const Default = {
         </Table>
       </Section>
 
-      <Section title='Blog Consumption' description='The blog and Gaudi components consume icons through the registry only. Direct vendor imports are limited to packages/design-system/src/icons/index.jsx.'>
+      <Section title='Blog Consumption' description='The blog and Gaudi components consume icons through the registry only. Direct vendor imports are limited to src/icons/index.jsx in ahmadassaf/design-system.'>
         <CodeBlock code={ `import { Icon } from '@gaudi/design-system';
 
 <Icon name='Search' size='sm' decorative />
 <Icon name='Github' href='https://github.com/ahmadassaf' />
 
 # Verification
-rg "from ['"](@heroicons|react-icons|lucide-react|@tabler/icons-react)" packages/design-system/src app layouts lib scripts | rg -v "packages/design-system/src/icons/index.jsx"` } />
+rg "from ['"](@heroicons|react-icons|lucide-react|@tabler/icons-react)" src app layouts lib scripts | rg -v "src/icons/index.jsx"` } />
       </Section>
 
       <Section title='Sizing, Color & Stroke' description='Prefer Gaudi props for common changes. Use className only for local layout adjustments or one-off sizing inside tight UI.'>
@@ -140,7 +140,7 @@ rg "from ['"](@heroicons|react-icons|lucide-react|@tabler/icons-react)" packages
           <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
             <h3 className='mb-3 text-sm font-semibold'>Workflow</h3>
             <CheckList items={ [
-              'Open packages/design-system/src/icons/index.jsx.',
+              'Open src/icons/index.jsx in ahmadassaf/design-system.',
               'Import the vendor icon only in that registry file.',
               'Add a PascalCase registry key for product UI, or a lowercase key for file/social aliases.',
               'Add compatibility aliases when replacing old names such as Heroicon-style *Icon keys.',
@@ -149,7 +149,7 @@ rg "from ['"](@heroicons|react-icons|lucide-react|@tabler/icons-react)" packages
               'Use <Icon name="NewIcon" decorative /> or <Icon name="NewIcon" label="Meaning" /> everywhere else.'
             ] } />
           </div>
-          <CodeBlock code={ `// packages/design-system/src/icons/index.jsx
+          <CodeBlock code={ `// src/icons/index.jsx
 import { NewIcon } from 'lucide-react';
 
 export const iconRegistry = {
@@ -179,7 +179,7 @@ export const iconLabels = {
 
         <CodeBlock code={ `pnpm lint
 pnpm storybook:build
-rg 'from ['\\''"](@heroicons|react-icons|lucide-react|@tabler/icons-react)' packages/design-system/src app layouts lib scripts | rg -v 'packages/design-system/src/icons/index.jsx'` } />
+rg 'from ['\\''"](@heroicons|react-icons|lucide-react|@tabler/icons-react)' src app layouts lib scripts | rg -v 'src/icons/index.jsx'` } />
       </Section>
 
       <Section title='Usage Rules'>

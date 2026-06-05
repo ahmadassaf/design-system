@@ -1,12 +1,16 @@
 # Gaudi Design System
 
-Gaudi is the design system package for Ahmad Assaf's blog and related editorial interfaces. It contains the shared React components, MDX rendering components, design tokens, Tailwind preset, and Storybook documentation used by the site.
+Gaudi is the design system for Ahmad Assaf's blog and related editorial interfaces. It contains the shared React components, MDX rendering components, design tokens, Tailwind preset, and Storybook documentation used by the site.
+
+The system is called **Gaudi**. The source repository is hosted at [`ahmadassaf/design-system`](https://github.com/ahmadassaf/design-system), and the package import name is `@gaudi/design-system`.
 
 ## Install
 
 ```sh
 pnpm add github:ahmadassaf/design-system
 ```
+
+The repository name and package name are intentionally different: install from GitHub, then import from `@gaudi/design-system`.
 
 ## Usage
 

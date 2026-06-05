@@ -284,7 +284,7 @@ export const Default = {
             long-form prose should use those variants instead of one-off heading styles.
           </div>
           <div>
-            Font families and line-height tokens come from <code>packages/design-system/src/tokens/index.js</code>
+            Font families and line-height tokens come from <code>src/tokens/index.js</code>
             and are mirrored through the Gaudi Tailwind preset and CSS variables.
           </div>
         </div>

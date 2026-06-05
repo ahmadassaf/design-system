@@ -5,7 +5,7 @@ const componentDocs = getComponentDocs('Core/Terminal');
 
 const installCommands = [
   {
-    'command': 'pnpm add @gaudi/design-system',
+    'command': 'pnpm add github:ahmadassaf/design-system',
     'output': [{ 'text': 'Packages resolved, downloaded, and linked.', 'tone': 'success' }]
   },
   {

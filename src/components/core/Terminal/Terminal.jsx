@@ -64,7 +64,7 @@ export const terminalLineVariants = createVariants({
 
 const defaultCommands = [
   {
-    'command': 'pnpm install @gaudi/design-system',
+    'command': 'pnpm add github:ahmadassaf/design-system',
     'output': [
       { 'text': 'Packages resolved and linked.', 'tone': 'success' },
       { 'text': 'Design system ready.' }
