@@ -47,7 +47,7 @@ const CmdItem = ({ category, children, count, icon, subtitle, title, type = 'nav
   const IconComponent = icon && getIcon(icon);
 
   return (
-    <div className='group flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
+    <div className='group grid w-full grid-cols-[auto_minmax(0,1fr)_minmax(0,9rem)] items-center gap-3 rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
       {IconComponent ? (
         <Icon name={ icon } size='md' decorative className={ cn('shrink-0', config.iconColor) } />
       ) : null}
@@ -57,8 +57,8 @@ const CmdItem = ({ category, children, count, icon, subtitle, title, type = 'nav
           <div className='mt-0.5 truncate text-xs text-gray-500 dark:text-gray-400'>{subtitle}</div>
         ) : null}
       </div>
-      <div className='flex shrink-0 items-center gap-3 text-xs text-gray-500 dark:text-gray-400'>
-        {config.showCategory && category ? <span className='capitalize'>{category.replace(/[-_]/g, ' ')}</span> : null}
+      <div className='flex min-w-0 shrink-0 items-center justify-end gap-3 text-xs text-gray-500 dark:text-gray-400'>
+        {config.showCategory && category ? <span className='truncate capitalize'>{category.replace(/[-_]/g, ' ')}</span> : null}
         {config.showCount && typeof count !== 'undefined' ? <span>{count} {count === 1 ? 'post' : 'posts'}</span> : null}
         {type === 'project' || type === 'publication' ? <span className='capitalize'>{type}</span> : null}
       </div>
