@@ -62,6 +62,14 @@ const FooterSection = ({ links = [], title }) => (
   </div>
 );
 
+const resolveCopyrightName = (value) => {
+  if (typeof value === 'string') return value;
+  if (value?.name) return value.name;
+  if (value?.author) return resolveCopyrightName(value.author);
+
+  return 'Ahmad Assaf';
+};
+
 /**
  * Footer component with navigation and social links
  *
@@ -107,7 +115,7 @@ const Footer = ({
         </div>
 
         <p className='mt-8 text-sm text-gray-500 md:order-1 md:mt-0 sm:text-center dark:text-gray-400'>
-          &copy; {new Date().getFullYear()} {copyrightName}. All rights reserved.
+          &copy; {new Date().getFullYear()} {resolveCopyrightName(copyrightName)}. All rights reserved.
         </p>
 
       </div>
