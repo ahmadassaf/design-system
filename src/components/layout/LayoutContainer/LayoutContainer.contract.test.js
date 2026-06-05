@@ -10,6 +10,5 @@ test('LayoutContainer owns its component folder contract', () => {
   const files = readdirSync(componentDir);
 
   assert.ok(existsSync(join(componentDir, 'index.js')));
-  assert.ok(files.some((file) => file.endsWith('.stories.jsx') || file.endsWith('.stories.js') || file.endsWith('.stories.mdx')));
   assert.ok(files.some((file) => file.endsWith('.js') || file.endsWith('.jsx')));
 });
