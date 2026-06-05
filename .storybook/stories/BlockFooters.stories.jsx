@@ -14,10 +14,8 @@ const footerLinks = {
     [ 'Data', '' ],
     [ 'Productivity', '' ]
   ],
-  'Social': [
-    [ 'GitHub', '' ],
-    [ 'LinkedIn', '' ],
-    [ 'X', '' ]
+  'Projects': [
+    [ 'Gaudi', '' ]
   ]
 };
 
