@@ -44,18 +44,30 @@ import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
  * @example
  * <Menu />
  */
-const Menu = () => {
+const Menu = ({
+  categories: categoriesProp,
+  posts: postsProp,
+  projects: projectsProp,
+  publications: publicationsProp,
+  tags: tagsProp,
+  thoughts: thoughtsProp
+}) => {
   const path = usePathname();
 
   // Memoize expensive operations
   const posts = useMemo(() => {
+    if (postsProp) return postsProp;
+
     const sortedPosts = sortPosts(allPosts);
 
     return coreContent(sortedPosts);
-  }, []);
+  }, [ postsProp ]);
 
-  const projects = useMemo(() => coreContent(sortPosts(allProjects)), []);
-  const thoughts = useMemo(() => coreContent(sortPosts(allThoughts)), []);
+  const projects = useMemo(() => projectsProp || coreContent(sortPosts(allProjects)), [ projectsProp ]);
+  const thoughts = useMemo(() => thoughtsProp || coreContent(sortPosts(allThoughts)), [ thoughtsProp ]);
+  const menuCategories = categoriesProp || categories;
+  const menuPublications = publicationsProp || publications;
+  const menuTags = tagsProp || tags;
 
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
   const [ LauncherOpen, LauncherSetOpen ] = useState(false);
@@ -81,8 +93,8 @@ const Menu = () => {
           );
         })}
 
-        { !path.includes('/blog') && (<MenuMain categories={ categories } allPosts={ posts }></MenuMain>) }
-        { path.includes('/blog') && (<MenuBlog categories={ categories }></MenuBlog>) }
+        { !path.includes('/blog') && (<MenuMain categories={ menuCategories } allPosts={ posts }></MenuMain>) }
+        { path.includes('/blog') && (<MenuBlog categories={ menuCategories }></MenuBlog>) }
       </ul>
 
       <MenuSearch className='hidden lg:block' setOpen={ LauncherSetOpen }></MenuSearch>
@@ -96,13 +108,13 @@ const Menu = () => {
         </Button>
       </div>
 
-      {mobileMenuOpen ? (<MenuMobile categories={ categories } links={ NavigationMetadata.links } setMobileMenuOpen={ setMobileMenuOpen } setLauncherOpen={ LauncherSetOpen } />) : null}
+      {mobileMenuOpen ? (<MenuMobile categories={ menuCategories } links={ NavigationMetadata.links } setMobileMenuOpen={ setMobileMenuOpen } setLauncherOpen={ LauncherSetOpen } />) : null}
       <CommandLauncher
-        tags={ tags }
+        tags={ menuTags }
         projects={ projects }
         posts={ posts }
         thoughts={ thoughts }
-        publications={ publications }
+        publications={ menuPublications }
         open={ LauncherOpen }
         setOpen={ LauncherSetOpen }
       />

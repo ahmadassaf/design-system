@@ -32,6 +32,7 @@ const ThemeProvider = dynamic(() => import('@/utilities/ThemeProvider'));
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - The page content to be rendered within the layout
  * @param {Object} [props.footerProps] - Footer navigation, social, and copyright data
+ * @param {Object} [props.menuProps] - Navigation and command launcher content data
  *
  * @returns {Promise<JSX.Element>} The rendered layout container component
  *
@@ -40,7 +41,7 @@ const ThemeProvider = dynamic(() => import('@/utilities/ThemeProvider'));
  *   <HomePage />
  * </LayoutContainer>
  */
-export default async function LayoutContainer({ children, footerProps }) {
+export default async function LayoutContainer({ children, footerProps, menuProps }) {
   const themeCookie = await cookies();
   const theme = themeCookie.get('__theme__')?.value || siteMetadata.theme;
 
@@ -56,7 +57,7 @@ export default async function LayoutContainer({ children, footerProps }) {
         <div className='relative w-full sm:w-[95%] xl-w[90%] isolate xl:max-w-6xl px-4 sm:px-8 dark:z-10'>
           <div className='flex min-h-screen flex-col justify-between'>
             <FloatingMenu/>
-            <Menu />
+            <Menu { ...menuProps } />
             <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': JSON.stringify(website()) }} key='jsonld'/>
             <main className='mb-4'>{children}</main>
             <Footer { ...footerProps } />
