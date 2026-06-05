@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import CommandPaletteModule, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
 import { useTheme } from 'next-themes';
 
+import Icon from '@/components/core/Icon';
 import Kbd from '@/components/core/Kbd';
 import { cn } from '@/utilities/cn';
 
@@ -42,12 +43,13 @@ const itemConfig = {
   'thought': { 'showSubtitle': true }
 };
 
-const CmdItem = ({ category, children, count, subtitle, title, type = 'navigation' }) => {
+const CmdItem = ({ category, children, count, icon, subtitle, title, type = 'navigation' }) => {
   const config = itemConfig[type] || itemConfig.navigation;
   const resolvedSubtitle = subtitle || (type === 'post' && category ? category.replace(/[-_]/g, ' ') : null) || (type === 'tag' && typeof count !== 'undefined' ? `${count} ${count === 1 ? 'post' : 'posts'}` : null);
 
   return (
-    <div className='group flex w-full items-center rounded-lg px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
+    <div className='group flex w-full items-center gap-3 rounded-lg px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
+      {icon ? <Icon name={ icon } decorative size='md' className='text-gray-600 dark:text-gray-300' /> : null}
       <div className='min-w-0 flex-1'>
         <div className='truncate text-sm font-medium text-gray-950 dark:text-gray-100'>{title || children}</div>
         {config.showSubtitle && resolvedSubtitle ? (
@@ -123,7 +125,7 @@ const CollectionPage = ({ id, items, search, setPage }) => {
         <CommandPalette.List key={ list.id } heading={ list.heading }>
           {list.items.map(({ category, children, count, 'id': itemId, subtitle, title, type, ...rest }) => (
             <CommandPalette.ListItem key={ itemId } index={ getItemIndex(filtered, itemId) } { ...commandItemProps(rest) }>
-              <CmdItem title={ title } subtitle={ subtitle } category={ category } count={ count } type={ type || config.type } icon={ config.icon }>
+              <CmdItem title={ title } subtitle={ subtitle } category={ category } count={ count } type={ type || config.type }>
                 {children}
               </CmdItem>
             </CommandPalette.ListItem>
@@ -200,21 +202,21 @@ const CommandLauncher = ({
       'heading': 'Explore content',
       'id': 'cmdLauncher',
       'items': [
-        { 'children': 'Home', 'href': '/', 'id': 'home' },
-        { 'children': 'Blog', 'href': '/blog', 'id': 'blog' },
-        { 'children': 'Projects', 'closeOnSelect': false, 'id': 'projects', 'onClick': () => {
+        { 'children': 'Home', 'cmdIcon': 'HomeIcon', 'href': '/', 'id': 'home' },
+        { 'children': 'Blog', 'cmdIcon': 'BookOpenIcon', 'href': '/blog', 'id': 'blog' },
+        { 'children': 'Projects', 'closeOnSelect': false, 'cmdIcon': 'RectangleGroupIcon', 'id': 'projects', 'onClick': () => {
           setPage('projects'); setSearch('');
         } },
-        { 'children': 'Posts', 'closeOnSelect': false, 'id': 'posts_list', 'onClick': () => {
+        { 'children': 'Posts', 'closeOnSelect': false, 'cmdIcon': 'RectangleStackIcon', 'id': 'posts_list', 'onClick': () => {
           setPage('posts'); setSearch('');
         } },
-        { 'children': 'Thoughts', 'closeOnSelect': false, 'id': 'thoughts', 'onClick': () => {
+        { 'children': 'Thoughts', 'closeOnSelect': false, 'cmdIcon': 'LightBulbIcon', 'id': 'thoughts', 'onClick': () => {
           setPage('thoughts'); setSearch('');
         } },
-        { 'children': 'Publications', 'closeOnSelect': false, 'id': 'publications', 'onClick': () => {
+        { 'children': 'Publications', 'closeOnSelect': false, 'cmdIcon': 'NewspaperIcon', 'id': 'publications', 'onClick': () => {
           setPage('publications'); setSearch('');
         } },
-        { 'children': 'Tags', 'closeOnSelect': false, 'id': 'tags', 'onClick': () => {
+        { 'children': 'Tags', 'closeOnSelect': false, 'cmdIcon': 'TagIcon', 'id': 'tags', 'onClick': () => {
           setPage('tags'); setSearch('');
         } }
       ]
@@ -223,11 +225,11 @@ const CommandLauncher = ({
       'heading': 'Other',
       'id': 'other',
       'items': [
-        { 'children': 'About me', 'href': '/about', 'id': 'about_me' },
-        { 'children': 'Reach out', 'closeOnSelect': false, 'id': 'reach_out', 'onClick': () => {
+        { 'children': 'About me', 'cmdIcon': 'FingerPrintIcon', 'href': '/about', 'id': 'about_me' },
+        { 'children': 'Reach out', 'closeOnSelect': false, 'cmdIcon': 'IdentificationIcon', 'id': 'reach_out', 'onClick': () => {
           setPage('contact'); setSearch('');
         } },
-        { 'children': 'Switch theme', 'closeOnSelect': false, 'id': 'switch_theme', 'onClick': () => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark') }
+        { 'children': 'Switch theme', 'closeOnSelect': false, 'cmdIcon': 'ArrowRightOnRectangleIcon', 'id': 'switch_theme', 'onClick': () => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark') }
       ]
     },
     { 'heading': 'Posts', 'hidden': true, 'id': 'posts_fullTextSearch', 'items': collections.posts, 'options': { 'filterOnListHeading': true } },
