@@ -1,0 +1,9 @@
+node_modules
+storybook-static
+.next
+dist
+coverage
+.DS_Store
+pnpm-debug.log*
+.env
+.env.*

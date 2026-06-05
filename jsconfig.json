@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "contentlayer/generated": [".contentlayer/generated"],
+      "@/app/*": ["app/*"],
+      "@/components/*": ["src/components/*"],
+      "@/data/*": ["data/*"],
+      "@/lib/*": ["lib/*"],
+      "@gaudi/design-system": ["src/index.js"],
+      "@gaudi/design-system/*": ["src/*"]
+    }
+  },
+  "include": [".", ".contentlayer/generated"]
+}
