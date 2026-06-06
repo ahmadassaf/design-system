@@ -1,6 +1,6 @@
 import { Card, Icon, Pill, Typography } from '../../src/index';
 
-import { Page, pageParameters, Section } from './StoryDocs';
+import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
 const metricStats = [
   [ '86', 'component contracts', 'Folder-level ownership checks across the Gaudi package.' ],
@@ -95,6 +95,82 @@ const CompactStats = () => (
   </div>
 );
 
+const usageCode = `import { Card, Pill, Typography } from '@gaudi/design-system';
+
+<section aria-labelledby='system-health'>
+  <Typography id='system-health' variant='heading-lg' as='h2'>
+    System health
+  </Typography>
+  <Card variant='outline'>
+    <Pill tone='green' size='xs' variant='soft'>current</Pill>
+    <p>76 component contracts</p>
+  </Card>
+</section>`;
+
+const variantRows = [
+  [ 'Metric Grid', 'Top-level numbers.', 'Use real labels and descriptions for every metric.' ],
+  [ 'Changelog Stats', 'Release or migration timelines.', 'Tie metrics to dated changes.' ],
+  [ 'Dark Summary', 'High-emphasis summaries.', 'Use sparingly and keep contrast readable.' ],
+  [ 'Compact Inline Stats', 'Docs pages and dense reports.', 'Use icon plus text where space is limited.' ]
+];
+
+const variantCode = {
+  'changelog': `<div className='rounded-lg border bg-white'>
+  {changelog.map(([date, title, body]) => (
+    <article key={title} className='grid gap-4 border-b p-5 md:grid-cols-[9rem_1fr]'>
+      <time>{date}</time>
+      <div>
+        <Typography variant='heading-sm'>{title}</Typography>
+        <p>{body}</p>
+      </div>
+    </article>
+  ))}
+</div>`,
+  'compact': `<div className='grid gap-4 md:grid-cols-3'>
+  {metricStats.map(([value, label, description]) => (
+    <div key={label} className='flex gap-4 rounded-lg border p-5'>
+      <Icon name='Check' decorative />
+      <div>
+        <p>{value}</p>
+        <p>{label}</p>
+        <p>{description}</p>
+      </div>
+    </div>
+  ))}
+</div>`,
+  'dark': `<section className='rounded-lg bg-gray-950 p-8 text-white'>
+  <Pill tone='blue' variant='soft'>system health</Pill>
+  <Typography variant='heading-lg'>Design-system coverage.</Typography>
+  <div className='grid gap-4 md:grid-cols-4'>
+    {healthStats.map((item) => (
+      <Card key={item.label} variant='flat'>{item.value}</Card>
+    ))}
+  </div>
+</section>`,
+  'metric': `<dl className='grid gap-px rounded-lg border md:grid-cols-3'>
+  {metricStats.map(([value, label, description]) => (
+    <div key={label} className='bg-white p-6'>
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+      <p>{description}</p>
+    </div>
+  ))}
+</dl>`
+};
+
+const VariantTable = () => (
+  <Table>
+    <thead>
+      <tr><Th>Variant</Th><Th>Use</Th><Th>Rule</Th></tr>
+    </thead>
+    <tbody>
+      {variantRows.map(([ variant, use, rule ]) => (
+        <tr key={ variant }><Td>{variant}</Td><Td>{use}</Td><Td>{rule}</Td></tr>
+      ))}
+    </tbody>
+  </Table>
+);
+
 export default {
   parameters: pageParameters,
   title: 'Blocks/Stats Sections'
@@ -108,17 +184,34 @@ export const Default = {
       intro='Composable stats blocks for release notes, migration summaries, system-health snapshots, and compact editorial metrics.'
       kicker='Blocks'
     >
+      <Section title='Usage' description='Stats blocks are editorial compositions. Keep metric labels visible and pair numbers with explanatory text.'>
+        <CodeBlock code={ usageCode } />
+      </Section>
+      <Section title='Variant Rules' description='Choose the presentation from the density and importance of the metrics.'>
+        <VariantTable />
+      </Section>
       <Section title='Metric Grid' description='Use for clear top-level Gaudi or blog metrics.'>
         <MetricGrid />
+        <CodeBlock code={ variantCode.metric } />
       </Section>
       <Section title='Changelog Stats' description='Use when the numbers are attached to release history.'>
         <ChangelogStats />
+        <CodeBlock code={ variantCode.changelog } />
       </Section>
       <Section title='Dark Summary' description='Use sparingly for high-contrast summary panels.'>
         <GradientStats />
+        <CodeBlock code={ variantCode.dark } />
       </Section>
       <Section title='Compact Inline Stats' description='Use inside docs pages where space is limited.'>
         <CompactStats />
+        <CodeBlock code={ variantCode.compact } />
+      </Section>
+      <Section title='Implementation Notes' description='Stats blocks must remain readable outside the visual treatment.'>
+        <ul className='grid gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
+          <li>Use semantic sections with labelled headings.</li>
+          <li>Use <InlineCode>Card</InlineCode>, <InlineCode>Pill</InlineCode>, and token color classes instead of bespoke surfaces.</li>
+          <li>Do not rely on large numbers alone; include supporting labels and descriptions.</li>
+        </ul>
       </Section>
     </Page>
   )

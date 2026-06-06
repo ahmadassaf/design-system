@@ -13,6 +13,7 @@ import React from 'react';
 
 import MenuDropDown from '@/components/navigation/DropDown';
 import Link from '@/components/core/Link';
+import { cn } from '@/utilities/cn';
 
 /**
  * Renders a dropdown menu for blog categories navigation
@@ -46,13 +47,54 @@ import Link from '@/components/core/Link';
  */
 const MenuBlog = ({ categories }) => {
   const [ menuBlogOpen, setMenuBlogOpen ] = React.useState(false);
+  const [ alignment, setAlignment ] = React.useState('center');
+  const containerRef = React.useRef(null);
+  const dropdownRef = React.useRef(null);
 
-  return (<li className='relative'>
+  React.useLayoutEffect(() => {
+    if (!menuBlogOpen) return;
+
+    const updateAlignment = () => {
+      if (!containerRef.current || !dropdownRef.current) return;
+
+      const triggerRect = containerRef.current.getBoundingClientRect();
+      const dropdownRect = dropdownRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const gutter = 16;
+      const centeredLeft = triggerRect.left + (triggerRect.width / 2) - (dropdownRect.width / 2);
+      const centeredRight = centeredLeft + dropdownRect.width;
+
+      if (centeredLeft < gutter) {
+        setAlignment('left');
+      } else if (centeredRight > viewportWidth - gutter) {
+        setAlignment('right');
+      } else {
+        setAlignment('center');
+      }
+    };
+
+    updateAlignment();
+    window.addEventListener('resize', updateAlignment);
+
+    return () => {
+      window.removeEventListener('resize', updateAlignment);
+    };
+  }, [ menuBlogOpen ]);
+
+  return (<li ref={ containerRef } className='relative'>
 
     <MenuDropDown name='Categories' menuDropDownOpen={ menuBlogOpen } setMenuDropDownOpen={ setMenuBlogOpen }></MenuDropDown>
 
     {menuBlogOpen ? (
-      <div className='absolute left-1/2 top-full z-50 mt-3 flex w-screen max-w-max -translate-x-1/2 px-3 py-2'>
+      <div
+        ref={ dropdownRef }
+        className={ cn(
+          'absolute top-full z-50 mt-3 flex w-screen max-w-max px-3 py-2',
+          alignment === 'left' && 'left-0',
+          alignment === 'center' && 'left-1/2 -translate-x-1/2',
+          alignment === 'right' && 'right-0'
+        ) }
+      >
         <div className='w-screen max-w-md flex-auto overflow-hidden rounded-2xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/10 dark:bg-gray-900 dark:ring-gray-700/60'>
           <div className='p-4'>
 

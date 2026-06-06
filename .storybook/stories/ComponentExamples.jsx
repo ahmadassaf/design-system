@@ -226,7 +226,7 @@ const MdxArticleFrame = ({ children }) => (
         <p className='text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400'>MDX article output</p>
         <h2 className='text-2xl font-bold leading-tight text-gray-950 dark:text-white'>References in editorial prose</h2>
         <p className='max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400'>
-          These examples use the same attributes emitted by the blog rehype plugins. Hover or focus the reference markers to inspect the popover behavior.
+          Authors write bibliography frontmatter and markers like [@HusseinYC18]. This frame mocks the generated output emitted by the blog rehype citation plugin.
         </p>
       </div>
       {children}
@@ -377,36 +377,37 @@ const renderMdxExample = (name, componentModule) => {
     return (
       <MdxArticleFrame>
         <p>
-          Knowledge graph systems need durable identifiers
+          A heterogeneous graph assigns types to nodes and edges
           <CitationMarker
             id='cite-ref-story-1'
-            href='#citation-smith-2026'
-            keys={ [ 'smith-2026' ] }
+            href='#citation-HusseinYC18'
+            keys={ [ 'HusseinYC18' ] }
             numbers={ [ 1 ] }
-            texts={ [ 'Smith (2026). <strong>Durable identifiers in linked data</strong>. Journal of Knowledge Systems.' ] }
+            texts={ [ 'Hussein et al. (2018). <strong>Representation learning for heterogeneous information networks</strong>.' ] }
           >
             1
           </CitationMarker>
-          and citation groups should keep every source reachable from one marker
+          and grouped citations should keep every source reachable from one marker
           <CitationMarker
             id='cite-ref-story-2'
-            href='#citation-chen-2025'
-            keys={ [ 'chen-2025', 'rivera-2024' ] }
-            numbers={ [ 2, 3 ] }
+            href='#citation-WangJSWYCY19'
+            keys={ [ 'HusseinYC18', 'WangJSWYCY19', 'YangXJWHW20' ] }
+            numbers={ [ 1, 2, 3 ] }
             texts={ [
-              'Chen (2025). <strong>Operational metadata for linked data pipelines</strong>. Data Engineering Review.',
-              'Rivera (2024). <strong>Editorial provenance in public knowledge systems</strong>. Web Semantics.'
+              'Hussein et al. (2018). <strong>Representation learning for heterogeneous information networks</strong>.',
+              'Wang et al. (2019). <strong>Heterogeneous graph neural network literature</strong>.',
+              'Yang et al. (2020). <strong>Learning over heterogeneous graph structures</strong>.'
             ] }
           >
-            2 3
+            1 2 3
           </CitationMarker>
           . Later in the same article, the first source can appear again
           <CitationMarker
             id='cite-ref-story-3'
-            href='#citation-smith-2026'
-            keys={ [ 'smith-2026' ] }
+            href='#citation-HusseinYC18'
+            keys={ [ 'HusseinYC18' ] }
             numbers={ [ 1 ] }
-            texts={ [ 'Smith (2026). <strong>Durable identifiers in linked data</strong>. Journal of Knowledge Systems.' ] }
+            texts={ [ 'Hussein et al. (2018). <strong>Representation learning for heterogeneous information networks</strong>.' ] }
           >
             1
           </CitationMarker>
@@ -414,9 +415,9 @@ const renderMdxExample = (name, componentModule) => {
         </p>
         <ReferenceList
           references={ [
-            { 'href': '#cite-ref-story-1', 'key': 'smith-2026', 'text': 'Smith (2026). <strong>Durable identifiers in linked data</strong>. Journal of Knowledge Systems.' },
-            { 'href': '#cite-ref-story-2', 'key': 'chen-2025', 'text': 'Chen (2025). <strong>Operational metadata for linked data pipelines</strong>. Data Engineering Review.' },
-            { 'href': '#cite-ref-story-2', 'key': 'rivera-2024', 'text': 'Rivera (2024). <strong>Editorial provenance in public knowledge systems</strong>. Web Semantics.' }
+            { 'href': '#cite-ref-story-1', 'key': 'HusseinYC18', 'text': 'Hussein et al. (2018). <strong>Representation learning for heterogeneous information networks</strong>.' },
+            { 'href': '#cite-ref-story-2', 'key': 'WangJSWYCY19', 'text': 'Wang et al. (2019). <strong>Heterogeneous graph neural network literature</strong>.' },
+            { 'href': '#cite-ref-story-2', 'key': 'YangXJWHW20', 'text': 'Yang et al. (2020). <strong>Learning over heterogeneous graph structures</strong>.' }
           ] }
         />
         <CitationTrackerRuntime />
@@ -478,8 +479,6 @@ const renderMdxExample = (name, componentModule) => {
     return <ExampleFrame><p>Ordinal text stays readable: <Component>11$^&#123;th&#125;$ International Conference</Component></p></ExampleFrame>;
   case 'Mermaid':
     return <ExampleFrame><Component id='storybook-mermaid-example' chart={ 'graph TD; A[Draft] --> B[Review]; B --> C[Publish];' } /></ExampleFrame>;
-  case 'Pre':
-    return <ExampleFrame><Component><code>{'const token = colors.blue[500];'}</code></Component></ExampleFrame>;
   case 'Preview':
     return (
       <ExampleFrame>
@@ -579,7 +578,16 @@ const renderPostExample = (name, componentModule) => {
   case 'Breadcrumbs':
     return <ExampleFrame><Component pages={ [{ 'current': false, 'href': '/blog', 'name': 'Blog' }, { 'current': true, 'href': '/blog/design-systems', 'name': 'Design Systems' }] } /></ExampleFrame>;
   case 'Disclaimer':
-    return <ExampleFrame><Component /></ExampleFrame>;
+    return (
+      <ExampleFrame>
+        <div className='space-y-4'>
+          <Component />
+          <Component>
+            Research notes are provided for context and should not be treated as advice.
+          </Component>
+        </div>
+      </ExampleFrame>
+    );
   case 'Post':
     return <ExampleFrame><ul><Component frontMatter={ frontMatter } /></ul></ExampleFrame>;
   case 'PostHeader':

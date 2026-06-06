@@ -6,6 +6,7 @@ import * as componentModule from './index';
 const componentDocs = getComponentDocs('Navigation/MenuSearch');
 
 export default {
+  excludeStories: [ 'Example' ],
   parameters: {
     docs: {
       description: {
@@ -14,7 +15,7 @@ export default {
       page: createComponentDocsPage(componentDocs)
     }
   },
-  tags: [ 'autodocs' ],
+  tags: [ '!autodocs', '!dev' ],
   title: 'Navigation/MenuSearch'
 };
 

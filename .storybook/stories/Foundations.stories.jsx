@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { colors, radii, shadows, tokens, Typography, typography } from '../../src/index';
 
 import { HighlightedCode } from './HighlightedCode';
+import { InlineText } from './StoryDocs';
 
 const scaleOrder = [ '50', '100', '200', '300', '500', '600', '700', '900' ];
 const paletteFamilies = [ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ];
@@ -90,7 +91,7 @@ const Section = ({ children, description, title }) => (
   <section className='space-y-4'>
     <div className='max-w-3xl space-y-2'>
       <Typography variant='heading-lg'>{title}</Typography>
-      {description && <Typography variant='paragraph-md'>{description}</Typography>}
+      {description && <Typography variant='paragraph-md'><InlineText>{description}</InlineText></Typography>}
     </div>
     {children}
   </section>

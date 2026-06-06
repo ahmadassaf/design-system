@@ -30,6 +30,45 @@ export const Default = {
         </Table>
       </Section>
 
+      <Section title='Rendering Pipeline' description='The blog uses Contentlayer and the unified ecosystem. Authors write MDX; remark works on the markdown tree, rehype works on the HTML tree, and Gaudi components hydrate the final article UI.'>
+        <Table>
+          <thead>
+            <tr><Th>Stage</Th><Th>What Happens</Th></tr>
+          </thead>
+          <tbody>
+            <tr><Td mono>MDX source</Td><Td>Posts live under the blog content folders with YAML frontmatter, markdown prose, citation keys, and occasional MDX component tags.</Td></tr>
+            <tr><Td mono>remark / mdast</Td><Td><InlineCode>remarkExtractFrontmatter</InlineCode>, <InlineCode>remarkGfm</InlineCode>, <InlineCode>remarkFootnoteData</InlineCode>, <InlineCode>remarkMath</InlineCode>, <InlineCode>remarkImgToJsx</InlineCode>, and <InlineCode>remarkLinks</InlineCode> process markdown-level structure.</Td></tr>
+            <tr><Td mono>rehype / hast</Td><Td><InlineCode>rehypeSlug</InlineCode>, heading links, KaTeX, tabbed code, citations, footnote popovers, internal links, and code highlighting modify the generated HTML tree.</Td></tr>
+            <tr><Td mono>runtime</Td><Td><InlineCode>MDXLayoutRenderer</InlineCode> receives compiled code and the <InlineCode>MDXComponents</InlineCode> map, while small runtimes such as <InlineCode>CitationPopover</InlineCode>, <InlineCode>CitationTracker</InlineCode>, <InlineCode>Footnote</InlineCode>, and <InlineCode>CodeGroupTabs</InlineCode> bind behavior to generated markup.</Td></tr>
+          </tbody>
+        </Table>
+      </Section>
+
+      <Section title='Citation Pipeline' description='Citations are authored as markdown citation keys. The blog plugin turns them into anchors, popover data, and the References section.'>
+        <CodeBlock
+          language='mdx'
+          code={ `---
+bibliography: ['meta/bibliography/references.bib', 'meta/bibliography/kg.bib']
+---
+
+A heterogeneous graph [@HusseinYC18; @WangJSWYCY19; @YangXJWHW20] assigns
+types to nodes and edges.
+
+The same source can be cited again later [@HusseinYC18].` }
+        />
+        <Table>
+          <thead>
+            <tr><Th>Piece</Th><Th>Responsibility</Th></tr>
+          </thead>
+          <tbody>
+            <tr><Td mono>data/meta/bibliography/*.bib</Td><Td>BibTeX sources live in the blog repo. Posts list the needed files in frontmatter.</Td></tr>
+            <tr><Td mono>rehypeSimpleCitations</Td><Td>Loads BibTeX through <InlineCode>citation-js</InlineCode>, parses <InlineCode>[@key]</InlineCode> and grouped <InlineCode>[@key1; @key2]</InlineCode> markers, assigns numbers, and appends the references list.</Td></tr>
+            <tr><Td mono>CitationPopover</Td><Td>Gaudi runtime reads generated <InlineCode>data-citation-*</InlineCode> attributes and shows source previews on hover/focus.</Td></tr>
+            <tr><Td mono>CitationTracker</Td><Td>Global runtime remembers the most recent citation instance so bibliography back-links return to the right spot.</Td></tr>
+          </tbody>
+        </Table>
+      </Section>
+
       <Section title='Author Syntax' description='This is the shape authors should write in a post file. No local imports are needed when the blog MDX provider exposes the component map.'>
         <CodeBlock
           language='mdx'
@@ -68,9 +107,10 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
             <tr><Td mono>Expandable context</Td><Td><InlineCode>{'<Details>'}</InlineCode></Td></tr>
             <tr><Td mono>Question-answer content</Td><Td><InlineCode>{'<Faq>'}</InlineCode></Td></tr>
             <tr><Td mono>Inline explanation</Td><Td><InlineCode>{'<Tooltip>'}</InlineCode>, <InlineCode>{'<Highlight>'}</InlineCode>, or <InlineCode>{'<LatexText>'}</InlineCode></Td></tr>
-            <tr><Td mono>Media</Td><Td><InlineCode>{'<Image>'}</InlineCode>, <InlineCode>{'<Video>'}</InlineCode>, or <InlineCode>{'<Preview>'}</InlineCode></Td></tr>
+            <tr><Td mono>Links</Td><Td>Write normal markdown links. <InlineCode>remarkLinks</InlineCode> transforms external HTTP links into <InlineCode>{'<Preview>'}</InlineCode>, while <InlineCode>rehypeInternalLinks</InlineCode> transforms matching blog anchors into <InlineCode>{'<Preview internal />'}</InlineCode>.</Td></tr>
+            <tr><Td mono>Media</Td><Td><InlineCode>{'<Image>'}</InlineCode>, <InlineCode>{'<Video>'}</InlineCode>, or direct <InlineCode>{'<Preview>'}</InlineCode> for React-only surfaces.</Td></tr>
             <tr><Td mono>Data and diagrams</Td><Td><InlineCode>{'<Chart>'}</InlineCode> variants, markdown tables, <InlineCode>{'<FileTree>'}</InlineCode>, or <InlineCode>{'<Mermaid>'}</InlineCode></Td></tr>
-            <tr><Td mono>References</Td><Td><InlineCode>{'<CitationPopover>'}</InlineCode> with <InlineCode>{'<CitationTracker>'}</InlineCode> support, <InlineCode>{'<Footnote>'}</InlineCode>, and reference-list output from the blog pipeline.</Td></tr>
+            <tr><Td mono>References</Td><Td>Write <InlineCode>{'[@CitationKey]'}</InlineCode> in prose and list BibTeX files in frontmatter. The blog pipeline emits citation links, reference lists, footnote data, and the Gaudi runtime binds popovers and back-links.</Td></tr>
           </tbody>
         </Table>
       </Section>

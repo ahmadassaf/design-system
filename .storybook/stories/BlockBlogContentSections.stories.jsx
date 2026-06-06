@@ -6,7 +6,7 @@ import PostHeader from '../../src/components/post/PostHeader';
 import TableOfContents from '../../src/components/post/TableOfContents';
 import { Banner, Button, Card, Grid, GridItem, Icon, Pill, Typography } from '../../src/index';
 
-import { Page, pageParameters, Section } from './StoryDocs';
+import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
 const siteMetadata = {
   'locale': 'en-GB'
@@ -212,6 +212,79 @@ const ContentVariants = () => (
   </Grid>
 );
 
+const usageCode = `import {
+  ArticleContentLayout,
+  PostHeader,
+  TableOfContents,
+} from '@gaudi/design-system';
+
+<PostHeader frontMatter={frontMatter} toc={toc} />
+<ArticleContentLayout
+  aside={<TableOfContents toc={toc} />}
+  asideOpen={isTocOpen}
+  collapsibleAside
+  hasAside
+>
+  {children}
+</ArticleContentLayout>`;
+
+const variantRows = [
+  [ 'Full Article', 'Long-form posts with sections and series context.', 'Header, body, series, FAQ, and TOC appear together.' ],
+  [ 'No TOC', 'Short posts and project notes.', 'Keep the reading column; remove the aside.' ],
+  [ 'Series Only', 'Sequential content without long section navigation.', 'Series orientation remains, TOC does not.' ],
+  [ 'Composable Parts', 'Docs and design reviews.', 'Show which primitives make up the article shell.' ]
+];
+
+const variantCode = {
+  'full': `<PostHeader frontMatter={frontMatter} toc={toc} />
+<ArticleContentLayout
+  aside={<TableOfContents toc={toc} />}
+  asideOpen={isTocOpen}
+  collapsibleAside
+  hasAside
+>
+  <Banner tone='blue' variant='soft'>Series context.</Banner>
+  <ArticleBody />
+  <Faq questions={faqs} />
+</ArticleContentLayout>`,
+  'noToc': `<PostHeader
+  frontMatter={{ ...frontMatter, tableOfContents: false }}
+  toc={[]}
+/>
+<main className='mt-8'>
+  <ArticleBody />
+</main>`,
+  'parts': `<div className='grid gap-4 md:grid-cols-3'>
+  {['Header and metadata', 'Series navigation', 'Table of contents'].map((title) => (
+    <Card key={title} variant='outline'>
+      <Typography variant='heading-sm'>{title}</Typography>
+      <p>Document the article primitive and its responsibility.</p>
+    </Card>
+  ))}
+</div>`,
+  'series': `<PostHeader
+  frontMatter={{
+    ...frontMatter,
+    tableOfContents: false,
+    subtitle: 'Series navigation is the primary article aid.',
+  }}
+  toc={[]}
+/>`
+};
+
+const VariantTable = () => (
+  <Table>
+    <thead>
+      <tr><Th>Variant</Th><Th>Use</Th><Th>Composition</Th></tr>
+    </thead>
+    <tbody>
+      {variantRows.map(([ variant, use, composition ]) => (
+        <tr key={ variant }><Td>{variant}</Td><Td>{use}</Td><Td>{composition}</Td></tr>
+      ))}
+    </tbody>
+  </Table>
+);
+
 export default {
   parameters: pageParameters,
   title: 'Blocks/Blog Content Sections'
@@ -225,20 +298,37 @@ export const Default = {
       intro='Article-content compositions showing the post header with and without series navigation, table of contents, banners, FAQs, and content sections.'
       kicker='Blocks'
     >
+      <Section title='Usage' description='Article content blocks are assembled from post and layout primitives. The page supplies content, TOC data, and open state.'>
+        <CodeBlock code={ usageCode } />
+      </Section>
+      <Section title='Variant Rules' description='Use the same article shell and only remove aids that are not useful for the content length.'>
+        <VariantTable />
+      </Section>
       <Section title='Available Variants' description='The content-section shapes currently supported for article pages.'>
         <ContentVariants />
       </Section>
       <Section title='Full Article Composition' description='Post header, series box, article body, FAQ, and table of contents.'>
         <FullArticle />
+        <CodeBlock code={ variantCode.full } />
       </Section>
       <Section title='Without Table Of Contents' description='Use for shorter posts where a TOC would add noise.'>
         <WithoutToc />
+        <CodeBlock code={ variantCode.noToc } />
       </Section>
       <Section title='Series Box Only' description='Use when the article is part of a sequence but does not need a TOC.'>
         <SeriesOnly />
+        <CodeBlock code={ variantCode.series } />
       </Section>
       <Section title='Composition Parts' description='Concise map of the article blocks available for long-form posts.'>
         <ContentCards />
+        <CodeBlock code={ variantCode.parts } />
+      </Section>
+      <Section title='Implementation Notes' description='Keep article pages on the design-system contract.'>
+        <ul className='grid gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
+          <li><InlineCode>PostHeader</InlineCode> owns title, metadata, tags, and series context.</li>
+          <li><InlineCode>ArticleContentLayout</InlineCode> owns the reading column and optional side rail.</li>
+          <li><InlineCode>TableOfContents</InlineCode> receives structured TOC data; do not hard-code aside links.</li>
+        </ul>
       </Section>
     </Page>
   )

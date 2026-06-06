@@ -32,7 +32,6 @@ import Highlight from '@/components/mdx/Highlight';
 import Image from '@/components/mdx/Image';
 import ImageModal from '@/components/mdx/ImageModal';
 import Mermaid from '@/components/mdx/Mermaid';
-import Pre from '@/components/mdx/Pre';
 import Preview from '@/components/mdx/Preview';
 import Quote from '@/components/mdx/Quote';
 import Table, { TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from '@/components/mdx/Table';
@@ -75,7 +74,6 @@ export const MDXComponents = {
   Tooltip,
   Video,
   'a': CustomLink,
-  'pre': Pre,
   'table': Table,
   'tbody': TableBody,
   'td': TableCell,
@@ -104,7 +102,6 @@ export { AreaChart,
   LineChart,
   Mermaid,
   PieChart,
-  Pre,
   Preview,
   Quote,
   RadialBarChart,

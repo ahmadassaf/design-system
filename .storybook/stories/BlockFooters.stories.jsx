@@ -1,7 +1,7 @@
 import Footer from '../../src/components/layout/Footer';
 import { Button, Field, FieldInput, Link, Pill } from '../../src/index';
 
-import { Page, pageParameters, Section } from './StoryDocs';
+import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
 const editorialSections = [
   {
@@ -77,6 +77,63 @@ const CompactFooter = () => (
   </footer>
 );
 
+const usageCode = `import { Footer } from '@gaudi/design-system';
+
+<Footer
+  copyrightName='Ahmad Assaf'
+  sections={sections}
+  socialLinks={socialLinks}
+  variant='editorial'
+/>`;
+
+const variantRows = [
+  [ 'Current Blog Footer', 'Main blog layout.', 'Newsletter, sitemap links, copyright, and social links.' ],
+  [ 'Editorial Footer', 'Content-heavy pages.', 'Author context plus sitemap navigation.' ],
+  [ 'Newsletter Footer', 'Campaign or subscription-led pages.', 'Subscription action is the primary footer task.' ],
+  [ 'Compact Footer', 'Focused utility pages.', 'Minimal navigation and copyright only.' ]
+];
+
+const variantCode = {
+  'compact': `<footer className='flex flex-col gap-4 rounded-lg border p-5 sm:flex-row sm:items-center sm:justify-between'>
+  <p>&copy; 2026 Ahmad Assaf</p>
+  <nav aria-label='Compact footer navigation'>
+    <Link href='/blog'>Blog</Link>
+    <Link href='/blog/projects'>Projects</Link>
+    <Link href='/about'>About</Link>
+  </nav>
+</footer>`,
+  'current': `<Footer copyrightName='Ahmad Assaf' />`,
+  'editorial': `<Footer
+  copyrightName='Ahmad Assaf'
+  sections={editorialSections}
+  socialLinks={editorialSocialLinks}
+  variant='editorial'
+/>`,
+  'newsletter': `<footer className='rounded-lg bg-gray-950 text-white'>
+  <Pill tone='blue' variant='soft'>newsletter</Pill>
+  <h3>Notes on AI, data, and engineering systems.</h3>
+  <form>
+    <Field>
+      <FieldInput type='email' placeholder='you@example.com' />
+    </Field>
+    <Button type='submit'>Subscribe</Button>
+  </form>
+</footer>`
+};
+
+const VariantTable = () => (
+  <Table>
+    <thead>
+      <tr><Th>Variant</Th><Th>Use</Th><Th>Contents</Th></tr>
+    </thead>
+    <tbody>
+      {variantRows.map(([ variant, use, contents ]) => (
+        <tr key={ variant }><Td>{variant}</Td><Td>{use}</Td><Td>{contents}</Td></tr>
+      ))}
+    </tbody>
+  </Table>
+);
+
 export default {
   parameters: pageParameters,
   title: 'Blocks/Footers'
@@ -90,17 +147,34 @@ export const Default = {
       intro='Footer compositions for the current blog footer, editorial sitemap footers, newsletter-first pages, and compact utility pages.'
       kicker='Blocks'
     >
+      <Section title='Usage' description='Use the shared Footer component for real blog footers. Custom footer blocks are examples for page-specific composition.'>
+        <CodeBlock code={ usageCode } />
+      </Section>
+      <Section title='Variant Rules' description='Choose a footer by navigation density and primary action.'>
+        <VariantTable />
+      </Section>
       <Section title='Current Blog Footer' description='Uses the actual Footer component used by the blog layout.'>
         <CurrentFooter />
+        <CodeBlock code={ variantCode.current } />
       </Section>
       <Section title='Editorial Footer' description='Use for content-heavy pages with sitemap navigation.'>
         <EditorialFooter />
+        <CodeBlock code={ variantCode.editorial } />
       </Section>
       <Section title='Newsletter Footer' description='Use where the subscription action is the main footer goal.'>
         <NewsletterFooter />
+        <CodeBlock code={ variantCode.newsletter } />
       </Section>
       <Section title='Compact Footer' description='Use for focused pages with minimal navigation needs.'>
         <CompactFooter />
+        <CodeBlock code={ variantCode.compact } />
+      </Section>
+      <Section title='Implementation Notes' description='Footer examples must not drift into app-only styling.'>
+        <ul className='grid gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
+          <li>Use <InlineCode>Footer</InlineCode> for production blog layouts.</li>
+          <li>Pass links as data; do not bake app routes into the component package.</li>
+          <li>Newsletter controls should use <InlineCode>Field</InlineCode>, <InlineCode>FieldInput</InlineCode>, and <InlineCode>Button</InlineCode>.</li>
+        </ul>
       </Section>
     </Page>
   )

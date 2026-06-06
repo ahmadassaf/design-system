@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Pill, Typography } from '../../src/index';
 
-import { CodeBlock, InlineCode } from './StoryDocs';
+import { CodeBlock, InlineCode, InlineText } from './StoryDocs';
 
 const statuses = [
   { 'color': 'green', 'description': 'Available, published, complete, or healthy.', 'label': 'Published', 'tone': 'bg-green-500' },
@@ -103,7 +103,7 @@ const StatusRow = ({ status }) => {
         </div>
       </div>
       <div className='flex items-start justify-between gap-3'>
-        <p className='text-gray-600 dark:text-gray-300'>{status.description}</p>
+        <p className='text-gray-600 dark:text-gray-300'><InlineText>{status.description}</InlineText></p>
       </div>
     </div>
   );
@@ -156,7 +156,7 @@ import { Pill } from '@gaudi/design-system';
       <section className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
         <Typography variant='heading-md'>Pulsing Pill</Typography>
         <p className='mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300'>
-          Use the Pill pulse modifier for live, active, or transient states. The pulse is decorative; the label still carries the status.
+          <InlineText>Use the `Pill pulse` modifier for live, active, or transient states. The pulse is decorative; the label still carries the status.</InlineText>
         </p>
         <div className='mt-4 flex flex-wrap gap-5'>
           <Pill tone='green' variant='soft' size='sm' pulse>Live</Pill>
@@ -173,15 +173,15 @@ import { Pill } from '@gaudi/design-system';
       <section className='grid gap-4 md:grid-cols-3'>
         <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
           <Typography variant='heading-md'>Dot + Text</Typography>
-          <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>Use for dense lists, tables, metadata rows, and compact status summaries.</p>
+          <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'><InlineText>Use for dense lists, tables, metadata rows, and compact status summaries.</InlineText></p>
         </div>
         <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
           <Typography variant='heading-md'>Pill</Typography>
-          <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>Use when the status is a primary scannable attribute, such as post state or release state.</p>
+          <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'><InlineText>Use when the status is a primary scannable attribute, such as post state or release state.</InlineText></p>
         </div>
         <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900'>
           <Typography variant='heading-md'>Accessibility</Typography>
-          <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>Never rely on the dot color alone. Always include visible text or an accessible label.</p>
+          <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'><InlineText>Never rely on the dot color alone. Always include visible text or an accessible label.</InlineText></p>
         </div>
       </section>
 

@@ -1,7 +1,7 @@
 import Faq from '../../src/components/mdx/Faq';
 import { Card, Icon, Link, Pill, Typography } from '../../src/index';
 
-import { Page, pageParameters, Section } from './StoryDocs';
+import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
 const questions = [
   {
@@ -83,6 +83,74 @@ const CardsFaq = () => (
   </div>
 );
 
+const usageCode = `import { Faq } from '@gaudi/design-system/mdx';
+
+const questions = [
+  {
+    question: 'What belongs in the design system?',
+    answer: 'Reusable UI with stories, docs, and tests.',
+  },
+];
+
+<Faq questions={questions} />`;
+
+const variantRows = [
+  [ 'Accordion FAQ', 'Long answer lists.', 'Answers are hidden until requested.' ],
+  [ 'Grid FAQ', 'Short answers that should all be visible.', 'Every answer renders in the page flow.' ],
+  [ 'FAQ With Sidebar', 'Support or docs pages with framing copy.', 'Side context and expandable answers share one section.' ],
+  [ 'FAQ Cards', 'Brief principles or policies.', 'Each answer is a short card, not an accordion.' ]
+];
+
+const variantCode = {
+  'accordion': `<div className='rounded-lg border border-gray-200 bg-white p-6'>
+  <Faq questions={questions} />
+</div>`,
+  'cards': `<div className='grid gap-4 md:grid-cols-4'>
+  {columns.map(([title, body]) => (
+    <Card key={title} variant='outline'>
+      <Icon name='Info' decorative />
+      <Typography variant='heading-sm'>{title}</Typography>
+      <p>{body}</p>
+    </Card>
+  ))}
+</div>`,
+  'grid': `<div className='grid gap-px rounded-lg border md:grid-cols-2'>
+  {questions.map((item) => (
+    <article key={item.question} className='bg-white p-6'>
+      <Typography variant='heading-sm'>{item.question}</Typography>
+      <p>{item.answer}</p>
+    </article>
+  ))}
+</div>`,
+  'sidebar': `<div className='grid gap-8 rounded-lg border p-6 lg:grid-cols-[18rem_1fr]'>
+  <aside>
+    <Pill tone='blue' variant='soft'>help</Pill>
+    <Typography variant='heading-lg'>Design-system questions</Typography>
+  </aside>
+  <div>
+    {questions.map((item) => (
+      <details key={item.question}>
+        <summary>{item.question}</summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+</div>`
+};
+
+const VariantTable = () => (
+  <Table>
+    <thead>
+      <tr><Th>Variant</Th><Th>Use</Th><Th>Behavior</Th></tr>
+    </thead>
+    <tbody>
+      {variantRows.map(([ variant, use, behavior ]) => (
+        <tr key={ variant }><Td>{variant}</Td><Td>{use}</Td><Td>{behavior}</Td></tr>
+      ))}
+    </tbody>
+  </Table>
+);
+
 export default {
   parameters: pageParameters,
   title: 'Blocks/FAQs'
@@ -96,17 +164,34 @@ export const Default = {
       intro='FAQ patterns for docs, content pages, and support sections. The examples use Gaudi typography, cards, icons, and the existing MDX FAQ component.'
       kicker='Blocks'
     >
+      <Section title='Usage' description='The canonical FAQ primitive is the MDX Faq component. Other block variants compose the same question data into different reading layouts.'>
+        <CodeBlock code={ usageCode } />
+      </Section>
+      <Section title='Variant Rules' description='Use disclosure when answers are long; use visible layouts when answers are short.'>
+        <VariantTable />
+      </Section>
       <Section title='Accordion FAQ' description='Use when users are scanning a compact list of questions.'>
         <AccordionFaq />
+        <CodeBlock code={ variantCode.accordion } />
       </Section>
       <Section title='Grid FAQ' description='Use when all answers should be visible at once.'>
         <GridFaq />
+        <CodeBlock code={ variantCode.grid } />
       </Section>
       <Section title='FAQ With Sidebar' description='Use when an FAQ needs a contact path or framing copy.'>
         <SidebarFaq />
+        <CodeBlock code={ variantCode.sidebar } />
       </Section>
       <Section title='FAQ Cards' description='Use for short policy or component-author guidance.'>
         <CardsFaq />
+        <CodeBlock code={ variantCode.cards } />
+      </Section>
+      <Section title='Implementation Notes' description='FAQ blocks should keep semantics and keyboard behavior intact.'>
+        <ul className='grid gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
+          <li>Use <InlineCode>Faq</InlineCode> for article/MDX disclosure behavior.</li>
+          <li>Use native <InlineCode>details</InlineCode> and <InlineCode>summary</InlineCode> only when composing a custom block.</li>
+          <li>Keep questions as readable headings or summaries; color should never be the only state cue.</li>
+        </ul>
       </Section>
     </Page>
   )

@@ -87,7 +87,7 @@ const CodeHighlightingDocs = () => (
         </thead>
         <tbody>
           <tr><Td mono>rehype-pretty-code</Td><Td>Converts fenced code blocks into Shiki-highlighted HTML.</Td><Td><InlineCode>theme: 'aurora-x'</InlineCode></Td></tr>
-          <tr><Td mono>Pre</Td><Td>Wraps MDX <InlineCode>pre</InlineCode> output with copy-to-clipboard behavior.</Td><Td>Registered in the MDX component map as <InlineCode>pre: Pre</InlineCode>.</Td></tr>
+          <tr><Td mono>Code HTML</Td><Td>Highlighted <InlineCode>pre</InlineCode> and <InlineCode>code</InlineCode> markup is emitted by the rehype pipeline.</Td><Td>Styled by <InlineCode>MdxContent</InlineCode>; no separate wrapper component is exported.</Td></tr>
           <tr><Td mono>CodeGroupTabs</Td><Td>Hydrates generated <InlineCode>.rehype-code-group</InlineCode> blocks and switches active tabs.</Td><Td>Mount once in the app layout.</Td></tr>
           <tr><Td mono>MdxContent</Td><Td>Scopes highlighted lines, highlighted chars, figures, captions, and tabbed-code spacing.</Td><Td>Use the MDX content wrapper around article output.</Td></tr>
         </tbody>
