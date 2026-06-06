@@ -62,6 +62,28 @@ export function ArticleCard() {
         />
       </Section>
 
+      <Section title='Agent Usage' description='Agents working in the blog or Gaudi should follow the root AGENTS.md file before adding UI or styling.'>
+        <CheckList
+          items={ [
+            'Read `AGENTS.md` in `ahmadassaf/design-system` before changing reusable UI.',
+            'Import Gaudi from `@gaudi/design-system`; do not copy components into the blog.',
+            'Use `@gaudi/design-system/global.css`, the Tailwind preset, plugins, tokens, variants, and icon registry instead of app-local style hacks.',
+            'Keep content files, bibliography files, Contentlayer output, app API routes, and route metadata in the consuming app.',
+            'Document public Gaudi components with usage, variants, code examples, and accessibility notes.'
+          ] }
+        />
+        <CodeBlock
+          language='md'
+          code={ `Agent entrypoint:
+
+1. Read AGENTS.md.
+2. Check Storybook for the existing component or pattern.
+3. Reuse Gaudi tokens, variants, components, and icons.
+4. Put reusable UI changes in Gaudi, not in the blog app.
+5. Run git diff --check and pnpm test:contracts before committing.` }
+        />
+      </Section>
+
       <Section title='Conventions' description='The rules are intentionally small: keep reusable UI in Gaudi, keep route glue in the app, and document public APIs where they live.'>
         <CheckList
           items={ [
