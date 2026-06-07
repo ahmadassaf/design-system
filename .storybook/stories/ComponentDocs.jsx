@@ -129,10 +129,11 @@ const componentDocs = {
       [ 'type', 'single | multiple', 'single', 'Controls whether one panel or several panels can be open.' ],
       [ 'defaultValue', 'string | string[]', 'first item value', 'Initial open item for uncontrolled usage.' ],
       [ 'className', 'string', '-', 'Root container class override.' ],
-      [ 'Accordion children', 'ReactNode | render function', '-', 'Lower-level composition API for custom item markup.' ],
-      [ 'Accordion value', 'string | string[]', '-', 'Controlled open state for custom composition.' ],
+      [ 'children', 'ReactNode | render function', '-', 'Lower-level composition API for custom item markup.' ],
+      [ 'value', 'string | string[]', '-', 'Controlled open state for custom composition or stable item value on AccordionItem.' ],
       [ 'onValueChange', '(value) => void', '-', 'Called when a trigger changes the open state.' ],
-      [ 'AccordionItem value', 'string', '-', 'Stable value identifying the item.' ]
+      [ 'isOpen', 'boolean', '-', 'Open state passed to custom trigger or content primitives.' ],
+      [ 'onClick', '(event) => void', '-', 'Click handler passed to custom trigger composition.' ]
     ]
   },
   'Core/Avatar': {
@@ -170,8 +171,7 @@ const componentDocs = {
     'overview': 'Use Disclaimer at the end of posts, project write-ups, or editorial pages that need a consistent disclaimer treatment. The default copy covers personal opinions and employer affiliation; pass children when a page needs a more specific notice.',
     'props': [
       [ 'children', 'ReactNode', 'default disclaimer text', 'Custom disclaimer content. Leave empty to use the standard blog disclaimer.' ],
-      [ 'type', 'Callout type', 'info', 'Tone forwarded to the underlying Callout component.' ],
-      [ '...props', 'Callout props', '-', 'Additional props forwarded to Callout.' ]
+      [ 'type', 'Callout type', 'info', 'Tone forwarded to the underlying Callout component.' ]
     ]
   },
   'Core/Breadcrumb': {
@@ -305,7 +305,10 @@ const componentDocs = {
       [ 'darkSrc', 'string', '-', 'Optional image source shown in dark mode.' ],
       [ 'alt', 'string', 'post-image', 'Accessible alt text for informative images.' ],
       [ 'caption', 'ReactNode', '-', 'Optional visible figure caption.' ],
-      [ 'width / height', 'number', '-', 'Required dimensions for Next image rendering unless fill is supplied.' ],
+      [ 'width', 'number', '-', 'Image width for Next image rendering unless fill is supplied.' ],
+      [ 'height', 'number', '-', 'Image height for Next image rendering unless fill is supplied.' ],
+      [ 'fill', 'boolean', 'false', 'Uses the parent box instead of explicit dimensions.' ],
+      [ 'sizes', 'string', '-', 'Responsive image sizes hint passed to Next image.' ],
       [ 'className', 'string', '-', 'Image class override.' ]
     ]
   },
@@ -395,22 +398,33 @@ const componentDocs = {
     'description': 'Video renders a video thumbnail that opens an embedded video in an accessible modal dialog.',
     'overview': 'Use Video inside MDX when an article needs a focused video walkthrough without embedding an always-loaded iframe in the page flow.',
     'props': [
-      [ 'videoSrc', 'YouTube embed URL or embeddable URL', '-' ],
-      [ 'thumbnailSrc / thumbnailAlt', 'image source and accessible alt text', '-' ],
-      [ 'animationStyle', 'from-center | from-bottom | from-top | from-left | from-right | fade | top-in-bottom-out | left-in-right-out', 'from-center' ],
-      [ 'title', 'dialog title and iframe title', 'Video' ],
-      [ 'classNames', 'trigger | thumbnail | playWrapper | playButton | dialog | overlay | panel | title | close | video', '-' ]
+      [ 'videoSrc', 'YouTube embed URL or embeddable URL', '-', 'Source URL converted to an embeddable iframe URL when possible.' ],
+      [ 'thumbnailSrc', 'string', '-', 'Optional thumbnail image source.' ],
+      [ 'thumbnailAlt', 'string', 'Video thumbnail', 'Accessible alt text for the thumbnail image or fallback thumbnail label.' ],
+      [ 'animationStyle', 'from-center | from-bottom | from-top | from-left | from-right | fade | top-in-bottom-out | left-in-right-out', 'from-center', 'Dialog entrance animation.' ],
+      [ 'title', 'string', 'Video', 'Dialog heading and iframe title.' ],
+      [ 'ariaLabel', 'string', 'playLabel', 'Accessible label for the thumbnail trigger.' ],
+      [ 'autoplay', 'boolean', 'true', 'Adds autoplay to the iframe URL when the dialog opens.' ],
+      [ 'playLabel', 'string', 'Play video', 'Fallback accessible label for the thumbnail trigger.' ],
+      [ 'className', 'string', '-', 'Thumbnail trigger class override.' ],
+      [ 'classNames', '{ trigger, thumbnail, playWrapper, playButton, dialog, overlay, panel, title, close, video }', '-', 'Slot-level class overrides.' ]
     ]
   },
   'Core/Field': {
     'accessibility': 'Field keeps label, input, description, and error markup colocated so form controls can be wired with id/htmlFor.',
     'description': 'Field composes form label, description, error, and input building blocks.',
     'props': [
-      [ 'Field children', 'ReactNode', '-', 'Composes label, input, description, and error slots.' ],
-      [ 'FieldLabel htmlFor', 'string', '-', 'Connects the visible label to the input id.' ],
-      [ 'FieldInput', 'native input props', '-', 'Accepts standard input props such as id, type, value, placeholder, required, and aria-*.' ],
-      [ 'FieldDescription children', 'ReactNode', '-', 'Supporting guidance text.' ],
-      [ 'FieldError children', 'ReactNode', '-', 'Validation message text.' ],
+      [ 'children', 'ReactNode', '-', 'Composes label, input, description, and error slots or supplies slot text.' ],
+      [ 'htmlFor', 'string', '-', 'Connects the visible label to the input id.' ],
+      [ 'id', 'string', '-', 'Input id paired with FieldLabel htmlFor.' ],
+      [ 'type', 'string', 'text', 'Native input type.' ],
+      [ 'name', 'string', '-', 'Native input name for form submission.' ],
+      [ 'value', 'string', '-', 'Controlled input value.' ],
+      [ 'defaultValue', 'string', '-', 'Initial uncontrolled input value.' ],
+      [ 'placeholder', 'string', '-', 'Native input placeholder.' ],
+      [ 'required', 'boolean', 'false', 'Marks the input as required.' ],
+      [ 'disabled', 'boolean', 'false', 'Disables the input.' ],
+      [ 'onChange', '(event) => void', '-', 'Native input change handler.' ],
       [ 'className', 'string', '-', 'Class override on each Field slot.' ]
     ]
   },
@@ -421,12 +435,13 @@ const componentDocs = {
       [ 'children', 'ReactNode', '-', 'Grid items or custom content.' ],
       [ 'columns', '2 | 3 | 4', '3', 'Responsive column count.' ],
       [ 'gap', 'sm | md | lg', 'md', 'Space between grid items.' ],
-      [ 'GridItem title', 'ReactNode', '-', 'Item heading.' ],
-      [ 'GridItem description', 'ReactNode', '-', 'Item body text.' ],
-      [ 'GridItem header / icon', 'ReactNode', '-', 'Optional media or icon content.' ],
-      [ 'GridItem variant', 'elevated | outline | soft', 'elevated', 'Item surface treatment.' ],
-      [ 'GridItem padding', 'sm | md | lg', 'md', 'Item internal spacing.' ],
-      [ 'GridItem radius', 'sm | md | lg', 'md', 'Item corner radius.' ],
+      [ 'title', 'ReactNode', '-', 'GridItem heading.' ],
+      [ 'description', 'ReactNode', '-', 'GridItem body text.' ],
+      [ 'header', 'ReactNode', '-', 'Optional GridItem header media.' ],
+      [ 'icon', 'ReactNode', '-', 'Optional GridItem icon content.' ],
+      [ 'variant', 'elevated | outline | soft', 'elevated', 'GridItem surface treatment.' ],
+      [ 'padding', 'sm | md | lg', 'md', 'GridItem internal spacing.' ],
+      [ 'radius', 'sm | md | lg', 'md', 'GridItem corner radius.' ],
       [ 'className', 'string', '-', 'Root class override.' ],
       [ 'classNames', '{ root, body, title, description }', '-', 'GridItem slot overrides.' ]
     ]
@@ -491,13 +506,12 @@ const componentDocs = {
       [ 'variant', 'link | panel', 'link', 'Use link for top-level items and panel for dropdown card links.' ],
       [ 'description', 'ReactNode', '-', 'Supporting copy shown in panel links.' ],
       [ 'meta', 'ReactNode', '-', 'Small metadata line for panel links.' ],
-      [ 'NavigationMenuDropdown label', 'ReactNode', '-', 'Visible dropdown trigger label.' ],
       [ 'trigger', 'ReactNode', 'label', 'Custom dropdown trigger content.' ],
       [ 'defaultOpen', 'boolean', 'false', 'Initial uncontrolled dropdown state. Useful for demos and persistent nav panels.' ],
       [ 'align', 'start | center | end', 'start', 'Controls dropdown panel alignment.' ],
-      [ 'auto alignment', 'viewport measurement', 'enabled', 'Dropdown panels flip to the nearest safe side when they would overflow the viewport.' ],
       [ 'width', 'sm | md | lg | xl', 'lg', 'Controls dropdown panel width.' ],
-      [ 'NavigationMenuPanel columns', '1 | 2 | 3', '2', 'Responsive panel grid columns.' ],
+      [ 'columns', '1 | 2 | 3', '2', 'Responsive panel grid columns.' ],
+      [ 'panelClassName', 'string', '-', 'Dropdown panel class override.' ],
       [ 'className', 'string', '-', 'Class override on each slot.' ]
     ]
   },
@@ -559,15 +573,17 @@ const componentDocs = {
       [ 'disabled', 'boolean', 'false', 'Disables the trigger.' ],
       [ 'invalid', 'boolean', 'false', 'Applies aria-invalid and error styling.' ],
       [ 'name', 'string', '-', 'Renders hidden form inputs for selected values.' ],
-      [ 'className / classNames', 'string | slots', '-', 'Root and slot-level class overrides.' ]
+      [ 'aria-label', 'string', '-', 'Accessible label for icon-only or unlabeled select controls.' ],
+      [ 'children', 'ReactNode', '-', 'Option children normalized when options is empty.' ],
+      [ 'className', 'string', '-', 'Root class override.' ],
+      [ 'classNames', '{ root, trigger, value, placeholder, chevron, popup, search, option, check, empty }', '-', 'Slot-level class overrides.' ]
     ]
   },
   'Core/Skeleton': {
     'accessibility': 'Skeleton is aria-hidden and should be paired with loading text or a labelled busy region when content loading needs announcement.',
     'description': 'Skeleton renders non-semantic loading placeholders.',
     'props': [
-      [ 'className', 'string', '-', 'Defines shape, width, height, radius, and layout placement.' ],
-      [ '...divProps', 'HTML div props', '-', 'Pass aria-hidden, data attributes, or other div props when needed.' ]
+      [ 'className', 'string', '-', 'Defines shape, width, height, radius, and layout placement.' ]
     ]
   },
   'Core/Spinner': {
