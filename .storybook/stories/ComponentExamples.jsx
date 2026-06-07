@@ -478,7 +478,9 @@ const renderMdxExample = (name, componentModule) => {
   case 'LatexText':
     return <ExampleFrame><p>Ordinal text stays readable: <Component>11$^&#123;th&#125;$ International Conference</Component></p></ExampleFrame>;
   case 'Mermaid':
-    return <ExampleFrame><Component id='storybook-mermaid-example' chart={ 'graph TD; A[Draft] --> B[Review]; B --> C[Publish];' } /></ExampleFrame>;
+    return <ExampleFrame><Component id='storybook-mermaid-example' chart={ `flowchart TD
+  A[Draft] --> B[Review]
+  B --> C[Publish]` } /></ExampleFrame>;
   case 'Preview':
     return (
       <ExampleFrame>

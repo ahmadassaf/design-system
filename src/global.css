@@ -9,6 +9,7 @@
  */
 
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 @config '../tailwind.config.cjs';
 @import './styles.css';
 
