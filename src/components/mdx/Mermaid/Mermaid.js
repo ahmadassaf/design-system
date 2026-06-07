@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 
 // Lazy load mermaid only when component is used
 const loadMermaid = async() => {
-  const { 'default': mermaid } = await import('mermaid');
+  const { 'default': mermaid } = await import('mermaid/dist/mermaid.esm.min.mjs');
 
   return mermaid;
 };
@@ -55,9 +55,12 @@ const Mermaid = ({ chart, className = '', id }) => {
         mermaid.initialize({
           'flowchart': {
             'curve': 'basis',
+            'defaultRenderer': 'elk',
             'htmlLabels': true
           },
+          'layout': 'elk',
           'securityLevel': 'loose',
+          'suppressErrorRendering': true,
           'startOnLoad': false,
           'theme': 'default',
           'themeVariables': {
@@ -74,12 +77,22 @@ const Mermaid = ({ chart, className = '', id }) => {
         });
 
         const diagramId = id || `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+        const renderContainer = document.createElement('div');
+        renderContainer.setAttribute('aria-hidden', 'true');
+        renderContainer.style.left = '-9999px';
+        renderContainer.style.position = 'absolute';
+        renderContainer.style.top = '0';
+        document.body.append(renderContainer);
 
-        // Validate and render the diagram
-        const { 'svg': renderedSvg } = await mermaid.render(diagramId, chart);
+        try {
+          // Validate and render the diagram without letting Mermaid append fallback UI to <body>.
+          const { 'svg': renderedSvg } = await mermaid.render(diagramId, chart, renderContainer);
 
-        setSvg(renderedSvg);
-        setError('');
+          setSvg(renderedSvg);
+          setError('');
+        } finally {
+          renderContainer.remove();
+        }
       } catch (err) {
         console.error('Mermaid rendering error:', err);
         setError('Failed to render diagram');
