@@ -265,16 +265,6 @@ const componentDocs = {
       '`CitationTracker` updates bibliography back-links so a reference points back to the most recent citation instance the reader used.'
     ],
     'overview': 'Use citations in three places. Authors put BibTeX files in the blog, list those files in post frontmatter, and cite keys directly in prose with Pandoc-style brackets. The blog MDX pipeline runs rehypeSimpleCitations, which converts those text markers into numbered anchors plus a generated References section. Gaudi does not parse BibTeX or rewrite MDX; it only provides the runtime CitationPopover and CitationTracker behavior for the generated markup.',
-    'propsTitle': 'Pipeline Pieces',
-    'props': [
-      [ 'data/meta/bibliography/*.bib', 'BibTeX files', '-', 'Blog-owned bibliography sources referenced by post frontmatter.' ],
-      [ 'bibliography', 'frontmatter string[]', '-', 'Post-level list of BibTeX files to load for that article.' ],
-      [ '[@CitationKey]', 'MDX prose syntax', '-', 'Single citation marker written by the author inside article copy.' ],
-      [ '[@Key1; @Key2]', 'MDX prose syntax', '-', 'Grouped citation marker rendered as one numbered cluster with multiple references.' ],
-      [ 'rehypeSimpleCitations', 'blog rehype plugin', '-', 'Transforms markdown citation markers into numbered citation anchors and appends the References section.' ],
-      [ 'CitationPopover', 'Gaudi runtime component', '-', 'Binds generated citation anchors to hover/focus popovers after the article has rendered.' ],
-      [ 'CitationTracker', 'Gaudi runtime component', '-', 'Runs once in the app layout to keep generated bibliography back-links pointed at the latest citation instance.' ]
-    ],
     'usageTitle': 'Authoring Example'
   },
   'MDX/Footnote': {
@@ -304,15 +294,6 @@ const componentDocs = {
       'The visible footnotes list remains the source of truth; the popover is a reading convenience.'
     ],
     'overview': 'Authors do not write a React component for each footnote. They write standard markdown footnote syntax in the post. The blog MDX pipeline extracts the definitions, enhances the generated footnote reference anchors with `data-footnote-*` attributes, and may visually collapse the bottom notes section. Gaudi only owns the small client runtime that reads those generated attributes and shows the preview popover on hover or keyboard focus.',
-    'propsTitle': 'Pipeline Pieces',
-    'props': [
-      [ '[^id]', 'MDX prose syntax', '-', 'Markdown footnote reference written inline in the article.' ],
-      [ '[^id]: note text', 'MDX footnote definition', '-', 'Markdown footnote body, usually placed near the end of the MDX source.' ],
-      [ 'remarkFootnoteData', 'blog remark plugin', '-', 'Extracts footnote definitions from mdast and stores them on `file.data.footnotes`.' ],
-      [ 'rehypeFootnotePopoverV2', 'blog rehype plugin', '-', 'Adds `data-footnote-popover`, `data-footnote-number`, `data-footnote-content`, and `footnote-link` to generated reference anchors.' ],
-      [ 'Footnote', 'Gaudi runtime component', '-', 'Mounts once near the article and binds hover/focus preview behavior to generated footnote links.' ],
-      [ 'data-footnote-content', 'generated HTML string', '-', 'Serialized note body shown inside the popover preview.' ]
-    ],
     'usageTitle': 'Authoring Example'
   },
   'MDX/Image': {
@@ -355,15 +336,18 @@ const componentDocs = {
       'Internal previews skip remote fetching and can use local metadata supplied by the app or generated pipeline.'
     ],
     'overview': 'Authors should usually write normal markdown links. During compilation, the blog turns eligible external markdown links into `Preview` components with `remarkLinks`, then turns eligible internal blog anchors into `Preview internal` components with `rehypeInternalLinks`. Gaudi owns the rendered inline link, fallback state, loading skeleton, and hover card UI; the blog owns the markdown transforms and preview API.',
-    'propsTitle': 'Pipeline Pieces',
     'props': [
-      [ '[label](https://example.com)', 'markdown link', '-', 'External authoring syntax. `remarkLinks` transforms it into a `Preview` MDX element.' ],
-      [ '[label](/blog/category/slug)', 'markdown link', '-', 'Internal blog authoring syntax. `rehypeInternalLinks` transforms matching anchors into `Preview internal`.' ],
-      [ 'remarkLinks', 'blog remark plugin', '-', 'Transforms external HTTP links before the markdown tree is compiled to MDX JSX.' ],
-      [ 'rehypeInternalLinks', 'blog rehype plugin', '-', 'Transforms internal blog anchors after markdown has become HTML/HAST.' ],
-      [ 'Preview', 'Gaudi MDX component', '-', 'Renders inline link text, loading/error states, optional favicon/image metadata, and the hover preview card.' ],
-      [ '/api/preview', 'blog API route', '-', 'Fetches, normalizes, and caches metadata for external URLs.' ],
-      [ 'previewData', 'object', '-', 'Optional deterministic metadata for Storybook, tests, or server-provided previews.' ]
+      [ 'url', 'string', '-', 'Target URL to link to and preview.' ],
+      [ 'title', 'string', '-', 'Optional custom title that overrides fetched preview metadata.' ],
+      [ 'className', 'string', '-', 'Root class override.' ],
+      [ 'defaultOpen', 'boolean', 'false', 'Starts the hover card open for deterministic demos and visual tests.' ],
+      [ 'internal', 'boolean', 'false', 'Renders a local app link and skips remote preview fetching.' ],
+      [ 'previewData', 'object', 'null', 'Preloaded metadata for deterministic docs, tests, or server-provided previews.' ],
+      [ 'showImage', 'boolean', 'true', 'Controls whether the hover card can show image preview metadata.' ],
+      [ 'timeout', 'number', '10000', 'Preview metadata request timeout in milliseconds.' ],
+      [ 'onLoad', '(data) => void', '-', 'Called when preview metadata loads successfully.' ],
+      [ 'onError', '(error) => void', '-', 'Called when preview metadata fails to load.' ],
+      [ 'fallback', 'ReactNode', '-', 'Custom fallback UI for unavailable preview metadata.' ]
     ],
     'usageTitle': 'Authoring Example'
   },
@@ -790,7 +774,7 @@ export const ComponentDocumentation = ({ docs }) => (
     ) : null}
 
     {docs.props?.length ? (
-      <Section title={ docs.propsTitle || 'Customisation' }>
+      <Section title={ docs.propsTitle || 'Props' }>
         <PropsTable rows={ docs.props } />
       </Section>
     ) : null}
@@ -843,7 +827,7 @@ export const createComponentDocsPage = (docs, options = {}) => {
         ) : null}
 
         {docs.props?.length ? (
-          <Section title={ docs.propsTitle || 'Customisation' }>
+          <Section title={ docs.propsTitle || 'Props' }>
             <PropsTable rows={ docs.props } />
           </Section>
         ) : null}
