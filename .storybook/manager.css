@@ -1,0 +1,35 @@
+/* Storybook manager chrome customisation for Gaudi. */
+
+button[aria-label='Create a new story'],
+button[title='Create a new story'] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+.sidebar-header,
+[data-testid='sidebar-header'] {
+  display: none !important;
+}
+
+#storybook-explorer-searchfield {
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s !important;
+}
+
+#storybook-explorer-searchfield:focus {
+  border-color: #2563a8 !important;
+  box-shadow: 0 0 0 2px rgb(37 99 168 / 15%) !important;
+}
+
+.sidebar-container button[data-nodetype] {
+  border-radius: 6px !important;
+}
+
+.sidebar-container button[data-selected='true'] {
+  background-color: rgb(37 99 168 / 8%) !important;
+  color: #2563a8 !important;
+  font-weight: 500 !important;
+}

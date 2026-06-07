@@ -1,5 +1,7 @@
 'use client';
 
+import { useLayoutEffect, useRef } from 'react';
+
 import * as AreaModule from 'recharts/lib/cartesian/Area.js';
 import * as BarModule from 'recharts/lib/cartesian/Bar.js';
 import * as CartesianGridModule from 'recharts/lib/cartesian/CartesianGrid.js';
@@ -104,6 +106,22 @@ const normalizeScatterData = (data, xKey, yKey) => data.map((item, index) => {
   return item;
 });
 
+const labelChartSurfaces = (frame, label) => {
+  frame.querySelectorAll('.recharts-wrapper svg').forEach((node) => {
+    if (node.getAttribute('role') !== 'img') node.setAttribute('role', 'img');
+    if (node.getAttribute('aria-label') !== label) node.setAttribute('aria-label', label);
+    if (node.hasAttribute('aria-hidden')) node.removeAttribute('aria-hidden');
+    if (node.getAttribute('focusable') !== 'false') node.setAttribute('focusable', 'false');
+  });
+
+  frame.querySelectorAll('.recharts-wrapper [role="img"]:not(svg)').forEach((node) => {
+    if (node.getAttribute('role') !== 'presentation') node.setAttribute('role', 'presentation');
+    if (node.hasAttribute('aria-hidden')) node.removeAttribute('aria-hidden');
+    if (node.getAttribute('focusable') !== 'false') node.setAttribute('focusable', 'false');
+    if (node.getAttribute('tabindex') !== '-1') node.setAttribute('tabindex', '-1');
+  });
+};
+
 const ChartFrame = ({
   ariaLabel,
   children,
@@ -111,23 +129,56 @@ const ChartFrame = ({
   description,
   height = 320,
   title
-}) => (
-  <figure
-    aria-label={ ariaLabel || title || 'Chart' }
-    className={ cn('not-prose my-8 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-950', className) }
-    role='img'
-  >
-    {title || description ? (
-      <figcaption className='mb-4 space-y-1'>
-        {title ? <h3 className='text-base font-semibold leading-6 text-gray-950 dark:text-white'>{title}</h3> : null}
-        {description ? <p className='text-sm leading-6 text-gray-600 dark:text-gray-400'>{description}</p> : null}
-      </figcaption>
-    ) : null}
-    <div className='min-w-0 w-full' style={{ height, 'minHeight': height, 'width': '100%' }}>
-      {children}
-    </div>
-  </figure>
-);
+}) => {
+  const frameRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const frame = frameRef.current;
+
+    if (!frame) return undefined;
+
+    const label = ariaLabel || title || 'Chart visualization';
+
+    labelChartSurfaces(frame, label);
+
+    const observer = new MutationObserver(() => {
+      labelChartSurfaces(frame, label);
+    });
+
+    observer.observe(frame, {
+      'attributeFilter': [ 'role' ],
+      'attributes': true,
+      'childList': true,
+      'subtree': true
+    });
+
+    const frameId = window.requestAnimationFrame(() => labelChartSurfaces(frame, label));
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <figure
+      ref={ frameRef }
+      aria-label={ ariaLabel || title || 'Chart' }
+      className={ cn('not-prose my-8 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-950', className) }
+      role='img'
+    >
+      {title || description ? (
+        <figcaption className='mb-4 space-y-1'>
+          {title ? <h3 className='text-base font-semibold leading-6 text-gray-950 dark:text-white'>{title}</h3> : null}
+          {description ? <p className='text-sm leading-6 text-gray-600 dark:text-gray-300'>{description}</p> : null}
+        </figcaption>
+      ) : null}
+      <div className='min-w-0 w-full' style={{ height, 'minHeight': height, 'width': '100%' }}>
+        {children}
+      </div>
+    </figure>
+  );
+};
 
 const ChartRuntimeFallback = ({ ariaLabel, className, description, height, title }) => (
   <ChartFrame ariaLabel={ ariaLabel } className={ className } description={ description } height={ height } title={ title }>

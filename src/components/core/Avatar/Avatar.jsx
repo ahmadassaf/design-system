@@ -24,11 +24,11 @@ export const avatarVariants = createVariants({
     'tone': {
       'blue': 'bg-blue-600',
       'gray': 'bg-gray-600',
-      'green': 'bg-green-600',
+      'green': 'bg-green-700',
       'indigo': 'bg-indigo-600',
       'neutral': 'bg-neutral-600',
       'red': 'bg-red-600',
-      'yellow': 'bg-yellow-600'
+      'yellow': 'bg-yellow-500 text-gray-950'
     }
   }
 });

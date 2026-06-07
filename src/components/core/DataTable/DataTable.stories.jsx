@@ -1,3 +1,5 @@
+import { expect, within } from 'storybook/test';
+
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 
 import DataTable from './DataTable';
@@ -31,7 +33,25 @@ export const Example = {
         ] }
       />
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const table = canvas.getByRole('table');
+    const headers = canvas.getAllByRole('columnheader');
+    const rows = canvas.getAllByRole('row');
+
+    expect(table).toBeVisible();
+    expect(headers.map((header) => header.textContent)).toEqual([ 'Component', 'Layer', 'Status' ]);
+    headers.forEach((header) => {
+      expect(header).toHaveAttribute('scope', 'col');
+    });
+    expect(rows).toHaveLength(3);
+    expect(canvas.getByRole('cell', { name: 'Button' })).toBeVisible();
+    expect(canvas.getAllByRole('cell', { name: 'Core' })).toHaveLength(2);
+    expect(canvas.getAllByRole('cell', { name: 'Ready' })).toHaveLength(2);
+    expect(rows[1]).toHaveTextContent('ButtonCoreReady');
+    expect(rows[2]).toHaveTextContent('DataTableCoreReady');
+  }
 };
 
 export const WithCaptionAndCustomCells = {
@@ -54,5 +74,21 @@ export const WithCaptionAndCustomCells = {
         ] }
       />
     </div>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const table = canvas.getByRole('table', { name: 'Core component status' });
+    const caption = canvas.getByText('Core component status');
+    const statusBadges = canvas.getAllByText('Ready');
+
+    expect(table).toBeVisible();
+    expect(caption.tagName).toBe('CAPTION');
+    expect(statusBadges).toHaveLength(2);
+    statusBadges.forEach((badge) => {
+      expect(badge.tagName).toBe('SPAN');
+      expect(badge).toHaveClass('rounded-sm', 'bg-green-50', 'font-semibold', 'text-green-700');
+    });
+    expect(canvas.getByRole('cell', { name: 'Button' })).toBeVisible();
+    expect(canvas.getByRole('cell', { name: 'DataTable' })).toBeVisible();
+  }
 };

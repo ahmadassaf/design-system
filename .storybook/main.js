@@ -10,7 +10,8 @@ const lodashEsDir = resolve(rootDir, 'node_modules/lodash-es');
 const config = {
   'addons': [
     '@storybook/addon-docs',
-    '@storybook/addon-a11y'
+    '@storybook/addon-a11y',
+    '@storybook/addon-vitest'
   ],
   'docs': {
     'autodocs': 'tag'

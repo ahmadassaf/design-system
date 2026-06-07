@@ -1,4 +1,5 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
+import { expect, userEvent, within } from 'storybook/test';
 import { StoryStage } from '../story-helpers';
 
 import { NavigationMenu, NavigationMenuDropdown, NavigationMenuLink, NavigationMenuList, NavigationMenuPanel } from './NavigationMenu';
@@ -58,6 +59,30 @@ const workSections = [
 ];
 
 export const Example = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const navigation = canvas.getByRole('navigation', { name: 'Main navigation' });
+    const categoriesButton = canvas.getByRole('button', { name: 'Categories' });
+    const workButton = canvas.getByRole('button', { name: 'Work' });
+    const activeLink = canvas.getByText('Blog').closest('[role="listitem"]');
+
+    await expect(navigation).toBeVisible();
+    await expect(activeLink).toHaveAttribute('aria-current', 'page');
+    await expect(categoriesButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getByText('All articles')).toBeVisible();
+
+    await userEvent.click(workButton);
+
+    await expect(categoriesButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(workButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.queryByText('All articles')).toBeNull();
+    await expect(canvas.getByText('Publications')).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+
+    await expect(workButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(canvas.queryByText('Publications')).toBeNull();
+  },
   render: () => (
     <StoryStage className='flex items-start' minHeight='min-h-80'>
       <NavigationMenu>
@@ -90,6 +115,16 @@ export const Example = {
 };
 
 export const Compact = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const navigation = canvas.getByRole('navigation', { name: 'Footer navigation' });
+    const items = within(navigation).getAllByRole('listitem');
+
+    await expect(items).toHaveLength(4);
+    await expect(within(navigation).getByText('Blog')).toBeVisible();
+    await expect(within(navigation).getByText('Publications')).toBeVisible();
+    await expect(within(navigation).queryByRole('button')).toBeNull();
+  },
   render: () => (
     <div className='p-8'>
       <NavigationMenu label='Footer navigation'>
@@ -105,6 +140,26 @@ export const Compact = {
 };
 
 export const MultipleDropdowns = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const blogButton = canvas.getByRole('button', { name: 'Blog' });
+    const workButton = canvas.getByRole('button', { name: 'Work' });
+
+    await expect(blogButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(workButton).toHaveAttribute('aria-expanded', 'false');
+
+    await userEvent.click(blogButton);
+
+    await expect(blogButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getByText('Engineering')).toBeVisible();
+
+    await userEvent.click(workButton);
+
+    await expect(blogButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(workButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.queryByText('Engineering')).toBeNull();
+    await expect(canvas.getByText('Projects')).toBeVisible();
+  },
   render: () => (
     <StoryStage className='flex items-start justify-center' minHeight='min-h-80'>
       <NavigationMenu className='justify-center'>

@@ -1,4 +1,5 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Carousel, carouselVariants } from '../../../index';
 
 const componentDocs = getComponentDocs('Core/Carousel');
@@ -89,6 +90,33 @@ export const Standard = {
     'items': editorialItems,
     'loop': true,
     'variant': 'standard'
+  },
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const region = canvas.getByRole('region', { 'name': 'Featured articles' });
+    const nextButton = canvas.getByRole('button', { 'name': 'Next slide' });
+    const previousButton = canvas.getByRole('button', { 'name': 'Previous slide' });
+
+    await expect(region).toHaveAttribute('aria-roledescription', 'carousel');
+    await expect(previousButton).toBeEnabled();
+    await expect(nextButton).toBeEnabled();
+    await expect(canvas.getByText('1 of 3')).toBeInTheDocument();
+    await expect(canvas.getByRole('heading', { 'level': 3, 'name': 'An Introduction to Knowledge Graphs' })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { 'name': 'Read article' })).toHaveAttribute('href', '/blog');
+
+    await userEvent.click(nextButton);
+
+    await expect(canvas.getByText('2 of 3')).toBeInTheDocument();
+    await expect(canvas.getByRole('heading', { 'level': 3, 'name': 'Design systems keep editorial rhythm predictable' })).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole('button', { 'name': 'Go to slide 3' }));
+
+    await expect(canvas.getByText('3 of 3')).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { 'name': 'Go to slide 3' })).toHaveAttribute('aria-current', 'true');
+
+    await userEvent.keyboard('{ArrowRight}');
+
+    await expect(canvas.getByText('1 of 3')).toBeInTheDocument();
   }
 };
 
@@ -103,6 +131,32 @@ export const AppleCards = {
     'items': appleItems,
     'loop': true,
     'variant': 'apple'
+  },
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole('region', { 'name': 'Featured cards' })).toHaveAttribute('aria-roledescription', 'carousel');
+    await expect(canvas.getByRole('button', { 'name': 'Go to slide 1' })).toHaveAttribute('aria-current', 'true');
+
+    await userEvent.click(canvas.getByRole('button', { 'name': 'Open Enhance your productivity.' }));
+
+    const dialog = await canvas.findByRole('dialog', { 'name': 'Enhance your productivity.' });
+    await expect(dialog).toHaveAttribute('aria-modal', 'true');
+    await expect(canvas.getByRole('button', { 'name': 'Go to slide 2' })).toHaveAttribute('aria-current', 'true');
+    await expect(within(dialog).getByText('Dense but readable cards for grouped content.')).toBeInTheDocument();
+    await expect(within(dialog).getByText('Cards keep a consistent width, snap in a horizontal rail, and expose a dialog for deeper content when selected.')).toBeVisible();
+
+    await userEvent.click(within(dialog).getAllByRole('button', { 'name': 'Close carousel card' })[1]);
+
+    await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+
+    await userEvent.click(canvas.getByRole('button', { 'name': 'Open Launching a focused component system.' }));
+
+    await expect(await canvas.findByRole('dialog', { 'name': 'Launching a focused component system.' })).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+
+    await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
   }
 };
 
@@ -112,5 +166,20 @@ export const Sizes = {
       <Carousel ariaLabel='Small carousel' items={ editorialItems } size='sm' />
       <Carousel ariaLabel='Large carousel' items={ editorialItems } size='lg' />
     </div>
-  )
+  ),
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const small = canvas.getByRole('region', { 'name': 'Small carousel' });
+    const large = canvas.getByRole('region', { 'name': 'Large carousel' });
+
+    await expect(small).toHaveAttribute('aria-roledescription', 'carousel');
+    await expect(large).toHaveAttribute('aria-roledescription', 'carousel');
+    await expect(within(small).getByRole('button', { 'name': 'Previous slide' })).toBeDisabled();
+    await expect(within(large).getByRole('button', { 'name': 'Previous slide' })).toBeDisabled();
+
+    await userEvent.click(within(small).getByRole('button', { 'name': 'Next slide' }));
+
+    await expect(within(small).getByText('2 of 3')).toBeInTheDocument();
+    await expect(within(large).getByText('1 of 3')).toBeInTheDocument();
+  }
 };

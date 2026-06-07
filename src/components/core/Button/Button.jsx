@@ -9,7 +9,7 @@ export const buttonVariants = createVariants({
   'compoundVariants': [
     { 'className': 'bg-blue-600 text-white hover:bg-blue-700', 'tone': 'blue', 'variant': 'solid' },
     { 'className': 'bg-gray-700 text-white hover:bg-gray-800', 'tone': 'gray', 'variant': 'solid' },
-    { 'className': 'bg-green-600 text-white hover:bg-green-700', 'tone': 'green', 'variant': 'solid' },
+    { 'className': 'bg-green-700 text-white hover:bg-green-800', 'tone': 'green', 'variant': 'solid' },
     { 'className': 'bg-indigo-600 text-white hover:bg-indigo-700', 'tone': 'indigo', 'variant': 'solid' },
     { 'className': 'bg-neutral-700 text-white hover:bg-neutral-800', 'tone': 'neutral', 'variant': 'solid' },
     { 'className': 'bg-red-600 text-white hover:bg-red-700', 'tone': 'red', 'variant': 'solid' },
@@ -37,7 +37,7 @@ export const buttonVariants = createVariants({
     { 'className': 'text-yellow-800 hover:bg-yellow-50 dark:text-yellow-300 dark:hover:bg-yellow-950', 'tone': 'yellow', 'variant': 'ghost' },
     { 'className': 'p-0 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300', 'tone': 'blue', 'variant': 'subtle' },
     { 'className': 'p-0 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300', 'tone': 'gray', 'variant': 'subtle' },
-    { 'className': 'p-0 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300', 'tone': 'green', 'variant': 'subtle' },
+    { 'className': 'p-0 text-green-700 hover:text-green-900 dark:text-green-300 dark:hover:text-green-200', 'tone': 'green', 'variant': 'subtle' },
     { 'className': 'p-0 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300', 'tone': 'indigo', 'variant': 'subtle' },
     { 'className': 'p-0 text-neutral-600 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-300', 'tone': 'neutral', 'variant': 'subtle' },
     { 'className': 'p-0 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300', 'tone': 'red', 'variant': 'subtle' },

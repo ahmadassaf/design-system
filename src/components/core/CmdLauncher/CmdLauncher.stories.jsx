@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ThemeProvider } from 'next-themes';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import Button from '../../core/Button';
 import MenuLogo from '../../navigation/MenuLogo';
 import MenuSearch from '../../navigation/MenuSearch';
@@ -134,10 +135,72 @@ export default {
 
 export const Default = {
   name: 'Example',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { 'name': 'Open search' }));
+
+    const documentBody = within(document.body);
+    const dialog = await documentBody.findByRole('dialog');
+    const palette = within(dialog);
+    const search = palette.getByRole('textbox');
+
+    await expect(palette.getByText('Explore content')).toBeInTheDocument();
+    await expect(palette.getAllByText('Posts').length).toBeGreaterThan(0);
+    await expect(palette.getByText('to select')).toBeInTheDocument();
+    await expect(palette.getByText('to navigate')).toBeInTheDocument();
+
+    await userEvent.type(search, 'semantic');
+
+    await expect(await palette.findByText('Semantic Web')).toBeInTheDocument();
+    await expect(palette.getByText('12 posts')).toBeInTheDocument();
+
+    await userEvent.clear(search);
+    await userEvent.type(search, 'no matching command');
+
+    await expect(await palette.findByText('No results for “no matching command”.')).toBeVisible();
+
+    await userEvent.clear(search);
+    const projectsCommand = palette
+      .getAllByText('Projects')
+      .find((node) => node.closest('.command-palette-list-item'))
+      ?.closest('.command-palette-list-item');
+
+    await expect(projectsCommand).toBeInTheDocument();
+    await userEvent.click(projectsCommand);
+
+    await expect(await palette.findByText('Gaudi')).toBeInTheDocument();
+    await expect(palette.getByText('Design-system notes, tokens, and reusable interface work.')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+
+    await expect(await palette.findByText('Explore content')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+
+    await waitFor(() => expect(documentBody.queryByRole('dialog')).not.toBeInTheDocument());
+
+    await userEvent.keyboard('{Control>}k{/Control}');
+
+    await expect(await documentBody.findByRole('dialog')).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+
+    await waitFor(() => expect(documentBody.queryByRole('dialog')).not.toBeInTheDocument());
+  },
   render: () => <BlogCommandShell />
 };
 
 export const Shortcut = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('Press')).toBeInTheDocument();
+    await expect(canvas.getByText('⌘')).toBeVisible();
+    await expect(canvas.getByText('+')).toBeVisible();
+    await expect(canvas.getByText('K')).toBeVisible();
+    await expect(canvas.getByText('to start')).toBeInTheDocument();
+  },
   render: () => (
     <div className='flex min-h-[180px] items-center justify-center bg-white p-8 dark:bg-gray-950'>
       <CmdLauncherShortcut />

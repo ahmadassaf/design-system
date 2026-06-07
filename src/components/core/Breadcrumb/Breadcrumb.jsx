@@ -21,7 +21,7 @@ export const BreadcrumbPage = ({ children, className }) => (
 );
 
 export const BreadcrumbSeparator = ({ children, className }) => (
-  <li aria-hidden='true' className={ cn('inline-flex items-center text-gray-400', className) }>{children || <Icon name='ChevronRight' decorative size='xs' />}</li>
+  <span aria-hidden='true' className={ cn('inline-flex items-center text-gray-500 dark:text-gray-300', className) }>{children || <Icon name='ChevronRight' decorative size='xs' />}</span>
 );
 
 export const BreadcrumbEllipsis = ({ className }) => (

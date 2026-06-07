@@ -1,3 +1,5 @@
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { StoryStage } from '../story-helpers';
 
@@ -26,6 +28,19 @@ export default {
 };
 
 export const Example = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Choose topic' });
+    const listbox = canvas.getByRole('listbox', { name: 'Choose topic options' });
+
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(listbox).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    await waitFor(() => expect(canvas.queryByRole('listbox', { name: 'Choose topic options' })).not.toBeInTheDocument());
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toHaveTextContent('Knowledge graphs');
+  },
   render: () => (
     <StoryStage minHeight='min-h-72'>
       <Select defaultOpen options={ topicOptions.slice(0, 3) } placeholder='Choose topic' />
@@ -34,6 +49,22 @@ export const Example = {
 };
 
 export const Searchable = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const searchInput = canvas.getByRole('textbox', { name: 'Search article topics...' });
+
+    await expect(searchInput).toHaveFocus();
+    await userEvent.type(searchInput, 'AI');
+
+    await expect(canvas.getByRole('option', { name: 'AI engineering' })).toBeVisible();
+    await expect(canvas.queryByRole('option', { name: 'Design systems' })).not.toBeInTheDocument();
+
+    await userEvent.clear(searchInput);
+    await expect(canvas.getByRole('option', { name: 'Design systems' })).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(canvas.queryByRole('listbox', { name: 'Search topics options' })).not.toBeInTheDocument());
+  },
   render: () => (
     <StoryStage minHeight='min-h-80'>
       <Select
@@ -48,6 +79,23 @@ export const Searchable = {
 };
 
 export const MultiSelect = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: /Design systems, Semantic web/ });
+    const listbox = canvas.getByRole('listbox', { name: 'Choose topics options' });
+    const selectedTopic = canvas.getByRole('option', { name: 'Design systems' });
+    const additionalTopic = canvas.getByRole('option', { name: 'AI engineering' });
+
+    await expect(listbox).toHaveAttribute('aria-multiselectable', 'true');
+    await expect(selectedTopic).toHaveAttribute('aria-selected', 'true');
+    await expect(trigger).toHaveTextContent('Design systems, Semantic web');
+    await expect(trigger).toHaveTextContent('2');
+
+    await userEvent.click(additionalTopic);
+    await expect(additionalTopic).toHaveAttribute('aria-selected', 'true');
+    await expect(trigger).toHaveTextContent('3');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  },
   render: () => (
     <StoryStage minHeight='min-h-80'>
       <Select
@@ -63,6 +111,22 @@ export const MultiSelect = {
 };
 
 export const States = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const sortTrigger = canvas.getByRole('button', { name: 'Sort posts' });
+    const selectedTrigger = canvas.getByRole('button', { name: 'Design systems' });
+    const requiredTrigger = canvas.getByRole('button', { name: 'Required topic' });
+    const disabledTrigger = canvas.getByRole('button', { name: 'Select option' });
+
+    await expect(sortTrigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(selectedTrigger).toHaveTextContent('Design systems');
+    await expect(requiredTrigger).toHaveAttribute('aria-invalid', 'true');
+    await expect(disabledTrigger).toBeDisabled();
+
+    await userEvent.click(sortTrigger);
+    await expect(canvas.getByRole('listbox', { name: 'Sort posts options' })).toBeVisible();
+    await expect(canvas.getByRole('option', { name: 'Newest first' })).toBeVisible();
+  },
   render: () => (
     <StoryStage className='grid max-w-sm content-start gap-4' minHeight='min-h-96'>
       <Select options={ [{ label: 'Newest first', value: 'newest' }, { label: 'Oldest first', value: 'oldest' }] } placeholder='Sort posts' />
@@ -74,6 +138,20 @@ export const States = {
 };
 
 export const NativeOptionsInput = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Topic from option children' });
+    const listbox = canvas.getByRole('listbox', { name: 'Topic from option children options' });
+
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(listbox).toBeVisible();
+    await expect(canvas.getByRole('option', { name: 'AI Engineering' })).toBeVisible();
+    await expect(canvas.getByRole('option', { name: 'Knowledge Graphs' })).toBeVisible();
+
+    await userEvent.keyboard('{End}{Enter}');
+    await waitFor(() => expect(canvas.queryByRole('listbox', { name: 'Topic from option children options' })).not.toBeInTheDocument());
+    await expect(trigger).toHaveTextContent('Design Systems');
+  },
   render: () => (
     <StoryStage minHeight='min-h-72'>
       <Select aria-label='Topic from option children' defaultOpen>

@@ -2,6 +2,21 @@ import { Button, Card, Typography } from '../../src/index';
 
 import { HighlightedCode } from './HighlightedCode';
 
+export const GaudiLogo = ({ className = '' }) => (
+  <svg
+    viewBox='0 0 96 96'
+    className={ `block shrink-0 text-gray-950 dark:text-white ${className}` }
+    role='img'
+    aria-label='Gaudi'
+    focusable='false'
+  >
+    <path
+      d='M24 10H88L79 28H24V10ZM8 28H24V62C24 66.4 27.6 70 32 70H72V88H28C16.95 88 8 79.05 8 68V28ZM32 42H88V66H42L32 42Z'
+      fill='currentColor'
+    />
+  </svg>
+);
+
 export const InlineCode = ({ children }) => (
   <code className='rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[0.8em] text-gray-800 dark:bg-gray-800 dark:text-gray-100'>{children}</code>
 );
@@ -42,7 +57,10 @@ export const Page = ({ children, intro, kicker, title }) => (
     <div className='w-full max-w-none space-y-14 px-6 py-8 sm:px-8 lg:px-10'>
       <header className='max-w-3xl space-y-4'>
         {kicker ? <div className='inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300'>{kicker}</div> : null}
-        <Typography variant='heading-xl'>{title}</Typography>
+        <div className='flex items-center gap-4'>
+          <GaudiLogo className='h-16 w-16' />
+          <Typography variant='heading-xl'>{title}</Typography>
+        </div>
         {intro ? <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'><InlineText>{intro}</InlineText></p> : null}
       </header>
       {children}

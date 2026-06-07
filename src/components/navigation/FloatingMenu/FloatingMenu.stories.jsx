@@ -1,11 +1,19 @@
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
+import { FloatingMenu } from '../../../index';
 
 import * as componentModule from './index';
 
 const componentDocs = getComponentDocs('Navigation/FloatingMenu');
+const waitForScrollEffect = () => new Promise((resolve) => window.setTimeout(resolve, 25));
 
 export default {
+  args: {
+    className: 'story-floating-menu'
+  },
+  component: FloatingMenu,
   excludeStories: [ 'Example' ],
   parameters: {
     docs: {
@@ -21,4 +29,42 @@ export default {
 
 export const Example = {
   'render': () => renderComponentExample('Navigation/FloatingMenu', componentModule)
+};
+
+export const ScrollAwareNavigation = {
+  render: (args) => (
+    <div className='min-h-[220px] p-8'>
+      <FloatingMenu className={ args.className } />
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const backTop = canvas.getByRole('button', { name: 'Back to top' });
+    const menu = backTop.closest('div');
+    const originalScrollTo = window.scrollTo;
+    const scrollTo = fn();
+
+    await expect(canvas.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/blog/projects');
+    await expect(menu).toHaveClass(args.className);
+    await expect(menu).toHaveClass('opacity-0');
+
+    await waitForScrollEffect();
+
+    Object.defineProperty(window, 'scrollY', { 'configurable': true, 'value': 120 });
+    window.dispatchEvent(new Event('scroll'));
+
+    await waitForScrollEffect();
+
+    Object.defineProperty(window, 'scrollY', { 'configurable': true, 'value': 80 });
+    window.dispatchEvent(new Event('scroll'));
+
+    await waitFor(() => expect(menu).toHaveClass('opacity-100'));
+
+    window.scrollTo = scrollTo;
+    await userEvent.click(backTop);
+
+    await expect(scrollTo).toHaveBeenCalledWith({ 'behavior': 'smooth', 'top': 0 });
+
+    window.scrollTo = originalScrollTo;
+  }
 };

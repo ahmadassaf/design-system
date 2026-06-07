@@ -1,12 +1,16 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
-import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
-import * as componentModule from './index';
+import MenuSearch from './MenuSearch';
 
 const componentDocs = getComponentDocs('Navigation/MenuSearch');
 
 export default {
-  excludeStories: [ 'Example' ],
+  args: {
+    className: 'storybook-menu-search',
+    setOpen: fn()
+  },
+  component: MenuSearch,
   parameters: {
     docs: {
       description: {
@@ -15,10 +19,26 @@ export default {
       page: createComponentDocsPage(componentDocs)
     }
   },
-  tags: [ '!autodocs', '!dev' ],
+  tags: [ '!autodocs' ],
   title: 'Navigation/MenuSearch'
 };
 
 export const Example = {
-  'render': () => renderComponentExample('Navigation/MenuSearch', componentModule)
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: 'Open search' });
+
+    await expect(button).toBeVisible();
+    await expect(button).toHaveTextContent('Search');
+    await expect(button.parentElement).toHaveClass('storybook-menu-search');
+
+    await userEvent.click(button);
+
+    await expect(args.setOpen).toHaveBeenCalledWith(true);
+  },
+  render: (args) => (
+    <div className='max-w-sm p-6'>
+      <MenuSearch { ...args } />
+    </div>
+  )
 };
