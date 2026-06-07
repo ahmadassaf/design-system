@@ -1,4 +1,5 @@
 import { CheckList, CodeBlock, InlineCode, Page, QuickLink, Section, Table, Td, Th } from '../../../.storybook/stories/StoryDocs';
+import { expect, within } from 'storybook/test';
 
 export default {
   parameters: {
@@ -11,6 +12,15 @@ export default {
 
 export const Default = {
   name: 'Overview',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole('heading', { name: 'MDX Components' })).toBeVisible();
+    await expect(canvas.getAllByText('CitationTracker').length).toBeGreaterThanOrEqual(2);
+    await expect(canvas.getAllByText('CodeGroupTabs').length).toBeGreaterThanOrEqual(1);
+    await expect(canvas.getByRole('link', { name: /Callout/ })).toHaveAttribute('href', '?path=/story/mdx-callout--example');
+    await expect(canvas.getByRole('link', { name: /Citation/ })).toHaveAttribute('href', '?path=/story/mdx-citation--example');
+  },
   render: () => (
     <Page
       title='MDX Components'

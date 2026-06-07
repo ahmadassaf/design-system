@@ -1,0 +1,80 @@
+name: Release Version
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump to apply
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+      dry_run:
+        description: Run checks and calculate the next version without committing
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-version-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bump-version:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, 'chore(release): v')
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_BUMP: ${{ github.event.inputs.bump || 'patch' }}
+      RELEASE_DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run contract tests
+        run: pnpm test:contracts
+
+      - name: Build Storybook
+        run: pnpm build-storybook
+
+      - name: Bump package version
+        run: pnpm version:bump
+
+      - name: Commit release version
+        if: env.RELEASE_DRY_RUN != 'true'
+        run: |
+          if git diff --quiet -- package.json; then
+            echo "No version changes to commit."
+            exit 0
+          fi
+
+          version="$(node -p "require('./package.json').version")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "chore(release): v${version}"
+          git tag "v${version}"
+          git push --follow-tags

@@ -1,4 +1,5 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
+import { expect, waitFor, within } from 'storybook/test';
 
 import { AreaChart,
   BarChart,
@@ -38,6 +39,18 @@ const radialData = [{ label: 'Read completion', value: 78 }];
 
 const componentDocs = getComponentDocs('MDX/Chart');
 
+const expectChartStory = async (canvasElement, { ariaLabel, description, title }) => {
+  const canvas = within(canvasElement);
+
+  await expect(canvas.getByText(title)).toBeVisible();
+  await expect(canvas.getByText(description)).toBeVisible();
+  await expect(canvas.queryByText('Chart renderer unavailable. Recharts did not load correctly.')).not.toBeInTheDocument();
+
+  await waitFor(() => {
+    expect(canvas.getAllByRole('img', { name: ariaLabel }).length).toBeGreaterThanOrEqual(1);
+  });
+};
+
 export default {
   component: Chart,
   parameters: {
@@ -53,6 +66,13 @@ export default {
 };
 
 export const Bar = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Article views by day',
+      description: 'Use bars for discrete comparisons such as views, counts, or category totals.',
+      title: 'Article views'
+    });
+  },
   render: () => (
     <BarChart
       ariaLabel='Article views by day'
@@ -65,6 +85,13 @@ export const Bar = {
 };
 
 export const Line = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Subscriber trend by day',
+      description: 'Use lines for trends across a continuous sequence.',
+      title: 'Subscriber trend'
+    });
+  },
   render: () => (
     <LineChart
       ariaLabel='Subscriber trend by day'
@@ -77,6 +104,13 @@ export const Line = {
 };
 
 export const Area = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Article views area chart',
+      description: 'Use area charts when the volume under a trend matters.',
+      title: 'Reading activity'
+    });
+  },
   render: () => (
     <AreaChart
       ariaLabel='Article views area chart'
@@ -89,6 +123,13 @@ export const Area = {
 };
 
 export const Pie = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Content mix by category',
+      description: 'Use pie charts sparingly for a small number of parts of a whole.',
+      title: 'Content mix'
+    });
+  },
   render: () => (
     <PieChart
       ariaLabel='Content mix by category'
@@ -100,6 +141,13 @@ export const Pie = {
 };
 
 export const Donut = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Content mix by category as donut chart',
+      description: 'Donut charts work best for compact proportional summaries.',
+      title: 'Content mix'
+    });
+  },
   render: () => (
     <DonutChart
       ariaLabel='Content mix by category as donut chart'
@@ -111,6 +159,13 @@ export const Donut = {
 };
 
 export const Composed = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Views and read time by day',
+      description: 'Use composed charts when two related measures need to share one timeline.',
+      title: 'Views and read time'
+    });
+  },
   render: () => (
     <ComposedChart
       ariaLabel='Views and read time by day'
@@ -122,6 +177,13 @@ export const Composed = {
 };
 
 export const Scatter = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Post length against read time',
+      description: 'Use scatter charts to show correlation between two numeric dimensions.',
+      title: 'Post length and read time'
+    });
+  },
   render: () => (
     <ScatterChart
       ariaLabel='Post length against read time'
@@ -135,6 +197,13 @@ export const Scatter = {
 };
 
 export const Radial = {
+  play: async ({ canvasElement }) => {
+    await expectChartStory(canvasElement, {
+      ariaLabel: 'Read completion progress',
+      description: 'Use radial charts for one compact progress-style measure.',
+      title: 'Read completion'
+    });
+  },
   render: () => (
     <RadialBarChart
       ariaLabel='Read completion progress'

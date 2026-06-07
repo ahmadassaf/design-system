@@ -35,7 +35,7 @@ const Keyword = ({ children }) => <span className='text-purple-300'>{children}</
 const ComponentToken = ({ children }) => <span className='text-blue-300'>{children}</span>;
 const TagToken = ({ children }) => <span className='text-sky-300'>{children}</span>;
 const StringToken = ({ children }) => <span className='text-green-300'>{children}</span>;
-const PunctuationToken = ({ children }) => <span className='text-gray-500'>{children}</span>;
+const PunctuationToken = ({ children }) => <span className='text-gray-300'>{children}</span>;
 
 const DemoPre = ({ children }) => (
   <pre className='overflow-auto whitespace-pre rounded-b-md bg-gray-950 p-4 text-left text-sm leading-6 text-gray-100'>
@@ -48,10 +48,10 @@ const DemoCodeGroup = () => (
     <CodeGroupTabs />
     <div className='rehype-code-group'>
       <div className='rcg-tab-container' role='tablist' aria-label='Code language'>
-        <button type='button' className='rcg-tab active' aria-selected='true'>JavaScript</button>
-        <button type='button' className='rcg-tab' aria-selected='false'>TypeScript</button>
+        <button type='button' className='rcg-tab active' id='demo-tab-js' role='tab' aria-controls='demo-panel-js' aria-selected='true'>JavaScript</button>
+        <button type='button' className='rcg-tab' id='demo-tab-ts' role='tab' aria-controls='demo-panel-ts' aria-selected='false'>TypeScript</button>
       </div>
-      <div className='rcg-block active'>
+      <div className='rcg-block active' id='demo-panel-js' role='tabpanel' aria-labelledby='demo-tab-js'>
         <DemoPre>
           <Keyword>import</Keyword>{' { '}<ComponentToken>Button</ComponentToken>{' } '}<Keyword>from</Keyword>{' '}<StringToken>'@gaudi/design-system'</StringToken><PunctuationToken>;</PunctuationToken>{'\n\n'}
           <Keyword>export</Keyword>{' '}<Keyword>default</Keyword>{' '}<Keyword>function</Keyword>{' '}<ComponentToken>Page</ComponentToken><PunctuationToken>() {'{'} </PunctuationToken>{'\n'}
@@ -59,7 +59,7 @@ const DemoCodeGroup = () => (
           <PunctuationToken>{'}'}</PunctuationToken>
         </DemoPre>
       </div>
-      <div className='rcg-block' hidden>
+      <div className='rcg-block' id='demo-panel-ts' role='tabpanel' aria-labelledby='demo-tab-ts' hidden>
         <DemoPre>
           <Keyword>import</Keyword>{' { '}<ComponentToken>Button</ComponentToken>{' } '}<Keyword>from</Keyword>{' '}<StringToken>'@gaudi/design-system'</StringToken><PunctuationToken>;</PunctuationToken>{'\n\n'}
           <Keyword>export</Keyword>{' '}<Keyword>default</Keyword>{' '}<Keyword>function</Keyword>{' '}<ComponentToken>Page</ComponentToken><PunctuationToken>()</PunctuationToken>{': '}<ComponentToken>JSX</ComponentToken><PunctuationToken>.</PunctuationToken><ComponentToken>Element</ComponentToken>{' '}<PunctuationToken>{'{'}</PunctuationToken>{'\n'}

@@ -29,15 +29,17 @@ const toneClasses = {
 };
 
 const MetricGrid = () => (
-  <div className='grid gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 dark:border-gray-800 dark:bg-gray-800 md:grid-cols-3'>
+  <dl className='grid gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 dark:border-gray-800 dark:bg-gray-800 md:grid-cols-3'>
     {metricStats.map(([ value, label, description ]) => (
       <div key={ label } className='bg-white p-6 dark:bg-gray-950'>
         <dt className='text-sm font-medium text-gray-500 dark:text-gray-400'>{label}</dt>
-        <dd className='mt-3 text-4xl font-extrabold tracking-tight text-gray-950 dark:text-white'>{value}</dd>
-        <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>{description}</p>
+        <dd className='mt-3'>
+          <span className='block text-4xl font-extrabold tracking-tight text-gray-950 dark:text-white'>{value}</span>
+          <span className='mt-3 block text-sm leading-6 text-gray-600 dark:text-gray-300'>{description}</span>
+        </dd>
       </div>
     ))}
-  </div>
+  </dl>
 );
 
 const ChangelogStats = () => (

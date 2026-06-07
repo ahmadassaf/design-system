@@ -1,3 +1,5 @@
+import { expect, within } from 'storybook/test';
+
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { Terminal, terminalVariants } from '../../../index';
 
@@ -122,10 +124,32 @@ export const Static = {
     'commands': blogCommands,
     'title': 'blog — zsh',
     'username': 'ahmad'
+  },
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const terminal = canvas.getByRole('region', { 'name': 'Static terminal output' });
+    const body = terminal.querySelector('pre');
+
+    expect(canvas.getByText('blog — zsh')).toBeInTheDocument();
+    expect(body).toHaveTextContent('ahmad$pnpm content');
+    expect(body).toHaveTextContent('Contentlayer generated posts, projects, and thoughts.');
+    expect(body).toHaveTextContent('Next.js build completed without GitHub API calls.');
+    expect(canvas.getByText('Contentlayer generated posts, projects, and thoughts.').parentElement).toHaveClass('text-green-300');
   }
 };
 
 export const Variants = {
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const darkTerminal = canvas.getByText('dark').closest('section');
+    const translucentTerminal = canvas.getByText('translucent').closest('section');
+    const lightTerminal = canvas.getByText('light').closest('section');
+
+    expect(darkTerminal).toHaveClass('bg-gray-950', 'text-gray-100');
+    expect(translucentTerminal).toHaveClass('bg-gray-950/90', 'backdrop-blur');
+    expect(lightTerminal).toHaveClass('bg-white', 'text-gray-950');
+    expect(within(lightTerminal).getByText('Packages resolved, downloaded, and linked.').parentElement).toHaveClass('text-green-700');
+  },
   'render': () => (
     <div className='grid max-w-5xl gap-6 p-6 lg:grid-cols-2'>
       <Terminal animate={ false } commands={ installCommands } title='dark' variant='dark' />

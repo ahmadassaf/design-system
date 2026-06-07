@@ -73,7 +73,7 @@ const NewsletterForm = ({ className, classNames = {}, title = 'Subscribe to the 
   return (
     <div className={ cn('mt-8 xl:col-span-2 xl:mt-0', className, classNames.root) }>
       <h3 className={ cn('text-base font-medium text-gray-900 dark:text-white', classNames.title) }>{title}</h3>
-      <p className={ cn('mt-4 text-base text-gray-400 md:text-sm', classNames.description) }>
+      <p className={ cn('mt-4 text-base text-gray-600 md:text-sm dark:text-gray-300', classNames.description) }>
         The latest articles, readings, and resources, sent to your inbox monthly
       </p>
       <form className={ cn('mt-4 sm:flex sm:max-w-md', classNames.form) } onSubmit={ subscribe }>

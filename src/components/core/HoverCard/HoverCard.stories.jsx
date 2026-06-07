@@ -1,3 +1,5 @@
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
+
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { StoryStage } from '../story-helpers';
 
@@ -25,7 +27,26 @@ export const Example = {
         content='Graph-shaped context for linking concepts, entities, and sources.'
       />
     </StoryStage>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Knowledge graphs' });
+
+    expect(trigger).toHaveClass('font-semibold', 'text-blue-600');
+
+    await userEvent.hover(trigger);
+
+    const content = await screen.findByText('Graph-shaped context for linking concepts, entities, and sources.');
+    const panel = content.closest('.w-80') || content;
+
+    expect(content).toBeVisible();
+    expect(panel).toHaveClass('w-80', 'rounded-lg', 'border', 'shadow-lg');
+
+    await userEvent.unhover(trigger);
+    await waitFor(() => {
+      expect(screen.queryByText('Graph-shaped context for linking concepts, entities, and sources.')).not.toBeInTheDocument();
+    });
+  }
 };
 
 export const RichContent = {
@@ -41,7 +62,21 @@ export const RichContent = {
         ) }
       />
     </StoryStage>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Gaudi' });
+
+    await userEvent.hover(trigger);
+
+    expect(await screen.findByText('Gaudi Design System')).toBeVisible();
+    expect(screen.getByText('Core components, tokens, and docs for editorial products.')).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByText('Gaudi Design System')).not.toBeInTheDocument();
+    });
+  }
 };
 
 export const Composed = {
@@ -56,5 +91,25 @@ export const Composed = {
         </HoverCardContent>
       </HoverCardRoot>
     </StoryStage>
-  )
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByText('Blog architecture').closest('a');
+
+    expect(trigger).toBeVisible();
+    expect(trigger).toHaveAttribute('href');
+
+    await userEvent.hover(trigger);
+
+    const content = await screen.findByText('Hover cards give supporting context without replacing links or required content.');
+    const panel = content.closest('.w-80') || content;
+
+    expect(content).toBeVisible();
+    expect(panel).toHaveClass('w-80', 'rounded-lg', 'border', 'shadow-lg');
+
+    await userEvent.unhover(trigger);
+    await waitFor(() => {
+      expect(screen.queryByText('Hover cards give supporting context without replacing links or required content.')).not.toBeInTheDocument();
+    });
+  }
 };

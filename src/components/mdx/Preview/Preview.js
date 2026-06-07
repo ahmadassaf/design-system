@@ -584,9 +584,10 @@ const Preview = memo(function Preview({
   // Get preview image URL
   const previewImageUrl = useMemo(() => {
     if (!showImage || !data) return null;
+    if (isInternal) return null;
 
     return getPreviewImageUrl(url, data);
-  }, [ url, data, showImage ]);
+  }, [ url, data, isInternal, showImage ]);
 
   // Normalize favicon URL
   const normalizedFavicon = useMemo(() => {
@@ -770,7 +771,7 @@ const Preview = memo(function Preview({
           <AnimatePresence>
             {isHoverCardOpen && (
               <motion.div
-                initial={{ 'opacity': 0, 'scale': 0.96, 'y': 8 }}
+                initial={{ 'opacity': 1, 'scale': 0.96, 'y': 8 }}
                 animate={{
                   'opacity': 1,
                   'scale': 1,
@@ -778,12 +779,12 @@ const Preview = memo(function Preview({
                   'y': 0
                 }}
                 exit={{
-                  'opacity': 0,
+                  'opacity': 1,
                   'scale': 0.96,
                   'transition': { 'duration': 0.1 },
                   'y': 8
                 }}
-                className={ `bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-border-dark ${isInternal ? 'p-4' : 'overflow-hidden'}` }
+                className={ `rounded-lg border border-gray-200 bg-white shadow-2xl ${isInternal ? 'p-4' : 'overflow-hidden'}` }
                 style={{
                   'maxWidth': 'calc(100vw - 2rem)',
                   'width': isInternal ? '384px' : '320px'
@@ -793,24 +794,24 @@ const Preview = memo(function Preview({
                   <div>
                     {data?.category && (
                       <div className='mb-3'>
-                        <span className='inline-block rounded bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'>
+                        <span className='inline-block rounded px-2 py-1 text-xs font-medium' style={{ 'backgroundColor': '#dbeafe', 'color': '#172554' }}>
                           {data.category}
                         </span>
                       </div>
                     )}
 
-                    <h3 className='mb-2 line-clamp-2 text-lg font-bold text-gray-900 dark:text-gray-100'>
+                    <h3 className='mb-2 line-clamp-2 text-lg font-bold' style={{ 'color': '#111827' }}>
                       {formattedTitle}
                     </h3>
 
                     {(data?.summary || data?.description) && (
-                      <p className='mb-3 line-clamp-3 text-sm text-gray-600 dark:text-gray-400'>
+                      <p className='mb-3 line-clamp-3 text-sm' style={{ 'color': '#111827' }}>
                         {data.summary || data.description}
                       </p>
                     )}
 
                     {(data?.publishedTime || data?.readingTime) && (
-                      <div className='mb-3 flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400'>
+                      <div className='mb-3 flex flex-wrap gap-3 text-xs' style={{ 'color': '#111827' }}>
                         {data?.publishedTime && (
                           <div className='flex items-center gap-1'>
                             <Icon name='Calendar' size='xs' decorative />
@@ -835,13 +836,13 @@ const Preview = memo(function Preview({
                             variant='soft'
                             size='xs'
                             radius='md'
-                            className='my-0 mr-0 normal-case tracking-normal'
+                            className='my-0 mr-0 normal-case tracking-normal !bg-[#f9fafb] !text-[#111827] dark:!bg-[#f9fafb] dark:!text-[#111827]'
                           >
                             {tag}
                           </Pill>
                         ))}
                         {data.tags.length > 5 && (
-                          <span className='self-center text-xs text-gray-500 dark:text-gray-400'>
+                          <span className='self-center text-xs' style={{ 'color': '#111827' }}>
                             +{data.tags.length - 5} more
                           </span>
                         )}
@@ -852,23 +853,23 @@ const Preview = memo(function Preview({
                   <>
                     {/* Special content display for Wikipedia instead of image */}
                     {data?.type === 'wikipedia' && data?.excerpt ? (
-                      <div className='bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6'>
+                      <div className='bg-gradient-to-br from-gray-50 to-gray-100 p-6'>
                         <div className='flex items-center gap-2 mb-3'>
-                          <svg className='h-5 w-5 text-gray-600 dark:text-gray-400' fill='currentColor' viewBox='0 0 20 20'>
+                          <svg className='h-5 w-5' fill='currentColor' viewBox='0 0 20 20' style={{ 'color': '#111827' }}>
                             <path d='M9 4.804A1 1 0 017.53 5.02L5.032 9.513a1 1 0 00.268 1.537l2.5 1.5a1 1 0 001.2-.268l2.5-3.5a1 1 0 00-.134-1.366l-2-1.612zM11 4.804a1 1 0 011.47.216l2.498 4.493a1 1 0 01-.268 1.537l-2.5 1.5a1 1 0 01-1.2-.268l-2.5-3.5a1 1 0 01.134-1.366l2-1.612z'/>
                           </svg>
-                          <span className='text-sm font-semibold text-gray-700 dark:text-gray-300'>Wikipedia Article</span>
+                          <span className='text-sm font-semibold text-gray-700'>Wikipedia Article</span>
                         </div>
                         <div className='space-y-2'>
-                          <h4 className='text-base font-bold text-gray-900 dark:text-gray-100'>
+                          <h4 className='text-base font-bold text-gray-900'>
                             {data.articleName || formattedTitle}
                           </h4>
                           {data.description && (
-                            <p className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+                            <p className='text-sm font-medium text-gray-700'>
                               {data.description}
                             </p>
                           )}
-                          <p className='text-xs text-gray-600 dark:text-gray-400 leading-relaxed'>
+                          <p className='text-xs leading-relaxed' style={{ 'color': '#111827' }}>
                             {data.excerpt}
                           </p>
                         </div>
@@ -877,11 +878,11 @@ const Preview = memo(function Preview({
 
                     /* Regular image preview for other sites */
                       previewImageUrl && !imageError && (
-                        <div className='relative w-full h-48 bg-gray-100 dark:bg-gray-900'>
+                        <div className='relative w-full h-48 bg-gray-100'>
                           {!imageLoaded && (
                             <div className='absolute inset-0 flex items-center justify-center'>
                               <div className='animate-pulse'>
-                                <Icon name='PhotoIcon' size='xl' decorative className='text-gray-400' />
+                                <Icon name='PhotoIcon' size='xl' decorative className='text-gray-500' />
                               </div>
                             </div>
                           )}
@@ -920,32 +921,32 @@ const Preview = memo(function Preview({
                             />
                           )}
                           <div className='flex-1 min-w-0'>
-                            <h3 className='font-medium text-sm text-gray-900 dark:text-gray-100 line-clamp-2'>
+                            <h3 className='font-medium text-sm text-gray-900 line-clamp-2'>
                               {formattedTitle}
                             </h3>
 
                             {data?.description && (
-                              <p className='text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2'>
+                              <p className='mt-1 line-clamp-2 text-xs' style={{ 'color': '#111827' }}>
                                 {data.description}
                               </p>
                             )}
 
                             <div className='flex items-center gap-2 mt-2'>
-                              <span className='text-xs text-gray-500 dark:text-gray-500'>
+                              <span className='text-xs' style={{ 'color': '#111827' }}>
                                 {siteName}
                               </span>
                               {data?.publishedTime && (
                                 <>
-                                  <span className='text-xs text-gray-400'>·</span>
-                                  <span className='text-xs text-gray-500'>
+                                  <span className='text-xs' style={{ 'color': '#111827' }}>·</span>
+                                  <span className='text-xs' style={{ 'color': '#111827' }}>
                                     {new Date(data.publishedTime).toLocaleDateString()}
                                   </span>
                                 </>
                               )}
                               {data?.readingTime && (
                                 <>
-                                  <span className='text-xs text-gray-400'>·</span>
-                                  <span className='text-xs text-gray-500'>
+                                  <span className='text-xs' style={{ 'color': '#111827' }}>·</span>
+                                  <span className='text-xs' style={{ 'color': '#111827' }}>
                                     {data.readingTime}
                                   </span>
                                 </>

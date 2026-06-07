@@ -1,4 +1,5 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
+import { expect, within } from 'storybook/test';
 import { Button, Card, Pill } from '../../../index';
 
 const componentDocs = getComponentDocs('Core/Card');
@@ -34,13 +35,35 @@ export const Variants = {
         <Card key={ variant } title={ variant } subtitle='Reusable card style.' variant={ variant } />
       ))}
     </div>
-  )
+  ),
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    for (const variant of [ 'elevated', 'outline', 'soft', 'flat' ]) {
+      const heading = canvas.getByRole('heading', { 'level': 4, 'name': variant });
+      const card = heading.closest('div')?.parentElement;
+
+      await expect(heading).toBeVisible();
+      await expect(within(card).getByText('Reusable card style.')).toBeVisible();
+    }
+  }
 };
 
 export const Default = {
   'args': {
     'subtitle': 'Reusable content frame with title, description, and optional actions.',
     title: 'Design System Card'
+  },
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heading = canvas.getByRole('heading', { 'level': 4, 'name': 'Design System Card' });
+    const card = heading.closest('div')?.parentElement;
+    const subtitle = canvas.getByText('Reusable content frame with title, description, and optional actions.');
+
+    await expect(heading).toBeVisible();
+    await expect(subtitle).toBeVisible();
+    await expect(card).toContainElement(heading);
+    await expect(card).toContainElement(subtitle);
   }
 };
 
@@ -54,7 +77,15 @@ export const WithContent = {
         </div>
       </Card>
     </div>
-  )
+  ),
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole('heading', { 'level': 4, 'name': 'Building with tokens' })).toBeInTheDocument();
+    await expect(canvas.getByText('Cards should be plain containers, not layout decoration.')).toBeVisible();
+    await expect(canvas.getByText('Foundations')).toBeVisible();
+    await expect(canvas.getByRole('button', { 'name': 'Open' })).toBeEnabled();
+  }
 };
 
 export const Padding = {
@@ -66,7 +97,16 @@ export const Padding = {
         </Card>
       ))}
     </div>
-  )
+  ),
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    for (const padding of [ 'none', 'sm', 'md', 'lg' ]) {
+      await expect(canvas.getByRole('heading', { 'level': 4, 'name': padding })).toBeVisible();
+    }
+
+    await expect(canvas.getByText('Content supplies its own spacing.')).toBeVisible();
+  }
 };
 
 export const Interactive = {
@@ -78,5 +118,15 @@ export const Interactive = {
         </div>
       </Card>
     </div>
-  )
+  ),
+  'play': async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heading = canvas.getByRole('heading', { 'level': 4, 'name': 'Interactive card' });
+    const card = heading.closest('div')?.parentElement;
+    const link = canvas.getByRole('link', { 'name': 'Open article' });
+
+    await expect(card).toContainElement(link);
+    await expect(link).toBeVisible();
+    await expect(new URL(link.href).pathname).toBe('/blog');
+  }
 };
