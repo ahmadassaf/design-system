@@ -29,6 +29,10 @@ import {
   Typography
 } from '../../src/index';
 
+import { ComponentDocumentation, getComponentDocs } from './ComponentDocs';
+
+const componentDocs = getComponentDocs('Layout');
+
 const siteMetadata = {
   author: 'Ahmad Assaf',
   description: 'This is my personal space to share my thoughts and ideas on AI, Data and Productivity',
@@ -1032,7 +1036,18 @@ export default {
       }
     }
   },
-  title: 'Layout/LayoutContainer'
+  title: 'Layout'
+};
+
+export const Documentation = {
+  name: 'Docs',
+  parameters: {
+    controls: {
+      disable: true
+    },
+    layout: 'fullscreen'
+  },
+  render: () => <ComponentDocumentation docs={ componentDocs } />
 };
 
 export const MainPage = {

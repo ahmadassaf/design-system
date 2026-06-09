@@ -125,12 +125,6 @@ const articleSections = toc.flatMap((section) => [
 
 const sectionBody = 'Use enough article copy to make the page scroll and let the table of contents track the active heading. The example mirrors a real post instead of a bare list of hidden headings.';
 
-const layoutPosts = [
-  { 'category': 'Engineering', 'title': 'Design systems keep editorial rhythm predictable' },
-  { 'category': 'Data', 'title': 'Knowledge graphs for product teams' },
-  { 'category': 'Management', 'title': 'Decision records make teams faster' }
-];
-
 const LayoutContainerPreview = () => (
   <ExampleFrame width='max-w-6xl'>
     <div className='overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950'>
@@ -626,31 +620,10 @@ const renderPostExample = (name, componentModule) => {
   }
 };
 
-const renderLayoutExample = (name, componentModule) => {
-  const Component = componentOf(componentModule);
-
+const renderLayoutExample = (name) => {
   switch (name) {
-  case 'Aurora':
-    return (
-      <ExampleFrame width='max-w-6xl'>
-        <Component className='min-h-[420px] overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800'>
-          <div className='relative z-10 w-full max-w-4xl px-8 py-16'>
-            <p className='text-sm font-semibold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400'>Editorial system</p>
-            <h2 className='mt-3 max-w-2xl text-5xl font-bold leading-tight text-gray-950 dark:text-white'>Writing, projects, and research in one quiet shell</h2>
-            <p className='mt-5 max-w-xl text-base leading-7 text-gray-600 dark:text-gray-300'>The background sits behind full-page content while the foreground keeps the article surface readable.</p>
-            <div className='mt-8 grid gap-3 sm:grid-cols-3'>
-              {layoutPosts.map((post) => (
-                <div key={ post.title } className='rounded-lg border border-white/70 bg-white/75 p-4 text-sm shadow-xs backdrop-blur dark:border-white/10 dark:bg-gray-950/70'>
-                  <p className='text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400'>{post.category}</p>
-                  <p className='mt-2 font-semibold text-gray-950 dark:text-white'>{post.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Component>
-      </ExampleFrame>
-    );
   case 'LayoutContainer':
+  case 'Layout':
     return <LayoutContainerPreview />;
   default:
     return null;
