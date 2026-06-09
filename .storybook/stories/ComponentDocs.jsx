@@ -18,7 +18,7 @@ const groupDocs = {
   },
   'Layout': {
     'accessibility': 'Layout components should preserve document landmarks, reading order, and form semantics. They must not trap focus or create non-semantic wrappers around interactive content.',
-    'description': 'provides consistent spacing, width, section composition, and layout-owned surfaces such as newsletter signup.'
+    'description': 'provides consistent spacing, width, and page shell composition.'
   },
   'MDX': {
     'accessibility': 'MDX components must keep article semantics intact: real headings, tables, code blocks, captions, alt text, and keyboard-accessible expandable content.',
@@ -38,11 +38,7 @@ const usageExamples = {
   'Core/CmdLauncher': "import { CmdLauncher } from '@gaudi/design-system';\n\n<MenuSearch setOpen={setOpen} />\n<CmdLauncher\n  open={open}\n  setOpen={setOpen}\n  posts={posts}\n  projects={projects}\n  publications={publications}\n  tags={tags}\n  thoughts={thoughts}\n/>",
   'Blocks/Thoughts': "import { ThoughtsSection } from '@gaudi/design-system';\n\n<ThoughtsSection thoughts={thoughts} />",
   'Layout/Aurora': "import { Aurora } from '@gaudi/design-system';\n\n<Aurora className='min-h-[320px]'>\n  <section>Editorial content</section>\n</Aurora>",
-  'Layout/Footer': "import { Footer } from '@gaudi/design-system';\n\n<Footer />",
   'Layout/LayoutContainer': "import { LayoutContainer } from '@gaudi/design-system';\n\n<LayoutContainer>{children}</LayoutContainer>",
-  'Layout/LayoutWrapper': "import { LayoutWrapper } from '@gaudi/design-system';\n\n<LayoutWrapper>\n  <main>{children}</main>\n</LayoutWrapper>",
-  'Layout/NewsletterForm': "import { NewsletterForm } from '@gaudi/design-system';\n\n<NewsletterForm />",
-  'Layout/Search': "import { Search } from '@gaudi/design-system';\n\n<Search setSearchValue={setSearchValue} />",
   'MDX/Aside': '<Aside>\n  Additional context for the article that should sit outside the main argument.\n</Aside>',
   'MDX/Callout': "<Callout type='info'>\n  Useful article context that readers should notice before continuing.\n</Callout>",
   'MDX/Chart': "<BarChart\n  title='Article views'\n  ariaLabel='Article views by day'\n  data={[\n    { label: 'Mon', views: 124 },\n    { label: 'Tue', views: 168 },\n  ]}\n  yKey='views'\n/>\n\n<LineChart\n  title='Subscriber trend'\n  ariaLabel='Subscribers by day'\n  data={[\n    { label: 'Mon', subscribers: 8 },\n    { label: 'Tue', subscribers: 12 },\n  ]}\n  yKey='subscribers'\n/>",

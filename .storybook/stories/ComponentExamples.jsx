@@ -131,30 +131,6 @@ const layoutPosts = [
   { 'category': 'Management', 'title': 'Decision records make teams faster' }
 ];
 
-const SearchExample = ({ Component }) => {
-  const [ searchValue, setSearchValue ] = useState('');
-  const filteredPosts = layoutPosts.filter((post) => post.title.toLowerCase().includes(searchValue.toLowerCase()) || post.category.toLowerCase().includes(searchValue.toLowerCase()));
-
-  return (
-    <ExampleFrame width='max-w-2xl'>
-      <div className='space-y-5'>
-        <Component setSearchValue={ setSearchValue } />
-        <div className='divide-y divide-gray-200 rounded-lg border border-gray-200 dark:divide-gray-800 dark:border-gray-800'>
-          {filteredPosts.map((post) => (
-            <article key={ post.title } className='p-4'>
-              <p className='text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400'>{post.category}</p>
-              <h3 className='mt-1 text-base font-semibold text-gray-950 dark:text-white'>{post.title}</h3>
-            </article>
-          ))}
-          {filteredPosts.length === 0 ? (
-            <p className='p-4 text-sm text-gray-500 dark:text-gray-400'>No posts matched.</p>
-          ) : null}
-        </div>
-      </div>
-    </ExampleFrame>
-  );
-};
-
 const LayoutContainerPreview = () => (
   <ExampleFrame width='max-w-6xl'>
     <div className='overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950'>
@@ -674,43 +650,8 @@ const renderLayoutExample = (name, componentModule) => {
         </Component>
       </ExampleFrame>
     );
-  case 'Footer':
-    return (
-      <ExampleFrame width='max-w-6xl'>
-        <div className='rounded-lg border border-gray-200 px-6 dark:border-gray-800'>
-          <Component />
-        </div>
-      </ExampleFrame>
-    );
   case 'LayoutContainer':
     return <LayoutContainerPreview />;
-  case 'LayoutWrapper':
-    return (
-      <ExampleFrame width='max-w-6xl'>
-        <div className='max-h-[42rem] overflow-auto rounded-lg border border-gray-200 dark:border-gray-800'>
-          <Component>
-            <div className='grid gap-5 md:grid-cols-[1.4fr_1fr]'>
-              <article className='rounded-lg border border-gray-200 p-5 dark:border-gray-800'>
-                <p className='text-xs font-semibold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400'>Featured</p>
-                <h2 className='mt-2 text-3xl font-bold text-gray-950 dark:text-white'>A complete page inside the wrapper</h2>
-                <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>The wrapper owns the outer navigation, main slot, and footer while page content controls its own grid.</p>
-              </article>
-              <aside className='rounded-lg bg-gray-50 p-5 text-sm dark:bg-gray-900'>Related links and metadata</aside>
-            </div>
-          </Component>
-        </div>
-      </ExampleFrame>
-    );
-  case 'NewsletterForm':
-    return (
-      <ExampleFrame width='max-w-xl'>
-        <div className='rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-950'>
-          <Component />
-        </div>
-      </ExampleFrame>
-    );
-  case 'Search':
-    return <SearchExample Component={ Component } />;
   default:
     return null;
   }
