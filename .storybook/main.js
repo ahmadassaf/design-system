@@ -16,6 +16,9 @@ const config = {
   'docs': {
     'autodocs': 'tag'
   },
+  'features': {
+    'changeDetection': false
+  },
   'framework': {
     'name': '@storybook/nextjs-vite',
     'options': {}

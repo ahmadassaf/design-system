@@ -1032,7 +1032,7 @@ export default {
       }
     }
   },
-  title: 'Layout'
+  title: 'Layout/Examples'
 };
 
 export const MainPage = {

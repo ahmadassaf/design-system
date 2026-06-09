@@ -117,8 +117,8 @@ const preview = {
         const orderedNames = nameOrder[group];
 
         if (orderedNames) {
-          const aName = a.title.split('/')[1] || a.name;
-          const bName = b.title.split('/')[1] || b.name;
+          const aName = group === 'Layout' ? a.name : a.title.split('/')[1] || a.name;
+          const bName = group === 'Layout' ? b.name : b.title.split('/')[1] || b.name;
           const aIndex = orderedNames.indexOf(aName);
           const bIndex = orderedNames.indexOf(bName);
 
