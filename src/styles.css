@@ -45,3 +45,100 @@
     --ds-color-text-subtle: #a3a3a3;
   }
 }
+
+@layer components {
+  .prose {
+    color: var(--ds-color-text);
+    font-size: var(--ds-prose-font-size);
+    line-height: var(--ds-line-height-prose);
+    max-width: var(--ds-prose-max-width);
+  }
+
+  .prose :where(p) {
+    margin-bottom: 1.25em;
+    margin-top: 1.25em;
+  }
+
+  .prose :where(h1, h2, h3, h4) {
+    color: var(--ds-color-text);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .prose :where(h1) {
+    font-size: 2.25em;
+    margin-bottom: var(--ds-prose-h1-margin-bottom);
+    margin-top: var(--ds-prose-h1-margin-top);
+  }
+
+  .prose :where(h2) {
+    font-size: 1.5em;
+    margin-bottom: var(--ds-prose-h2-margin-bottom);
+    margin-top: var(--ds-prose-h2-margin-top);
+  }
+
+  .prose :where(h3) {
+    font-size: 1.25em;
+    margin-bottom: var(--ds-prose-h3-margin-bottom);
+    margin-top: var(--ds-prose-h3-margin-top);
+  }
+
+  .prose :where(h4) {
+    font-size: 1.125em;
+    margin-bottom: var(--ds-prose-h4-margin-bottom);
+    margin-top: var(--ds-prose-h4-margin-top);
+  }
+
+  .prose :where(ul, ol) {
+    margin-bottom: 1.25em;
+    margin-top: 1.25em;
+    padding-inline-start: 1.625em;
+  }
+
+  .prose :where(ul) {
+    list-style-type: disc;
+  }
+
+  .prose :where(ol) {
+    list-style-type: decimal;
+  }
+
+  .prose :where(li) {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    padding-inline-start: 0.375em;
+  }
+
+  .prose :where(li > p) {
+    margin-bottom: 0.75em;
+    margin-top: 0.75em;
+  }
+
+  .prose :where(strong) {
+    color: var(--ds-color-text);
+    font-weight: 700;
+  }
+
+  .prose :where(blockquote) {
+    border-inline-start: 0.25rem solid var(--ds-color-border);
+    color: var(--ds-color-text-muted);
+    font-style: italic;
+    margin-bottom: 1.6em;
+    margin-top: 1.6em;
+    padding-inline-start: 1em;
+  }
+
+  .prose :where(hr) {
+    border-color: var(--ds-color-border);
+    margin-bottom: 3em;
+    margin-top: 3em;
+  }
+
+  .prose :where(:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :where(:last-child) {
+    margin-bottom: 0;
+  }
+}
