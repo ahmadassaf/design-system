@@ -52,13 +52,13 @@ export const pageParameters = {
   }
 };
 
-export const Page = ({ children, intro, kicker, title }) => (
+export const Page = ({ children, intro, kicker, showLogo = false, title }) => (
   <div className='min-h-screen bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
     <div className='w-full max-w-none space-y-14 px-6 py-8 sm:px-8 lg:px-10'>
       <header className='max-w-3xl space-y-4'>
         {kicker ? <div className='inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300'>{kicker}</div> : null}
         <div className='flex items-center gap-4'>
-          <GaudiLogo className='h-16 w-16' />
+          {showLogo ? <GaudiLogo className='h-16 w-16' /> : null}
           <Typography variant='heading-xl'>{title}</Typography>
         </div>
         {intro ? <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'><InlineText>{intro}</InlineText></p> : null}

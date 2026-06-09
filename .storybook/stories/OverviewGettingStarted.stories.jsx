@@ -16,6 +16,7 @@ export const Default = {
   'render': () => (
     <Page
       kicker={ `v${packageJson.version}` }
+      showLogo
       title='Gaudi Design System'
       intro='Gaudi is the design system for the blog and related interface work. The source repository is ahmadassaf/design-system, while the package import name is @gaudi/design-system.'
     >

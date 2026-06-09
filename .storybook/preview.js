@@ -82,30 +82,52 @@ const preview = {
       appDirectory: true
     },
     options: {
-      storySort: {
-        method: 'alphabetical',
-        order: [
-          'Overview',
-          [
+      storySort: (a, b) => {
+        const groupOrder = [ 'Overview', 'Core', 'Blocks', 'MDX', 'Navigation', 'Post', 'Layout' ];
+        const nameOrder = {
+          'Layout': [
+            'Main Page',
+            'Blog Main Page',
+            'Category Page With Posts And Pagination',
+            'Categories Page',
+            'Tags Page',
+            'Projects Page',
+            'Publications Page',
+            'About Me Page'
+          ],
+          'Overview': [
             'Getting Started',
             'Accessibility',
             'Colors & Tokens',
             'Typography',
             'Icons',
             'Indicators'
-          ],
-          'Core',
-          [ 'Overview', '*' ],
-          'Blocks',
-          'MDX',
-          [ 'Overview', '*' ],
-          'Navigation',
-          [ 'Overview', '*' ],
-          'Post',
-          [ 'Overview', '*' ],
-          'Layout',
-          [ 'Overview', '*' ]
-        ]
+          ]
+        };
+        const storyRank = (title) => {
+          const rank = groupOrder.indexOf(title.split('/')[0]);
+
+          return rank === -1 ? groupOrder.length - 1 : rank;
+        };
+        const rankDiff = storyRank(a.title) - storyRank(b.title);
+
+        if (rankDiff !== 0) return rankDiff;
+
+        const group = a.title.split('/')[0];
+        const orderedNames = nameOrder[group];
+
+        if (orderedNames) {
+          const aName = a.title.split('/')[1] || a.name;
+          const bName = b.title.split('/')[1] || b.name;
+          const aIndex = orderedNames.indexOf(aName);
+          const bIndex = orderedNames.indexOf(bName);
+
+          if (aIndex !== -1 || bIndex !== -1) {
+            return (aIndex === -1 ? orderedNames.length : aIndex) - (bIndex === -1 ? orderedNames.length : bIndex);
+          }
+        }
+
+        return a.title.localeCompare(b.title, undefined, { numeric: true }) || a.name.localeCompare(b.name, undefined, { numeric: true });
       }
     }
   }
