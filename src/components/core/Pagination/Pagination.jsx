@@ -1,6 +1,6 @@
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
+import Icon from '../Icon';
+import Link from '../Link';
+import { cn } from '../../../utilities/cn';
 
 export const POSTS_PER_PAGE = 7;
 
@@ -69,7 +69,7 @@ export const PaginationEllipsis = ({ className }) => <span className={ cn('inlin
 
 export const PaginationStatus = ({ className, currentPage = 1, getHref = (page) => `?page=${page}`, onPageChange, totalPages = 1 }) => (
   <span className={ cn('group/pagination-status relative inline-flex justify-center', className) }>
-    <span tabIndex={ 0 } className='rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:border-border-dark dark:bg-gray-900 dark:text-gray-400 dark:focus-visible:ring-offset-gray-950'>
+    <span className='rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm outline-none transition-colors dark:border-border-dark dark:bg-gray-900 dark:text-gray-400'>
       <span className='font-semibold text-blue-600 dark:text-blue-400'>{currentPage}</span>
       <span className='mx-1.5 text-gray-600 dark:text-gray-300'>of</span>
       <span className='text-gray-600 dark:text-gray-300'>{totalPages}</span>

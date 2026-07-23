@@ -1,4 +1,4 @@
-import { cn } from '@/utilities/cn';
+import { cn } from '../../../utilities/cn';
 
 const spinnerSizes = {
   'lg': 'size-8 border-2',

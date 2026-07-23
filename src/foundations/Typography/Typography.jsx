@@ -1,4 +1,4 @@
-import { cn } from '@/utilities/cn';
+import { cn } from '../../utilities/cn';
 
 export const typographyVariants = {
   'author-name': {
@@ -30,11 +30,11 @@ export const typographyVariants = {
     'element': 'h1'
   },
   'heading-lg': {
-    'className': 'text-2xl md:text-3xl font-bold text-gray-900 dark:text-white leading-tight',
+    'className': 'text-3xl font-bold leading-[1.35] text-gray-900 dark:text-white md:text-4xl',
     'element': 'h2'
   },
   'heading-md': {
-    'className': 'text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-tight',
+    'className': 'text-[1.375rem] font-bold leading-[1.25] text-gray-900 dark:text-white md:text-2xl',
     'element': 'h3'
   },
   'heading-sm': {
@@ -42,7 +42,7 @@ export const typographyVariants = {
     'element': 'h4'
   },
   'heading-xl': {
-    'className': 'text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white text-balance',
+    'className': 'text-4xl font-bold leading-[1.12] tracking-tight text-gray-900 text-balance dark:text-white sm:text-[2.875rem]',
     'element': 'h2'
   },
   'metadata': {
@@ -50,11 +50,11 @@ export const typographyVariants = {
     'element': 'p'
   },
   'paragraph-lg': {
-    'className': 'text-lg leading-8 text-gray-700 dark:text-gray-300',
+    'className': 'text-xl leading-9 text-gray-700 dark:text-gray-300 md:text-[1.375rem]',
     'element': 'p'
   },
   'paragraph-md': {
-    'className': 'text-base leading-7 text-gray-700 dark:text-gray-300',
+    'className': 'text-[1.0625rem] leading-8 text-gray-700 dark:text-gray-300 md:text-lg',
     'element': 'p'
   },
   'paragraph-sm': {
@@ -82,7 +82,7 @@ export const typographyVariants = {
     'element': 'h3'
   },
   'subtitle-md': {
-    'className': 'text-lg font-medium text-gray-600 dark:text-gray-400',
+    'className': 'text-xl font-medium leading-snug text-gray-600 dark:text-gray-400 md:text-2xl',
     'element': 'h4'
   },
   'subtitle-xl': {
@@ -98,7 +98,7 @@ export const typographyVariants = {
     'element': 'h1'
   },
   'title-xl': {
-    'className': 'text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-gray-100',
+    'className': 'text-5xl font-extrabold leading-[1.05] tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl md:text-7xl lg:text-[5.25rem]',
     'element': 'h1'
   }
 };

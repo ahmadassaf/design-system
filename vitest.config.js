@@ -6,8 +6,6 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
-const sourceDir = resolve(rootDir, 'src');
-const siteFixturesDir = resolve(rootDir, '.storybook/fixtures/site');
 const lodashEsDir = resolve(rootDir, 'node_modules/lodash-es');
 
 export default defineConfig({
@@ -35,62 +33,6 @@ export default defineConfig({
       {
         find: /^recharts\/es6\/(?<path>.+)$/,
         replacement: `${resolve(rootDir, 'node_modules/recharts/lib')}/$<path>`
-      },
-      {
-        find: 'contentlayer/generated',
-        replacement: resolve(siteFixturesDir, 'contentlayer-generated.mjs')
-      },
-      {
-        find: '@/app/content/categories',
-        replacement: resolve(siteFixturesDir, 'categories.json')
-      },
-      {
-        find: '@/app/content/publications',
-        replacement: resolve(siteFixturesDir, 'publications.json')
-      },
-      {
-        find: '@/app/content/tags',
-        replacement: resolve(siteFixturesDir, 'tags.json')
-      },
-      {
-        find: /^@\/components\/(?<path>.*)$/,
-        replacement: `${resolve(sourceDir, 'components')}/$1`
-      },
-      {
-        find: /^@\/foundations\/(?<path>.*)$/,
-        replacement: `${resolve(sourceDir, 'foundations')}/$1`
-      },
-      {
-        find: /^@\/utilities\/(?<path>.*)$/,
-        replacement: `${resolve(sourceDir, 'utilities')}/$1`
-      },
-      {
-        find: /^@\/css\/(?<path>.*)$/,
-        replacement: `${resolve(sourceDir, 'styles')}/$1`
-      },
-      {
-        find: '@/data/meta/JSON-LD/website',
-        replacement: resolve(siteFixturesDir, 'website.js')
-      },
-      {
-        find: '@/data/meta/metadata',
-        replacement: resolve(siteFixturesDir, 'metadata.js')
-      },
-      {
-        find: '@/data/meta/navigationMetadata',
-        replacement: resolve(siteFixturesDir, 'navigationMetadata.mjs')
-      },
-      {
-        find: '@/lib/utils/contentlayer',
-        replacement: resolve(siteFixturesDir, 'contentlayer.js')
-      },
-      {
-        find: '@/lib/utils/formatDate',
-        replacement: resolve(siteFixturesDir, 'formatDate.js')
-      },
-      {
-        find: /^@\/(?<path>.*)$/,
-        replacement: `${rootDir}/$1`
       }
     ]
   },

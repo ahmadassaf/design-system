@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * MenuMobile Component
  *
@@ -12,11 +14,11 @@
 
 import React from 'react';
 
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import NewsletterForm from '@/components/layout/NewsletterForm';
-import MenuSearch from '@/components/navigation/MenuSearch';
+import Button from '../../core/Button';
+import Icon from '../../core/Icon';
+import Link from '../../core/Link';
+import NewsletterForm from '../../layout/NewsletterForm';
+import MenuSearch from '../MenuSearch';
 
 /**
  * Renders a full-screen mobile navigation menu

@@ -293,7 +293,7 @@ const renderCommandExample = (name, componentModule) => {
   }
 };
 
-const renderContentExample = (name, componentModule) => {
+const renderContentExample = (name, _componentModule) => {
   switch (name) {
   default:
     return null;

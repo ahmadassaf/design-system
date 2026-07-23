@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * ClientReload Component
  *
@@ -37,7 +39,7 @@ export const ClientReload = () => {
     import('socket.io-client').then((module) => {
       const socket = module.io();
 
-      socket.on('reload', (data) => {
+      socket.on('reload', () => {
         Router.replace(Router.asPath, undefined, {
           'scroll': false
         });

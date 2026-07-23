@@ -29,19 +29,35 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    @apply border-border;
   }
   
   /**
    * Base font size for optimal readability
    */
   body {
+    @apply bg-background text-foreground font-sans antialiased;
     font-size: 1rem; /* 16px */
     line-height: 1.6;
   }
 
-  :where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
-    outline: 2px solid var(--ds-color-text-subtle);
+  button,
+  [role='button'],
+  a {
+    cursor: pointer;
+  }
+
+  /*
+   * Focus rings are suppressed for pointer interactions only. Keyboard focus
+   * (:focus-visible) keeps the browser outline as a fallback so components
+   * without an explicit focus-visible utility still show an indicator.
+   */
+  :where(*):focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--ds-color-accent, #2563eb);
     outline-offset: 2px;
   }
 

@@ -1,5 +1,10 @@
-/* eslint-disable quote-props */
+import React from 'react';
+
 import './preview.css';
+
+import { SiteConfigProvider } from '../src/utilities/SiteConfig';
+import siteMetadata from './fixtures/site/metadata';
+import navigationMetadata from './fixtures/site/navigationMetadata.mjs';
 
 const STORYBOOK_THEME_CLASSES = [ 'dark' ];
 
@@ -31,7 +36,11 @@ const preview = {
   decorators: [
     (Story, context) => {
       syncStorybookTheme(context.globals.theme);
-      return Story();
+      return React.createElement(
+        SiteConfigProvider,
+        { metadata: siteMetadata, navigation: navigationMetadata },
+        Story()
+      );
     }
   ],
   globalTypes: {

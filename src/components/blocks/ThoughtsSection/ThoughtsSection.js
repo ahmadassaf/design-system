@@ -8,8 +8,8 @@
  * @version 2.0.0
  */
 
-import Button from '@/components/core/Button';
-import Link from '@/components/core/Link';
+import Button from '../../core/Button';
+import Link from '../../core/Link';
 
 /**
  * Renders a special thoughts section for the homepage
@@ -24,7 +24,7 @@ export default function ThoughtsSection({ thoughts }) {
     <div className='py-8'>
       {/* Section Header */}
       <div className='mb-6'>
-        <h2 className='text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100'>
+        <h2 className='text-3xl font-bold text-gray-900 dark:text-gray-100 md:text-4xl'>
           Recent Thoughts
         </h2>
       </div>
@@ -35,10 +35,11 @@ export default function ThoughtsSection({ thoughts }) {
           <article key={ thought.slug } className='group'>
             <Link
               href={ `/thoughts/${thought.slug}` }
+              variant='bare'
               className='block'
             >
               <div className='flex items-start gap-2 mb-1'>
-                <h3 className='text-base font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
+                <h3 className='text-lg font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400'>
                   {thought.title}
                 </h3>
                 {thought.featured && (
@@ -50,7 +51,7 @@ export default function ThoughtsSection({ thoughts }) {
 
               {/* Summary */}
               {thought.summary && (
-                <p className='text-sm text-gray-600 dark:text-gray-400 leading-relaxed'>
+                <p className='text-base leading-7 text-gray-600 dark:text-gray-400'>
                   {thought.summary}
                 </p>
               )}
@@ -61,14 +62,15 @@ export default function ThoughtsSection({ thoughts }) {
 
       {/* Last Thought with View All Button */}
       {thoughts.length > 0 && (
-        <div className='flex flex-col md:flex-row md:items-start md:justify-between gap-4 pt-6'>
+        <div className='flex flex-col gap-4 pt-6 md:flex-row md:items-start md:justify-between'>
           <article className='group flex-1'>
             <Link
               href={ `/thoughts/${thoughts[thoughts.length - 1].slug}` }
+              variant='bare'
               className='block'
             >
               <div className='flex items-start gap-2 mb-1'>
-                <h3 className='text-base font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
+                <h3 className='text-lg font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400'>
                   {thoughts[thoughts.length - 1].title}
                 </h3>
                 {thoughts[thoughts.length - 1].featured && (
@@ -80,7 +82,7 @@ export default function ThoughtsSection({ thoughts }) {
 
               {/* Summary */}
               {thoughts[thoughts.length - 1].summary && (
-                <p className='text-sm text-gray-600 dark:text-gray-400 leading-relaxed'>
+                <p className='text-base leading-7 text-gray-600 dark:text-gray-400'>
                   {thoughts[thoughts.length - 1].summary}
                 </p>
               )}
@@ -91,7 +93,7 @@ export default function ThoughtsSection({ thoughts }) {
           <div className='flex justify-end md:flex-shrink-0 md:pt-1'>
             <Button variant='outline' tone='blue' size='md' href='/thoughts' aria-label='View all thoughts'>
               View All Thoughts
-              <svg className='w-4 h-4 transition-transform group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <svg className='h-4 w-4 transition-transform group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={ 2 } d='M9 5l7 7-7 7' />
               </svg>
             </Button>

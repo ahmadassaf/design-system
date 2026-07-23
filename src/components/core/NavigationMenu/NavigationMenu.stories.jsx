@@ -64,10 +64,12 @@ export const Example = {
     const navigation = canvas.getByRole('navigation', { name: 'Main navigation' });
     const categoriesButton = canvas.getByRole('button', { name: 'Categories' });
     const workButton = canvas.getByRole('button', { name: 'Work' });
-    const activeLink = canvas.getByText('Blog').closest('[role="listitem"]');
+    // href='' renders Link as a span, so locate the active item via aria-current.
+    const activeLink = canvas.getByText('Blog').closest('[aria-current="page"]');
 
     await expect(navigation).toBeVisible();
-    await expect(activeLink).toHaveAttribute('aria-current', 'page');
+    await expect(activeLink).not.toBeNull();
+    await expect(activeLink.closest('[role="listitem"]')).not.toBeNull();
     await expect(categoriesButton).toHaveAttribute('aria-expanded', 'true');
     await expect(canvas.getByText('All articles')).toBeVisible();
 

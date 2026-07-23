@@ -40,6 +40,10 @@
       "import": "./src/components/mdx/index.js",
       "default": "./src/components/mdx/index.js"
     },
+    "./mdx/runtime": {
+      "import": "./src/components/mdx/runtime.js",
+      "default": "./src/components/mdx/runtime.js"
+    },
     "./navigation": {
       "import": "./src/components/navigation/index.js",
       "default": "./src/components/navigation/index.js"
@@ -63,10 +67,19 @@
     "./tokens": {
       "import": "./src/tokens/index.js",
       "default": "./src/tokens/index.js"
+    },
+    "./utilities/content": {
+      "import": "./src/utilities/content/content.js",
+      "default": "./src/utilities/content/content.js"
+    },
+    "./utilities/formatDate": {
+      "import": "./src/utilities/formatDate/formatDate.js",
+      "default": "./src/utilities/formatDate/formatDate.js"
     }
   },
   "scripts": {
     "build-storybook": "storybook build",
+    "lint": "eslint .",
     "test:contracts": "node --test $(find src -name '*.contract.test.js' | sort)",
     "test-storybook": "vitest --project=storybook",
     "storybook": "storybook dev -p 6006",
@@ -82,7 +95,6 @@
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
     "framer-motion": "^12.9.2",
-    "lodash-es": "^4.17.21",
     "lucide-react": "^0.544.0",
     "mermaid": "^11.12.0",
     "mini-svg-data-uri": "^1.4.0",
@@ -97,7 +109,13 @@
     "tailwind-merge": "^3.2.0",
     "tailwindcss": ">=4.0.0"
   },
+  "peerDependenciesMeta": {
+    "socket.io-client": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-hover-card": "^1.1.15",
@@ -113,7 +131,12 @@
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
     "esbuild": "^0.28.0",
+    "eslint": "^10.7.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "framer-motion": "^12.9.2",
+    "globals": "^17.7.0",
+    "lodash-es": "^4.17.21",
     "lucide-react": "^0.544.0",
     "mermaid": "^11.12.0",
     "mini-svg-data-uri": "^1.4.0",

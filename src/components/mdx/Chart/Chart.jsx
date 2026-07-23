@@ -23,7 +23,7 @@ import * as RechartsTooltipModule from 'recharts/lib/component/Tooltip.js';
 import * as PieModule from 'recharts/lib/polar/Pie.js';
 import * as RadialBarModule from 'recharts/lib/polar/RadialBar.js';
 
-import { cn } from '@/utilities/cn';
+import { cn } from '../../../utilities/cn';
 
 const resolveRechartsExport = (module, key) => module[key] || module.default?.[key] || module.default;
 
@@ -158,7 +158,7 @@ const ChartFrame = ({
       window.cancelAnimationFrame(frameId);
       observer.disconnect();
     };
-  }, []);
+  }, [ ariaLabel, title ]);
 
   return (
     <figure

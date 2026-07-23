@@ -27,10 +27,48 @@ import { Button, PostHeader } from '@gaudi/design-system';
 import '@gaudi/design-system/global.css';
 ```
 
-MDX article components are exported from the MDX entrypoint:
+MDX article components are exported from the MDX entrypoint (they are intentionally
+not re-exported from the root entry, so their heavy peer dependencies — recharts,
+framer-motion, mermaid, react-latex-next — stay out of apps that don't render articles):
 
 ```js
 import { Callout, CitationPopover, CodeGroupTabs, Preview, Table } from '@gaudi/design-system/mdx';
+```
+
+The compiled-MDX runtime (`MDXLayoutRenderer`, `useMDXComponent`) has its own entry:
+
+```js
+import { MDXLayoutRenderer } from '@gaudi/design-system/mdx/runtime';
+```
+
+### Site configuration
+
+Gaudi never imports data from the consuming app. Site-aware components (navigation,
+footer, command launcher, theme switcher) read metadata and navigation links from the
+`SiteConfigProvider` context; `LayoutContainer` wires it up for you:
+
+```jsx
+import LayoutContainer from '@gaudi/design-system/components/layout/LayoutContainer';
+
+<LayoutContainer
+  metadata={ siteMetadata }        // { author, title, locale, theme, github, linkedin, twitter, email, … }
+  navigation={ navigationMetadata } // { links: [...], categoriesMetadata: {...} }
+  jsonLd={ websiteJsonLd }          // object or () => object, rendered as application/ld+json
+  menuProps={{ posts, projects, thoughts, categories, publications, tags }}
+  footerProps={ footerProps }
+>
+  {children}
+</LayoutContainer>
+```
+
+Standalone usage without `LayoutContainer` wraps the tree directly:
+
+```jsx
+import { SiteConfigProvider } from '@gaudi/design-system';
+
+<SiteConfigProvider metadata={ siteMetadata } navigation={ navigationMetadata }>
+  <App />
+</SiteConfigProvider>
 ```
 
 Use the Tailwind preset and plugins from the package:
@@ -55,9 +93,15 @@ module.exports = {
 ```sh
 pnpm install
 pnpm storybook
+pnpm lint
 pnpm test:contracts
+pnpm test-storybook
 pnpm build-storybook
 ```
+
+CI (`.github/workflows/ci.yml`) runs lint, contract tests, the Storybook interaction +
+axe accessibility suite (in Playwright browser mode), and the Storybook build on every
+pull request and push to `main`.
 
 Storybook uses local fixtures under `.storybook/fixtures/site/` and static assets under `.storybook/public/` to document site-aware components such as navigation and footer without depending on the blog repository. Those fixtures are not part of the design-system runtime API.
 

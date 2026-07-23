@@ -1,6 +1,6 @@
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
-import { createVariants } from '@/utilities/variants';
+import Link from '../Link';
+import { cn } from '../../../utilities/cn';
+import { createVariants } from '../../../utilities/variants';
 
 export const bannerVariants = createVariants({
   'base': 'relative isolate flex justify-center gap-x-6 overflow-hidden',

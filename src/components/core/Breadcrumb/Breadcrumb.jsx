@@ -1,6 +1,6 @@
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
+import Icon from '../Icon';
+import Link from '../Link';
+import { cn } from '../../../utilities/cn';
 
 export const Breadcrumb = ({ children, className, label = 'Breadcrumb' }) => (
   <nav aria-label={ label } className={ cn('flex', className) }>{children}</nav>

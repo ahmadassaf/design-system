@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import CommandPaletteModule, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
 import { useTheme } from 'next-themes';
 
-import Icon from '@/components/core/Icon';
-import Kbd from '@/components/core/Kbd';
-import { cn } from '@/utilities/cn';
+import Icon from '../Icon';
+import Kbd from '../Kbd';
+import { cn } from '../../../utilities/cn';
+import { useSiteConfig } from '../../../utilities/SiteConfig';
 
 import '@tmikeladze/react-cmdk/dist/cmdk.css';
 import styles from './CommandLauncher.module.css';
@@ -136,17 +137,31 @@ const CollectionPage = ({ id, items, search, setPage }) => {
   );
 };
 
-const SocialPage = ({ search, setPage }) => {
+/**
+ * Builds the contact page entries from site metadata. Consumers can override the
+ * whole list via the CommandLauncher `social` prop.
+ */
+const buildSocialItems = (metadata = {}, social) => {
+  if (social) return social;
+
+  const openExternal = (url) => () => window.open(url, '_blank', 'noopener,noreferrer')?.focus();
+  const items = [];
+
+  if (metadata.linkedin) items.push({ 'children': 'LinkedIn', 'closeOnSelect': false, 'icon': 'UserGroupIcon', 'id': 'linkedin', 'onClick': openExternal(metadata.linkedin), 'title': 'LinkedIn profile' });
+  if (metadata.twitter) items.push({ 'children': 'Twitter', 'closeOnSelect': false, 'icon': 'ChatBubbleLeftRightIcon', 'id': 'twitter', 'onClick': openExternal(metadata.twitter), 'title': 'Twitter profile' });
+  if (metadata.github) items.push({ 'children': 'GitHub', 'closeOnSelect': false, 'icon': 'CodeBracketIcon', 'id': 'github', 'onClick': openExternal(metadata.github), 'title': 'GitHub profile' });
+  if (metadata.youtube) items.push({ 'children': 'YouTube', 'closeOnSelect': false, 'icon': 'VideoCameraIcon', 'id': 'youtube', 'onClick': openExternal(metadata.youtube), 'title': 'YouTube channel' });
+  if (metadata.email) items.push({ 'children': 'Mail', 'closeOnSelect': false, 'icon': 'EnvelopeIcon', 'id': 'mail', 'onClick': openExternal(`mailto:${metadata.email}`), 'title': 'Send an email' });
+
+  return items;
+};
+
+const SocialPage = ({ items = [], search, setPage }) => {
   const socialItems = filterItems([
     {
       'heading': 'Contact',
       'id': 'contact',
-      'items': [
-        { 'children': 'LinkedIn', 'closeOnSelect': false, 'icon': 'UserGroupIcon', 'id': 'linkedin', 'onClick': () => window.open('https://linkedin.com/in/ahmadassaf', '_blank', 'noopener,noreferrer')?.focus(), 'title': 'LinkedIn profile' },
-        { 'children': 'Twitter', 'closeOnSelect': false, 'icon': 'ChatBubbleLeftRightIcon', 'id': 'twitter', 'onClick': () => window.open('https://twitter.com/ahmadaassaf', '_blank', 'noopener,noreferrer')?.focus(), 'title': 'Twitter profile' },
-        { 'children': 'GitHub', 'closeOnSelect': false, 'icon': 'CodeBracketIcon', 'id': 'github', 'onClick': () => window.open('https://github.com/ahmadassaf', '_blank', 'noopener,noreferrer')?.focus(), 'title': 'GitHub profile' },
-        { 'children': 'Mail', 'closeOnSelect': false, 'icon': 'EnvelopeIcon', 'id': 'mail', 'onClick': () => window.open('mailto:ahmad@assaf.website', '_blank', 'noopener,noreferrer')?.focus(), 'title': 'Email Ahmad' }
-      ]
+      items
     }
   ], search);
 
@@ -178,6 +193,7 @@ const CommandLauncher = ({
   projects = [],
   publications = [],
   setOpen,
+  social,
   tags = [],
   thoughts = []
 }) => {
@@ -186,6 +202,8 @@ const CommandLauncher = ({
   const [ selected, setSelected ] = useState(0);
   const [ isKeyboardMode, setIsKeyboardMode ] = useState(true);
   const { resolvedTheme, setTheme, theme } = useTheme();
+  const { metadata } = useSiteConfig();
+  const socialItems = useMemo(() => buildSocialItems(metadata, social), [ metadata, social ]);
 
   const collections = useMemo(() => {
     return {
@@ -226,9 +244,9 @@ const CommandLauncher = ({
       'id': 'other',
       'items': [
         { 'children': 'About me', 'cmdIcon': 'FingerPrintIcon', 'href': '/about', 'id': 'about_me' },
-        { 'children': 'Reach out', 'closeOnSelect': false, 'cmdIcon': 'IdentificationIcon', 'id': 'reach_out', 'onClick': () => {
+        ...(socialItems.length ? [{ 'children': 'Reach out', 'closeOnSelect': false, 'cmdIcon': 'IdentificationIcon', 'id': 'reach_out', 'onClick': () => {
           setPage('contact'); setSearch('');
-        } },
+        } }] : []),
         { 'children': 'Switch theme', 'closeOnSelect': false, 'cmdIcon': 'ArrowRightOnRectangleIcon', 'id': 'switch_theme', 'onClick': () => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark') }
       ]
     },
@@ -237,7 +255,7 @@ const CommandLauncher = ({
     { 'heading': 'Thoughts', 'hidden': true, 'id': 'thoughts_fullTextSearch', 'items': collections.thoughts, 'options': { 'filterOnListHeading': true } },
     { 'heading': 'Publications', 'hidden': true, 'id': 'publications_fullTextSearch', 'items': collections.publications, 'options': { 'filterOnListHeading': true } },
     { 'heading': 'Tags', 'hidden': true, 'id': 'tags_fullTextSearch', 'items': collections.tags, 'options': { 'filterOnListHeading': true } }
-  ], search), [ collections, resolvedTheme, search, setTheme, theme ]);
+  ], search), [ collections, resolvedTheme, search, setTheme, socialItems, theme ]);
 
   useEffect(() => {
     const down = (event) => {
@@ -271,7 +289,7 @@ const CommandLauncher = ({
   }, [ open ]);
 
   return (
-    <div className={ cn(styles.root, resolvedTheme === 'dark' && styles.dark, isKeyboardMode && styles.keyboardMode) }>
+    <div className={ cn(styles.root, isKeyboardMode && styles.keyboardMode) }>
       <CommandPalette
         footer={ <LauncherFooter /> }
         isOpen={ open }
@@ -305,7 +323,7 @@ const CommandLauncher = ({
         <CollectionPage id='thoughts' setPage={ setPage } search={ search } items={ collections.thoughts } />
         <CollectionPage id='publications' setPage={ setPage } search={ search } items={ collections.publications } />
         <CollectionPage id='tags' setPage={ setPage } search={ search } items={ collections.tags } />
-        <SocialPage setPage={ setPage } search={ search } />
+        <SocialPage setPage={ setPage } search={ search } items={ socialItems } />
       </CommandPalette>
     </div>
   );

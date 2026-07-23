@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * MenuSearch Component
  *
@@ -9,9 +11,9 @@
  * @version 2.0.0
  */
 
-import Button from '@/components/core/Button';
-import Kbd from '@/components/core/Kbd';
-import { cn } from '@/utilities/cn';
+import Button from '../../core/Button';
+import Kbd from '../../core/Kbd';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Renders a search input button that opens the command palette

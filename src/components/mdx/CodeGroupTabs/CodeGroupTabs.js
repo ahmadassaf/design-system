@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Code Group Tabs Component
  *
@@ -8,8 +10,6 @@
  * @author Ahmad Assaf
  * @version 1.0.0
  */
-
-'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -48,20 +48,23 @@ const CodeGroupTabs = () => {
 
         group.classList.add(styles.root);
 
-        const tabs = group.querySelectorAll('.rcg-tab');
+        const tabs = Array.from(group.querySelectorAll('.rcg-tab'));
         const blocks = group.querySelectorAll('.rcg-block');
         let activeTab = group.querySelector('.rcg-tab.active');
         let activeBlock = group.querySelector('.rcg-block.active');
 
-        // Create click handler for this group
-        const handleTabClick = (event) => {
-          const tab = event.target.closest('.rcg-tab');
+        // Roving tabindex: only the active tab is in the tab order (APG tabs pattern)
+        const syncTabIndexes = () => {
+          const current = activeTab || tabs[0];
 
-          if (!tab) return;
+          tabs.forEach((tab) => tab.setAttribute('tabindex', tab === current ? '0' : '-1'));
+        };
 
-          const index = Array.from(tabs).indexOf(tab);
+        // Activate the tab at the given index (selection + roving tabindex)
+        const activateTab = (index) => {
+          const tab = tabs[index];
 
-          if (index === -1) return;
+          if (!tab || !blocks[index]) return;
 
           // Remove active states
           if (activeTab) {
@@ -82,10 +85,50 @@ const CodeGroupTabs = () => {
           // Update references
           activeTab = tab;
           activeBlock = blocks[index];
+          syncTabIndexes();
         };
 
-        // Attach event listener
+        // Create click handler for this group
+        const handleTabClick = (event) => {
+          const tab = event.target.closest('.rcg-tab');
+
+          if (!tab) return;
+
+          const index = tabs.indexOf(tab);
+
+          if (index === -1) return;
+
+          activateTab(index);
+        };
+
+        // APG tabs keyboard pattern: arrows move focus and selection, Home/End jump
+        const handleTabKeyDown = (event) => {
+          const tab = event.target.closest('.rcg-tab');
+
+          if (!tab) return;
+
+          const currentIndex = tabs.indexOf(tab);
+
+          if (currentIndex === -1) return;
+
+          let nextIndex = null;
+
+          if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+          if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+          if (event.key === 'Home') nextIndex = 0;
+          if (event.key === 'End') nextIndex = tabs.length - 1;
+
+          if (nextIndex === null) return;
+
+          event.preventDefault();
+          activateTab(nextIndex);
+          tabs[nextIndex].focus();
+        };
+
+        // Attach event listeners and set the initial roving tabindex
         group.addEventListener('click', handleTabClick);
+        group.addEventListener('keydown', handleTabKeyDown);
+        syncTabIndexes();
 
         // Mark as initialized
         group.setAttribute('data-tabs-initialized', 'true');
@@ -93,6 +136,7 @@ const CodeGroupTabs = () => {
         // Store cleanup function for later use
         group._tabsCleanup = () => {
           group.removeEventListener('click', handleTabClick);
+          group.removeEventListener('keydown', handleTabKeyDown);
           group.removeAttribute('data-tabs-initialized');
           group.classList.remove(styles.root);
           delete group._tabsCleanup;
@@ -118,6 +162,9 @@ const CodeGroupTabs = () => {
     // Initialize after page fully loads
     const longerTimeoutId = setTimeout(initialize, 1000);
 
+    // Track observer-scheduled timers so they can be cleared on unmount
+    const mutationTimeoutIds = new Set();
+
     // Watch for new content being added (for dynamic loading)
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -128,7 +175,7 @@ const CodeGroupTabs = () => {
           ));
 
           if (hasCodeGroups)
-            setTimeout(initialize, 10);
+            mutationTimeoutIds.add(setTimeout(initialize, 10));
 
         }
       });
@@ -143,6 +190,8 @@ const CodeGroupTabs = () => {
     return () => {
       clearTimeout(timeoutId);
       clearTimeout(longerTimeoutId);
+      mutationTimeoutIds.forEach((mutationTimeoutId) => clearTimeout(mutationTimeoutId));
+      mutationTimeoutIds.clear();
       document.removeEventListener('DOMContentLoaded', initialize);
       observer.disconnect();
 

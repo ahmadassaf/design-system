@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
-import Icon from '@/components/core/Icon';
-import { cn } from '@/utilities/cn';
+import Icon from '../Icon';
+import { cn } from '../../../utilities/cn';
 
 export const Accordion = ({ children, className, defaultValue, type = 'single', value, onValueChange }) => {
   const [ internalValue, setInternalValue ] = useState(defaultValue || (type === 'multiple' ? [] : undefined));
@@ -27,10 +27,12 @@ export const AccordionItem = ({ children, className, value }) => (
   </div>
 );
 
-export const AccordionTrigger = ({ children, className, isOpen, onClick }) => (
+export const AccordionTrigger = ({ children, className, contentId, id, isOpen, onClick }) => (
   <button
     type='button'
+    id={ id }
     className={ cn('flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-semibold text-gray-950 transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-white dark:hover:bg-gray-900', className) }
+    aria-controls={ contentId }
     aria-expanded={ isOpen }
     onClick={ onClick }
   >
@@ -39,29 +41,44 @@ export const AccordionTrigger = ({ children, className, isOpen, onClick }) => (
   </button>
 );
 
-export const AccordionContent = ({ children, className, isOpen }) => {
+export const AccordionContent = ({ children, className, id, isOpen, labelledBy }) => {
   if (!isOpen) return null;
 
-  return <div className={ cn('px-4 pb-4 text-sm leading-6 text-gray-600 dark:text-gray-300', className) }>{children}</div>;
+  return (
+    <div
+      id={ id }
+      role={ labelledBy ? 'region' : undefined }
+      aria-labelledby={ labelledBy }
+      className={ cn('px-4 pb-4 text-sm leading-6 text-gray-600 dark:text-gray-300', className) }
+    >
+      {children}
+    </div>
+  );
 };
 
-export const AccordionGroup = ({ items = [], type = 'single', defaultValue, className }) => (
-  <Accordion type={ type } defaultValue={ defaultValue || items[0]?.value } className={ className }>
-    {({ currentValue, setValue }) => items.map((item) => {
-      const isOpen = type === 'multiple' ? currentValue?.includes(item.value) : currentValue === item.value;
-      let nextValue;
+export const AccordionGroup = ({ items = [], type = 'single', defaultValue, className }) => {
+  const groupId = useId();
 
-      if (type === 'multiple') nextValue = isOpen ? currentValue.filter((entry) => entry !== item.value) : [ ...(currentValue || []), item.value ];
-      else nextValue = isOpen ? undefined : item.value;
+  return (
+    <Accordion type={ type } defaultValue={ defaultValue || items[0]?.value } className={ className }>
+      {({ currentValue, setValue }) => items.map((item, index) => {
+        const isOpen = type === 'multiple' ? currentValue?.includes(item.value) : currentValue === item.value;
+        const triggerId = `${groupId}-trigger-${index}`;
+        const contentId = `${groupId}-content-${index}`;
+        let nextValue;
 
-      return (
-        <AccordionItem key={ item.value } value={ item.value }>
-          <AccordionTrigger isOpen={ isOpen } onClick={ () => setValue(nextValue) }>{item.title}</AccordionTrigger>
-          <AccordionContent isOpen={ isOpen }>{item.content}</AccordionContent>
-        </AccordionItem>
-      );
-    })}
-  </Accordion>
-);
+        if (type === 'multiple') nextValue = isOpen ? currentValue.filter((entry) => entry !== item.value) : [ ...(currentValue || []), item.value ];
+        else nextValue = isOpen ? undefined : item.value;
+
+        return (
+          <AccordionItem key={ item.value } value={ item.value }>
+            <AccordionTrigger id={ triggerId } contentId={ contentId } isOpen={ isOpen } onClick={ () => setValue(nextValue) }>{item.title}</AccordionTrigger>
+            <AccordionContent id={ contentId } labelledBy={ triggerId } isOpen={ isOpen }>{item.content}</AccordionContent>
+          </AccordionItem>
+        );
+      })}
+    </Accordion>
+  );
+};
 
 export default AccordionGroup;

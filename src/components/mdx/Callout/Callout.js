@@ -35,7 +35,7 @@
  *   This action cannot be undone!
  * </Callout>
  */
-import { cn } from '@/utilities/cn';
+import { cn } from '../../../utilities/cn';
 
 const Callout = ({ children, className, classNames = {}, type = 'info' }) => {
   let calloutStyles;

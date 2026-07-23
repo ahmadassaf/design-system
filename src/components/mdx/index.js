@@ -9,36 +9,27 @@
  * @version 1.0.0
  */
 
-/* eslint-disable no-new-func */
-/* eslint-disable camelcase */
-
-import React from 'react';
-import * as _jsx_runtime from 'react/jsx-runtime';
-import ReactDOM from 'react-dom';
-
-import CustomLink from '@/components/core/Link';
-import { BlogNewsletterForm } from '@/components/layout/NewsletterForm';
-import Aside from '@/components/mdx/Aside';
-import Callout from '@/components/mdx/Callout';
-import Chart, { AreaChart, BarChart, ComposedChart, DonutChart, LineChart, PieChart, RadialBarChart, ScatterChart } from '@/components/mdx/Chart';
-import CitationPopover from '@/components/mdx/CitationPopover';
-import CitationTracker from '@/components/mdx/CitationTracker';
-import CodeGroupTabs from '@/components/mdx/CodeGroupTabs';
-import Details from '@/components/mdx/Details';
-import Faq from '@/components/mdx/Faq';
-import FileTree from '@/components/mdx/FileTree';
-import Footnote from '@/components/mdx/Footnote';
-import Highlight from '@/components/mdx/Highlight';
-import Image from '@/components/mdx/Image';
-import ImageModal from '@/components/mdx/ImageModal';
-import Mermaid from '@/components/mdx/Mermaid';
-import Preview from '@/components/mdx/Preview';
-import Quote from '@/components/mdx/Quote';
-import Table, { TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from '@/components/mdx/Table';
-import Tooltip from '@/components/mdx/Tooltip';
-import Video, { videoAnimationStyles } from '@/components/mdx/Video';
-
-import styles from './MdxContent/MdxContent.module.css';
+import CustomLink from '../core/Link';
+import { BlogNewsletterForm } from '../layout/NewsletterForm';
+import Aside from './Aside';
+import Callout from './Callout';
+import Chart, { AreaChart, BarChart, ComposedChart, DonutChart, LineChart, PieChart, RadialBarChart, ScatterChart } from './Chart';
+import CitationPopover from './CitationPopover';
+import CitationTracker from './CitationTracker';
+import CodeGroupTabs from './CodeGroupTabs';
+import Details from './Details';
+import Faq from './Faq';
+import FileTree from './FileTree';
+import Footnote from './Footnote';
+import Highlight from './Highlight';
+import Image from './Image';
+import ImageModal from './ImageModal';
+import Mermaid from './Mermaid';
+import Preview from './Preview';
+import Quote from './Quote';
+import Table, { TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from './Table';
+import Tooltip from './Tooltip';
+import Video, { videoAnimationStyles } from './Video';
 
 /**
  * Collection of all available MDX components
@@ -114,48 +105,3 @@ export { AreaChart,
   TableRow,
   Tooltip, Video,
   videoAnimationStyles };
-
-/**
- * Dynamically creates an MDX component from compiled code
- *
- * @param {string} code - The compiled MDX code string
- * @param {Object} [globals={}] - Additional global variables to make available
- * @returns {React.Component} The MDX component ready for rendering
- */
-const getMDXComponent = (code, globals = {}) => {
-  const scope = { React, ReactDOM, _jsx_runtime, ...globals };
-  const fn = new Function(...Object.keys(scope), code);
-
-  return fn(...Object.values(scope)).default;
-};
-
-/**
- * React hook for memoized MDX component creation
- *
- * @param {string} code - The compiled MDX code string
- * @param {Object} [globals={}] - Additional global variables to make available
- * @returns {React.Component} Memoized MDX component
- */
-export const useMDXComponent = (
-  code,
-  globals = {}
-) => React.useMemo(() => getMDXComponent(code, globals), [ code, globals ]);
-
-/**
- * MDX layout renderer component
- *
- * @param {Object} props - Component props
- * @param {string} props.code - The compiled MDX code to render
- * @param {Object} [props.components] - Custom component overrides
- * @returns {JSX.Element} The rendered MDX content
- * @param {...Object} props.rest - Additional props passed to the MDX component
- */
-export const MDXLayoutRenderer = ({ code, components, ...rest }) => {
-  const Mdx = useMDXComponent(code);
-
-  return (
-    <div className={ styles.root }>
-      <Mdx components={ components } { ...rest } />
-    </div>
-  );
-};

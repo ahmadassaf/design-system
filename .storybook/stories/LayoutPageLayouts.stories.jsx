@@ -287,7 +287,8 @@ const footerProps = {
     { href: siteMetadata.github, kind: 'github' },
     { href: siteMetadata.linkedin, kind: 'linkedin' },
     { href: siteMetadata.twitter, kind: 'twitter' }
-  ]
+  ],
+  variant: 'editorial'
 };
 
 const menuProps = {
@@ -307,7 +308,7 @@ const formatDate = (date) => new Date(date).toLocaleDateString('en-US', {
 });
 
 const PageShell = ({ children }) => (
-  <div className='bg-white text-black antialiased dark:bg-gray-900 dark:text-white'>
+  <div className='bg-white text-black antialiased dark:bg-neutral-950 dark:text-white'>
     <Aurora>
       <div className='relative isolate w-full px-4 dark:z-10 sm:w-[95%] sm:px-8 xl:max-w-6xl'>
         <div className='flex min-h-screen flex-col justify-between'>
@@ -345,7 +346,7 @@ const FeaturedPostsLayout = ({ hideTitle = false }) => {
             </Pill>
           </div>
 
-          <Typography variant='heading-xl' as='h2' className='mb-4 max-w-4xl'>
+          <Typography variant='heading-xl' as='h2' className='mb-4'>
             <Link
               href={ `/blog/${featuredPost.slug}` }
               variant='bare'
@@ -356,7 +357,7 @@ const FeaturedPostsLayout = ({ hideTitle = false }) => {
             </Link>
           </Typography>
 
-          <Typography variant='paragraph-md' className='mb-6 max-w-3xl'>
+          <Typography variant='paragraph-md' className='mb-6'>
             {featuredPost.summary}
           </Typography>
 
@@ -468,7 +469,7 @@ const BlogListLayout = ({ filter = true, posts: listPosts = sortedPosts }) => {
 const HomePage = () => (
   <PageShell>
     <div className='divide-y divide-gray-200 dark:divide-gray-700'>
-      <div className='mb-8 max-w-6xl space-y-3 pb-6 pt-8 md:space-y-4'>
+      <div className='mb-8 space-y-3 pb-6 pt-8 md:space-y-4'>
         <Typography variant='title-xl' className='uppercase'>
           {siteMetadata.author}
         </Typography>
@@ -477,11 +478,11 @@ const HomePage = () => (
             AI and Machine Learning Leader, Mentor and Advisor
           </TextHighlight>
         </Typography>
-        <Typography variant='subtitle-md' className='max-w-5xl max-sm:py-3'>{siteMetadata.description}</Typography>
-        <Typography variant='paragraph-md' className='max-w-6xl'>
+        <Typography variant='subtitle-md' className='max-sm:py-3'>{siteMetadata.description}</Typography>
+        <Typography variant='paragraph-md'>
           A driven AI and Machine Learning (ML) leader with a passion for building intelligent systems and turning complex technology into useful products through my current role as <strong>CTO <Link tone='blue' href='https://mav9.com' className='font-bold'>@Mav9</Link></strong>, where I lead technology strategy across AI, data, knowledge graphs, and product engineering; previously, as <strong>VP of AI and Data <Link tone='blue' href='https://beamery.com' className='font-bold'>@Beamery</Link></strong>, I built and scaled engineering, AI, and data science teams and helped the company become one of the latest tech unicorns.
         </Typography>
-        <Typography variant='paragraph-md' className='max-w-6xl'>
+        <Typography variant='paragraph-md'>
           I am a Knowledge Graph and Semantic Web Enthusiast (<strong>PhD in Semantic Web and Information Retrieval</strong>) with <Link tone='blue' href='/blog/publications'>publications</Link> on Linked Data, Data Quality and Recommender Systems.
         </Typography>
         <CmdLauncherShortcut />
@@ -1041,7 +1042,10 @@ export const MainPage = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByRole('heading', { name: 'Ahmad Assaf' })).toBeVisible();
+    // Both the hero title and the footer brand heading carry the author name.
+    const authorHeadings = canvas.getAllByRole('heading', { name: 'Ahmad Assaf' });
+
+    await expect(authorHeadings[0]).toBeVisible();
     await expect(canvas.getByText('AI and Machine Learning Leader, Mentor and Advisor')).toBeVisible();
   }
 };

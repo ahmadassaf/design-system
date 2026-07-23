@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * AppThemeProvider Component
  *
@@ -8,8 +10,6 @@
  * @author Ahmad Assaf
  * @version 1.0.0
  */
-
-'use client';
 
 import { useEffect } from 'react';
 import { setCookie } from 'cookies-next';

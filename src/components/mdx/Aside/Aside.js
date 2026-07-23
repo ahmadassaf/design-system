@@ -9,7 +9,6 @@
  * @version 1.0.0
  */
 
-import React from 'react';
 
 /**
  * Renders a styled aside element with consistent formatting

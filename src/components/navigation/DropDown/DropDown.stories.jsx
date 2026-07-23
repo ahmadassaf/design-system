@@ -32,23 +32,25 @@ export const Example = {
   'render': () => renderComponentExample('Navigation/DropDown', componentModule)
 };
 
-export const ToggleDisclosure = {
-  render: (args) => {
-    const [ menuDropDownOpen, setMenuDropDownOpen ] = useState(false);
-    const handleSetMenuDropDownOpen = (nextOpen) => {
-      args.setMenuDropDownOpen(nextOpen);
-      setMenuDropDownOpen(nextOpen);
-    };
+const ToggleDisclosureExample = (args) => {
+  const [ menuDropDownOpen, setMenuDropDownOpen ] = useState(false);
+  const handleSetMenuDropDownOpen = (nextOpen) => {
+    args.setMenuDropDownOpen(nextOpen);
+    setMenuDropDownOpen(nextOpen);
+  };
 
-    return (
-      <DropDown
-        className='story-dropdown-trigger'
-        name={ args.name }
-        menuDropDownOpen={ menuDropDownOpen }
-        setMenuDropDownOpen={ handleSetMenuDropDownOpen }
-      />
-    );
-  },
+  return (
+    <DropDown
+      className='story-dropdown-trigger'
+      name={ args.name }
+      menuDropDownOpen={ menuDropDownOpen }
+      setMenuDropDownOpen={ handleSetMenuDropDownOpen }
+    />
+  );
+};
+
+export const ToggleDisclosure = {
+  render: (args) => <ToggleDisclosureExample { ...args } />,
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const trigger = canvas.getByRole('button', { name: args.name });

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * TableOfContents Component
  *
@@ -9,11 +11,9 @@
  * @version 1.0.0
  */
 
-'use client';
-
 import { useEffect, useRef, useState } from 'react';
 
-import { cn } from '@/utilities/cn';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Renders an interactive table of contents with scroll tracking
@@ -47,7 +47,7 @@ import { cn } from '@/utilities/cn';
  * // TOC automatically expands when there are 4 or fewer level-1 headings
  * <TableOfContents toc={smallTocData} />
  */
-const TableOfContents = ({ className, toc }) => {
+const TableOfContents = ({ className, toc = [] }) => {
   const [ activeSlug, setActiveSlug ] = useState('');
   const isTableOfContentsLoaded = useRef(false);
 
@@ -57,7 +57,7 @@ const TableOfContents = ({ className, toc }) => {
         const element = document.getElementById(heading.id);
 
         if (element) observer.observe(element);
-        if (heading.children.length > 0) observeHeadings(heading.children, observer);
+        if ((heading.children || []).length > 0) observeHeadings(heading.children, observer);
       });
     };
 
@@ -92,7 +92,7 @@ const TableOfContents = ({ className, toc }) => {
   const isDescendantActive = (heading) => {
     if (heading.id === activeSlug) return true;
 
-    return heading.children.some((child) => isDescendantActive(child));
+    return (heading.children || []).some((child) => isDescendantActive(child));
   };
 
   /**
@@ -114,17 +114,20 @@ const TableOfContents = ({ className, toc }) => {
 
         return (
           <li
-            key={ heading.value }
-            className={ `flex flex-col py-[7px] dark:text-white ${isActive && 'text-blue-600!'} ${heading.depth === 1 && 'font-bold!'} ${heading.depth === 2 && 'ml-3!'} ${heading.depth > 2 ? 'font-light text-gray-500 ml-5!' : 'font-medium text-gray-600'}` }
+            key={ heading.url || heading.id }
+            className={ cn(
+              'flex flex-col py-[7px] dark:text-white', isActive && 'text-blue-600!', heading.depth === 1 && 'font-bold!', heading.depth === 2 && 'ml-3!', heading.depth > 2 ? 'font-light text-gray-500 ml-5!' : 'font-medium text-gray-600'
+            ) }
           >
             <a
               className='flex text-[15px] hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
               href={ heading.url }
+              aria-current={ isActive ? 'location' : undefined }
               onClick={ () => setActiveSlug(heading.id) }
             >
               {heading.value}
             </a>
-            {heading.children.length > 0 && shouldShowChildren &&
+            {(heading.children || []).length > 0 && shouldShowChildren &&
               renderToc(heading.children, shouldShowChildren, expandAll)}
           </li>
         );
@@ -136,9 +139,9 @@ const TableOfContents = ({ className, toc }) => {
   const expandAll = level1HeadingsCount <= 4;
 
   return (
-    <div className={ cn('p-4 sticky top-20 text-gray-800 col-span-3 max-xl:hidden max-h-[calc(100vh-5rem)] overflow-y-auto', className) }>
+    <nav aria-label='Table of contents' className={ cn('p-4 sticky top-20 text-gray-800 col-span-3 max-xl:hidden max-h-[calc(100vh-5rem)] overflow-y-auto', className) }>
       {renderToc(toc, false, expandAll)}
-    </div>
+    </nav>
   );
 };
 

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Mermaid Diagram Component
  *
@@ -7,8 +9,6 @@
  * @author Ahmad Assaf
  * @version 1.0.0
  */
-
-'use client';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -43,13 +43,19 @@ const Mermaid = ({ chart, className = '', id }) => {
   }, []);
 
   useEffect(() => {
-    if (!isClient || !chart) return;
+    if (!isClient || !chart) return undefined;
+
+    // Cancellation flag so a stale render never wins over a newer chart
+    // and no setState happens after unmount.
+    let cancelled = false;
 
     const renderDiagram = async() => {
       try {
 
         // Lazy load mermaid
         const mermaid = await loadMermaid();
+
+        if (cancelled) return;
 
         // Initialize mermaid with configuration
         mermaid.initialize({
@@ -88,12 +94,16 @@ const Mermaid = ({ chart, className = '', id }) => {
           // Validate and render the diagram without letting Mermaid append fallback UI to <body>.
           const { 'svg': renderedSvg } = await mermaid.render(diagramId, chart, renderContainer);
 
+          if (cancelled) return;
+
           setSvg(renderedSvg);
           setError('');
         } finally {
           renderContainer.remove();
         }
       } catch (err) {
+        if (cancelled) return;
+
         console.error('Mermaid rendering error:', err);
         setError('Failed to render diagram');
         setSvg('');
@@ -101,6 +111,10 @@ const Mermaid = ({ chart, className = '', id }) => {
     };
 
     renderDiagram();
+
+    return () => {
+      cancelled = true;
+    };
   }, [ chart, id, isClient ]);
 
   if (!isClient)

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * MenuBlog Component
  *
@@ -11,9 +13,9 @@
 
 import React from 'react';
 
-import MenuDropDown from '@/components/navigation/DropDown';
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
+import MenuDropDown from '../DropDown';
+import Link from '../../core/Link';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Renders a dropdown menu for blog categories navigation

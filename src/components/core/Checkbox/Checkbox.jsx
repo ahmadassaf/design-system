@@ -2,8 +2,8 @@
 
 import { useId, useState } from 'react';
 
-import Icon from '@/components/core/Icon';
-import { cn } from '@/utilities/cn';
+import Icon from '../Icon';
+import { cn } from '../../../utilities/cn';
 
 const Checkbox = ({ checked, className, defaultChecked = false, disabled = false, id, label, onCheckedChange }) => {
   const generatedId = useId();

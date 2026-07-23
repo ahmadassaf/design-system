@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import Icon from '@/components/core/Icon';
+import Icon from '../../core/Icon';
 
 /**
  * Get the appropriate icon for a file based on its extension or name
@@ -76,7 +76,7 @@ const getFileIcon = (name, isFolder = false, isOpen = false) => {
  * @param {boolean} props.isOpen - Whether the folder is open
  * @returns {JSX.Element}
  */
-const FileTreeItem = ({ name, isFolder = false, level = 0, isLast = false, childrenProp = [], isOpen = true }) => {
+const FileTreeItem = ({ name, isFolder = false, level = 0, childrenProp = [], isOpen = true }) => {
   const indent = level * 20;
   const icon = getFileIcon(name, isFolder, isOpen && isFolder);
 

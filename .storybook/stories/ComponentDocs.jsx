@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys, sort-keys-fix/sort-keys-fix */
 import { Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks';
 
 import { HighlightedCode } from './HighlightedCode';
@@ -37,7 +36,7 @@ const groupDocs = {
 const usageExamples = {
   'Core/CmdLauncher': "import { CmdLauncher } from '@gaudi/design-system';\n\n<MenuSearch setOpen={setOpen} />\n<CmdLauncher\n  open={open}\n  setOpen={setOpen}\n  posts={posts}\n  projects={projects}\n  publications={publications}\n  tags={tags}\n  thoughts={thoughts}\n/>",
   'Blocks/Thoughts': "import { ThoughtsSection } from '@gaudi/design-system';\n\n<ThoughtsSection thoughts={thoughts} />",
-  'Layout': "import { LayoutContainer } from '@gaudi/design-system';\n\n<LayoutContainer>{children}</LayoutContainer>",
+  'Layout': "import LayoutContainer from '@gaudi/design-system/components/layout/LayoutContainer';\n\n<LayoutContainer>{children}</LayoutContainer>",
   'MDX/Aside': '<Aside>\n  Additional context for the article that should sit outside the main argument.\n</Aside>',
   'MDX/Callout': "<Callout type='info'>\n  Useful article context that readers should notice before continuing.\n</Callout>",
   'MDX/Chart': "<BarChart\n  title='Article views'\n  ariaLabel='Article views by day'\n  data={[\n    { label: 'Mon', views: 124 },\n    { label: 'Tue', views: 168 },\n  ]}\n  yKey='views'\n/>\n\n<LineChart\n  title='Subscriber trend'\n  ariaLabel='Subscribers by day'\n  data={[\n    { label: 'Mon', subscribers: 8 },\n    { label: 'Tue', subscribers: 12 },\n  ]}\n  yKey='subscribers'\n/>",
@@ -283,7 +282,7 @@ const componentDocs = {
       'Keep footnote copy short enough for a compact popover; long supporting material belongs in the visible footnotes section.'
     ],
     'notes': [
-      '`Footnote` listens for `mouseenter`, `mouseleave`, `focusin`, and `focusout` on generated links marked with `data-footnote-popover=\"true\"`.',
+      '`Footnote` listens for `mouseenter`, `mouseleave`, `focusin`, and `focusout` on generated links marked with `data-footnote-popover="true"`.',
       'The popover body is read from generated `data-footnote-content`, so the plugin must sanitize and serialize the note content before runtime.',
       'The component positions the popover next to the reference and flips left when it would overflow the viewport.',
       'The visible footnotes list remains the source of truth; the popover is a reading convenience.'

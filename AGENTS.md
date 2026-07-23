@@ -40,6 +40,9 @@ module.exports = {
 - Do not copy Gaudi components into the blog. Import from `@gaudi/design-system` or the app's Gaudi-backed alias.
 - Do not add app-owned content fixtures such as `app/content`, `data/meta`, or `.contentlayer/generated` to this package.
 - Do not hand-roll colors, typography, spacing, or icons in the blog when Gaudi already exposes a token, variant, component, or icon registry entry.
+- Never import consumer files (`@/data/meta/*`, `@/app/content/*`, `@/lib/utils/*`, `contentlayer/generated`) from this package. Site data flows in through `SiteConfigProvider` (metadata, navigation) and component props (`LayoutContainer`'s `metadata`/`navigation`/`jsonLd`/`menuProps`/`footerProps`); generic helpers such as `formatDate`, `sortPosts`, and `coreContent` live in `src/utilities/` and are exported from the root entry.
+- All package-internal imports are relative. Do not introduce `@/` aliases in `src/`.
+- MDX components live only in the `./mdx` entry (not re-exported from the root), and the compiled-MDX runtime lives in `./mdx/runtime`.
 
 ## Component Work
 
@@ -62,7 +65,10 @@ Use lightweight checks while a local Storybook server is already running:
 
 ```sh
 git diff --check
+pnpm lint
 pnpm test:contracts
 ```
 
-Only run Storybook build or start a server when explicitly asked.
+Only run Storybook build or start a server when explicitly asked. CI runs lint,
+contract tests, the Storybook interaction + axe a11y suite, and the Storybook build
+on every pull request.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Table Component for MDX
  *
@@ -8,8 +10,6 @@
  * @author Ahmad Assaf
  * @version 1.0.0
  */
-
-'use client';
 
 import { useEffect, useRef } from 'react';
 

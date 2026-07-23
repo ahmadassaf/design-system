@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Image Modal Component
  *
@@ -9,13 +11,11 @@
  * @version 1.0.0
  */
 
-'use client';
-
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
+import Button from '../../core/Button';
+import Icon from '../../core/Icon';
 
 /**
  * Renders a full-screen modal overlay for displaying enlarged images

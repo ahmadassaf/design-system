@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-import BreadcrumbTrail from '@/components/core/Breadcrumb';
+import BreadcrumbTrail from '../../core/Breadcrumb';
 
 /**
  * Renders a breadcrumb navigation trail

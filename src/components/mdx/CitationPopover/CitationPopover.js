@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Citation Popover Component
  *
@@ -5,16 +7,16 @@
  * Works with data attributes added by the rehype-simple-citations plugin.
  *
  * @author Ahmad Assaf
- * @version 1.0.0
+ * @version 2.0.0
  */
-
-'use client';
 
 import { useEffect, useRef, useState } from 'react';
 
-import LatexText from '@/components/mdx/LatexText';
+import LatexText from '../LatexText';
 
 import styles from './CitationPopover.module.css';
+
+const CITATION_TRIGGER_SELECTOR = '[data-citation-popover="true"]';
 
 const readJsonArray = (value) => {
   if (!value) return [];
@@ -43,8 +45,13 @@ const setStoredCitation = (citationKey, originCitationId) => {
   }
 };
 
-const normalizeCitationGroupMarkers = () => {
-  const citationGroups = document.querySelectorAll('a.citation-link.citation-group[data-citation-popover="true"]');
+/**
+ * Ensure grouped citations render one marker per citation number, and mark
+ * every trigger as bound so consumers can detect the popover is active.
+ * Idempotent, so it is safe to re-run from the MutationObserver.
+ */
+const prepareCitationTriggers = () => {
+  const citationGroups = document.querySelectorAll(`a.citation-link.citation-group${CITATION_TRIGGER_SELECTOR}`);
 
   citationGroups.forEach((citationGroup) => {
     if (citationGroup.querySelector('[data-citation-marker-number]')) return;
@@ -61,6 +68,10 @@ const normalizeCitationGroupMarkers = () => {
       marker.textContent = String(number);
       citationGroup.appendChild(marker);
     });
+  });
+
+  document.querySelectorAll(CITATION_TRIGGER_SELECTOR).forEach((trigger) => {
+    trigger.dataset.citationPopoverBound = 'true';
   });
 };
 
@@ -83,13 +94,11 @@ const parseCitationContent = (citationTexts, citationNumbers, citationKeys, cita
       return { 'content': texts[0], 'type': 'single' };
 
     return {
-      'items': texts.map((text, index) => {
-        return {
-          'key': keys[index],
-          'number': numbers[index],
-          text
-        };
-      }),
+      'items': texts.map((text, index) => ({
+        'key': keys[index],
+        'number': numbers[index],
+        text
+      })),
       'type': 'multiple'
     };
   } catch {
@@ -122,21 +131,15 @@ const calculatePosition = (targetRect, popoverWidth, popoverHeight) => {
 const updateCitationBackLink = (citationKey, originCitationId) => {
   const backLink = getBackLink(citationKey);
 
-  if (backLink) {
+  if (!backLink) return;
 
-    // Update href to point to the specific clicked instance
-    backLink.href = `#${originCitationId}`;
+  // Point the back-link at the specific clicked instance and reveal it
+  backLink.href = `#${originCitationId}`;
+  backLink.style.display = 'inline-block';
+  backLink.setAttribute('data-recently-clicked', 'true');
 
-    // Show the back-link (it's hidden by default)
-    backLink.style.display = 'inline-block';
-
-    // Add a visual indicator that this citation was recently accessed
-    backLink.setAttribute('data-recently-clicked', 'true');
-
-    // Store in localStorage for persistence
-    if (typeof window !== 'undefined')
-      setStoredCitation(citationKey, originCitationId);
-  }
+  if (typeof window !== 'undefined')
+    setStoredCitation(citationKey, originCitationId);
 };
 
 /**
@@ -152,251 +155,238 @@ const hideBackLink = (citationKey) => {
 };
 
 /**
- * Component that adds popover functionality to citation references
+ * Component that adds popover functionality to citation references.
+ *
+ * All interaction is handled through document-level delegated listeners
+ * registered once on mount; mutable interaction state lives in refs so the
+ * effect never needs to re-run.
  */
 const CitationPopover = () => {
   const [ popover, setPopover ] = useState(null);
   const popoverRef = useRef(null);
+  const popoverStateRef = useRef(null);
+  const activeTriggerRef = useRef(null);
   const timeoutRef = useRef(null);
 
+  // Mirror state into a ref so the once-bound handlers always see fresh data
   useEffect(() => {
-    normalizeCitationGroupMarkers();
+    popoverStateRef.current = popover;
+  }, [ popover ]);
 
-    // Handle back-link clicks to hide them after use
-    const handleBackLinkClick = (event) => {
-      const backLink = event.target.closest('a.citation-back-link');
-
-      if (!backLink) return;
-
-      const citationKey = backLink.getAttribute('data-citation-key');
-
-      if (citationKey)
-
-        // Small delay to allow navigation to complete, then hide the back-link
-        setTimeout(() => {
-          hideBackLink(citationKey);
-        }, 100);
-
-    };
-
-    // Handle direct citation link clicks (when user clicks citation number)
-    const handleCitationLinkClick = (event) => {
-      const citationLink = event.target.closest('a.citation-link');
-
-      if (!citationLink) return;
-
-      // Extract citation key from href or data attributes
-      const href = citationLink.getAttribute('href');
-      const citationKeys = citationLink.getAttribute('data-citation-keys');
-
-      if (citationKeys) {
-        const keys = readJsonArray(citationKeys);
-        const originId = citationLink.id || citationLink.getAttribute('id');
-
-        if (keys.length > 0 && originId) {
-          keys.forEach((key) => updateCitationBackLink(key, originId));
-
-          if (href?.startsWith('#citation-group-')) {
-            event.preventDefault();
-            document.getElementById(`citation-${keys[0]}`)?.scrollIntoView({ 'block': 'center' });
-          }
-        }
-      } else if (href && href.startsWith('#citation-')) {
-        const citationKey = href.replace('#citation-', '').replace(/^group-\d+-/, '');
-        const originId = citationLink.id || citationLink.getAttribute('id');
-
-        if (citationKey && originId)
-
-          // Update back-link to point to this specific clicked instance
-          updateCitationBackLink(citationKey, originId);
-      }
-    };
-
-    const handleCitationHover = (event) => {
-      let target = event.target.closest?.('[data-citation-popover="true"]');
-
-      if (event.currentTarget?.matches?.('[data-citation-popover="true"]'))
-        target = event.currentTarget;
-
-      if (!target)
-        return;
-
-      event.preventDefault();
-
-      if (timeoutRef.current)
+  useEffect(() => {
+    const clearCloseTimeout = () => {
+      if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-
-      if (event.type === 'pointerenter' || event.type === 'pointermove' || event.type === 'mouseenter' || event.type === 'mousemove' || event.type === 'mouseover' || event.type === 'focus') {
-        const { citationText, citationTexts, citationNumbers, citationKeys } = target.dataset;
-        const displayNumber = target.textContent;
-        const parsedContent = parseCitationContent(citationTexts, citationNumbers, citationKeys, citationText);
-
-        if (!parsedContent)
-          return;
-
-        // Use element-based positioning for better accuracy
-        const rect = target.getBoundingClientRect();
-        const itemCount = readJsonArray(citationNumbers).length || 1;
-        const popoverWidth = itemCount > 1 ? 420 : 360;
-        const popoverHeight = itemCount > 1 ? Math.min(320, 96 + (itemCount * 86)) : 150;
-        const position = calculatePosition(rect, popoverWidth, popoverHeight);
-
-        setPopover({
-          'content': parsedContent,
-          'left': Math.round(position.left),
-          'number': displayNumber,
-          'originCitationId': target.id,
-          'top': Math.round(position.top)
-        });
-      } else if (event.type === 'blur') {
-        timeoutRef.current = setTimeout(() => {
-          setPopover(null);
-        }, 300);
-      } else if (event.type === 'pointerleave' || event.type === 'mouseleave' || event.type === 'mouseout') {
-        if (event.relatedTarget && target.contains(event.relatedTarget))
-          return;
-
-        timeoutRef.current = setTimeout(() => {
-          setPopover(null);
-        }, 300);
+        timeoutRef.current = null;
       }
+    };
+
+    const closePopover = () => {
+      clearCloseTimeout();
+      activeTriggerRef.current?.setAttribute('aria-expanded', 'false');
+      activeTriggerRef.current = null;
+      setPopover(null);
+    };
+
+    const scheduleClose = (delay) => {
+      clearCloseTimeout();
+      timeoutRef.current = setTimeout(closePopover, delay);
+    };
+
+    const openPopoverFor = (target) => {
+      clearCloseTimeout();
+
+      const { citationText, citationTexts, citationNumbers, citationKeys } = target.dataset;
+      const parsedContent = parseCitationContent(citationTexts, citationNumbers, citationKeys, citationText);
+
+      if (!parsedContent) return;
+
+      const rect = target.getBoundingClientRect();
+      const itemCount = readJsonArray(citationNumbers).length || 1;
+      const popoverWidth = itemCount > 1 ? 420 : 360;
+      const popoverHeight = itemCount > 1 ? Math.min(320, 96 + (itemCount * 86)) : 150;
+      const position = calculatePosition(rect, popoverWidth, popoverHeight);
+
+      if (activeTriggerRef.current && activeTriggerRef.current !== target)
+        activeTriggerRef.current.setAttribute('aria-expanded', 'false');
+
+      target.setAttribute('aria-expanded', 'true');
+      activeTriggerRef.current = target;
+
+      setPopover({
+        'content': parsedContent,
+        'left': Math.round(position.left),
+        'number': target.textContent,
+        'originCitationId': target.id,
+        'top': Math.round(position.top)
+      });
+    };
+
+    const isInsidePopover = (node) => Boolean(node && popoverRef.current?.contains(node));
+
+    const handlePointerOver = (event) => {
+      const trigger = event.target.closest?.(CITATION_TRIGGER_SELECTOR);
+
+      if (trigger) {
+        openPopoverFor(trigger);
+
+        return;
+      }
+
+      // Moving onto the popover itself cancels any pending close
+      if (isInsidePopover(event.target)) clearCloseTimeout();
+    };
+
+    const handlePointerOut = (event) => {
+      const trigger = event.target.closest?.(CITATION_TRIGGER_SELECTOR);
+
+      if (!trigger && !isInsidePopover(event.target)) return;
+
+      const related = event.relatedTarget;
+
+      // Ignore moves within the trigger, into the popover, or onto another trigger
+      if (related && (trigger?.contains(related) || isInsidePopover(related) || related.closest?.(CITATION_TRIGGER_SELECTOR))) return;
+
+      scheduleClose(trigger ? 300 : 150);
+    };
+
+    const handleFocusIn = (event) => {
+      const trigger = event.target.closest?.(CITATION_TRIGGER_SELECTOR);
+
+      if (trigger) openPopoverFor(trigger);
+    };
+
+    const handleFocusOut = (event) => {
+      const trigger = event.target.closest?.(CITATION_TRIGGER_SELECTOR);
+
+      if (trigger || isInsidePopover(event.target)) scheduleClose(300);
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && popoverStateRef.current) closePopover();
     };
 
     const handleScroll = () => {
-      setPopover(null);
-      if (timeoutRef.current)
-        clearTimeout(timeoutRef.current);
-
+      clearCloseTimeout();
+      if (popoverStateRef.current) closePopover();
     };
 
-    const handleCitationClick = (event) => {
-      const citationItem = event.target.closest('[data-citation-popover-item="multiple"]');
+    const handleClick = (event) => {
 
-      if (!citationItem) return;
+      // 1. Clicks on a row inside a multi-citation popover
+      const citationItem = event.target.closest?.('[data-citation-popover-item="multiple"]');
 
-      const { citationKey } = citationItem.dataset;
+      if (citationItem) {
+        const { citationKey } = citationItem.dataset;
 
-      if (citationKey) {
+        if (!citationKey) return;
+
         event.preventDefault();
 
         // Update the back-link ONLY for the specific citation that was clicked
-        if (popover?.originCitationId)
-          updateCitationBackLink(citationKey, popover.originCitationId);
+        const originCitationId = popoverStateRef.current?.originCitationId;
 
-        // Navigate to the bibliography entry
+        if (originCitationId) updateCitationBackLink(citationKey, originCitationId);
+
         const targetElement = document.getElementById(`citation-${citationKey}`);
 
         if (targetElement) {
           targetElement.scrollIntoView({ 'block': 'center' });
-
-          // Hide the popover
-          setPopover(null);
+          closePopover();
         }
+
+        return;
+      }
+
+      // 2. Clicks on citation numbers in the text
+      const citationLink = event.target.closest?.('a.citation-link');
+
+      if (citationLink) {
+        const href = citationLink.getAttribute('href');
+        const citationKeys = citationLink.getAttribute('data-citation-keys');
+
+        if (citationKeys) {
+          const keys = readJsonArray(citationKeys);
+          const originId = citationLink.id || citationLink.getAttribute('id');
+
+          if (keys.length > 0 && originId) {
+            keys.forEach((key) => updateCitationBackLink(key, originId));
+
+            if (href?.startsWith('#citation-group-')) {
+              event.preventDefault();
+              document.getElementById(`citation-${keys[0]}`)?.scrollIntoView({ 'block': 'center' });
+            }
+          }
+        } else if (href && href.startsWith('#citation-')) {
+          const citationKey = href.replace('#citation-', '').replace(/^group-\d+-/, '');
+          const originId = citationLink.id || citationLink.getAttribute('id');
+
+          if (citationKey && originId) updateCitationBackLink(citationKey, originId);
+        }
+
+        return;
+      }
+
+      // 3. Clicks on bibliography back-links hide them after navigation
+      const backLink = event.target.closest?.('a.citation-back-link');
+
+      if (backLink) {
+        const citationKey = backLink.getAttribute('data-citation-key');
+
+        if (citationKey) setTimeout(() => hideBackLink(citationKey), 100);
       }
     };
 
-    const citationLinks = new Set();
-    const bindCitationLink = (citationLink) => {
-      if (citationLinks.has(citationLink)) return;
+    prepareCitationTriggers();
 
-      citationLinks.add(citationLink);
-      citationLink.dataset.citationPopoverBound = 'true';
-      citationLink.onmouseover = handleCitationHover;
-      citationLink.onmousemove = handleCitationHover;
-      citationLink.onmouseout = handleCitationHover;
-      citationLink.onmouseenter = handleCitationHover;
-      citationLink.onmouseleave = handleCitationHover;
-      citationLink.onfocus = handleCitationHover;
-      citationLink.onblur = handleCitationHover;
-      citationLink.addEventListener('mouseover', handleCitationHover);
-      citationLink.addEventListener('mousemove', handleCitationHover);
-      citationLink.addEventListener('mouseout', handleCitationHover);
-      citationLink.addEventListener('pointerenter', handleCitationHover);
-      citationLink.addEventListener('pointermove', handleCitationHover);
-      citationLink.addEventListener('pointerleave', handleCitationHover);
-      citationLink.addEventListener('focus', handleCitationHover);
-      citationLink.addEventListener('blur', handleCitationHover);
-    };
+    const bindTimer = window.setTimeout(prepareCitationTriggers, 0);
 
-    const bindCitationLinks = () => {
-      normalizeCitationGroupMarkers();
-      document.querySelectorAll('[data-citation-popover="true"]').forEach(bindCitationLink);
-    };
-
-    bindCitationLinks();
-
-    const bindTimer = window.setTimeout(bindCitationLinks, 0);
-    const observer = new MutationObserver(bindCitationLinks);
+    // Catch late-hydrated citation markup; prepareCitationTriggers is idempotent
+    const observer = new MutationObserver(prepareCitationTriggers);
 
     if (document.body)
       observer.observe(document.body, { 'childList': true, 'subtree': true });
 
-    document.addEventListener('mouseover', handleCitationHover, true);
-    document.addEventListener('mousemove', handleCitationHover, true);
-    document.addEventListener('mouseout', handleCitationHover, true);
-    document.addEventListener('pointermove', handleCitationHover, true);
-    document.addEventListener('click', handleCitationClick, true);
-    document.addEventListener('click', handleCitationLinkClick, true);
-    document.addEventListener('click', handleBackLinkClick, true);
+    document.addEventListener('pointerover', handlePointerOver, true);
+    document.addEventListener('pointerout', handlePointerOut, true);
+    document.addEventListener('focusin', handleFocusIn, true);
+    document.addEventListener('focusout', handleFocusOut, true);
+    document.addEventListener('click', handleClick, true);
+    document.addEventListener('keydown', handleKeyDown, true);
     window.addEventListener('scroll', handleScroll, true);
 
     return () => {
       window.clearTimeout(bindTimer);
       observer.disconnect();
 
-      citationLinks.forEach((citationLink) => {
-        citationLink.removeEventListener('mouseover', handleCitationHover);
-        citationLink.removeEventListener('mousemove', handleCitationHover);
-        citationLink.removeEventListener('mouseout', handleCitationHover);
-        citationLink.removeEventListener('pointerenter', handleCitationHover);
-        citationLink.removeEventListener('pointermove', handleCitationHover);
-        citationLink.removeEventListener('pointerleave', handleCitationHover);
-        citationLink.removeEventListener('focus', handleCitationHover);
-        citationLink.removeEventListener('blur', handleCitationHover);
-        citationLink.onmouseover = null;
-        citationLink.onmousemove = null;
-        citationLink.onmouseout = null;
-        citationLink.onmouseenter = null;
-        citationLink.onmouseleave = null;
-        citationLink.onfocus = null;
-        citationLink.onblur = null;
-        delete citationLink.dataset.citationPopoverBound;
-      });
-
-      document.removeEventListener('mouseover', handleCitationHover, true);
-      document.removeEventListener('mousemove', handleCitationHover, true);
-      document.removeEventListener('mouseout', handleCitationHover, true);
-      document.removeEventListener('pointermove', handleCitationHover, true);
-      document.removeEventListener('click', handleCitationClick, true);
-      document.removeEventListener('click', handleCitationLinkClick, true);
-      document.removeEventListener('click', handleBackLinkClick, true);
+      document.removeEventListener('pointerover', handlePointerOver, true);
+      document.removeEventListener('pointerout', handlePointerOut, true);
+      document.removeEventListener('focusin', handleFocusIn, true);
+      document.removeEventListener('focusout', handleFocusOut, true);
+      document.removeEventListener('click', handleClick, true);
+      document.removeEventListener('keydown', handleKeyDown, true);
       window.removeEventListener('scroll', handleScroll, true);
-      if (timeoutRef.current)
-        clearTimeout(timeoutRef.current);
 
+      clearCloseTimeout();
+
+      document.querySelectorAll(CITATION_TRIGGER_SELECTOR).forEach((trigger) => {
+        delete trigger.dataset.citationPopoverBound;
+        trigger.removeAttribute('aria-expanded');
+      });
     };
-  }, [ popover ]);
+  }, []);
 
   return (
     <div data-gaudi-citation-popover-root='true'>
       {popover ? (
         <div
           ref={ popoverRef }
+          role='tooltip'
           className={ `${styles.popover} ${styles.ready}` }
           style={{
             'left': `${popover.left}px`,
             'top': `${popover.top}px`
           }}
-          onMouseEnter={ () => {
-            if (timeoutRef.current)
-              clearTimeout(timeoutRef.current);
-
-          } }
-          onMouseLeave={ () => {
-            timeoutRef.current = setTimeout(() => {
-              setPopover(null);
-            }, 150);
-          } }
         >
           <div className={ styles.content }>
             <div className={ styles.body }>

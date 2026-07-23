@@ -51,7 +51,7 @@ export const Example = {
 export const Searchable = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const searchInput = canvas.getByRole('textbox', { name: 'Search article topics...' });
+    const searchInput = canvas.getByRole('combobox', { name: 'Search article topics...' });
 
     await expect(searchInput).toHaveFocus();
     await userEvent.type(searchInput, 'AI');

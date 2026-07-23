@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Image Component
  *
@@ -9,14 +11,12 @@
  * @version 1.0.0
  */
 
-'use client';
-
 import { useEffect, useState } from 'react';
 import NextImageModule from 'next/image';
 
-import ImageModal from '@/components/mdx/ImageModal';
-import Button from '@/components/core/Button';
-import resolveNextImage from '@/utilities/resolveNextImage';
+import ImageModal from '../ImageModal';
+import Button from '../../core/Button';
+import resolveNextImage from '../../../utilities/resolveNextImage';
 
 const NextImage = resolveNextImage(NextImageModule);
 
@@ -24,7 +24,7 @@ const NextImage = resolveNextImage(NextImageModule);
  * Renders an optimized image using Next.js Image component with modal functionality
  *
  * @param {Object} props - All Next.js Image component props
- * @param {string} [props.alt='post-image'] - Alt text for the image
+ * @param {string} [props.alt=''] - Alt text for the image (defaults to empty so images are treated as decorative unless described)
  * @param {string} [props.caption] - Optional image caption
  * @param {string} [props.darkSrc] - Optional dark-mode image source
  * @param {string} [props.fallback] - Optional fallback image source after load failure
@@ -36,7 +36,7 @@ const NextImage = resolveNextImage(NextImageModule);
  * // In MDX content:
  * <Image src="/static/images/example.jpg" width={500} height={300} />
  */
-const Image = ({ alt = 'post-image', caption, darkSrc, fallback, src, ...rest }) => {
+const Image = ({ alt = '', caption, darkSrc, fallback, src, ...rest }) => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ currentSrc, setCurrentSrc ] = useState(src);
   const [ erroredSources, setErroredSources ] = useState({});
@@ -83,11 +83,11 @@ const Image = ({ alt = 'post-image', caption, darkSrc, fallback, src, ...rest })
 
   return (
     <figure>
-      <Button variant='ghost' tone='gray' size='sm' className='block max-w-full p-0 hover:bg-transparent dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(src)) } aria-label={ `Open image: ${alt}` }>
+      <Button variant='ghost' tone='gray' size='sm' className='block max-w-full p-0 hover:bg-transparent dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(src)) } aria-label={ alt ? `Open image: ${alt}` : 'Open image' }>
         {renderImage(src, darkSrc ? `${rest.className || ''} dark:hidden` : rest.className)}
       </Button>
       {darkSrc && (
-        <Button variant='ghost' tone='gray' size='sm' className='hidden max-w-full p-0 hover:bg-transparent dark:block dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(darkSrc)) } aria-label={ `Open image: ${alt}` }>
+        <Button variant='ghost' tone='gray' size='sm' className='hidden max-w-full p-0 hover:bg-transparent dark:block dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(darkSrc)) } aria-label={ alt ? `Open image: ${alt}` : 'Open image' }>
           {renderImage(darkSrc, rest.className)}
         </Button>
       )}

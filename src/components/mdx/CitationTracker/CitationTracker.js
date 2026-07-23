@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Citation Tracker Component
  *
@@ -8,8 +10,6 @@
  * @author Ahmad Assaf
  * @version 1.0.0
  */
-
-'use client';
 
 import { useEffect } from 'react';
 

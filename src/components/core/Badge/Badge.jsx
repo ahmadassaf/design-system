@@ -1,4 +1,4 @@
-import Pill, { pillVariants } from '@/components/core/Pill';
+import Pill, { pillVariants } from '../Pill';
 
 export const badgeVariants = pillVariants;
 

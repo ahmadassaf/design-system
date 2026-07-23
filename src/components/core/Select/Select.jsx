@@ -1,9 +1,9 @@
 'use client';
 
-import { Children, isValidElement, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { Children, isValidElement, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import Icon from '@/components/core/Icon';
-import { cn } from '@/utilities/cn';
+import Icon from '../Icon';
+import { cn } from '../../../utilities/cn';
 
 const normalizeOptions = (children, options) => {
   const optionList = options || [];
@@ -57,9 +57,11 @@ const Select = ({
   const listboxId = `${id}-listbox`;
   const listboxLabel = ariaLabel ? `${ariaLabel} options` : `${placeholder} options`;
   const searchId = `${id}-search`;
+  const triggerId = `${id}-trigger`;
   const listboxRef = useRef(null);
   const rootRef = useRef(null);
   const searchRef = useRef(null);
+  const triggerRef = useRef(null);
   const isControlled = value !== undefined;
   const normalizedOptions = useMemo(() => normalizeOptions(children, options), [ children, options ]);
   const [ internalValue, setInternalValue ] = useState(() => getInitialValue({ defaultValue, multiple, value }));
@@ -78,16 +80,21 @@ const Select = ({
     return String(option.label).toLowerCase().includes(query.toLowerCase());
   });
 
-  const updateOpen = (nextOpen) => {
+  const updateOpen = useCallback((nextOpen) => {
     setOpen(nextOpen);
     onOpenChange?.(nextOpen);
     if (!nextOpen) setQuery('');
-  };
+  }, [ onOpenChange ]);
 
   const updateValue = (nextValue, option) => {
     if (!isControlled) setInternalValue(nextValue);
     onValueChange?.(nextValue, option);
   };
+
+  const closePopup = useCallback(() => {
+    updateOpen(false);
+    triggerRef.current?.focus();
+  }, [ updateOpen ]);
 
   const commitOption = (option) => {
     if (!option || option.disabled) return;
@@ -102,7 +109,7 @@ const Select = ({
     }
 
     updateValue(option.value, option);
-    updateOpen(false);
+    closePopup();
   };
 
   const moveActive = (direction) => {
@@ -121,13 +128,13 @@ const Select = ({
     if (!open) return undefined;
 
     const handlePointerDown = (event) => {
-      if (rootRef.current && !rootRef.current.contains(event.target)) updateOpen(false);
+      if (rootRef.current && !rootRef.current.contains(event.target)) closePopup();
     };
 
     document.addEventListener('pointerdown', handlePointerDown);
 
     return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [ open ]);
+  }, [ closePopup, open ]);
 
   useEffect(() => {
     if (open && searchable) searchRef.current?.focus();
@@ -143,12 +150,25 @@ const Select = ({
   if (selectedOptions.length && multiple) triggerLabel = selectedOptions.map((option) => option.label).join(', ');
   if (selectedOptions.length && !multiple) triggerLabel = selectedOptions[0].label;
 
+  const activeOptionId = open && filteredOptions.length ? `${id}-option-${activeIndex}` : undefined;
+
   return (
-    <div ref={ rootRef } className={ cn('relative w-full max-w-xs', className, classNames.root) }>
+    <div
+      ref={ rootRef }
+      className={ cn('relative w-full max-w-xs', className, classNames.root) }
+      onKeyDown={ (event) => {
+        if (event.key === 'Escape' && open) {
+          event.stopPropagation();
+          closePopup();
+        }
+      } }
+    >
       {name && multiple ? selectedValues.map((item) => <input key={ item } type='hidden' name={ name } value={ item } />) : null}
       {name && !multiple ? <input type='hidden' name={ name } value={ currentValue } /> : null}
 
       <button
+        ref={ triggerRef }
+        id={ triggerId }
         type='button'
         disabled={ disabled }
         aria-expanded={ open }
@@ -190,7 +210,12 @@ const Select = ({
               <input
                 ref={ searchRef }
                 id={ searchId }
+                role='combobox'
                 aria-label={ searchPlaceholder }
+                aria-autocomplete='list'
+                aria-expanded={ open }
+                aria-controls={ listboxId }
+                aria-activedescendant={ activeOptionId }
                 value={ query }
                 placeholder={ searchPlaceholder }
                 className='w-full bg-transparent text-sm text-gray-950 outline-none placeholder:text-gray-400 dark:text-gray-100'
@@ -210,8 +235,6 @@ const Select = ({
                     event.preventDefault();
                     commitOption(filteredOptions[activeIndex]);
                   }
-
-                  if (event.key === 'Escape') updateOpen(false);
                 } }
               />
             </div>
@@ -223,6 +246,7 @@ const Select = ({
             role='listbox'
             aria-label={ listboxLabel }
             aria-multiselectable={ multiple || undefined }
+            aria-activedescendant={ searchable ? undefined : activeOptionId }
             className='max-h-64 overflow-y-auto py-1'
             tabIndex={ searchable ? -1 : 0 }
             onKeyDown={ (event) => {
@@ -243,8 +267,6 @@ const Select = ({
                 event.preventDefault();
                 commitOption(filteredOptions[activeIndex]);
               }
-
-              if (event.key === 'Escape') updateOpen(false);
             } }
           >
             {filteredOptions.length ? filteredOptions.map((option, index) => {
@@ -254,8 +276,10 @@ const Select = ({
               return (
                 <button
                   key={ option.value }
+                  id={ `${id}-option-${index}` }
                   type='button'
                   role='option'
+                  tabIndex={ -1 }
                   aria-selected={ selected }
                   disabled={ option.disabled }
                   className={ cn(

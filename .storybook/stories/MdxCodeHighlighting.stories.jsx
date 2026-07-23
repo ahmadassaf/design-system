@@ -1,4 +1,4 @@
-import { CodeGroupTabs } from '../../src/index';
+import { CodeGroupTabs } from '../../src/components/mdx';
 
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
@@ -14,7 +14,7 @@ export default makeSource({
   }
 });`;
 
-const layoutSetup = `import { CodeGroupTabs } from '@gaudi/design-system';
+const layoutSetup = `import { CodeGroupTabs } from '@gaudi/design-system/mdx';
 
 export default function RootLayout({ children }) {
   return (

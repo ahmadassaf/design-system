@@ -1,4 +1,4 @@
-import { cn } from '@/utilities/cn';
+import { cn } from '../../../utilities/cn';
 
 export const DataTable = ({ caption, className, columns = [], rows = [] }) => (
   <div className={ cn('isolate overflow-x-auto rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950', className) }>

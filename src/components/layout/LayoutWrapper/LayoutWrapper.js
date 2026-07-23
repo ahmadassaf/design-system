@@ -9,8 +9,8 @@
  * @version 1.0.0
  */
 
-import Footer from '@/components/layout/Footer';
-import Menu from '@/components/navigation/Menu';
+import Footer from '../Footer';
+import Menu from '../../navigation/Menu';
 
 /**
  * Renders the main application layout structure
@@ -43,7 +43,7 @@ import Menu from '@/components/navigation/Menu';
  */
 const LayoutWrapper = ({ children, footerProps }) => (
   <div className='relative isolate overflow-x-hidden'>
-    <div className='flex h-screen flex-col justify-between'>
+    <div className='flex min-h-screen flex-col justify-between'>
       <Menu />
       <main className='mb-8'>{children}</main>
       <Footer { ...footerProps } />

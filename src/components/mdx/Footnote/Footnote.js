@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Footnote Component
  *
@@ -7,8 +9,6 @@
  * @author Ahmad Assaf
  * @version 1.0.0
  */
-
-'use client';
 
 import { useEffect, useRef, useState } from 'react';
 

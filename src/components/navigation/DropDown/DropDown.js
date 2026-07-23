@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Menu Dropdown Component
  *
@@ -11,9 +13,9 @@
 
 import React from 'react';
 
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
-import { cn } from '@/utilities/cn';
+import Button from '../../core/Button';
+import Icon from '../../core/Icon';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Dropdown menu component with outside click detection

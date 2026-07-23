@@ -9,12 +9,12 @@
  * @version 1.0.0
  */
 
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import Pill from '@/components/core/Pill';
-import PostSeriesBox from '@/components/post/PostSeriesBox';
-import Typography from '@/foundations/Typography';
-import { cn } from '@/utilities/cn';
+import Icon from '../../core/Icon';
+import Link from '../../core/Link';
+import Pill from '../../core/Pill';
+import PostSeriesBox from '../PostSeriesBox';
+import Typography from '../../../foundations/Typography';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Renders the complete blog post header with metadata and navigation
@@ -24,7 +24,7 @@ import { cn } from '@/utilities/cn';
  * and series information when available. Features responsive design for different screen sizes.
  *
  * @param {Object} props - Component props
- * @param {Object} props.frontMatter - Post metadata object
+ * @param {Object} [props.frontMatter={}] - Post metadata object
  * @param {string} props.frontMatter.title - Post title
  * @param {string} props.frontMatter.subtitle - Post subtitle
  * @param {string} props.frontMatter.category - Post category
@@ -39,7 +39,7 @@ import { cn } from '@/utilities/cn';
  * @param {string} props.frontMatter.fileName - Source file name
  * @param {string} [props.frontMatter.externalLink] - External link for source
  * @param {Array} [props.frontMatter.seriesPosts] - Related series posts
- * @param {Object} props.siteMetadata - Site configuration object
+ * @param {Object} [props.siteMetadata={}] - Site configuration object
  * @param {string} props.siteMetadata.locale - Site locale for date formatting
  * @param {Array} props.toc - Table of contents array
  *
@@ -53,13 +53,13 @@ import { cn } from '@/utilities/cn';
  *   toc={tableOfContents}
  * />
  */
-const PostHeader = ({ className, classNames = {}, frontMatter, siteMetadata, toc, tocControl }) => (
+const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata = {}, tocControl }) => (
   <div className={ cn('w-full pt-10 max-xl:w-full sm:pt-12 lg:pt-14', className, classNames.root) }>
 
     <div className={ cn('mb-2 flex flex-wrap items-center gap-3', classNames.meta) }>
       {frontMatter.category && (
         <Link
-          href={ `/blog/categories/${frontMatter.category.replace(' ', '-').toLowerCase()}` }
+          href={ `/blog/categories/${frontMatter.category.replaceAll(' ', '-').toLowerCase()}` }
           className={ cn('flex w-fit cursor-pointer items-center gap-2 text-xs text-gray-600 hover:text-gray-800 sm:text-sm dark:text-gray-400 dark:hover:text-gray-200', classNames.category) }
         >
           <div className='size-2 flex-shrink-0 rounded-full bg-green-500'></div>
@@ -86,7 +86,7 @@ const PostHeader = ({ className, classNames = {}, frontMatter, siteMetadata, toc
         className={ classNames.timestamps }
         date={ frontMatter.updated || frontMatter.date }
         locale={ siteMetadata.locale }
-        readingTime={ frontMatter.readingTime.text }
+        readingTime={ frontMatter.readingTime?.text }
       />
 
     </div>
@@ -96,7 +96,7 @@ const PostHeader = ({ className, classNames = {}, frontMatter, siteMetadata, toc
         {frontMatter.tags && (
           <div className={ cn('flex flex-wrap gap-2', classNames.tags) }>
             {frontMatter.tags.map((tag) => (
-              <Pill key={ tag } href={ `/blog/tags/${tag.replace(' ', '-').toLowerCase()}` } tone='gray' variant='soft' size='sm' radius='md' className={ cn('my-0 mr-0 normal-case tracking-normal capitalize', classNames.tag) }>
+              <Pill key={ tag } href={ `/blog/tags/${tag.replaceAll(' ', '-').toLowerCase()}` } tone='gray' variant='soft' size='sm' radius='md' className={ cn('my-0 mr-0 normal-case tracking-normal capitalize', classNames.tag) }>
                 {tag}
               </Pill>
             ))}
@@ -136,22 +136,27 @@ export default PostHeader;
  */
 export const PostTimestamps = ({ action, className, date, locale, readingTime }) => {
   const postDate = new Date(date);
-  const formattedDate = postDate.toLocaleDateString(locale, {
+  const isValidDate = date && !Number.isNaN(postDate.getTime());
+  const formattedDate = isValidDate ? postDate.toLocaleDateString(locale, {
     'day': 'numeric',
     'month': 'short',
     'year': 'numeric'
-  });
+  }) : '';
 
   return (
     <div className={ cn('mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-600 dark:text-gray-400', className) }>
-      <time dateTime={ date } className='font-medium'>
-        {formattedDate}
-      </time>
+      {isValidDate ? (
+        <time dateTime={ date } className='font-medium'>
+          {formattedDate}
+        </time>
+      ) : null}
       {action || null}
-      <div className='flex items-center gap-1.5'>
-        <Icon name='BookOpen' decorative className='h-3.5 w-3.5 text-gray-400' />
-        <span>{readingTime}</span>
-      </div>
+      {readingTime ? (
+        <div className='flex items-center gap-1.5'>
+          <Icon name='BookOpen' decorative className='h-3.5 w-3.5 text-gray-400' />
+          <span>{readingTime}</span>
+        </div>
+      ) : null}
     </div>
   );
 };

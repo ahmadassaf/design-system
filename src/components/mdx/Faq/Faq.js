@@ -13,7 +13,7 @@
 
 import { Disclosure } from '@headlessui/react';
 
-import Icon from '@/components/core/Icon';
+import Icon from '../../core/Icon';
 
 /**
  * Renders a collapsible FAQ section

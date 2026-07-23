@@ -1,3 +1,6 @@
+/*
+ * CSS mirror of `src/tokens/tokens.cjs` (`dsVariables`) — keep the two in sync.
+ */
 @layer base {
   :root {
     --ds-color-accent: #2563eb;
@@ -8,13 +11,73 @@
     --ds-color-border: #d4d4d4;
     --ds-color-border-dark: #303030;
     --ds-color-border-muted: #f5f5f5;
+    --ds-color-dark: #171717;
     --ds-color-surface: #ffffff;
     --ds-color-surface-dark: #171717;
     --ds-color-surface-muted: #fafafa;
+    --ds-color-surface-raised: #ffffff;
     --ds-color-text: #171717;
     --ds-color-text-inverse: #ffffff;
     --ds-color-text-muted: #404040;
     --ds-color-text-subtle: #737373;
+
+    /* MDX prose extras (code, citations, footnotes, captions) */
+    --ds-color-caption-text: #6b7280;
+    --ds-color-citation-back-active-bg: #dbeafe;
+    --ds-color-citation-back-active-border: #3b82f6;
+    --ds-color-citation-back-active-text: #1e40af;
+    --ds-color-citation-back-bg: #f3f4f6;
+    --ds-color-citation-back-border: #e5e7eb;
+    --ds-color-citation-back-hover-bg: #e5e7eb;
+    --ds-color-citation-back-hover-border: #d1d5db;
+    --ds-color-citation-back-text: #374151;
+    --ds-color-citation-badge-bg: #3b82f6;
+    --ds-color-citation-badge-bg-hover: #2563eb;
+    --ds-color-citation-badge-text: #ffffff;
+    --ds-color-citation-divider: #e5e7eb;
+    --ds-color-citation-entry-text: #374151;
+    --ds-color-code-block-bg: #070910;
+    --ds-color-code-chars-highlight-bg: #52525b80;
+    --ds-color-code-inline-bg: rgba(156, 163, 175, 0.2);
+    --ds-color-code-inline-border: rgba(229, 231, 235, 0.5);
+    --ds-color-code-inline-text: rgb(31, 41, 55);
+    --ds-color-code-line-highlight-bg: #c8c8ff1a;
+    --ds-color-code-line-highlight-border: #60a5fa;
+    --ds-color-references-rule: #ddd;
+
+    /* Table component */
+    --ds-color-scrollbar-thumb: #d1d5db;
+    --ds-color-scrollbar-track: #f3f4f6;
+    --ds-color-table-border: #dbe2ea;
+    --ds-color-table-cell-border: #e5e7eb;
+    --ds-color-table-cell-divider: #eef2f7;
+    --ds-color-table-col-hover: rgba(59, 130, 246, 0.03);
+    --ds-color-table-frame-bg: rgba(255, 255, 255, 0.92);
+    --ds-color-table-header-alt-bg: #f9fafb;
+    --ds-color-table-header-bg: #f8fafc;
+    --ds-color-table-row-hover: rgba(59, 130, 246, 0.05);
+    --ds-color-table-sticky-bg: #ffffff;
+    --ds-shadow-table: 0 1px 2px rgba(15, 23, 42, 0.04);
+
+    /* Command launcher */
+    --ds-color-launcher-bg: rgba(255, 255, 255, 0.96);
+    --ds-color-launcher-border: rgb(229, 231, 235);
+    --ds-color-launcher-heading: rgba(107, 114, 128, 0.9);
+    --ds-color-launcher-input-text: rgba(17, 24, 39, 0.95);
+    --ds-color-launcher-item-selected-bg: rgba(59, 130, 246, 0.1);
+    --ds-color-launcher-item-text: #374151;
+    --ds-color-launcher-placeholder: rgba(107, 114, 128, 0.75);
+    --ds-color-launcher-scrollbar-thumb: rgba(156, 163, 175, 0.35);
+    --ds-color-launcher-text: #111827;
+    --ds-shadow-launcher: 0 24px 48px -18px rgba(15, 23, 42, 0.32);
+
+    /* Z-index scale */
+    --ds-z-raised: 5;
+    --ds-z-sticky: 10;
+    --ds-z-nav: 50;
+    --ds-z-overlay: 1000;
+    --ds-z-max: 9999;
+
     --ds-font-sans: var(--font-space-inter), "Inter Variable", system-ui, sans-serif;
     --ds-font-mono: "JetBrains Mono", Menlo, Monaco, monospace;
     --ds-line-height-body: 1.6;
@@ -43,6 +106,49 @@
     --ds-color-text: #f5f5f5;
     --ds-color-text-muted: #d4d4d4;
     --ds-color-text-subtle: #a3a3a3;
+
+    /* MDX prose extras */
+    --ds-color-citation-back-active-bg: #1e3a8a;
+    --ds-color-citation-back-active-border: #60a5fa;
+    --ds-color-citation-back-active-text: #93c5fd;
+    --ds-color-citation-back-bg: #374151;
+    --ds-color-citation-back-border: #4b5563;
+    --ds-color-citation-back-hover-bg: #4b5563;
+    --ds-color-citation-back-hover-border: #6b7280;
+    --ds-color-citation-back-text: #d1d5db;
+    --ds-color-citation-badge-bg: #60a5fa;
+    --ds-color-citation-badge-bg-hover: #93c5fd;
+    --ds-color-citation-badge-text: #111827;
+    --ds-color-citation-divider: #374151;
+    --ds-color-citation-entry-text: #d1d5db;
+    --ds-color-code-inline-bg: rgba(75, 85, 99, 0.3);
+    --ds-color-code-inline-border: rgba(75, 85, 99, 0.5);
+    --ds-color-code-inline-text: rgb(229, 231, 235);
+
+    /* Table component */
+    --ds-color-scrollbar-thumb: #6b7280;
+    --ds-color-scrollbar-track: #374151;
+    --ds-color-table-border: #374151;
+    --ds-color-table-cell-border: #374151;
+    --ds-color-table-cell-divider: #374151;
+    --ds-color-table-col-hover: rgba(59, 130, 246, 0.08);
+    --ds-color-table-frame-bg: rgba(17, 24, 39, 0.88);
+    --ds-color-table-header-alt-bg: #1f2937;
+    --ds-color-table-header-bg: #1f2937;
+    --ds-color-table-row-hover: rgba(59, 130, 246, 0.1);
+    --ds-color-table-sticky-bg: #111827;
+
+    /* Command launcher */
+    --ds-color-launcher-bg: rgba(17, 24, 39, 0.96);
+    --ds-color-launcher-border: rgb(55, 65, 81);
+    --ds-color-launcher-heading: rgb(156, 163, 175);
+    --ds-color-launcher-input-text: rgb(243, 244, 246);
+    --ds-color-launcher-item-selected-bg: rgba(59, 130, 246, 0.24);
+    --ds-color-launcher-item-text: rgb(243, 244, 246);
+    --ds-color-launcher-placeholder: rgba(156, 163, 175, 0.85);
+    --ds-color-launcher-scrollbar-thumb: rgba(75, 85, 99, 0.7);
+    --ds-color-launcher-text: rgb(243, 244, 246);
+    --ds-shadow-launcher: 0 24px 48px -18px rgba(0, 0, 0, 0.72);
   }
 }
 

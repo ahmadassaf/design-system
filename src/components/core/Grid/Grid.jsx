@@ -1,5 +1,5 @@
-import { cn } from '@/utilities/cn';
-import { createVariants } from '@/utilities/variants';
+import { cn } from '../../../utilities/cn';
+import { createVariants } from '../../../utilities/variants';
 
 export const gridVariants = createVariants({
   'base': 'mx-auto grid grid-cols-1',

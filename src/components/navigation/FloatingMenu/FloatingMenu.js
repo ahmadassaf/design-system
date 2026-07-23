@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * FloatingMenu Component
  *
@@ -10,15 +12,13 @@
  * @version 1.0.0
  */
 
-'use client';
+import { useEffect, useState } from 'react';
 
-import React, { useEffect, useState } from 'react';
-
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/TailwindUtils';
-import NavigationMetadata from '@/data/meta/navigationMetadata';
+import Button from '../../core/Button';
+import Icon from '../../core/Icon';
+import Link from '../../core/Link';
+import { cn } from '../../../utilities/cn';
+import { useSiteConfig } from '../../../utilities/SiteConfig';
 
 /**
  * Renders a floating navigation menu with scroll-based visibility
@@ -46,7 +46,9 @@ import NavigationMetadata from '@/data/meta/navigationMetadata';
  * // - Shows when scrolling up
  * // - Hides when scrolling down
  */
-const FloatingMenu = ({ className }) => {
+const FloatingMenu = ({ className, links }) => {
+  const { navigation } = useSiteConfig();
+  const navLinks = links ?? navigation.links;
   const [ visible, setVisible ] = useState(false);
   const [ lastScrollY, setLastScrollY ] = useState(0);
   const [ mounted, setMounted ] = useState(false);
@@ -91,10 +93,10 @@ const FloatingMenu = ({ className }) => {
   return (
     <div
       className={ cn(
-        'flex min-w-[414px] max-sm:py-2 max-sm:w-[90%] max-w-fit fixed top-4 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-white bg-black text-white dark:text-black shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-5000 pr-2 pl-8 py-2 items-center justify-center max-sm:ml-1! space-x-4 transition-all duration-200', mounted && visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none', className
+        'flex min-w-[414px] max-sm:min-w-0 max-sm:py-2 max-sm:w-[90%] max-w-fit fixed top-4 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-white bg-black text-white dark:text-black shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-5000 pr-2 pl-8 py-2 items-center justify-center space-x-4 transition-all duration-200', mounted && visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none', className
       ) }
     >
-      {NavigationMetadata.links.map((navItem, idx) => (
+      {navLinks.map((navItem, idx) => (
         <Link key={ `link=${idx}` } href={ navItem.href } className={ cn('relative dark:text-black items-center flex space-x-1 text-white dark:hover:text-blue-600 hover:text-blue-600') }>
           <span className='block text-sm'>{navItem.title}</span>
         </Link>

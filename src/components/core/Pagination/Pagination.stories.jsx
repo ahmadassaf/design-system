@@ -67,8 +67,12 @@ export const Interactive = {
     await userEvent.click(within(navigation).getByRole('button', { name: 'Next' }));
     await expect(getStatus()).toHaveTextContent(/3\s*of\s*4/);
 
-    await userEvent.click(getStatus());
-    await userEvent.click(within(navigation).getByRole('button', { name: '4' }));
+    // The shortcut layer reveals on hover or focus-within; drive it via focus,
+    // which is also the real keyboard path (synthetic hover can't trigger CSS :hover).
+    const pageFourButton = within(navigation).getByRole('button', { name: '4' });
+
+    pageFourButton.focus();
+    await userEvent.click(pageFourButton);
 
     await expect(getStatus()).toHaveTextContent(/4\s*of\s*4/);
     await expect(within(navigation).getByRole('button', { name: 'Next' })).toBeDisabled();

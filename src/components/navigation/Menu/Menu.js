@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Main Navigation Menu Component
  *
@@ -9,28 +11,21 @@
  * @version 1.0.0
  */
 
-'use client';
-
-import { React, useMemo, useState } from 'react';
-import { allPosts, allProjects, allThoughts } from 'contentlayer/generated';
+import { useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
-import categories from '@/app/content/categories';
-import publications from '@/app/content/publications';
-import tags from '@/app/content/tags';
-import CommandLauncher from '@/components/core/CmdLauncher';
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import MenuBlog from '@/components/navigation/MenuBlog';
-import ThemeLogo from '@/components/navigation/MenuLogo';
-import MenuMain from '@/components/navigation/MenuMain';
-import MenuMobile from '@/components/navigation/MenuMobile';
-import MenuSearch from '@/components/navigation/MenuSearch';
-import ThemeSwitch from '@/utilities/ThemeSwitcher';
-import siteMetadata from '@/data/meta/metadata';
-import NavigationMetadata from '@/data/meta/navigationMetadata';
-import { coreContent, sortPosts } from '@/lib/utils/contentlayer';
+import CommandLauncher from '../../core/CmdLauncher';
+import Button from '../../core/Button';
+import Icon from '../../core/Icon';
+import Link from '../../core/Link';
+import MenuBlog from '../MenuBlog';
+import ThemeLogo from '../MenuLogo';
+import MenuMain from '../MenuMain';
+import MenuMobile from '../MenuMobile';
+import MenuSearch from '../MenuSearch';
+import ThemeSwitch from '../../../utilities/ThemeSwitcher';
+import { coreContent, sortPosts } from '../../../utilities/content';
+import { useSiteConfig } from '../../../utilities/SiteConfig';
 
 /**
  * Main navigation menu component
@@ -53,34 +48,28 @@ const Menu = ({
   thoughts: thoughtsProp
 }) => {
   const path = usePathname();
+  const { metadata, navigation } = useSiteConfig();
 
   // Memoize expensive operations
-  const posts = useMemo(() => {
-    if (postsProp) return postsProp;
-
-    const sortedPosts = sortPosts(allPosts);
-
-    return coreContent(sortedPosts);
-  }, [ postsProp ]);
-
-  const projects = useMemo(() => projectsProp || coreContent(sortPosts(allProjects)), [ projectsProp ]);
-  const thoughts = useMemo(() => thoughtsProp || coreContent(sortPosts(allThoughts)), [ thoughtsProp ]);
-  const menuCategories = categoriesProp || categories;
-  const menuPublications = publicationsProp || publications;
-  const menuTags = tagsProp || tags;
+  const posts = useMemo(() => coreContent(sortPosts(postsProp || [])), [ postsProp ]);
+  const projects = useMemo(() => coreContent(sortPosts(projectsProp || [])), [ projectsProp ]);
+  const thoughts = useMemo(() => coreContent(sortPosts(thoughtsProp || [])), [ thoughtsProp ]);
+  const menuCategories = categoriesProp || [];
+  const menuPublications = publicationsProp || [];
+  const menuTags = tagsProp || [];
 
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
   const [ LauncherOpen, LauncherSetOpen ] = useState(false);
 
-  return (<nav className='flex min-h-20 items-center justify-between gap-5 py-6'>
+  return (<nav aria-label='Main navigation' className='flex min-h-20 items-center justify-between gap-5 py-6'>
 
-    <Link href='/' aria-label={ siteMetadata.author.name } variant='bare' className='shrink-0 text-gray-950 dark:text-white'>
+    <Link href='/' aria-label={ metadata.author.name || metadata.title || 'Home' } variant='bare' className='shrink-0 text-gray-950 dark:text-white'>
       <ThemeLogo />
     </Link>
 
     <div className='flex min-w-0 items-center gap-3 lg:gap-5'>
       <ul className='hidden items-center gap-5 lg:flex xl:gap-7'>
-        {NavigationMetadata.links.map((link) => {
+        {navigation.links.map((link) => {
           if (
             (link.hideInPath === '*' && !path.includes(link.showInPath)) || path.includes(link.hideInPath)) return null;
 
@@ -108,7 +97,7 @@ const Menu = ({
         </Button>
       </div>
 
-      {mobileMenuOpen ? (<MenuMobile categories={ menuCategories } links={ NavigationMetadata.links } setMobileMenuOpen={ setMobileMenuOpen } setLauncherOpen={ LauncherSetOpen } />) : null}
+      {mobileMenuOpen ? (<MenuMobile categories={ menuCategories } links={ navigation.links } setMobileMenuOpen={ setMobileMenuOpen } setLauncherOpen={ LauncherSetOpen } />) : null}
       <CommandLauncher
         tags={ menuTags }
         projects={ projects }

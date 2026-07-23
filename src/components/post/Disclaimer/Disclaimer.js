@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-import Callout from '@/components/mdx/Callout';
+import Callout from '../../mdx/Callout';
 
 /**
  * Renders a legal disclaimer notice

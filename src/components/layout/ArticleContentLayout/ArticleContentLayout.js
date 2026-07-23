@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import Button from '@/components/core/Button';
-import { cn } from '@/utilities/cn';
+import Button from '../../core/Button';
+import { cn } from '../../../utilities/cn';
 
 const prosePadding = {
   'lg': 'pt-10 pb-8',

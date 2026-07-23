@@ -13,14 +13,13 @@ import { Analytics } from '@vercel/analytics/react';
 import dynamic from 'next/dynamic';
 import { cookies } from 'next/headers';
 
-import Aurora from '@/components/layout/Aurora';
-import Footer from '@/components/layout/Footer';
-import FloatingMenu from '@/components/navigation/FloatingMenu';
-import Menu from '@/components/navigation/Menu';
-import { website } from '@/data/meta/JSON-LD/website';
-import siteMetadata from '@/data/meta/metadata';
+import Aurora from '../Aurora';
+import Footer from '../Footer';
+import FloatingMenu from '../../navigation/FloatingMenu';
+import Menu from '../../navigation/Menu';
+import { SiteConfigProvider } from '../../../utilities/SiteConfig';
 
-const ThemeProvider = dynamic(() => import('@/utilities/ThemeProvider'));
+const ThemeProvider = dynamic(() => import('../../../utilities/ThemeProvider'));
 
 /**
  * Main layout container component that wraps all page content
@@ -32,7 +31,10 @@ const ThemeProvider = dynamic(() => import('@/utilities/ThemeProvider'));
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - The page content to be rendered within the layout
  * @param {Object} [props.footerProps] - Footer navigation, social, and copyright data
+ * @param {Object|Function} [props.jsonLd] - JSON-LD structured data (object, or function returning one)
  * @param {Object} [props.menuProps] - Navigation and command launcher content data
+ * @param {Object} [props.metadata] - Site metadata (author, title, locale, theme, …)
+ * @param {Object} [props.navigation] - Navigation data (links, categoriesMetadata)
  *
  * @returns {Promise<JSX.Element>} The rendered layout container component
  *
@@ -41,12 +43,13 @@ const ThemeProvider = dynamic(() => import('@/utilities/ThemeProvider'));
  *   <HomePage />
  * </LayoutContainer>
  */
-export default async function LayoutContainer({ children, footerProps, menuProps }) {
+export default async function LayoutContainer({ children, footerProps, jsonLd, menuProps, metadata = {}, navigation }) {
   const themeCookie = await cookies();
-  const theme = themeCookie.get('__theme__')?.value || siteMetadata.theme;
+  const theme = themeCookie.get('__theme__')?.value || metadata.theme || 'system';
+  const jsonLdData = typeof jsonLd === 'function' ? jsonLd() : jsonLd;
 
   return (
-    <div className='bg-white text-black dark:bg-gray-900 dark:text-white antialiased'>
+    <div className='bg-white text-black antialiased dark:bg-neutral-950 dark:text-white'>
 
       {/* Aurora wraps all content and provides the shared light/dark background treatment. */}
       <Aurora>
@@ -54,15 +57,17 @@ export default async function LayoutContainer({ children, footerProps, menuProps
         <ThemeProvider attribute='class' defaultTheme={ theme } enableSystem/>
         <Analytics />
 
-        <div className='relative w-full sm:w-[95%] xl-w[90%] isolate xl:max-w-6xl px-4 sm:px-8 dark:z-10'>
-          <div className='flex min-h-screen flex-col justify-between'>
-            <FloatingMenu/>
-            <Menu { ...menuProps } />
-            <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': JSON.stringify(website()) }} key='jsonld'/>
-            <main className='mb-4'>{children}</main>
-            <Footer { ...footerProps } />
+        <SiteConfigProvider metadata={ metadata } navigation={ navigation }>
+          <div className='relative w-full sm:w-[95%] xl:w-[90%] isolate xl:max-w-6xl px-4 sm:px-8 dark:z-10'>
+            <div className='flex min-h-screen flex-col justify-between'>
+              <FloatingMenu/>
+              <Menu { ...menuProps } />
+              {jsonLdData ? <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': JSON.stringify(jsonLdData) }} key='jsonld'/> : null}
+              <main className='mb-4'>{children}</main>
+              <Footer { ...footerProps } />
+            </div>
           </div>
-        </div>
+        </SiteConfigProvider>
 
       </Aurora>
 

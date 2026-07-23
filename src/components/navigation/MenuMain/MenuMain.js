@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * MenuMain Component
  *
@@ -12,10 +14,11 @@
 
 import React from 'react';
 
-import MenuDropDown from '@/components/navigation/DropDown';
-import Link from '@/components/core/Link';
-import formatDate from '@/lib/utils/formatDate';
-import { cn } from '@/utilities/cn';
+import MenuDropDown from '../DropDown';
+import Link from '../../core/Link';
+import formatDate from '../../../utilities/formatDate';
+import { useSiteConfig } from '../../../utilities/SiteConfig';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Renders the main navigation dropdown with categories and recent posts
@@ -48,6 +51,7 @@ import { cn } from '@/utilities/cn';
  * <MenuMain categories={blogCategories} allPosts={recentPosts} />
  */
 const MenuMain = ({ categories, allPosts }) => {
+  const { metadata } = useSiteConfig();
   const [ menuBlogOpen, setMenuBlogOpen ] = React.useState(false);
   const [ alignment, setAlignment ] = React.useState('center');
   const containerRef = React.useRef(null);
@@ -121,7 +125,7 @@ const MenuMain = ({ categories, allPosts }) => {
             <ul role='list' className='py-2'>
               {allPosts.slice(0, 3).map((post) => (
                 <li key={ post.slug } className='group relative px-3 py-2'>
-                  <time dateTime={ post.date } className='block text-xs leading-6 text-gray-600 dark:text-gray-300 font-light'>{formatDate(post.date)}</time>
+                  <time dateTime={ post.date } className='block text-xs leading-6 text-gray-600 dark:text-gray-300 font-light'>{formatDate(post.date, metadata.locale)}</time>
                   <Link href={ `/blog/${post.slug}` } className='block truncate text-sm font-medium leading-6 text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400'>
                     {post.title}
                     <span className='absolute inset-0'></span>

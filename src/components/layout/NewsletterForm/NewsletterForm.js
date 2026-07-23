@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Newsletter Form Component
  *
@@ -9,12 +11,10 @@
  * @version 1.0.0
  */
 
-'use client';
+import { useId, useRef, useState } from 'react';
 
-import { useRef, useState } from 'react';
-
-import Button from '@/components/core/Button';
-import { cn } from '@/utilities/cn';
+import Button from '../../core/Button';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Newsletter subscription form component
@@ -24,6 +24,7 @@ import { cn } from '@/utilities/cn';
  * user feedback for success and error cases.
  *
  * @param {Object} props - Component props
+ * @param {string} [props.endpoint='/api/buttondown'] - Subscription API endpoint to POST the email to
  * @param {string} [props.title='Subscribe to the newsletter'] - Form title (currently unused in display)
  *
  * @returns {JSX.Element} Newsletter subscription form
@@ -31,43 +32,63 @@ import { cn } from '@/utilities/cn';
  * @example
  * <NewsletterForm title="Join our newsletter" />
  */
-const NewsletterForm = ({ className, classNames = {}, title = 'Subscribe to the newsletter' }) => {
+const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondown', title = 'Subscribe to the newsletter' }) => {
   const inputEl = useRef(null);
+  const messageId = useId();
   const [ error, setError ] = useState(false);
   const [ message, setMessage ] = useState('');
+  const [ submitting, setSubmitting ] = useState(false);
   const [ subscribed, setSubscribed ] = useState(false);
 
   /**
    * Handles newsletter subscription form submission
    *
-   * @param {Event} _error - Form submission event
+   * @param {Event} event - Form submission event
    */
-  const subscribe = async(_error) => {
-    _error.preventDefault();
+  const subscribe = async(event) => {
+    event.preventDefault();
 
-    const res = await fetch(`/api/buttondown`, {
-      'body': JSON.stringify({
-        'email': inputEl.current.value
-      }),
-      'headers': {
-        'Content-Type': 'application/json'
-      },
-      'method': 'POST'
-    });
+    if (submitting) return;
 
-    const { 'error': responseError } = await res.json();
+    setSubmitting(true);
 
-    if (responseError) {
+    try {
+      const res = await fetch(endpoint, {
+        'body': JSON.stringify({
+          'email': inputEl.current.value
+        }),
+        'headers': {
+          'Content-Type': 'application/json'
+        },
+        'method': 'POST'
+      });
+
+      let responseError = null;
+
+      try {
+        ({ 'error': responseError } = await res.json());
+      } catch {
+        // Guard against non-JSON responses (e.g. HTML error pages from the server).
+        responseError = res.ok ? null : 'Unexpected response';
+      }
+
+      if (responseError || !res.ok) {
+        setError(true);
+        setMessage('Your e-mail address is invalid or you are already subscribed!');
+
+        return;
+      }
+
+      inputEl.current.value = '';
+      setError(false);
+      setSubscribed(true);
+      setMessage('Successfully! 🎉 You are now subscribed.');
+    } catch {
       setError(true);
-      setMessage('Your e-mail address is invalid or you are already subscribed!');
-
-      return;
+      setMessage('Something went wrong. Please check your connection and try again.');
+    } finally {
+      setSubmitting(false);
     }
-
-    inputEl.current.value = '';
-    setError(false);
-    setSubscribed(true);
-    setMessage('Successfully! 🎉 You are now subscribed.');
   };
 
   return (
@@ -90,21 +111,23 @@ const NewsletterForm = ({ className, classNames = {}, title = 'Subscribe to the 
           type='email'
           disabled={ subscribed }
           aria-invalid={ error || undefined }
+          aria-describedby={ message ? messageId : undefined }
           className={ cn('w-full min-w-0 appearance-none rounded-sm border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 shadow-xs placeholder-gray-500 focus:border-gray-400 focus:outline-hidden focus:ring-0 md:text-sm', classNames.input) }
         />
         <div className={ cn('mt-3 sm:ml-3 sm:mt-0 sm:shrink-0', classNames.action) }>
           <Button
             type='submit'
-            disabled={ subscribed }
+            disabled={ subscribed || submitting }
+            aria-busy={ submitting || undefined }
             className={ cn('w-full', classNames.button) }
             size='sm'
             variant='solid'
           >
-            {subscribed ? 'Thank you!' : 'Sign up'}
+            {subscribed ? 'Thank you!' : submitting ? 'Signing up…' : 'Sign up'}
           </Button>
         </div>
       </form>
-      {message ? <p className={ cn('mt-3 text-sm', error ? 'text-red-600 dark:text-red-400' : 'text-green-700 dark:text-green-400', classNames.message) }>{message}</p> : null}
+      {message ? <p id={ messageId } role={ error ? 'alert' : 'status' } className={ cn('mt-3 text-sm', error ? 'text-red-600 dark:text-red-400' : 'text-green-700 dark:text-green-400', classNames.message) }>{message}</p> : null}
     </div>
   );
 };

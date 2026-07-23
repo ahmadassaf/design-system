@@ -1,8 +1,8 @@
 .root :global(code:not(pre code)) {
-  background-color: rgba(156, 163, 175, 0.2);
-  border: 1px solid rgba(229, 231, 235, 0.5);
+  background-color: var(--ds-color-code-inline-bg);
+  border: 1px solid var(--ds-color-code-inline-border);
   border-radius: 0.25rem;
-  color: rgb(31, 41, 55);
+  color: var(--ds-color-code-inline-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.85em;
   margin: 0 0.125rem;
@@ -11,25 +11,21 @@
 
 .root :global(code:not(pre code)::before),
 .root :global(code:not(pre code)::after) {
-  content: none !important;
-}
-
-:global(.dark) .root :global(code:not(pre code)) {
-  background-color: rgba(75, 85, 99, 0.3);
-  border-color: rgba(75, 85, 99, 0.5);
-  color: rgb(229, 231, 235);
+  content: none;
 }
 
 .root :global(pre) {
-  background-color: #070910;
+  background-color: var(--ds-color-code-block-bg);
+  margin: 0;
 }
 
 .root :global(pre code) {
-  font-size: 0.8rem !important;
+  font-size: 0.8rem;
 }
 
+/* Prose body text is brighter than --ds-color-text in dark mode. */
 :global(.dark) .root {
-  color: white;
+  color: var(--ds-color-text-inverse);
 }
 
 .root :global(.csl-entry) {
@@ -46,7 +42,7 @@
 }
 
 .root :global(h2.references-title) {
-  margin-top: 0 !important;
+  margin-top: 0;
 }
 
 .root :global(a[data-state='closed']),
@@ -67,7 +63,7 @@
 }
 
 .root :global(.references::before) {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--ds-color-references-rule);
   content: 'References';
   display: block;
   font-family: var(--font-space-inter), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -92,58 +88,45 @@
   top: -0.16em;
 }
 
+/*
+ * Shared badge recipe for footnote markers, citation markers, and the pills
+ * inside grouped citations. Variant-specific sizing follows below.
+ */
 .root :global(sup a.footnote-link),
-.root :global(sup a[data-footnote-ref]) {
+.root :global(sup a[data-footnote-ref]),
+.root :global(a.citation-link:not(.citation-group)),
+.root :global(a[href*='#bib-']:not(.citation-group)),
+.root :global(a.citation-link.citation-group),
+.root :global(a.citation-link.citation-group span) {
   align-items: center;
-  background: #3b82f6;
+  background: var(--ds-color-citation-badge-bg);
   border-radius: 50%;
-  color: white !important;
+  color: var(--ds-color-citation-badge-text);
   cursor: pointer;
   display: inline-flex;
   font-size: 9px;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.root :global(sup a.footnote-link),
+.root :global(sup a[data-footnote-ref]) {
   font-weight: 600;
   height: 14px;
-  justify-content: center;
   margin: 0 1px 0 3px;
   position: relative;
-  text-decoration: none;
   top: 0;
-  transition: background-color 0.2s ease;
   vertical-align: baseline;
   width: 14px;
-}
-
-.root :global(sup a.footnote-link:hover),
-.root :global(sup a[data-footnote-ref]:hover) {
-  background: #2563eb;
-  text-decoration: none !important;
-}
-
-:global(.dark) .root :global(sup a.footnote-link),
-:global(.dark) .root :global(sup a[data-footnote-ref]) {
-  background: #60a5fa;
-  color: #111827 !important;
-}
-
-:global(.dark) .root :global(sup a.footnote-link:hover),
-:global(.dark) .root :global(sup a[data-footnote-ref]:hover) {
-  background: #93c5fd;
 }
 
 .root :global(a.citation-link:not(.citation-group)),
 .root :global(a[href*='#bib-']:not(.citation-group)),
 .root :global(a.citation-link.citation-group) {
-  align-items: center;
-  background: #3b82f6;
-  border-radius: 50%;
-  color: white !important;
-  cursor: pointer;
-  display: inline-flex;
-  font-size: 9px;
   font-weight: 700;
   gap: 3px;
   height: 17px;
-  justify-content: center;
   line-height: 1;
   margin: 0 2px;
   min-height: 17px;
@@ -151,21 +134,13 @@
   padding: 0 2px;
   position: relative;
   scroll-margin-top: 50px;
-  text-decoration: none !important;
-  transition: background-color 0.2s ease, transform 0.2s ease;
   vertical-align: baseline;
-  width: 17px;
-}
-
-.root :global(a.citation-link:not(.citation-group)),
-.root :global(a[href*='#bib-']:not(.citation-group)) {
   width: 17px;
 }
 
 .root :global(a.citation-link.citation-group) {
   background: transparent;
   border-radius: 0;
-  gap: 3px;
   height: auto;
   margin: 0 3px;
   min-height: 0;
@@ -174,19 +149,11 @@
 }
 
 .root :global(a.citation-link.citation-group span) {
-  align-items: center;
-  background: #3b82f6;
-  border-radius: 50%;
-  color: white;
-  display: inline-flex;
-  font-size: 9px;
   height: 17px;
-  justify-content: center;
   line-height: 1;
   min-width: 17px;
   padding: 0 2px;
   text-align: center;
-  transition: background-color 0.2s ease, transform 0.2s ease;
   width: 17px;
 }
 
@@ -208,18 +175,16 @@
   margin: 0 2px;
 }
 
+.root :global(sup a.footnote-link:hover),
+.root :global(sup a[data-footnote-ref]:hover),
 .root :global(a.citation-link:hover),
 .root :global(a[href*='#bib-']:hover) {
-  background: #2563eb;
-  text-decoration: none !important;
+  background: var(--ds-color-citation-badge-bg-hover);
+  text-decoration: none;
 }
 
 .root :global(a.citation-link.citation-group:hover) {
   background: transparent;
-}
-
-.root :global(a.citation-link.citation-group:hover span) {
-  background: #2563eb;
 }
 
 .root :global(a.citation-link:not(.citation-group):hover),
@@ -228,45 +193,14 @@
 }
 
 .root :global(a.citation-link.citation-group:hover span) {
+  background: var(--ds-color-citation-badge-bg-hover);
   transform: translateY(-1px);
 }
 
-:global(.dark) .root :global(a.citation-link),
-:global(.dark) .root :global(a[href*='#bib-']) {
-  background: #60a5fa;
-  color: #111827 !important;
-}
-
-:global(.dark) .root :global(a.citation-link.citation-group) {
-  background: transparent;
-}
-
-:global(.dark) .root :global(a.citation-link.citation-group span) {
-  background: #60a5fa;
-  color: #111827;
-}
-
-:global(.dark) .root :global(a.citation-link:hover),
-:global(.dark) .root :global(a[href*='#bib-']:hover) {
-  background: #93c5fd;
-}
-
-:global(.dark) .root :global(a.citation-link.citation-group:hover) {
-  background: transparent;
-}
-
-:global(.dark) .root :global(a.citation-link.citation-group:hover span) {
-  background: #93c5fd;
-}
-
 .root :global(.citations-section) {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--ds-color-citation-divider);
   margin-top: 3rem;
   padding-top: 2rem;
-}
-
-:global(.dark) .root :global(.citations-section) {
-  border-top-color: #374151;
 }
 
 .root :global(.citation-list) {
@@ -282,19 +216,15 @@
 }
 
 .root :global(.citation-entry) {
-  color: #374151;
-}
-
-:global(.dark) .root :global(.citation-entry) {
-  color: #d1d5db;
+  color: var(--ds-color-citation-entry-text);
 }
 
 .root :global(.citation-back-link) {
   align-items: center;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: var(--ds-color-citation-back-bg);
+  border: 1px solid var(--ds-color-citation-back-border);
   border-radius: 4px;
-  color: #374151 !important;
+  color: var(--ds-color-citation-back-text);
   display: inline-flex;
   font-size: 11px;
   font-weight: 500;
@@ -303,47 +233,30 @@
   margin-left: 0.5rem;
   opacity: 0.8;
   padding: 4px 8px;
-  text-decoration: none !important;
+  text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .root :global(.citation-back-link:hover) {
-  background: #e5e7eb;
-  border-color: #d1d5db;
+  background: var(--ds-color-citation-back-hover-bg);
+  border-color: var(--ds-color-citation-back-hover-border);
   opacity: 1;
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 .root :global(.citation-back-link[data-recently-clicked='true']) {
-  background: #dbeafe;
-  border-color: #3b82f6;
-  color: #1e40af !important;
+  background: var(--ds-color-citation-back-active-bg);
+  border-color: var(--ds-color-citation-back-active-border);
+  color: var(--ds-color-citation-back-active-text);
   opacity: 1;
 }
 
-:global(.dark) .root :global(.citation-back-link) {
-  background: #374151;
-  border-color: #4b5563;
-  color: #d1d5db !important;
-}
-
-:global(.dark) .root :global(.citation-back-link:hover) {
-  background: #4b5563;
-  border-color: #6b7280;
-}
-
-:global(.dark) .root :global(.citation-back-link[data-recently-clicked='true']) {
-  background: #1e3a8a;
-  border-color: #60a5fa;
-  color: #93c5fd !important;
-}
-
 .root :global(.katex) {
-  font-size: 0.95em !important;
+  font-size: 0.95em;
 }
 
 .root :global(.caption) {
-  color: #6b7280;
+  color: var(--ds-color-caption-text);
   display: table;
   font-size: 14px;
   margin: 1em 0;
@@ -358,15 +271,14 @@
 }
 
 .root :global([data-highlighted-line]) {
-  --tw-border-opacity: 1;
-  background: #c8c8ff1a;
-  border-left-color: rgb(96 165 250 / var(--tw-border-opacity));
+  background: var(--ds-color-code-line-highlight-bg);
+  border-left-color: var(--ds-color-code-line-highlight-border);
 }
 
 .root :global([data-highlighted-chars]) {
-  background-color: #52525b80;
+  background-color: var(--ds-color-code-chars-highlight-bg);
   border-radius: 0.25rem;
-  box-shadow: 0 0 0 4px #52525b80;
+  box-shadow: 0 0 0 4px var(--ds-color-code-chars-highlight-bg);
 }
 
 .root :global(.relative) {
@@ -374,13 +286,9 @@
 }
 
 .root :global(figure[data-rehype-pretty-code-figure]) {
-  margin: 1em 0 !important;
-}
-
-.root :global(pre) {
-  margin: 0 !important;
+  margin: 1em 0;
 }
 
 .root :global(figcaption) {
-  margin-bottom: 1rem !important;
+  margin-bottom: 1rem;
 }

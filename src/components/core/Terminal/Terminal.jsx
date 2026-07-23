@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { cn } from '@/utilities/cn';
-import { createVariants } from '@/utilities/variants';
+import { cn } from '../../../utilities/cn';
+import { createVariants } from '../../../utilities/variants';
 
 export const terminalVariants = createVariants({
   'base': 'overflow-hidden border bg-gray-950 text-gray-100 shadow-sm',
@@ -71,8 +71,8 @@ const defaultCommands = [
     ]
   },
   {
-    'command': 'pnpm test:ds-contracts',
-    'output': [{ 'text': '85 component contracts passed.', 'tone': 'success' }]
+    'command': 'pnpm test',
+    'output': [{ 'text': 'All checks passed.', 'tone': 'success' }]
   }
 ];
 

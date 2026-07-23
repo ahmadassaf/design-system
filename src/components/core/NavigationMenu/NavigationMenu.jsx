@@ -2,8 +2,8 @@
 
 import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
+import Link from '../Link';
+import { cn } from '../../../utilities/cn';
 
 export const NavigationMenu = ({ children, className, label = 'Main navigation' }) => (
   <nav aria-label={ label } className={ cn('relative z-10 flex w-full items-center', className) }>{children}</nav>
@@ -15,25 +15,36 @@ export const NavigationMenuList = ({ children, className }) => (
 export const NavigationMenuItem = forwardRef(({ children, className }, ref) => <div ref={ ref } role='listitem' className={ cn('relative m-0 p-0', className) }>{children}</div>);
 NavigationMenuItem.displayName = 'NavigationMenuItem';
 
-export const NavigationMenuLink = ({ active = false, children, className, description, href, meta, variant = 'link' }) => (
-  <Link
-    href={ href }
-    variant='bare'
-    aria-current={ active ? 'page' : undefined }
-    role={ variant === 'link' ? 'listitem' : undefined }
-    className={ cn(
-      'group/nav-link transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950', variant === 'link' && 'inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400', variant === 'panel' && 'block rounded-xl p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-900', active && variant === 'link' && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300', className
-    ) }
-  >
-    <span className={ cn(variant === 'panel' && 'block text-sm font-medium text-gray-950 group-hover/nav-link:text-blue-600 dark:text-gray-100 dark:group-hover/nav-link:text-blue-400') }>{children}</span>
-    {description ? <span className='mt-1 block text-sm leading-6 text-gray-600 dark:text-gray-400'>{description}</span> : null}
-    {meta ? <span className='mt-2 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-500'>{meta}</span> : null}
-  </Link>
-);
+export const NavigationMenuLink = ({ active = false, children, className, description, href, meta, variant = 'link' }) => {
+  const link = (
+    <Link
+      href={ href }
+      variant='bare'
+      aria-current={ active ? 'page' : undefined }
+      className={ cn(
+        'group/nav-link transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950', variant === 'link' && 'inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400', variant === 'panel' && 'block rounded-xl p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-900', active && variant === 'link' && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300', className
+      ) }
+    >
+      <span className={ cn(variant === 'panel' && 'block text-sm font-medium text-gray-950 group-hover/nav-link:text-blue-600 dark:text-gray-100 dark:group-hover/nav-link:text-blue-400') }>{children}</span>
+      {description ? <span className='mt-1 block text-sm leading-6 text-gray-600 dark:text-gray-400'>{description}</span> : null}
+      {meta ? <span className='mt-2 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-500'>{meta}</span> : null}
+    </Link>
+  );
+
+  /*
+   * Link-variant items sit directly inside NavigationMenuList (role='list'), so
+   * they need a listitem wrapper AROUND the link — never a role on the link
+   * itself, which would destroy its link semantics for screen readers.
+   */
+  if (variant === 'link') return <div role='listitem' className='m-0 p-0'>{link}</div>;
+
+  return link;
+};
 
 export const NavigationMenuDropdown = ({ align = 'start', children, className, defaultOpen = false, label, panelClassName, trigger, width = 'lg' }) => {
   const dropdownId = useId();
   const panelRef = useRef(null);
+  const triggerRef = useRef(null);
   const [ open, setOpen ] = useState(defaultOpen);
   const [ resolvedAlign, setResolvedAlign ] = useState(align);
   const ref = useRef(null);
@@ -50,7 +61,10 @@ export const NavigationMenuDropdown = ({ align = 'start', children, className, d
     };
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key === 'Escape') {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     };
 
     document.addEventListener('pointerdown', handlePointerDown);
@@ -117,6 +131,7 @@ export const NavigationMenuDropdown = ({ align = 'start', children, className, d
   return (
     <NavigationMenuItem ref={ ref } className={ className }>
       <button
+        ref={ triggerRef }
         type='button'
         className={ cn(
           'inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400 dark:focus-visible:ring-offset-gray-950', open && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'

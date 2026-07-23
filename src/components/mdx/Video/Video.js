@@ -2,9 +2,9 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
-import { cn } from '@/utilities/cn';
+import Button from '../../core/Button';
+import Icon from '../../core/Icon';
+import { cn } from '../../../utilities/cn';
 
 export const videoAnimationStyles = {
   'fade': 'opacity-0 data-open:opacity-100',
@@ -99,10 +99,12 @@ const Video = ({
 
     document.addEventListener('keydown', onKeyDown);
 
+    const trigger = triggerRef.current;
+
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', onKeyDown);
-      triggerRef.current?.focus();
+      trigger?.focus();
     };
   }, [ open ]);
 

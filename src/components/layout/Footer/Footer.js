@@ -9,9 +9,9 @@
  * @version 1.0.0
  */
 
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import NewsletterForm from '@/components/layout/NewsletterForm';
+import Icon from '../../core/Icon';
+import Link from '../../core/Link';
+import NewsletterForm from '../NewsletterForm';
 
 const defaultSections = [
   {
@@ -49,11 +49,11 @@ const defaultSocialLinks = [
 
 const FooterSection = ({ links = [], title }) => (
   <div>
-    <h3 className='text-sm font-semibold text-gray-950 dark:text-white'>{title}</h3>
+    <h3 className='text-[1.0625rem] font-semibold leading-7 text-gray-950 dark:text-white'>{title}</h3>
     <ul role='list' className='mt-4 space-y-3'>
       {links.map((link) => (
         <li key={ `${title}-${link.href}-${link.label}` }>
-          <Link href={ link.href } variant='muted' className='text-sm font-normal capitalize'>
+          <Link href={ link.href } variant='muted' className='text-base font-normal leading-7 capitalize'>
             {link.label}
           </Link>
         </li>
@@ -76,7 +76,7 @@ const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks 
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
     <h2 id='footer-heading' className='sr-only'>Footer</h2>
     <div className='mx-auto py-10 lg:py-14'>
-      <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start max-md:hidden'>
+      <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start'>
         <nav aria-label='Footer navigation' className='grid gap-8 sm:grid-cols-3'>
           {sections.filter((section) => section.links?.length).map((section) => (
             <FooterSection key={ section.title } links={ section.links } title={ section.title } />
@@ -88,14 +88,14 @@ const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks 
           className='mt-0'
           classNames={{
             ...newsletterProps.classNames,
-            'form': 'mt-5 flex gap-3',
+            'form': 'mt-5 flex flex-col gap-3 sm:flex-row',
             'input': 'min-h-11',
             'root': `xl:col-span-1! ${newsletterProps.classNames?.root || ''}`,
             'title': 'text-sm font-semibold text-gray-950 dark:text-white'
           }}
         />
       </div>
-      <div className='mt-8 border-t border-gray-200 dark:border-border-dark pt-8 md:flex md:items-center md:justify-between max-sm:border-none max-sm:p-0 max-sm:m-0 max-md:border-0'>
+      <div className='mt-8 border-t border-gray-200 dark:border-border-dark pt-8 md:flex md:items-center md:justify-between'>
 
         <div className='flex gap-5 md:order-2 sm:justify-center'>
           {socialIconLinks(socialLinks).map((link) => (
@@ -127,12 +127,14 @@ const EditorialFooter = ({
           {brandTitle ? (
             <h3 className='text-3xl font-bold tracking-tight text-gray-950 dark:text-white'>{brandTitle}</h3>
           ) : null}
-          <p className={ `${brandTitle ? 'mt-4 ' : ''}max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
-          <div className='mt-6 flex gap-4'>
+          <p className={ `${brandTitle ? 'mt-4 ' : ''}max-w-md text-[0.9375rem] leading-6 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
+          <div className='mt-6 flex gap-5'>
             {socialIconLinks(socialLinks).map((link) => (
               <Icon
                 key={ link.kind }
                 kind={ link.kind }
+                size='lg'
+                className='h-[1.4375rem] w-[1.4375rem]'
                 href={ link.href }
                 linkClassName='text-gray-950 hover:text-blue-600 dark:text-white dark:hover:text-blue-400'
               />

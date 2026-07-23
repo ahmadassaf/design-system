@@ -2,11 +2,11 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import Button from '@/components/core/Button';
-import Icon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
-import { createVariants } from '@/utilities/variants';
+import Button from '../Button';
+import Icon from '../Icon';
+import Link from '../Link';
+import { cn } from '../../../utilities/cn';
+import { createVariants } from '../../../utilities/variants';
 
 export const carouselVariants = createVariants({
   'base': 'relative w-full',
@@ -62,14 +62,14 @@ export const carouselCardVariants = createVariants({
       'sm': 'rounded-lg'
     },
     'size': {
-      'lg': 'h-[460px] w-[320px] md:w-[380px]',
-      'md': 'h-[400px] w-[280px] md:w-[340px]',
-      'sm': 'h-[320px] w-[240px] md:w-[280px]'
+      'lg': 'min-h-[460px] w-[320px] md:w-[380px]',
+      'md': 'min-h-[400px] w-[280px] md:w-[340px]',
+      'sm': 'min-h-[320px] w-[240px] md:w-[280px]'
     }
   }
 });
 
-const getItemKey = (item, index) => item.id || item.title || index;
+const getItemKey = (item, index) => item.id ?? `${item.title}-${index}`;
 
 const getNextIndex = (current, direction, count, loop) => {
   if (!count) return 0;
@@ -141,24 +141,64 @@ const AppleCard = ({ classNames, isActive, item, onOpen, radius, size }) => (
 
 const CarouselDialog = ({ classNames, item, onClose }) => {
   const titleId = useId();
+  const dialogRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const previouslyFocusedElementRef = useRef(null);
 
   useEffect(() => {
+    if (!item) return undefined;
+
+    previouslyFocusedElementRef.current = document.activeElement;
+    closeButtonRef.current?.focus();
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') {
+        onClose();
+
+        return;
+      }
+
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+
+      const focusableElements = dialogRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      const firstFocusableElement = focusableElements[0];
+      const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+      if (!firstFocusableElement || !lastFocusableElement) {
+        event.preventDefault();
+
+        return;
+      }
+
+      if (event.shiftKey && document.activeElement === firstFocusableElement) {
+        event.preventDefault();
+        lastFocusableElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastFocusableElement) {
+        event.preventDefault();
+        firstFocusableElement.focus();
+      }
     };
 
     document.addEventListener('keydown', onKeyDown);
 
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [ onClose ]);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = 'unset';
+      previouslyFocusedElementRef.current?.focus?.();
+    };
+  }, [ item, onClose ]);
 
   if (!item) return null;
 
   return (
-    <div className={ cn('fixed inset-0 z-50 flex items-center justify-center p-4', classNames.dialog) } role='dialog' aria-modal='true' aria-labelledby={ titleId }>
+    <div ref={ dialogRef } className={ cn('fixed inset-0 z-50 flex items-center justify-center p-4', classNames.dialog) } role='dialog' aria-modal='true' aria-labelledby={ titleId }>
       <button className={ cn('absolute inset-0 bg-gray-950/70 backdrop-blur-sm', classNames.overlay) } type='button' aria-label='Close carousel card' onClick={ onClose } />
       <article className='relative z-10 max-h-[85vh] w-full max-w-3xl overflow-auto rounded-lg bg-white p-6 shadow-xl dark:bg-gray-950 sm:p-8'>
         <button
+          ref={ closeButtonRef }
           aria-label='Close carousel card'
           className='absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
           type='button'
@@ -221,7 +261,9 @@ const Carousel = ({
     <section
       aria-label={ ariaLabel }
       aria-roledescription='carousel'
-      className={ carouselVariants({ 'className': cn(className, classNames.root), size, 'variant': normalizedVariant }) }
+      role='region'
+      tabIndex={ 0 }
+      className={ carouselVariants({ 'className': cn('focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400', className, classNames.root), size, 'variant': normalizedVariant }) }
       onKeyDown={ (event) => {
         if (event.key === 'ArrowLeft') move(-1);
         if (event.key === 'ArrowRight') move(1);

@@ -9,11 +9,10 @@
  * @version 1.0.0
  */
 
-/* eslint-disable no-shadow */
 
-import SocialIcon from '@/components/core/Icon';
-import Link from '@/components/core/Link';
-import { cn } from '@/utilities/cn';
+import SocialIcon from '../../core/Icon';
+import Link from '../../core/Link';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Post sharing component with social media and GitHub integration
@@ -40,7 +39,7 @@ import { cn } from '@/utilities/cn';
  *   externalLink="content/blog/my-post"
  * />
  */
-const PostSharing = ({ className, classNames = {}, siteMetadata, slug, title, tags, externalLink }) => {
+const PostSharing = ({ className, classNames = {}, siteMetadata, title, tags, externalLink }) => {
 
   /**
    * Generates the GitHub edit URL for the post source

@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-import Link from '@/components/core/Link';
+import Link from '../../core/Link';
 
 /**
  * Renders navigation links to adjacent blog posts

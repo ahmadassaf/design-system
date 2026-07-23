@@ -9,9 +9,8 @@
  * @version 1.0.0
  */
 
-import React from 'react';
 
-import { cn } from '@/utilities/TailwindUtils';
+import { cn } from '../../../utilities/cn';
 
 /**
  * Aurora background component with animated gradient effects
@@ -51,21 +50,21 @@ const AuroraBackground = ({
         <div
           className={ cn(`
                 bg-gradient-to-br from-blue-200/90 via-blue-100/80 to-transparent
-                dark:from-blue-950/80 dark:via-indigo-950/60 dark:to-transparent
+                dark:from-neutral-900/70 dark:via-neutral-950/65 dark:to-transparent
                 pointer-events-none
                 absolute inset-0
                 `, showRadialGradient && '[mask-image:radial-gradient(ellipse_at_100%_0%,black_18%,transparent_42%)]') }
         ></div>
         <div
           className={ cn(`bg-gradient-to-tl from-transparent via-indigo-200/30 to-transparent
-                dark:from-transparent dark:via-blue-900/30 dark:to-transparent
+                dark:from-transparent dark:via-neutral-800/20 dark:to-transparent
                 pointer-events-none
                 absolute inset-0
                 `, showRadialGradient && '[mask-image:radial-gradient(ellipse_at_95%_5%,black_12%,transparent_36%)]') }
         ></div>
         <div
           className={ cn(`bg-gradient-to-br from-transparent via-indigo-200/20 to-transparent
-                dark:from-transparent dark:via-indigo-950/25 dark:to-transparent
+                dark:from-transparent dark:via-black/25 dark:to-transparent
                 pointer-events-none
                 absolute inset-0
                 `, showRadialGradient && '[mask-image:radial-gradient(ellipse_at_90%_10%,black_12%,transparent_32%)]') }

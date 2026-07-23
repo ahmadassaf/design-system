@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * ThemeSwitcher Component
  *
@@ -9,14 +11,12 @@
  * @version 1.0.0
  */
 
-'use client';
-
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
-import Icon from '@/components/core/Icon';
-import ThemeProvider from '@/utilities/ThemeProvider';
-import siteMetadata from '@/data/meta/metadata';
+import Icon from '../../components/core/Icon';
+import ThemeProvider from '../ThemeProvider';
+import { useSiteConfig } from '../SiteConfig';
 
 /**
  * Internal provider component that renders the theme toggle button
@@ -81,11 +81,13 @@ function Provider() {
  *   <ThemeSwitch />
  * </nav>
  */
-function ThemeSwitch() {
+function ThemeSwitch({ defaultTheme }) {
+  const { metadata } = useSiteConfig();
+
   return (
     <ThemeProvider
       attribute='class'
-      defaultTheme={ siteMetadata.theme }
+      defaultTheme={ defaultTheme ?? metadata.theme }
       enableSystem
     >
       <Provider />

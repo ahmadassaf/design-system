@@ -1,16 +1,16 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
-import { createVariants } from '@/utilities/variants';
+import { createVariants } from '../../../utilities/variants';
 
 export const textHighlightVariants = createVariants({
-  'base': 'relative inline rounded bg-[length:100%_100%] bg-left bg-no-repeat',
+  'base': 'relative inline box-decoration-clone rounded bg-[length:100%_100%] bg-left bg-no-repeat [-webkit-box-decoration-break:clone]',
   'compoundVariants': [
-    { 'className': 'bg-linear-to-r from-blue-100 to-blue-300 dark:from-blue-400 dark:to-blue-800', 'tone': 'blue', 'variant': 'marker' },
+    { 'className': 'bg-linear-to-r from-blue-100 to-blue-300 dark:from-neutral-700 dark:to-neutral-800', 'tone': 'blue', 'variant': 'marker' },
     { 'className': 'bg-linear-to-r from-gray-100 to-gray-300 dark:from-gray-500 dark:to-gray-800', 'tone': 'gray', 'variant': 'marker' },
     { 'className': 'bg-linear-to-r from-green-100 to-green-300 dark:from-green-500 dark:to-green-800', 'tone': 'green', 'variant': 'marker' },
-    { 'className': 'bg-linear-to-r from-indigo-100 to-indigo-300 dark:from-indigo-500 dark:to-indigo-800', 'tone': 'indigo', 'variant': 'marker' },
+    { 'className': 'bg-linear-to-r from-indigo-100 to-indigo-300 dark:from-neutral-700 dark:to-neutral-800', 'tone': 'indigo', 'variant': 'marker' },
     { 'className': 'bg-linear-to-r from-neutral-100 to-neutral-300 dark:from-neutral-500 dark:to-neutral-800', 'tone': 'neutral', 'variant': 'marker' },
     { 'className': 'bg-linear-to-r from-red-100 to-red-300 dark:from-red-500 dark:to-red-800', 'tone': 'red', 'variant': 'marker' },
     { 'className': 'bg-linear-to-r from-yellow-100 to-yellow-300 dark:from-yellow-500 dark:to-yellow-800', 'tone': 'yellow', 'variant': 'marker' },
@@ -58,9 +58,10 @@ export const textHighlightVariants = createVariants({
 });
 
 export const TextHighlight = ({ animate = true, children, className, radius, tone, variant }) => {
+  const shouldReduceMotion = useReducedMotion();
   const classes = textHighlightVariants({ className, radius, tone, variant });
 
-  if (!animate) return <span className={ classes }>{children}</span>;
+  if (!animate || shouldReduceMotion) return <span className={ classes }>{children}</span>;
 
   return (
     <motion.span
