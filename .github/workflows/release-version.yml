@@ -31,7 +31,7 @@ concurrency:
 
 jobs:
   bump-version:
-    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, 'chore(release): v')
+    if: "github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, 'chore(release): v')"
     runs-on: ubuntu-latest
     env:
       RELEASE_BUMP: ${{ github.event.inputs.bump || 'patch' }}
