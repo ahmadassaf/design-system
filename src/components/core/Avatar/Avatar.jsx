@@ -19,16 +19,19 @@ export const avatarVariants = createVariants({
       'lg': 'size-14 text-base',
       'md': 'size-10 text-sm',
       'sm': 'size-8 text-xs',
-      'xs': 'size-5 text-[10px]'
+      'xs': 'size-5 text-xs'
     },
     'tone': {
+      'amber': 'bg-amber-700',
       'blue': 'bg-blue-600',
       'gray': 'bg-gray-600',
       'green': 'bg-green-700',
       'indigo': 'bg-indigo-600',
       'neutral': 'bg-neutral-600',
       'red': 'bg-red-600',
-      'yellow': 'bg-yellow-500 text-gray-950'
+      'rose': 'bg-rose-700',
+      'teal': 'bg-teal-700',
+      'yellow': 'bg-yellow-500 text-yellow-950'
     }
   }
 });

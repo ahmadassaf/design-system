@@ -24,6 +24,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-select',
   title: 'Core/Select'
 };
 
@@ -34,7 +35,7 @@ export const Example = {
     const listbox = canvas.getByRole('listbox', { name: 'Choose topic options' });
 
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    await expect(listbox).toHaveFocus();
+    await waitFor(() => expect(listbox).toHaveFocus());
 
     await userEvent.keyboard('{ArrowDown}{Enter}');
     await waitFor(() => expect(canvas.queryByRole('listbox', { name: 'Choose topic options' })).not.toBeInTheDocument());

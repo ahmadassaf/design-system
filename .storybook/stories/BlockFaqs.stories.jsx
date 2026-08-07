@@ -1,5 +1,9 @@
+import Card from '../../src/components/core/Card';
+import Icon from '../../src/components/core/Icon';
+import Link from '../../src/components/core/Link';
 import Faq from '../../src/components/mdx/Faq';
-import { Card, Icon, Link, Pill, Typography } from '../../src/index';
+import Pill from '../../src/components/core/Pill';
+import Typography from '../../src/foundations/Typography';
 
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
@@ -157,14 +161,13 @@ export default {
 };
 
 export const Default = {
-  'name': 'FAQ Blocks',
+  'name': 'Overview',
   'render': () => (
     <Page
-      title='FAQ Blocks'
-      intro='FAQ patterns for docs, content pages, and support sections. The examples use Gaudi typography, cards, icons, and the existing MDX FAQ component.'
-      kicker='Blocks'
+      title='FAQ Recipes'
+      intro='Reference FAQ compositions for docs, content pages, and support sections. The examples use Gaudi typography, cards, icons, and the exported MDX Faq component.'
     >
-      <Section title='Usage' description='The canonical FAQ primitive is the MDX Faq component. Other block variants compose the same question data into different reading layouts.'>
+      <Section title='Usage' description='The canonical package export is the MDX Faq component. The other examples are reference recipes that compose the same question data into different reading layouts.'>
         <CodeBlock code={ usageCode } />
       </Section>
       <Section title='Variant Rules' description='Use disclosure when answers are long; use visible layouts when answers are short.'>
@@ -186,7 +189,7 @@ export const Default = {
         <CardsFaq />
         <CodeBlock code={ variantCode.cards } />
       </Section>
-      <Section title='Implementation Notes' description='FAQ blocks should keep semantics and keyboard behavior intact.'>
+      <Section title='Implementation Notes' description='FAQ recipes must keep the exported component semantics and keyboard behavior intact.'>
         <ul className='grid gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
           <li>Use <InlineCode>Faq</InlineCode> for article/MDX disclosure behavior.</li>
           <li>Use native <InlineCode>details</InlineCode> and <InlineCode>summary</InlineCode> only when composing a custom block.</li>

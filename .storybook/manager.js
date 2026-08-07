@@ -1,81 +1,178 @@
 import { addons } from 'storybook/manager-api';
-import { create } from 'storybook/theming/create';
-import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
 
 import './manager.css';
 
-const GAUDI_LOGO_PATH = 'M24 10H88L79 28H24V10ZM8 28H24V62C24 66.4 27.6 70 32 70H72V88H28C16.95 88 8 79.05 8 68V28ZM32 42H88V66H42L32 42Z';
+const panelConfig = {
+  layout: {
+    initialActive: 'canvas',
+    showPanel: false
+  },
+  layoutCustomisations: {
+    showPanel: () => false
+  },
+  sidebar: {
+    collapsedRoots: []
+  }
+};
 
-function buildBrandSvg(fill) {
-  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 40" width="340" height="40" role="img" aria-label="Gaudi Design System"><g transform="translate(2,0) scale(0.42)"><path d="${GAUDI_LOGO_PATH}" fill="${fill}"/></g><text x="52" y="28" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="600" fill="${fill}">Gaudi Design System</text></svg>`)}`;
-}
+addons.setConfig(panelConfig);
 
-const gaudiLightTheme = create({
-  base: 'light',
-  brandTitle: 'Gaudi Design System',
-  brandUrl: '/',
-  brandTarget: '_self',
-  brandImage: buildBrandSvg('#0f1419'),
-  fontBase: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  colorPrimary: '#2563a8',
-  colorSecondary: '#2563a8',
-  appBg: '#ffffff',
-  appContentBg: '#ffffff',
-  appBorderColor: '#e5e7eb',
-  appBorderRadius: 8,
-  textColor: '#0f1419',
-  textMutedColor: '#5f6b7a',
-  barBg: '#ffffff',
-  barSelectedColor: '#2563a8',
-  inputBorderRadius: 6
-});
+const MOBILE_QUERY = '(max-width: 768px)';
+const RESPONSIVE_VIEWPORT = '100pct-100pct';
+const VIEWPORTS = [
+  { label: 'Responsive', value: RESPONSIVE_VIEWPORT },
+  { label: 'Mobile', value: 'mobile1' },
+  { label: 'Tablet', value: 'tablet' }
+];
 
-const gaudiDarkTheme = create({
-  base: 'dark',
-  brandTitle: 'Gaudi Design System',
-  brandUrl: '/',
-  brandTarget: '_self',
-  brandImage: buildBrandSvg('#e4e6ea'),
-  fontBase: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  colorPrimary: '#5b9bd5',
-  colorSecondary: '#5b9bd5',
-  appBg: '#111215',
-  appContentBg: '#1a1b1e',
-  appBorderColor: '#2d2f34',
-  appBorderRadius: 8,
-  textColor: '#e4e6ea',
-  textMutedColor: '#8b929e',
-  barBg: '#1a1b1e',
-  barSelectedColor: '#5b9bd5',
-  inputBorderRadius: 6
-});
+const createManagerButton = ({ className, icon, label, onClick }) => {
+  const button = document.createElement('button');
+  const iconElement = document.createElement('span');
 
-addons.setConfig({
-  theme: gaudiLightTheme
-});
+  button.type = 'button';
+  button.className = className;
+  button.setAttribute('aria-label', label);
+  button.title = label;
+  button.addEventListener('click', onClick);
 
-function applyManagerTheme(theme) {
-  const isDark = theme === 'dark';
+  iconElement.className = 'gaudi-manager-icon';
+  iconElement.setAttribute('aria-hidden', 'true');
+  iconElement.textContent = icon;
+  button.append(iconElement);
 
-  document.documentElement.classList.toggle('dark', isDark);
-  document.body?.classList.toggle('dark', isDark);
+  return button;
+};
 
-  addons.setConfig({
-    theme: isDark ? gaudiDarkTheme : gaudiLightTheme
+const closeMobileMenu = (restoreFocus = true) => {
+  const trigger = document.querySelector("button[aria-label='Open navigation menu'][aria-expanded='true']");
+
+  trigger?.click();
+  if (restoreFocus) window.requestAnimationFrame(() => trigger?.focus());
+};
+
+const enhanceMobileMenu = () => {
+  const dialog = document.querySelector("[role='dialog'][aria-label='Menu']");
+  const menu = dialog?.querySelector('#storybook-mobile-menu');
+
+  if (!dialog || !menu) return;
+
+  dialog.setAttribute('aria-modal', 'true');
+
+  if (menu.querySelector('.gaudi-mobile-menu-close')) return;
+
+  const closeButton = createManagerButton({
+    className: 'gaudi-mobile-menu-close',
+    icon: '\u00d7',
+    label: 'Close navigation menu',
+    onClick: closeMobileMenu
   });
-}
 
-addons.register('gaudi/storybook-theme-and-layout', (api) => {
-  const syncInitialLayout = () => {
-    applyManagerTheme(api.getGlobals?.().theme);
-    api.setSizes({ bottomPanelHeight: 0, rightPanelWidth: 0 });
+  menu.prepend(closeButton);
+};
+
+const enhanceMobileToolbar = (api) => {
+  if (!window.matchMedia(MOBILE_QUERY).matches) return;
+
+  const bar = document.querySelector("header[role='banner'].sb-bar");
+
+  if (!bar || bar.querySelector('.gaudi-mobile-preview-tools')) return;
+
+  const tools = document.createElement('div');
+  const theme = api.getGlobals().theme === 'dark' ? 'dark' : 'light';
+  const viewport = api.getGlobals().viewport?.value || RESPONSIVE_VIEWPORT;
+  const viewportIndex = Math.max(VIEWPORTS.findIndex(({ value }) => value === viewport), 0);
+  const currentViewport = VIEWPORTS[viewportIndex];
+
+  tools.className = 'gaudi-mobile-preview-tools';
+  tools.setAttribute('aria-label', 'Preview tools');
+  tools.setAttribute('role', 'group');
+
+  const viewportButton = createManagerButton({
+    className: 'gaudi-mobile-preview-tool gaudi-mobile-preview-tool--viewport',
+    icon: '',
+    label: `Preview viewport: ${currentViewport.label}`,
+    onClick: () => {
+      const current = api.getGlobals().viewport?.value || RESPONSIVE_VIEWPORT;
+      const currentIndex = Math.max(VIEWPORTS.findIndex(({ value }) => value === current), 0);
+      const next = VIEWPORTS[(currentIndex + 1) % VIEWPORTS.length];
+
+      api.updateGlobals({ viewport: { isRotated: false, value: next.value } });
+      viewportButton.setAttribute('aria-label', `Preview viewport: ${next.label}`);
+      viewportButton.title = `Preview viewport: ${next.label}`;
+    }
+  });
+  const themeButton = createManagerButton({
+    className: 'gaudi-mobile-preview-tool',
+    icon: theme === 'dark' ? '\u2600' : '\u25d0',
+    label: `Preview theme: ${theme === 'dark' ? 'Dark' : 'Light'}`,
+    onClick: () => {
+      const next = api.getGlobals().theme === 'dark' ? 'light' : 'dark';
+
+      api.updateGlobals({ theme: next });
+      themeButton.firstElementChild.textContent = next === 'dark' ? '\u2600' : '\u25d0';
+      themeButton.setAttribute('aria-label', `Preview theme: ${next === 'dark' ? 'Dark' : 'Light'}`);
+      themeButton.title = `Preview theme: ${next === 'dark' ? 'Dark' : 'Light'}`;
+    }
+  });
+
+  tools.append(viewportButton, themeButton);
+  bar.append(tools);
+};
+
+const hardenViewportControls = () => {
+  document.querySelectorAll("main[aria-labelledby='main-preview-heading'] :is(input[data-size-input], button[aria-label='Rotate viewport'])")
+    .forEach((control) => {
+      control.style.setProperty('min-height', '44px', 'important');
+      control.style.setProperty('min-width', '44px', 'important');
+
+      if (control.matches('input[data-size-input]')) {
+        control.style.setProperty('height', '44px', 'important');
+        control.parentElement?.style.setProperty('height', '44px', 'important');
+        control.parentElement?.style.setProperty('min-height', '44px', 'important');
+        control.parentElement?.parentElement?.style.setProperty('height', '44px', 'important');
+        control.parentElement?.parentElement?.style.setProperty('min-height', '44px', 'important');
+      } else {
+        control.style.setProperty('height', '44px', 'important');
+        control.style.setProperty('width', '44px', 'important');
+      }
+    });
+
+  document.querySelectorAll("main[aria-labelledby='main-preview-heading'] button[aria-hidden='true'][aria-disabled='true']")
+    .forEach((label) => {
+      label.disabled = true;
+      label.tabIndex = -1;
+    });
+};
+
+addons.register('gaudi/mobile-manager-accessibility', (api) => {
+  let frame = null;
+  const updateManager = () => {
+    if (frame) return;
+
+    frame = window.requestAnimationFrame(() => {
+      frame = null;
+      enhanceMobileMenu();
+      enhanceMobileToolbar(api);
+      hardenViewportControls();
+    });
   };
 
-  window.setTimeout(syncInitialLayout, 0);
-  window.setTimeout(syncInitialLayout, 250);
-  window.setTimeout(syncInitialLayout, 750);
+  const observer = new MutationObserver(updateManager);
 
-  api.on(GLOBALS_UPDATED, ({ globals, userGlobals }) => {
-    applyManagerTheme(globals?.theme ?? userGlobals?.theme);
+  observer.observe(document.body, { childList: true, subtree: true });
+  window.matchMedia(MOBILE_QUERY).addEventListener('change', updateManager);
+  document.addEventListener('click', (event) => {
+    const navigationTarget = event.target.closest("#storybook-mobile-menu :is(a[href*='?path='], [role='option'])");
+
+    if (navigationTarget) closeMobileMenu(false);
   });
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !document.querySelector("[role='dialog'][aria-label='Menu']")) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    closeMobileMenu();
+  }, true);
+
+  updateManager();
 });

@@ -11,10 +11,10 @@
  * @version 1.0.0
  */
 
-import { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useId, useRef } from 'react';
 
 import Button from '../../core/Button';
+import DialogPortal from '../../core/DialogPortal';
 import Icon from '../../core/Icon';
 
 /**
@@ -38,15 +38,12 @@ import Icon from '../../core/Icon';
  * />
  */
 const ImageModal = ({ isOpen, onClose, src, alt, caption }) => {
+  const captionId = useId();
   const modalRef = useRef(null);
   const closeButtonRef = useRef(null);
-  const previouslyFocusedElementRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return undefined;
-
-    previouslyFocusedElementRef.current = document.activeElement;
-    closeButtonRef.current?.focus();
 
     const handleEscape = (event) => {
       if (event.key === 'Escape')
@@ -87,31 +84,29 @@ const ImageModal = ({ isOpen, onClose, src, alt, caption }) => {
     document.addEventListener('keydown', handleEscape);
     document.addEventListener('keydown', handleTab);
     document.addEventListener('click', handleClickOutside);
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('keydown', handleTab);
       document.removeEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'unset';
-      previouslyFocusedElementRef.current?.focus?.();
     };
   }, [ isOpen, onClose ]);
 
-  if (!isOpen || typeof document === 'undefined')
+  if (!isOpen || !src || typeof document === 'undefined')
     return null;
 
-  return createPortal(
+  return (
+    <DialogPortal initialFocusRef={ closeButtonRef }>
     <div
       ref={ modalRef }
-      className='fixed inset-0 z-50 flex items-center justify-center p-8 bg-black/80 dark:bg-black/80 backdrop-blur-sm'
+      className='fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm dark:bg-black/80 sm:p-8'
       role='dialog'
       aria-modal='true'
-      aria-labelledby={ caption ? 'modal-caption' : undefined }
+      aria-labelledby={ caption ? captionId : undefined }
       aria-label={ caption ? undefined : alt || 'Image preview' }
     >
       {/* Modal content container */}
-      <div className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-[70vw] max-h-[70vh] overflow-hidden'>
+      <div className='relative flex max-h-[calc(100dvh-2rem)] w-full max-w-5xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 sm:max-h-[calc(100dvh-4rem)]'>
         {/* Close button */}
         <Button
           ref={ closeButtonRef }
@@ -119,24 +114,24 @@ const ImageModal = ({ isOpen, onClose, src, alt, caption }) => {
           tone='gray'
           size='sm'
           onClick={ onClose }
-          className='absolute right-4 top-4 z-10 h-10 w-10 rounded-full bg-white/90 p-0 text-gray-600 hover:bg-white dark:bg-gray-800/90 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
+          className='absolute right-4 top-4 z-10 h-11 w-11 rounded-full bg-white/90 p-0 text-gray-600 hover:bg-white dark:bg-gray-800/90 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
           aria-label='Close modal'
         >
           <Icon name='X' decorative size='md' />
         </Button>
 
         {/* Image container */}
-        <div className='flex flex-col items-center p-6'>
+        <div className='flex min-h-0 flex-1 flex-col items-center overflow-auto p-4 pt-16 sm:p-6 sm:pt-16'>
           <img
             src={ src }
-            alt={ alt }
-            className='max-w-full max-h-[55vh] object-contain rounded-lg'
+            alt={ alt || '' }
+            className='max-h-[calc(100dvh-11rem)] w-full rounded-md object-contain sm:max-h-[calc(100dvh-13rem)]'
             loading='lazy'
           />
 
           {caption && (
             <p
-              id='modal-caption'
+              id={ captionId }
               className='mt-4 text-center text-sm text-gray-700 dark:text-gray-300 max-w-2xl'
             >
               {caption}
@@ -144,7 +139,8 @@ const ImageModal = ({ isOpen, onClose, src, alt, caption }) => {
           )}
         </div>
       </div>
-    </div>, document.body
+    </div>
+    </DialogPortal>
   );
 };
 

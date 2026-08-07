@@ -31,13 +31,13 @@ export const AccordionTrigger = ({ children, className, contentId, id, isOpen, o
   <button
     type='button'
     id={ id }
-    className={ cn('flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-semibold text-gray-950 transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-white dark:hover:bg-gray-900', className) }
+    className={ cn('ds-motion-state flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-semibold text-gray-950 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-white dark:hover:bg-gray-900', className) }
     aria-controls={ contentId }
     aria-expanded={ isOpen }
     onClick={ onClick }
   >
     <span>{children}</span>
-    <Icon name='ChevronDown' decorative size='sm' className={ cn('transition-transform', isOpen && 'rotate-180') } />
+    <Icon name='ChevronDown' decorative size='sm' className={ cn('ds-motion-icon', isOpen && 'rotate-180') } />
   </button>
 );
 
@@ -49,7 +49,7 @@ export const AccordionContent = ({ children, className, id, isOpen, labelledBy }
       id={ id }
       role={ labelledBy ? 'region' : undefined }
       aria-labelledby={ labelledBy }
-      className={ cn('px-4 pb-4 text-sm leading-6 text-gray-600 dark:text-gray-300', className) }
+      className={ cn('ds-motion-disclosure px-4 pb-4 text-sm leading-6 text-gray-600 dark:text-gray-300', className) }
     >
       {children}
     </div>

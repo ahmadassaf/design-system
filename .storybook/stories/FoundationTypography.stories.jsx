@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Typography, typography, typographyVariants } from '../../src/index';
+import Typography, { typographyVariants } from '../../src/foundations/Typography';
+import { typography } from '../../src/tokens';
 
 import { HighlightedCode } from './HighlightedCode';
 
@@ -32,9 +33,9 @@ const sampleText = {
   'post-subtitle': 'A supporting deck that gives context without overpowering the article title.',
   'post-title': 'Design systems keep editorial rhythm predictable',
   'prose-lead': 'A lead paragraph sets up the article with a slightly larger size, generous line-height, and readable contrast.',
-  'subtitle-lg': 'Large supporting heading',
-  'subtitle-md': 'Medium supporting heading',
-  'subtitle-xl': 'Prominent supporting heading',
+  'subtitle-lg': 'Large supporting text',
+  'subtitle-md': 'Medium supporting text',
+  'subtitle-xl': 'Prominent supporting text',
   'title-lg': 'Practical components for writing',
   'title-md': 'A compact page title',
   'title-xl': 'A stronger editorial title'
@@ -91,7 +92,7 @@ const Copyable = ({ children, className = '', label, value }) => {
       onClick={ handleCopy }
     >
       {children}
-      <span className={ `pointer-events-none absolute right-2 top-2 rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 ${copied ? 'opacity-100' : 'opacity-0'}` }>
+      <span className={ `pointer-events-none absolute right-2 top-2 rounded border border-gray-200 bg-white px-1.5 py-0.5 text-xs font-semibold text-gray-600 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 ${copied ? 'opacity-100' : 'opacity-0'}` }>
         {copied ? 'Copied' : 'Copy'}
       </span>
     </button>
@@ -107,10 +108,10 @@ const VariantPreview = ({ variant }) => {
       <div className='grid gap-4 lg:grid-cols-[180px_minmax(0,1fr)]'>
         <div>
           <div className='font-mono text-xs font-semibold text-gray-700 dark:text-gray-300'>{variant}</div>
-          <div className='mt-1 font-mono text-[11px] text-gray-500'>{config.element}</div>
+          <div className='mt-1 font-mono text-xs text-gray-500'>{config.element}</div>
         </div>
         <div className='min-w-0 overflow-hidden'>
-          <Typography variant={ variant }>
+          <Typography as='p' variant={ variant }>
             {sampleText[variant] || 'The design system keeps editorial rhythm predictable.'}
           </Typography>
         </div>
@@ -127,7 +128,7 @@ const TokenCard = ({ children, label, value }) => (
 
 const TokenLine = ({ label, value }) => (
   <div className='rounded-md bg-gray-50 px-3 py-2 dark:bg-gray-800'>
-    <div className='font-mono text-[11px] font-semibold text-gray-500 dark:text-gray-400'>{label}</div>
+    <div className='font-mono text-xs font-semibold text-gray-500 dark:text-gray-400'>{label}</div>
     <div className='mt-1 break-words font-mono text-xs leading-5 text-gray-700 dark:text-gray-200'>{value}</div>
   </div>
 );
@@ -147,15 +148,17 @@ const exportedApis = [
 ];
 
 export default {
+  id: 'overview-typography',
   tags: [ '!autodocs' ],
-  title: 'Overview/Typography'
+  title: 'Overview'
 };
 
 export const Default = {
+  name: 'Typography',
   'render': () => (
     <div className='max-w-6xl space-y-10 p-6 text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
       <section className='max-w-3xl space-y-3'>
-        <Typography variant='heading-xl'>Typography</Typography>
+        <Typography as='h1' variant='heading-xl'>Typography</Typography>
         <Typography variant='paragraph-lg'>
           The Gaudi typography scale is optimized for blog posts first: readable titles, calm subtitles, generous prose line-height, metadata that stays quiet, and compact UI text for cards.
         </Typography>
@@ -191,7 +194,7 @@ export const Default = {
       <section className='rounded-md border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900 md:p-8'>
         <div className='mb-8 max-w-3xl space-y-4'>
           <Typography variant='metadata'>Blog Post Composition</Typography>
-          <Typography variant='post-title'>Design systems keep editorial rhythm predictable</Typography>
+          <Typography as='h2' variant='post-title'>Design systems keep editorial rhythm predictable</Typography>
           <Typography variant='post-subtitle'>A focused typography stack makes articles easier to scan, read, and maintain across every post template.</Typography>
           <Typography variant='post-meta'>May 20, 2026 · 8 min read · Design Systems</Typography>
         </div>
@@ -201,20 +204,42 @@ export const Default = {
         </div>
       </section>
 
-      {groups.map((group) => (
-        <section key={ group.label } className='space-y-3'>
-          <Typography variant='heading-lg'>{group.label}</Typography>
-          <div className='divide-y divide-gray-200 overflow-hidden rounded-md border border-gray-200 bg-white dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900'>
-            {group.variants.filter((variant) => typographyVariants[variant]).map((variant) => (
-              <VariantPreview key={ variant } variant={ variant } />
-            ))}
-          </div>
-        </section>
-      ))}
+      <section className='space-y-4 rounded-md border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900'>
+        <div className='max-w-3xl space-y-3'>
+          <Typography as='h2' variant='heading-lg'>Canonical Recipes</Typography>
+          <Typography variant='paragraph-md'>
+            Start with these variants before opening the full catalog: <code>post-title</code> for article titles, <code>paragraph-md</code> for default prose, and <code>metadata</code> for dates, categories, and reading-time rows.
+          </Typography>
+        </div>
+        <HighlightedCode
+          language='jsx'
+          code={ `<Typography variant='post-title'>Design systems keep editorial rhythm predictable</Typography>
+<Typography variant='paragraph-md'>Default body text uses the Gaudi reading rhythm.</Typography>
+<Typography variant='metadata'>Engineering / 8 min read</Typography>` }
+        />
+      </section>
+
+      <section className='space-y-4'>
+        <Typography as='h2' variant='heading-lg'>Variant Catalog</Typography>
+        <div className='space-y-3'>
+          {groups.map((group, index) => (
+            <details key={ group.label } className='overflow-hidden rounded-md border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900' open={ index === 0 }>
+              <summary className='cursor-pointer px-4 py-3 text-sm font-semibold text-gray-900 marker:text-gray-500 dark:text-gray-100'>
+                {group.label}
+              </summary>
+              <div className='divide-y divide-gray-200 dark:divide-gray-700'>
+                {group.variants.filter((variant) => typographyVariants[variant]).map((variant) => (
+                  <VariantPreview key={ variant } variant={ variant } />
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
 
       <section className='space-y-6 rounded-md border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900'>
         <div className='max-w-3xl space-y-3'>
-          <Typography variant='heading-lg'>Typography Component API</Typography>
+          <Typography as='h2' variant='heading-lg'>Typography Component API</Typography>
           <Typography variant='paragraph-md'>
             Typography is documented as a foundation because it defines the blog reading system. The importable primitive remains the public rendering API, and this page is the single Storybook source for its variants, tokens, usage, and accessibility expectations.
           </Typography>
@@ -251,8 +276,8 @@ export const Default = {
           </div>
         </div>
 
-        <div className='overflow-hidden rounded-md border border-gray-200 dark:border-gray-700'>
-          <table className='w-full border-collapse text-left text-sm'>
+        <div className='max-w-full overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700' role='region' tabIndex={ 0 } aria-label='Scrollable typography props table'>
+          <table className='w-full min-w-[42rem] border-collapse text-left text-sm'>
             <thead className='bg-gray-50 text-xs uppercase text-gray-500 dark:bg-gray-800 dark:text-gray-400'>
               <tr>
                 <th scope='col' className='px-4 py-3 font-semibold'>Prop</th>

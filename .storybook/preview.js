@@ -1,12 +1,18 @@
 import React from 'react';
+import 'storybook/internal/components';
 
 import './preview.css';
 
 import { SiteConfigProvider } from '../src/utilities/SiteConfig';
+import tokenData from '../src/tokens/tokens.json';
 import siteMetadata from './fixtures/site/metadata';
 import navigationMetadata from './fixtures/site/navigationMetadata.mjs';
 
 const STORYBOOK_THEME_CLASSES = [ 'dark' ];
+const STORYBOOK_BACKGROUNDS = {
+  'dark': tokenData.dsVariables.root['--ds-color-surface-dark'],
+  'light': tokenData.dsVariables.root['--ds-color-surface']
+};
 
 function applyStorybookTheme(theme) {
   const isDark = theme === 'dark';
@@ -23,7 +29,7 @@ function applyStorybookTheme(theme) {
   });
 
   document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
-  document.body.style.backgroundColor = isDark ? '#171717' : '#ffffff';
+  document.body.style.backgroundColor = isDark ? STORYBOOK_BACKGROUNDS.dark : STORYBOOK_BACKGROUNDS.light;
 }
 
 function syncStorybookTheme(theme) {
@@ -77,8 +83,8 @@ const preview = {
     backgrounds: {
       default: 'light',
       options: {
-        dark: { name: 'Dark', value: '#171717' },
-        light: { name: 'Light', value: '#ffffff' }
+        dark: { name: 'Dark', value: STORYBOOK_BACKGROUNDS.dark },
+        light: { name: 'Light', value: STORYBOOK_BACKGROUNDS.light }
       }
     },
     controls: {
@@ -91,52 +97,28 @@ const preview = {
       appDirectory: true
     },
     options: {
-      storySort: (a, b) => {
-        const groupOrder = [ 'Overview', 'Core', 'Blocks', 'MDX', 'Navigation', 'Post', 'Layout' ];
-        const nameOrder = {
-          'Layout': [
-            'Main Page',
-            'Blog Main Page',
-            'Category Page With Posts And Pagination',
-            'Categories Page',
-            'Tags Page',
-            'Projects Page',
-            'Publications Page',
-            'About Me Page'
-          ],
-          'Overview': [
+      storySort: {
+        includeNames: true,
+        method: 'alphabetical',
+        order: [
+          'Overview', [
             'Getting Started',
             'Accessibility',
             'Colors & Tokens',
-            'Typography',
             'Icons',
-            'Indicators'
-          ]
-        };
-        const storyRank = (title) => {
-          const rank = groupOrder.indexOf(title.split('/')[0]);
-
-          return rank === -1 ? groupOrder.length - 1 : rank;
-        };
-        const rankDiff = storyRank(a.title) - storyRank(b.title);
-
-        if (rankDiff !== 0) return rankDiff;
-
-        const group = a.title.split('/')[0];
-        const orderedNames = nameOrder[group];
-
-        if (orderedNames) {
-          const aName = group === 'Layout' ? a.name : a.title.split('/')[1] || a.name;
-          const bName = group === 'Layout' ? b.name : b.title.split('/')[1] || b.name;
-          const aIndex = orderedNames.indexOf(aName);
-          const bIndex = orderedNames.indexOf(bName);
-
-          if (aIndex !== -1 || bIndex !== -1) {
-            return (aIndex === -1 ? orderedNames.length : aIndex) - (bIndex === -1 ? orderedNames.length : bIndex);
-          }
-        }
-
-        return a.title.localeCompare(b.title, undefined, { numeric: true }) || a.name.localeCompare(b.name, undefined, { numeric: true });
+            'Indicators',
+            'States & Recovery',
+            'Typography',
+            '*'
+          ],
+          'Core', [ 'Overview', '*' ],
+          'Blocks', [ 'Overview', '*' ],
+          'Navigation', [ 'Overview', '*' ],
+          'MDX', [ 'Overview', '*' ],
+          'Post', [ 'Overview', '*' ],
+          'Layout', [ 'Overview', '*' ],
+          '*'
+        ]
       }
     }
   }

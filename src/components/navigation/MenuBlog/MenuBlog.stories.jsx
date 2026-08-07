@@ -2,7 +2,7 @@ import { expect, userEvent, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
-import { MenuBlog } from '../../../index';
+import MenuBlog from './MenuBlog';
 
 import * as componentModule from './index';
 
@@ -35,7 +35,7 @@ export default {
       page: createComponentDocsPage(componentDocs)
     }
   },
-  tags: [ '!autodocs', '!dev' ],
+  tags: [ '!autodocs' ],
   title: 'Navigation/MenuBlog'
 };
 

@@ -38,8 +38,8 @@ const AuroraBackground = ({
   showRadialGradient = true,
   ...props
 }) => (
-  <main>
-    <div className={ cn('relative flex flex-col min-h-[100vh] items-center justify-center transition-bg', className) }
+  <div>
+    <div className={ cn('relative flex min-h-dvh flex-col items-center justify-center transition-colors motion-reduce:transition-none', className) }
       { ...props }
     >
       <div
@@ -47,32 +47,24 @@ const AuroraBackground = ({
         data-radial-gradient={ showRadialGradient ? 'true' : 'false' }
         className='aurora absolute inset-x-0 top-0 h-[48rem] overflow-hidden [mask-image:linear-gradient(to_bottom,black_0%,black_62%,transparent_100%)]'
       >
+        {/*
+          * Gradients live in styles.css (aurora-primary/-secondary/-tertiary)
+          * as plain CSS: dark-mode variants must not depend on the consumer's
+          * Tailwind content scanning, which misses symlinked installs.
+          */}
         <div
-          className={ cn(`
-                bg-gradient-to-br from-blue-200/90 via-blue-100/80 to-transparent
-                dark:from-neutral-900/70 dark:via-neutral-950/65 dark:to-transparent
-                pointer-events-none
-                absolute inset-0
-                `, showRadialGradient && '[mask-image:radial-gradient(ellipse_at_100%_0%,black_18%,transparent_42%)]') }
+          className={ cn('aurora-primary pointer-events-none absolute inset-0', showRadialGradient && '[mask-image:radial-gradient(ellipse_at_100%_0%,black_18%,transparent_42%)]') }
         ></div>
         <div
-          className={ cn(`bg-gradient-to-tl from-transparent via-indigo-200/30 to-transparent
-                dark:from-transparent dark:via-neutral-800/20 dark:to-transparent
-                pointer-events-none
-                absolute inset-0
-                `, showRadialGradient && '[mask-image:radial-gradient(ellipse_at_95%_5%,black_12%,transparent_36%)]') }
+          className={ cn('aurora-secondary pointer-events-none absolute inset-0', showRadialGradient && '[mask-image:radial-gradient(ellipse_at_95%_5%,black_12%,transparent_36%)]') }
         ></div>
         <div
-          className={ cn(`bg-gradient-to-br from-transparent via-indigo-200/20 to-transparent
-                dark:from-transparent dark:via-black/25 dark:to-transparent
-                pointer-events-none
-                absolute inset-0
-                `, showRadialGradient && '[mask-image:radial-gradient(ellipse_at_90%_10%,black_12%,transparent_32%)]') }
+          className={ cn('aurora-tertiary pointer-events-none absolute inset-0', showRadialGradient && '[mask-image:radial-gradient(ellipse_at_90%_10%,black_12%,transparent_32%)]') }
         ></div>
       </div>
       {children}
     </div>
-  </main>
+  </div>
 );
 
 export default AuroraBackground;

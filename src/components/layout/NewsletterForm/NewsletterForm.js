@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import Button from '../../core/Button';
 import { cn } from '../../../utilities/cn';
@@ -33,12 +33,24 @@ import { cn } from '../../../utilities/cn';
  * <NewsletterForm title="Join our newsletter" />
  */
 const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondown', title = 'Subscribe to the newsletter' }) => {
+  const abortControllerRef = useRef(null);
   const inputEl = useRef(null);
+  const mountedRef = useRef(false);
+  const inputId = useId();
   const messageId = useId();
   const [ error, setError ] = useState(false);
   const [ message, setMessage ] = useState('');
   const [ submitting, setSubmitting ] = useState(false);
   const [ subscribed, setSubscribed ] = useState(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   /**
    * Handles newsletter subscription form submission
@@ -50,17 +62,33 @@ const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondow
 
     if (submitting) return;
 
+    const email = inputEl.current?.value?.trim();
+
+    if (!email) {
+      setError(true);
+      setMessage('Enter a valid e-mail address.');
+
+      return;
+    }
+
+    abortControllerRef.current?.abort();
+
+    const controller = new AbortController();
+    const subscriptionEndpoint = endpoint || '/api/buttondown';
+
+    abortControllerRef.current = controller;
     setSubmitting(true);
 
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetch(subscriptionEndpoint, {
         'body': JSON.stringify({
-          'email': inputEl.current.value
+          email
         }),
         'headers': {
           'Content-Type': 'application/json'
         },
-        'method': 'POST'
+        'method': 'POST',
+        'signal': controller.signal
       });
 
       let responseError = null;
@@ -72,6 +100,8 @@ const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondow
         responseError = res.ok ? null : 'Unexpected response';
       }
 
+      if (controller.signal.aborted || !mountedRef.current) return;
+
       if (responseError || !res.ok) {
         setError(true);
         setMessage('Your e-mail address is invalid or you are already subscribed!');
@@ -79,15 +109,18 @@ const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondow
         return;
       }
 
-      inputEl.current.value = '';
+      if (inputEl.current) inputEl.current.value = '';
       setError(false);
       setSubscribed(true);
       setMessage('Successfully! 🎉 You are now subscribed.');
-    } catch {
+    } catch (err) {
+      if (err?.name === 'AbortError' || !mountedRef.current) return;
+
       setError(true);
       setMessage('Something went wrong. Please check your connection and try again.');
     } finally {
-      setSubmitting(false);
+      if (abortControllerRef.current === controller) abortControllerRef.current = null;
+      if (!controller.signal.aborted && mountedRef.current) setSubmitting(false);
     }
   };
 
@@ -98,12 +131,12 @@ const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondow
         The latest articles, readings, and resources, sent to your inbox monthly
       </p>
       <form className={ cn('mt-4 sm:flex sm:max-w-md', classNames.form) } onSubmit={ subscribe }>
-        <label htmlFor='email-input' className='sr-only'>
+        <label htmlFor={ inputId } className='sr-only'>
           Email address
         </label>
         <input
           autoComplete='email'
-          id='email-input'
+          id={ inputId }
           name='email'
           placeholder={ subscribed ? "You're subscribed !  🎉" : 'Enter your email' }
           ref={ inputEl }
@@ -112,7 +145,7 @@ const NewsletterForm = ({ className, classNames = {}, endpoint = '/api/buttondow
           disabled={ subscribed }
           aria-invalid={ error || undefined }
           aria-describedby={ message ? messageId : undefined }
-          className={ cn('w-full min-w-0 appearance-none rounded-sm border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 shadow-xs placeholder-gray-500 focus:border-gray-400 focus:outline-hidden focus:ring-0 md:text-sm', classNames.input) }
+          className={ cn('min-h-11 w-full min-w-0 appearance-none rounded-sm border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 shadow-xs placeholder-gray-500 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 md:text-sm dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder-gray-400 dark:focus-visible:border-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-gray-900', classNames.input) }
         />
         <div className={ cn('mt-3 sm:ml-3 sm:mt-0 sm:shrink-0', classNames.action) }>
           <Button

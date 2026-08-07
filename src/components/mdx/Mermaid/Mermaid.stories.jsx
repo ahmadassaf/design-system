@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-mermaid',
   title: 'MDX/Mermaid'
 };
 
@@ -28,6 +29,7 @@ export const Example = {
     const diagram = canvasElement.querySelector('.mermaid-diagram');
 
     await expect(canvasElement.querySelector('.mermaid-error')).not.toBeInTheDocument();
+    await expect(diagram).toHaveAccessibleName('A publishing workflow moves from draft to review and then publication.');
     await expect(diagram).toHaveTextContent('Draft');
     await expect(diagram).toHaveTextContent('Review');
     await expect(diagram).toHaveTextContent('Publish');

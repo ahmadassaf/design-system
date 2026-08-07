@@ -15,6 +15,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-switch',
   title: 'Core/Switch'
 };
 
@@ -22,17 +23,17 @@ export const Example = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const switchControl = canvas.getByRole('switch', { name: 'Email notifications' });
-    const checkedBackground = getComputedStyle(switchControl).backgroundColor;
 
     expect(switchControl).toHaveAttribute('aria-checked', 'true');
+    expect(switchControl).toHaveClass('bg-blue-600');
 
     await userEvent.click(switchControl);
     expect(switchControl).toHaveAttribute('aria-checked', 'false');
-    expect(getComputedStyle(switchControl).backgroundColor).not.toBe(checkedBackground);
+    expect(switchControl).not.toHaveClass('bg-blue-600');
 
     await userEvent.click(canvas.getByText('Email notifications'));
     expect(switchControl).toHaveAttribute('aria-checked', 'true');
-    expect(getComputedStyle(switchControl).backgroundColor).toBe(checkedBackground);
+    expect(switchControl).toHaveClass('bg-blue-600');
   },
   render: () => <div className='flex items-center p-6'><Switch label='Email notifications' defaultChecked /></div>
 };

@@ -1,7 +1,13 @@
 import { useRef, useState } from 'react';
 
-import { Button, Icon, Link, MenuLogo, MenuMain, MenuSearch, Typography } from '../../index';
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from '../../../.storybook/stories/StoryDocs';
+import Button from '../core/Button';
+import Icon from '../core/Icon';
+import Link from '../core/Link';
+import Typography from '../../foundations/Typography';
+import MenuLogo from './MenuLogo';
+import MenuMain from './MenuMain';
+import MenuSearch from './MenuSearch';
 
 const categories = [
   {
@@ -47,38 +53,20 @@ const links = [
   { 'href': '/about', 'title': 'About' }
 ];
 
-const usageCode = `import {
-  Button,
-  Icon,
-  Link,
-  MenuLogo,
-  MenuMain,
-  MenuSearch
-} from '@gaudi/design-system';
+const usageCode = `import { Menu, SiteConfigProvider } from '@gaudi/design-system';
 
-function Header({ categories, posts, links, setLauncherOpen }) {
+function Header({ categories, navigation, posts, projects, publications, siteMetadata, tags, thoughts }) {
   return (
-    <header className='flex min-h-20 items-center justify-between gap-5 py-6'>
-      <Link href='/' aria-label='Ahmad Assaf' variant='bare'>
-        <MenuLogo />
-      </Link>
-
-      <nav className='hidden items-center gap-7 lg:flex' aria-label='Primary'>
-        {links.map((link) => (
-          <Link key={link.href} href={link.href} className='px-1 py-2 text-sm font-medium'>
-            {link.title}
-          </Link>
-        ))}
-        <MenuMain categories={categories} allPosts={posts} />
-      </nav>
-
-      <div className='flex items-center gap-3'>
-        <MenuSearch className='hidden lg:block' setOpen={setLauncherOpen} />
-        <Button className='lg:hidden' variant='ghost' tone='gray' size='sm'>
-          <Icon name='Menu' decorative />
-        </Button>
-      </div>
-    </header>
+    <SiteConfigProvider metadata={siteMetadata} navigation={navigation}>
+      <Menu
+        categories={categories}
+        posts={posts}
+        projects={projects}
+        publications={publications}
+        tags={tags}
+        thoughts={thoughts}
+      />
+    </SiteConfigProvider>
   );
 }`;
 
@@ -104,7 +92,7 @@ const stickyCode = `function StickyHeader() {
 
 const HeaderSurface = ({ children, label }) => (
   <div className='rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950'>
-    {label ? <div className='mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400'>{label}</div> : null}
+    {label ? <div className='mb-3 text-xs font-semibold uppercase text-gray-500 dark:text-gray-400'>{label}</div> : null}
     {children}
   </div>
 );
@@ -120,7 +108,7 @@ const HeaderRow = ({ launcherLabel = 'Search opened', mobile = false, onMenuClic
         </Link>
 
         {mobile ? null : (
-          <nav className='flex items-center gap-6' aria-label='Primary'>
+          <nav className='hidden items-center gap-6 lg:flex' aria-label='Primary'>
             {links.slice(0, 4).map((link) => (
               <Link key={ link.href } href={ link.href } className='whitespace-nowrap px-1 py-2 text-sm font-medium'>
                 {link.title}
@@ -133,8 +121,8 @@ const HeaderRow = ({ launcherLabel = 'Search opened', mobile = false, onMenuClic
         )}
 
         <div className='flex items-center gap-3'>
-          {mobile ? null : <MenuSearch setOpen={ setLauncherOpen } />}
-          <Button variant='ghost' tone='gray' size='sm' className={ mobile ? 'h-10 w-10 p-0' : 'hidden h-10 w-10 p-0' } onClick={ onMenuClick }>
+          {mobile ? null : <MenuSearch className='hidden lg:block' setOpen={ setLauncherOpen } />}
+          <Button variant='ghost' tone='neutral' size='sm' className={ mobile ? 'h-11 w-11 p-0' : 'h-11 w-11 p-0 lg:hidden' } onClick={ onMenuClick }>
             <span className='sr-only'>Open menu</span>
             <Icon name='Menu' decorative size='md' />
           </Button>
@@ -153,7 +141,7 @@ const MobilePanelPreview = () => {
   return (
     <div className='rounded-lg border border-gray-200 bg-white px-6 py-8 shadow-sm dark:border-gray-800 dark:bg-gray-950 sm:ring-1 sm:ring-gray-900/10'>
       <div className='mb-10 flex items-start justify-end'>
-        <Button variant='ghost' tone='gray' size='sm' className='h-10 w-10 shrink-0 p-0'>
+        <Button variant='ghost' tone='neutral' size='sm' className='h-11 w-11 shrink-0 p-0'>
           <span className='sr-only'>Close menu</span>
           <Icon name='X' decorative size='md' />
         </Button>
@@ -161,19 +149,19 @@ const MobilePanelPreview = () => {
       <div className='flow-root'>
         <nav aria-label='Mobile preview' className='-my-6 divide-y divide-gray-500/10'>
           <div className='space-y-2 pb-6'>
-            <Link href='/blog' className='-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>Blog</Link>
+            <Link href='/blog' className='-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-blue-950 hover:bg-blue-50 hover:text-blue-900 dark:text-white dark:hover:text-blue-900'>Blog</Link>
             <div className='-mx-3'>
               <div className='mt-2 space-y-2'>
                 {categories.map((category) => (
-                  <Link key={ category.id } href={ `/blog/categories/${category.id}` } className='group block rounded-lg py-2 pl-6 pr-3 text-sm font-medium capitalize leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>
+                  <Link key={ category.id } href={ `/blog/categories/${category.id}` } className='group block rounded-lg py-2 pl-6 pr-3 text-sm font-medium capitalize leading-7 text-blue-950 hover:bg-blue-50 hover:text-blue-900 dark:text-white dark:hover:text-blue-900'>
                     {category.title.replace('-', ' ')}
-                    <span className='mt-1 block text-sm font-light leading-6 text-gray-600 dark:text-gray-100 dark:group-hover:text-gray-600'>{category.description}</span>
+                    <span className='mt-1 block text-sm font-light leading-6 text-gray-600 group-hover:text-blue-800 dark:text-gray-100 dark:group-hover:text-blue-800'>{category.description}</span>
                   </Link>
                 ))}
               </div>
             </div>
             {links.slice(1).map((link) => (
-              <Link key={ link.href } href={ link.href } className='-mx-3 block whitespace-nowrap rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{link.title}</Link>
+              <Link key={ link.href } href={ link.href } className='-mx-3 block whitespace-nowrap rounded-lg px-3 py-2 text-base font-medium leading-7 text-blue-950 hover:bg-blue-50 hover:text-blue-900 dark:text-white dark:hover:text-blue-900'>{link.title}</Link>
             ))}
           </div>
         </nav>
@@ -228,7 +216,7 @@ const StickyHeaderDemo = () => {
 
   return (
     <div className='rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950'>
-      <div className='border-b border-gray-200 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:text-gray-400'>
+      <div className='border-b border-gray-200 px-4 py-3 text-xs font-semibold uppercase text-gray-500 dark:border-gray-800 dark:text-gray-400'>
         Scroll down, then scroll up
       </div>
       <div className='h-[420px] overflow-y-auto' onScroll={ handleScroll }>
@@ -250,7 +238,7 @@ const StickyHeaderDemo = () => {
         <article className='space-y-8 px-6 py-8'>
           {Array.from({ 'length': 8 }).map((_, index) => (
             <section key={ index } className='space-y-2'>
-              <Typography variant='heading-sm'>Editorial section {index + 1}</Typography>
+              <Typography as='h3' variant='heading-sm'>Editorial section {index + 1}</Typography>
               <p className='max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
                 This scroll area demonstrates the header behavior used for long reading surfaces: the header moves away while the reader moves down and returns as soon as the reader scrolls back up.
               </p>
@@ -264,17 +252,19 @@ const StickyHeaderDemo = () => {
 
 const NavigationDocs = () => (
   <Page
-    kicker='Navigation'
-    title='Header'
+    title='Navigation'
     intro='Navigation is documented as one composed header system: logo, primary links, blog menu, search trigger, mobile drawer, and scroll-aware sticky behavior.'
   >
-    <Section title='Composition' description='Use the top-level header composition in product surfaces. Low-level pieces remain exported for the header implementation, but they are not separate documentation destinations.'>
+    <Section title='Header Composition' description='Use the top-level header composition in product surfaces. Low-level pieces remain exported for the header implementation, but they are not separate documentation destinations.'>
       <Table>
         <thead>
           <tr><Th>Piece</Th><Th>Use</Th><Th>Notes</Th></tr>
         </thead>
         <tbody>
+          <tr><Td mono>Menu</Td><Td>Complete site header composition.</Td><Td>Preferred public entry point for the production navigation shell.</Td></tr>
           <tr><Td mono>MenuLogo</Td><Td>Brand mark at the start of the header.</Td><Td>Wrap it in a home link with an accessible label.</Td></tr>
+          <tr><Td mono>DropDown</Td><Td>Disclosure trigger used by navigation menus.</Td><Td>Low-level public primitive; wire it to a labelled controlled panel.</Td></tr>
+          <tr><Td mono>MenuBlog</Td><Td>Blog category disclosure.</Td><Td>Use on blog routes when category navigation replaces the broader blog menu.</Td></tr>
           <tr><Td mono>MenuMain</Td><Td>Primary blog navigation menu.</Td><Td>Show it on desktop next to top-level links. The dropdown clamps left, center, or right so it stays visible near viewport edges.</Td></tr>
           <tr><Td mono>MenuSearch</Td><Td>Visible command launcher trigger.</Td><Td>Do not add a second shortcut hint beside it.</Td></tr>
           <tr><Td mono>MenuMobile</Td><Td>Mobile drawer implementation.</Td><Td>Open it from the compact header menu button.</Td></tr>
@@ -283,7 +273,7 @@ const NavigationDocs = () => (
       </Table>
     </Section>
 
-    <Section title='Usage' description='Header composition is explicit: pass category and post data to the menu, and wire MenuSearch to the command launcher state.'>
+    <Section title='Usage' description='Use the exported Menu composition. SiteConfigProvider supplies identity and top-level links; Menu receives the searchable content collections.'>
       <CodeBlock code={ usageCode } language='jsx' />
     </Section>
 
@@ -305,23 +295,13 @@ const NavigationDocs = () => (
 );
 
 export default {
+  id: 'navigation-overview',
   parameters: pageParameters,
   tags: [ '!autodocs' ],
-  title: 'Blocks/Navigation'
+  title: 'Navigation'
 };
 
-export const Docs = {
+export const Default = {
+  name: 'Overview',
   'render': () => <NavigationDocs />
-};
-
-export const NavigationMenu = {
-  'render': () => <NavigationMenuDemo />
-};
-
-export const ResponsiveHeader = {
-  'render': () => <ResponsiveHeaderDemo />
-};
-
-export const StickyHeader = {
-  'render': () => <StickyHeaderDemo />
 };

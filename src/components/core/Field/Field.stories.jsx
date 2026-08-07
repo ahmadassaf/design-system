@@ -15,16 +15,31 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-field',
   title: 'Core/Field'
 };
 
 export const Example = {
-  render: () => (
+  args: {
+    description: 'Used for article updates only.',
+    disabled: false,
+    label: 'Email',
+    placeholder: 'you@example.com',
+    type: 'email'
+  },
+  argTypes: {
+    description: { control: 'text' },
+    disabled: { control: 'boolean' },
+    label: { control: 'text' },
+    placeholder: { control: 'text' },
+    type: { control: 'select', options: [ 'email', 'text', 'url' ] }
+  },
+  render: ({ description, disabled, label, placeholder, type }) => (
     <div className='max-w-sm p-6'>
       <Field>
-        <FieldLabel htmlFor='email'>Email</FieldLabel>
-        <FieldInput id='email' type='email' placeholder='you@example.com' />
-        <FieldDescription>Used for article updates only.</FieldDescription>
+        <FieldLabel htmlFor='email'>{label}</FieldLabel>
+        <FieldInput id='email' type={ type } placeholder={ placeholder } disabled={ disabled } />
+        <FieldDescription>{description}</FieldDescription>
       </Field>
     </div>
   ),

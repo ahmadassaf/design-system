@@ -1,12 +1,10 @@
-import { createComponentDocsPage, getComponentDocs } from '../../../.storybook/stories/ComponentDocs';
+import { Page, pageParameters, Section } from '../../../.storybook/stories/StoryDocs';
 
 import Breadcrumbs from './Breadcrumbs';
 import Disclaimer from './Disclaimer';
 import PostHeader, { PostTimestamps } from './PostHeader';
 import PostNavigation from './PostNavigation';
 import PostSharing from './PostSharing';
-
-const componentDocs = getComponentDocs('Post/Overview');
 
 const siteMetadata = {
   'github': 'https://github.com/ahmadassaf/blog',
@@ -81,46 +79,47 @@ const toc = [
 ];
 
 export default {
-  parameters: {
-    docs: {
-      description: {
-        component: componentDocs.description
-      },
-      page: createComponentDocsPage(componentDocs)
-    }
-  },
-  tags: [ 'autodocs' ],
-  title: 'Post/Overview'
+  id: 'post-overview',
+  parameters: pageParameters,
+  tags: [ '!autodocs' ],
+  title: 'Post'
 };
 
-export const Header = {
+export const Default = {
+  name: 'Overview',
   'render': () => (
-    <div className='max-w-5xl p-6'>
-      <PostHeader frontMatter={ frontMatter } siteMetadata={ siteMetadata } toc={ toc } />
-    </div>
-  )
-};
+    <Page
+      title='Post'
+      intro='Post components compose article identity, chronology, wayfinding, sharing, series context, and supporting editorial notes.'
+    >
+      <Section title='Article Header' description='Start with the article identity, publication metadata, reading time, and table-of-contents context.'>
+        <div className='max-w-5xl'>
+          <PostHeader frontMatter={ frontMatter } siteMetadata={ siteMetadata } titleLevel={ 3 } toc={ toc } />
+        </div>
+      </Section>
 
-export const NavigationAndSharing = {
-  'render': () => (
-    <div className='max-w-4xl space-y-8 p-6'>
-      <Breadcrumbs pages={ [
-        { 'current': false, 'href': '/blog', 'name': 'Blog' },
-        { 'current': true, 'href': '/blog/design-system', 'name': 'Design System' }
-      ] } />
-      <PostTimestamps date='2026-05-20' locale='en-GB' readingTime='6 min read' />
-      <PostSharing
-        siteMetadata={ siteMetadata }
-        slug='design-system'
-        title='Building a Complete Blog Design System'
-        tags={ [ 'design systems', 'react' ] }
-        externalLink='engineering/design-system'
-      />
-      <PostNavigation
-        prev={{ 'slug': 'previous-post', title: 'Previous post title' }}
-        next={{ 'slug': 'next-post', title: 'Next post title' }}
-      />
-      <Disclaimer />
-    </div>
+      <Section title='Navigation And Sharing' description='Keep wayfinding and sharing actions adjacent to the article without competing with its content.'>
+        <div className='max-w-4xl space-y-8'>
+          <Breadcrumbs pages={ [
+            { 'current': false, 'href': '/blog', 'name': 'Blog' },
+            { 'current': true, 'href': '/blog/design-system', 'name': 'Design System' }
+          ] } />
+          <PostTimestamps date='2026-05-20' locale='en-GB' readingTime='6 min read' />
+          <PostSharing
+            siteMetadata={ siteMetadata }
+            slug='design-system'
+            title='Building a Complete Blog Design System'
+            tags={ [ 'design systems', 'react' ] }
+            externalLink='engineering/design-system'
+          />
+          <PostNavigation
+            headingLevel={ 3 }
+            prev={{ 'slug': 'previous-post', title: 'Previous post title' }}
+            next={{ 'slug': 'next-post', title: 'Next post title' }}
+          />
+          <Disclaimer />
+        </div>
+      </Section>
+    </Page>
   )
 };

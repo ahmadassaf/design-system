@@ -25,13 +25,17 @@ export const Example = {
     const canvas = within(canvasElement);
     const defaultCopy = canvas.getByText(/opinions and views expressed on this blog are solely my own/u);
     const customCopy = canvas.getByText('Research notes are provided for context and should not be treated as advice.');
-    const defaultBody = defaultCopy.closest('.text-blue-800');
-    const customBody = customCopy.closest('.text-blue-800');
+    const defaultCallout = defaultCopy.closest('aside');
+    const customCallout = customCopy.closest('aside');
+    const defaultBody = defaultCallout?.querySelector('div');
+    const customBody = customCallout?.querySelector('div');
 
     await expect(defaultCopy).toBeVisible();
     await expect(customCopy).toBeVisible();
-    await expect(defaultBody?.parentElement).toHaveClass('border-blue-200');
-    await expect(customBody?.parentElement).toHaveClass('bg-gradient-to-br');
+    await expect(defaultCallout).toHaveClass('border-info-border', 'bg-info-subtle');
+    await expect(customCallout).toHaveClass('border-info-border', 'bg-info-subtle');
+    await expect(defaultBody).toHaveClass('text-info');
+    await expect(customBody).toHaveClass('text-info');
   },
   'render': () => renderComponentExample('Post/Disclaimer', componentModule)
 };
@@ -40,10 +44,12 @@ export const Warning = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const warningCopy = canvas.getByText('This post includes forward-looking implementation notes.');
-    const warningBody = warningCopy.closest('.text-yellow-800');
+    const warningCallout = warningCopy.closest('aside');
+    const warningBody = warningCallout?.querySelector('div');
 
     await expect(warningCopy).toBeVisible();
-    await expect(warningBody?.parentElement).toHaveClass('border-yellow-200');
+    await expect(warningCallout).toHaveClass('border-warning-border', 'bg-warning-subtle');
+    await expect(warningBody).toHaveClass('text-warning');
   },
   render: () => (
     <div className='p-6'>

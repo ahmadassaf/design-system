@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-citation',
   title: 'MDX/Citation'
 };
 

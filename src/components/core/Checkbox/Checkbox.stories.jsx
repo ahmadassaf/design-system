@@ -14,6 +14,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-checkbox',
   title: 'Core/Checkbox'
 };
 

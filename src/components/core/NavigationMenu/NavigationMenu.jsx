@@ -22,12 +22,20 @@ export const NavigationMenuLink = ({ active = false, children, className, descri
       variant='bare'
       aria-current={ active ? 'page' : undefined }
       className={ cn(
-        'group/nav-link transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950', variant === 'link' && 'inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400', variant === 'panel' && 'block rounded-xl p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-900', active && variant === 'link' && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300', className
+        'group/nav-link transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950',
+        variant === 'link' && [
+          'inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium',
+          'text-gray-900 hover:bg-gray-100 hover:text-blue-600',
+          'dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400'
+        ],
+        variant === 'panel' && 'block rounded-xl p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-900',
+        active && variant === 'link' && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300',
+        className
       ) }
     >
       <span className={ cn(variant === 'panel' && 'block text-sm font-medium text-gray-950 group-hover/nav-link:text-blue-600 dark:text-gray-100 dark:group-hover/nav-link:text-blue-400') }>{children}</span>
       {description ? <span className='mt-1 block text-sm leading-6 text-gray-600 dark:text-gray-400'>{description}</span> : null}
-      {meta ? <span className='mt-2 block text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-500'>{meta}</span> : null}
+      {meta ? <span className='mt-2 block text-xs font-medium uppercase text-gray-500 dark:text-gray-500'>{meta}</span> : null}
     </Link>
   );
 
@@ -134,7 +142,9 @@ export const NavigationMenuDropdown = ({ align = 'start', children, className, d
         ref={ triggerRef }
         type='button'
         className={ cn(
-          'inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400 dark:focus-visible:ring-offset-gray-950', open && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
+          'inline-flex min-h-11 items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950',
+          'text-gray-900 hover:bg-gray-100 hover:text-blue-600 dark:text-gray-100 dark:hover:bg-gray-800 dark:hover:text-blue-400',
+          open && 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
         ) }
         aria-controls={ dropdownId }
         aria-expanded={ open }

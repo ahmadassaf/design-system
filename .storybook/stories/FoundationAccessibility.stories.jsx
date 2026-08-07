@@ -23,6 +23,7 @@ const RuleRow = ({ description, note = '', rule, status = 'enforced' }) => (
 );
 
 export default {
+  id: 'overview-accessibility',
   parameters: {
     a11y: {
       options: {
@@ -34,29 +35,29 @@ export default {
       test: 'error'
     },
     layout: 'fullscreen',
-    options: { 'showPanel': false, 'showToolbar': false }
+    options: { 'showToolbar': false }
   },
   tags: [ '!autodocs' ],
-  title: 'Overview/Accessibility'
+  title: 'Overview'
 };
 
 export const Default = {
-  'name': 'Accessibility',
+  name: 'Accessibility',
   'render': () => (
     <Page
       title='Accessibility'
-      intro='The design system targets WCAG 2.1 Level AA. Components are expected to be keyboard reachable, screen-reader understandable, visually clear, and tested with Storybook a11y checks.'
+      intro='The design system targets WCAG 2.1 Level AA. Components are expected to be keyboard reachable, screen-reader understandable, visually clear, and tested through the headless Storybook accessibility gate.'
     >
       <section className='grid gap-4 md:grid-cols-3'>
         <Stat value='WCAG 2.1' label='Level AA target' />
-        <Stat value='axe-core' label='Storybook addon checks' />
-        <Stat value='12 components' label='A11y tested in Storybook' />
+        <Stat value='axe-core' label='Headless accessibility checks' />
+        <Stat value='Every story' label='A11y gate in test-storybook' />
       </section>
 
       <Section
         title='Keyboard Navigation'
         description={ <>
-            All interactive components are fully keyboard accessible. Gaudi enforces semantic <InlineCode>button</InlineCode> or <InlineCode>a</InlineCode> elements, never <InlineCode>div onClick</InlineCode>.
+            Interactive components use semantic <InlineCode>button</InlineCode> or <InlineCode>a</InlineCode> elements. Composite widgets document their own keyboard contract and must test Escape, focus order, and arrow-key behavior when they implement managed focus.
         </> }
       >
         <Table>
@@ -64,9 +65,9 @@ export const Default = {
           <tbody>
             <tr><Td><Key>Tab / Shift+Tab</Key></Td><Td>Move focus between interactive elements.</Td><Td>All components.</Td></tr>
             <tr><Td><Key>Enter / Space</Key></Td><Td>Activate buttons, toggles, and links.</Td><Td>Button, Link, Search, ImageModal.</Td></tr>
-            <tr><Td><Key>Arrow Keys</Key></Td><Td>Navigate within composite widgets.</Td><Td>Command palette, dropdowns, tabs, grouped controls.</Td></tr>
-            <tr><Td><Key>Escape</Key></Td><Td>Close overlay or cancel action.</Td><Td>Command palette, ImageModal, dropdowns, popovers.</Td></tr>
-            <tr><Td><Key>Home / End</Key></Td><Td>Jump to first or last option.</Td><Td>Command palette, menus, tab lists.</Td></tr>
+            <tr><Td><Key>Arrow Keys</Key></Td><Td>Navigate within composite widgets that implement managed focus.</Td><Td>Command palette, carousel, select, code tabs.</Td></tr>
+            <tr><Td><Key>Escape</Key></Td><Td>Close temporary overlays and return focus when the surface owns focus.</Td><Td>Command palette, ImageModal, Video, MenuMobile, dropdowns.</Td></tr>
+            <tr><Td><Key>Home / End</Key></Td><Td>Jump to first or last option where the widget owns a listbox, menu, or tablist pattern.</Td><Td>Command palette, select, code tabs.</Td></tr>
           </tbody>
         </Table>
       </Section>
@@ -110,7 +111,7 @@ export const Default = {
       <Section title='Focus Management' description='Proper focus management ensures keyboard users never lose their place in the page.'>
         <div className='grid gap-4 md:grid-cols-3'>
           <InfoCard title='Focus Traps'>
-            Command palette, menus, and image overlays trap focus when open. Custom overlays must trap focus, close on Escape, and avoid background tab stops.
+            Modal overlays such as command palette, mobile navigation, video, and image previews trap or contain focus when open. Non-modal dropdowns close on Escape and outside interaction without pretending to be dialogs.
           </InfoCard>
           <InfoCard title='Focus Rings'>
             All interactive elements show a visible focus ring with <InlineCode>:focus-visible</InlineCode>, hidden for mouse users only when an equivalent keyboard focus treatment remains.
@@ -124,13 +125,27 @@ export const Default = {
       <Section title='Motion Preferences' description='Gaudi respects prefers-reduced-motion. Motion should support comprehension, never be required for understanding.'>
         <div className='grid gap-4 md:grid-cols-2'>
           <InfoCard title='Reduced Motion Contract'>
-            CSS transitions on overlays, tooltips, media reveals, and command palette states must honor <InlineCode>prefers-reduced-motion</InlineCode>. Framer Motion components should disable or simplify animations when reduced motion is preferred.
+            Gaudi motion primitives, Tailwind animation and transition utilities, overlays, tooltips, media reveals, and command palette states honor <InlineCode>prefers-reduced-motion</InlineCode>. Framer Motion components should disable or simplify animations when reduced motion is preferred.
           </InfoCard>
-          <CodeBlock code={ `/* Gaudi stylesheet enforces reduced motion globally */
+          <CodeBlock code={ `/* Gaudi disables its motion primitives and utility motion. */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+  .ds-motion-disclosure,
+  .ds-motion-popover,
+  .animate-ping,
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
+  }
+
+  .ds-motion-press,
+  .ds-motion-state,
+  .ds-motion-toggle-track,
+  .ds-motion-toggle-thumb,
+  .transition,
+  .transition-all,
+  .transition-colors,
+  .transition-transform {
+    transition-duration: 0ms !important;
   }
 }` } />
         </div>
@@ -193,8 +208,8 @@ export const MyStory = {
       <Section title='A11y Testing' description='Gaudi uses a layered testing strategy to catch accessibility regressions before components land in the blog.'>
         <div className='grid gap-4 md:grid-cols-2'>
           <InfoCard title='Automated axe-core'>
-            <CodeBlock code='pnpm storybook:build' />
-            <p className='mt-3'>The Storybook a11y addon runs WCAG A/AA axe checks in the browser and catches common semantic, label, role, and contrast violations.</p>
+            <CodeBlock code='pnpm test-storybook -- --run' />
+            <p className='mt-3'>The Vitest-powered Storybook suite runs WCAG A/AA axe checks for every story and fails on semantic, label, role, or contrast violations.</p>
           </InfoCard>
           <InfoCard title='Static Analysis'>
             <CodeBlock code='pnpm lint' />

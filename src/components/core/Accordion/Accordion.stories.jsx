@@ -21,6 +21,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-accordion',
   title: 'Core/Accordion'
 };
 

@@ -12,7 +12,27 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import sanitizeHtml from '../../../utilities/sanitizeHtml';
+
 import styles from './Footnote.module.css';
+
+const calculatePosition = (rect) => {
+  const margin = 12;
+  const offset = 10;
+  const popoverWidth = 300;
+  const viewportWidth = Math.max(window.innerWidth || 0, margin * 2);
+  const viewportHeight = Math.max(window.innerHeight || 0, margin * 2);
+  const safeWidth = Math.min(popoverWidth, Math.max(viewportWidth - (margin * 2), 0)) || popoverWidth;
+  let xPos = rect.right + offset;
+  let yPos = rect.top + (rect.height / 2);
+
+  if (xPos + safeWidth > viewportWidth - margin) xPos = rect.left - safeWidth - offset;
+
+  xPos = Math.max(margin, Math.min(xPos, Math.max(margin, viewportWidth - safeWidth - margin)));
+  yPos = Math.max(margin, Math.min(yPos, viewportHeight - margin));
+
+  return { 'x': xPos, 'y': yPos };
+};
 
 /**
  * Component that adds popover functionality to footnote references
@@ -49,23 +69,13 @@ const Footnote = () => {
             timeoutRef.current = setTimeout(() => {
               setIsReady(false);
 
-              // Calculate position, ensuring popover stays on screen
-              const viewportWidth = window.innerWidth;
-
-              // Approximate width
-              const popoverWidth = 300;
-              let xPos = rect.right + 10;
-
-              // If popover would go off the right edge, position it to the left
-              if (xPos + popoverWidth > viewportWidth - 20) xPos = rect.left - popoverWidth - 10;
+              const position = calculatePosition(rect);
 
               setPopover({
-                'content': footnoteContent,
+                'content': sanitizeHtml(footnoteContent),
                 'footnoteNumber': footnoteNumber,
-                'x': xPos,
-
-                // Center vertically
-                'y': rect.top + rect.height / 2
+                'x': position.x,
+                'y': position.y
               });
 
               // Small delay to ensure positioning is applied before showing

@@ -62,6 +62,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-chart',
   title: 'MDX/Chart'
 };
 

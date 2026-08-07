@@ -177,7 +177,7 @@ const Select = ({
         aria-invalid={ invalid || undefined }
         aria-label={ ariaLabel }
         className={ cn(
-          'flex min-h-10 w-full items-center justify-between gap-3 rounded-lg border border-gray-300 bg-white px-3 py-2 text-left text-sm font-medium text-gray-950 shadow-xs transition-colors hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:border-gray-600 dark:disabled:bg-gray-900 dark:disabled:text-gray-600', invalid && 'border-red-500 focus-visible:ring-red-500', classNames.trigger
+          'ds-motion-press flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-gray-300 bg-white px-3 py-2 text-left text-sm font-medium text-gray-950 shadow-xs hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:hover:border-gray-600 dark:disabled:bg-gray-900 dark:disabled:text-gray-600', invalid && 'border-red-500 focus-visible:ring-red-500', classNames.trigger
         ) }
         onClick={ () => updateOpen(!open) }
         onKeyDown={ (event) => {
@@ -195,13 +195,13 @@ const Select = ({
             {selectedOptions.length}
           </span>
         ) : null}
-        <Icon name='ChevronDown' decorative size='xs' className={ cn('shrink-0 text-gray-500 transition-transform', open && 'rotate-180') } />
+        <Icon name='ChevronDown' decorative size='xs' className={ cn('ds-motion-icon shrink-0 text-gray-500', open && 'rotate-180') } />
       </button>
 
       {open ? (
         <div
           className={ cn(
-            'absolute left-0 top-full z-50 mt-2 w-full min-w-64 overflow-hidden rounded-xl border border-gray-200 bg-white p-1 shadow-xl shadow-gray-950/10 ring-1 ring-gray-950/5 dark:border-gray-800 dark:bg-gray-950 dark:ring-white/10', classNames.content
+            'ds-motion-popover absolute left-0 top-full z-50 mt-2 w-full min-w-64 overflow-hidden rounded-xl border border-gray-200 bg-white p-1 shadow-xl shadow-gray-950/10 ring-1 ring-gray-950/5 dark:border-gray-800 dark:bg-gray-950 dark:ring-white/10', classNames.content
           ) }
         >
           {searchable ? (
@@ -283,7 +283,7 @@ const Select = ({
                   aria-selected={ selected }
                   disabled={ option.disabled }
                   className={ cn(
-                    'flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-45 dark:text-gray-200 dark:hover:bg-gray-900', active && 'bg-gray-100 dark:bg-gray-900', selected && 'font-medium text-blue-700 dark:text-blue-300', classNames.option
+                    'ds-motion-state flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-45 dark:text-gray-200 dark:hover:bg-gray-900', active && 'bg-gray-100 dark:bg-gray-900', selected && 'font-medium text-blue-700 dark:text-blue-300', classNames.option
                   ) }
                   onMouseEnter={ () => setActiveIndex(index) }
                   onClick={ () => commitOption(option) }

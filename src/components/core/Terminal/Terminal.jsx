@@ -40,7 +40,7 @@ export const terminalBodyVariants = createVariants({
   'variants': {
     'size': {
       'lg': 'min-h-[22rem] max-h-[32rem] text-sm',
-      'md': 'min-h-[18rem] max-h-[28rem] text-[13px]',
+      'md': 'min-h-[18rem] max-h-[28rem] text-sm',
       'sm': 'min-h-[14rem] max-h-[22rem] text-xs'
     }
   }

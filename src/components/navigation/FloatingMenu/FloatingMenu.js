@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Button from '../../core/Button';
 import Icon from '../../core/Icon';
@@ -50,8 +50,8 @@ const FloatingMenu = ({ className, links }) => {
   const { navigation } = useSiteConfig();
   const navLinks = links ?? navigation.links;
   const [ visible, setVisible ] = useState(false);
-  const [ lastScrollY, setLastScrollY ] = useState(0);
   const [ mounted, setMounted ] = useState(false);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     setMounted(true);
@@ -62,6 +62,7 @@ const FloatingMenu = ({ className, links }) => {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
 
       if (currentScrollY < 50)
         setVisible(false);
@@ -70,13 +71,14 @@ const FloatingMenu = ({ className, links }) => {
       else if (currentScrollY > lastScrollY)
         setVisible(false);
 
-      setLastScrollY(currentScrollY);
+      lastScrollYRef.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { 'passive': true });
+    handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [ lastScrollY, mounted ]);
+  }, [ mounted ]);
 
   /**
    * Scrolls the page to the top smoothly
@@ -87,21 +89,25 @@ const FloatingMenu = ({ className, links }) => {
    * @returns {void}
    */
   const handleScrollTop = () => {
-    window.scrollTo({ 'behavior': 'smooth', 'top': 0 });
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    window.scrollTo({ 'behavior': reduceMotion ? 'auto' : 'smooth', 'top': 0 });
   };
 
   return (
     <div
+      aria-hidden={ !mounted || !visible }
+      inert={ !mounted || !visible }
       className={ cn(
-        'flex min-w-[414px] max-sm:min-w-0 max-sm:py-2 max-sm:w-[90%] max-w-fit fixed top-4 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-white bg-black text-white dark:text-black shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-5000 pr-2 pl-8 py-2 items-center justify-center space-x-4 transition-all duration-200', mounted && visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none', className
+        'fixed left-1/2 top-4 z-[var(--ds-z-nav)] flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center justify-center gap-3 overflow-x-auto rounded-full border border-transparent bg-black py-2 pl-4 pr-2 text-white shadow-[var(--ds-shadow-floating)] transition-all duration-200 motion-reduce:transition-none dark:border-white/[0.2] dark:bg-white dark:text-black sm:pl-8', mounted && visible ? 'opacity-100 translate-y-0' : 'pointer-events-none -translate-y-full opacity-0', className
       ) }
     >
       {navLinks.map((navItem, idx) => (
-        <Link key={ `link=${idx}` } href={ navItem.href } className={ cn('relative dark:text-black items-center flex space-x-1 text-white dark:hover:text-blue-600 hover:text-blue-600') }>
+        <Link key={ `link=${idx}` } href={ navItem.href } tabIndex={ mounted && visible ? undefined : -1 } className={ cn('relative flex shrink-0 items-center space-x-1 text-white hover:text-blue-600 dark:text-black dark:hover:text-blue-600') }>
           <span className='block text-sm'>{navItem.title}</span>
         </Link>
       ))}
-      <Button variant='outline' tone='neutral' size='sm' onClick={ () => handleScrollTop() } className='relative rounded-full border-neutral-200 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 hover:text-white dark:border-black/[0.2] dark:text-black max-sm:border-none max-sm:p-0' aria-label='Back to top'>
+      <Button variant='outline' tone='neutral' size='sm' tabIndex={ mounted && visible ? undefined : -1 } onClick={ () => handleScrollTop() } className='relative min-h-11 shrink-0 rounded-full border-neutral-200 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 hover:text-white dark:border-black/[0.2] dark:text-black max-sm:border-none max-sm:px-2' aria-label='Back to top'>
         <Icon name='ArrowUpCircle' size='md' decorative className='inline mx-2 align-middle max-sm:m-0!'/>
         <span className='max-sm:hidden'>Back Top</span>
         <span className='absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-linear-to-r from-transparent via-blue-500 to-transparent h-px' />

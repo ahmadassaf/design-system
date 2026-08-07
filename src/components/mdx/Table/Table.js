@@ -89,6 +89,9 @@ const Table = ({ children, className = '', ...rest }) => {
         <div
           ref={ scrollContainerRef }
           className={ `${styles.scroll} ${styles.frame}` }
+          role='region'
+          tabIndex={ 0 }
+          aria-label='Scrollable table'
         >
           <div className='inline-block min-w-full align-middle'>
             <table
@@ -136,7 +139,7 @@ const TableRow = ({ children, className = '', ...rest }) => (
  */
 const TableHeaderCell = ({ children, className = '', ...rest }) => (
   <th
-    className={ `${styles.cellPadding} text-left text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider ${className}` }
+    className={ `${styles.cellPadding} text-left text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase ${className}` }
     { ...rest }
   >
     {children}

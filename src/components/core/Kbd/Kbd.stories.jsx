@@ -1,6 +1,6 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, within } from 'storybook/test';
-import { Kbd } from '../../../index';
+import Kbd from './Kbd';
 
 const componentDocs = getComponentDocs('Core/Kbd');
 
@@ -25,6 +25,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-kbd',
   title: 'Core/Kbd'
 };
 
@@ -107,8 +108,8 @@ export const Sizes = {
     const [ xs, sm, md, lg ] = shortcuts.map((shortcut) => within(shortcut).getByText('K'));
 
     await expect(shortcuts).toHaveLength(4);
-    await expect(xs).toHaveClass('text-[10px]', 'px-1');
-    await expect(sm).toHaveClass('text-[11px]', 'px-1.5');
+    await expect(xs).toHaveClass('text-xs', 'px-1');
+    await expect(sm).toHaveClass('text-xs', 'px-1.5');
     await expect(md).toHaveClass('text-xs', 'px-2');
     await expect(lg).toHaveClass('text-sm', 'px-2.5');
   },

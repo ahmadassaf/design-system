@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-05T17:35:00Z",
+  "title": "Design System: Gaudi Design System",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Editorial Blue",
+        "canonical": "#2563eb",
+        "tonalRamp": [ "#172554", "#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#93c5fd", "#dbeafe", "#eff6ff" ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Paper Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": [ "#171717", "#262626", "#404040", "#737373", "#d4d4d4", "#f5f5f5", "#fafafa", "#ffffff" ]
+      },
+      "success": {
+        "role": "semantic",
+        "displayName": "Success Green",
+        "canonical": "#15803d",
+        "tonalRamp": [ "#052e16", "#14532d", "#166534", "#15803d", "#22c55e", "#86efac", "#dcfce7", "#f0fdf4" ]
+      },
+      "warning": {
+        "role": "semantic",
+        "displayName": "Amber Warning",
+        "canonical": "#b45309",
+        "tonalRamp": [ "#451a03", "#78350f", "#92400e", "#b45309", "#d97706", "#fcd34d", "#fef3c7", "#fffbeb" ]
+      },
+      "danger": {
+        "role": "semantic",
+        "displayName": "Red Danger",
+        "canonical": "#dc2626",
+        "tonalRamp": [ "#450a0a", "#7f1d1d", "#991b1b", "#dc2626", "#ef4444", "#fca5a5", "#fee2e2", "#fef2f2" ]
+      },
+      "discovery": {
+        "role": "semantic",
+        "displayName": "Discovery Teal",
+        "canonical": "#0f766e",
+        "tonalRamp": [ "#042f2e", "#134e4a", "#115e59", "#0f766e", "#14b8a6", "#5eead4", "#ccfbf1", "#f0fdfa" ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Large editorial and documentation headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Article and interface prose."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Code, terminal output, keyboard shortcuts, and measured literals."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Low-contrast resting elevation for cards."
+      },
+      {
+        "name": "card-hover",
+        "value": "0 10px 20px -12px rgb(0 0 0 / 0.25)",
+        "purpose": "Interactive hover lift."
+      },
+      {
+        "name": "launcher",
+        "value": "0 24px 48px -18px rgba(15, 23, 42, 0.32)",
+        "purpose": "Command launcher and modal overlay depth."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state",
+        "value": "180ms",
+        "purpose": "Default interactive state transition."
+      },
+      {
+        "name": "feedback",
+        "value": "120ms",
+        "purpose": "Fast press and immediate feedback."
+      },
+      {
+        "name": "standard",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "Default easing for ordinary UI motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "2xl",
+        "value": "1536px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default high-emphasis action control.",
+      "html": "<button class=\"ds-btn-primary\">Read More</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; border: 0; border-radius: var(--ds-radius-control, 0.5rem); background: var(--ds-color-accent, #2563eb); color: var(--ds-color-accent-foreground, #ffffff); padding: 0.75rem 1.5rem; font: 600 0.875rem/1.2 var(--ds-font-sans, system-ui, sans-serif); transition: background-color 180ms cubic-bezier(0.2, 0, 0, 1), transform 120ms cubic-bezier(0.2, 0, 0, 1); } .ds-btn-primary:hover { background: var(--ds-color-accent-dark, #1d4ed8); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ds-color-accent, #2563eb); outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Elevated Card",
+      "kind": "card",
+      "refersTo": "card-elevated",
+      "description": "Default bordered editorial container.",
+      "html": "<article class=\"ds-card\"><h3>Component title</h3><p>Concise supporting copy for an editorial interface surface.</p></article>",
+      "css": ".ds-card { border: 1px solid var(--ds-color-border, #d4d4d4); border-radius: var(--ds-radius-card, 0.5rem); background: var(--ds-color-surface, #ffffff); color: var(--ds-color-text, #171717); padding: 1rem; box-shadow: var(--ds-shadow-card, 0 1px 2px 0 rgb(0 0 0 / 0.05)); font-family: var(--ds-font-sans, system-ui, sans-serif); } .ds-card h3 { margin: 0 0 0.5rem; font-size: 1rem; line-height: 1.25; font-weight: 700; } .ds-card p { margin: 0; color: var(--ds-color-text-muted, #404040); font-size: 0.875rem; line-height: 1.6; }"
+    },
+    {
+      "name": "Field Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Neutral text input with accessible focus treatment.",
+      "html": "<label class=\"ds-field\"><span>Search</span><input placeholder=\"Search articles\" /></label>",
+      "css": ".ds-field { display: grid; gap: 0.5rem; color: var(--ds-color-text, #171717); font-family: var(--ds-font-sans, system-ui, sans-serif); } .ds-field span { font-size: 0.875rem; font-weight: 600; } .ds-field input { min-height: 2.5rem; border: 1px solid var(--ds-color-border, #d4d4d4); border-radius: var(--ds-radius-control, 0.5rem); background: var(--ds-color-surface, #ffffff); color: var(--ds-color-text, #171717); padding: 0.5rem 0.75rem; font-size: 0.875rem; transition: border-color 180ms cubic-bezier(0.2, 0, 0, 1); } .ds-field input:focus-visible { outline: 2px solid var(--ds-color-accent, #2563eb); outline-offset: 2px; }"
+    },
+    {
+      "name": "Soft Pill",
+      "kind": "chip",
+      "refersTo": "pill-soft",
+      "description": "Compact metadata or tag label.",
+      "html": "<span class=\"ds-pill-soft\">Design System</span>",
+      "css": ".ds-pill-soft { display: inline-flex; align-items: center; gap: 0.25rem; border-radius: var(--ds-radius-pill, 0.125rem); background: var(--ds-color-accent-subtle, #eff6ff); color: var(--ds-color-accent-dark, #1d4ed8); padding: 0.125rem 0.625rem; font: 600 0.75rem/1.4 var(--ds-font-sans, system-ui, sans-serif); text-transform: uppercase; letter-spacing: 0; }"
+    },
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Editorial navigation item with active blue state.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">Writing</a><a href=\"#\" aria-current=\"page\">Projects</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 1.25rem; font-family: var(--ds-font-sans, system-ui, sans-serif); } .ds-nav a { color: var(--ds-color-text, #171717); padding: 0.5rem 0.25rem; font-size: 1rem; font-weight: 500; text-decoration: none; } .ds-nav a:hover, .ds-nav a[aria-current='page'] { color: var(--ds-color-accent, #2563eb); } .ds-nav a:focus-visible { outline: 2px solid var(--ds-color-accent, #2563eb); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Editorial Instrument",
+    "overview": "Gaudi is a restrained editorial system for reading, navigating, and composing technical writing. It favors clear hierarchy, compact controls, neutral surfaces, and rare blue accents that signal action, selection, and wayfinding.\n\nThe system should feel precise rather than decorative. Components are practical and reusable, with enough visual detail to support scanning, comparison, and repeated use across blog pages, MDX articles, post chrome, and documentation surfaces.",
+    "keyCharacteristics": [
+      "Neutral reading surfaces with blue used as a functional accent.",
+      "Compact geometry, visible focus, and restrained elevation.",
+      "Separate root, MDX, and runtime entrypoints to keep interfaces lean.",
+      "Dark mode is intentionally composed, not mechanically inverted."
+    ],
+    "rules": [
+      {
+        "name": "The Rare Accent Rule",
+        "body": "Blue is functional, not decorative. Spend it on action, selection, focus, links, and data emphasis before using it for atmosphere.",
+        "section": "colors"
+      },
+      {
+        "name": "The Single Voice Rule",
+        "body": "Use one sans family for interface and editorial UI. Bring in mono only for code, data, or keyboard notation.",
+        "section": "typography"
+      },
+      {
+        "name": "The Border-First Rule",
+        "body": "Prefer border and tonal separation at rest. Add shadow when a surface is floating, modal, or actively interactive.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Gaudi tokens, variants, icons, and exported components before creating a local one-off.",
+      "Do preserve the root, MDX, and runtime entrypoint separation.",
+      "Do keep keyboard focus, dialog focus trapping, alt text, and reduced-motion behavior intact.",
+      "Do use blue to clarify interaction and current state."
+    ],
+    "donts": [
+      "Don't import consuming app data, generated content, or route-specific files into Gaudi.",
+      "Don't copy components into the blog when an exported Gaudi primitive exists.",
+      "Don't use color as the only status cue.",
+      "Don't add large decorative shadows, glass effects, or oversized radii to routine editorial surfaces."
+    ]
+  }
+}

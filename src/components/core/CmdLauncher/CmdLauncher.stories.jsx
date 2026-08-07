@@ -88,15 +88,15 @@ const BlogCommandShell = () => {
           </div>
           <div className='flex items-center gap-3'>
             <MenuSearch setOpen={ setOpen } className='hidden sm:block' />
-            <Button type='button' variant='outline' tone='gray' size='sm' className='sm:hidden' onClick={ () => setOpen(true) }>
+            <Button type='button' variant='outline' tone='neutral' size='sm' className='sm:hidden' onClick={ () => setOpen(true) }>
               Search
             </Button>
           </div>
         </div>
 
         <div className='mt-16 max-w-2xl space-y-3'>
-          <p className='text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400'>Command launcher demo</p>
-          <h3 className='text-3xl font-bold tracking-tight text-gray-950 dark:text-white'>Search the blog without leaving the keyboard.</h3>
+          <p className='text-xs font-semibold uppercase text-blue-600 dark:text-blue-400'>Command launcher demo</p>
+          <h3 className='text-3xl font-bold text-gray-950 dark:text-white'>Search the blog without leaving the keyboard.</h3>
           <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'>
             This mirrors the production header: the search control owns the trigger and the command launcher receives blog posts,
             projects, publications, tags, and thoughts as searchable collections.
@@ -126,10 +126,10 @@ export default {
       },
       page: createComponentDocsPage(componentDocs)
     },
-    layout: 'fullscreen',
-    options: { 'showPanel': false }
+    layout: 'fullscreen'
   },
   tags: [ 'autodocs' ],
+  id: 'core-cmdlauncher',
   title: 'Core/CmdLauncher'
 };
 
@@ -137,8 +137,9 @@ export const Default = {
   name: 'Example',
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const searchTrigger = canvas.queryByRole('button', { 'name': 'Open search' }) || canvas.getByRole('button', { 'name': 'Search' });
 
-    await userEvent.click(canvas.getByRole('button', { 'name': 'Open search' }));
+    await userEvent.click(searchTrigger);
 
     const documentBody = within(document.body);
     const dialog = await documentBody.findByRole('dialog');
@@ -149,6 +150,15 @@ export const Default = {
     await expect(palette.getAllByText('Posts').length).toBeGreaterThan(0);
     await expect(palette.getByText('to select')).toBeInTheDocument();
     await expect(palette.getByText('to navigate')).toBeInTheDocument();
+
+    const visibleItems = () => Array.from(dialog.querySelectorAll('.command-palette-list-item'))
+      .filter((item) => item.offsetParent !== null);
+
+    await userEvent.keyboard('{End}');
+    await expect(visibleItems().at(-1)).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.keyboard('{Home}');
+    await expect(visibleItems()[0]).toHaveAttribute('aria-selected', 'true');
 
     await userEvent.type(search, 'semantic');
 

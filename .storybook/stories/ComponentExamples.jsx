@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import Button from '../../src/components/core/Button';
 import CitationTrackerRuntime from '../../src/components/mdx/CitationTracker';
-import { Button } from '../../src/index';
 
 import mdxContentStyles from '../../src/components/mdx/MdxContent/MdxContent.module.css';
 
@@ -139,7 +139,7 @@ const LayoutContainerPreview = () => (
       <div className='grid gap-6 p-5 lg:grid-cols-[1fr_18rem]'>
         <main className='space-y-5'>
           <section className='rounded-lg border border-gray-200 p-5 dark:border-gray-800'>
-            <p className='text-xs font-semibold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400'>Latest post</p>
+            <p className='text-xs font-semibold uppercase text-blue-600 dark:text-blue-400'>Latest post</p>
             <h2 className='mt-2 text-3xl font-bold text-gray-950 dark:text-white'>Design systems keep editorial rhythm predictable</h2>
             <p className='mt-3 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-300'>The root layout frames navigation, content, background treatment, and footer around the page content.</p>
           </section>
@@ -191,9 +191,9 @@ const ExampleFrame = ({ children, width = 'max-w-3xl' }) => (
 
 const MdxArticleFrame = ({ children }) => (
   <ExampleFrame width='max-w-4xl'>
-    <article className={ `${mdxContentStyles.root} space-y-6 text-[15px] leading-7 text-gray-700 dark:text-gray-300` }>
+    <article className={ `${mdxContentStyles.root} space-y-6 text-sm leading-7 text-gray-700 dark:text-gray-300` }>
       <div className='space-y-2 border-b border-gray-200 pb-4 dark:border-gray-800'>
-        <p className='text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400'>MDX article output</p>
+        <p className='text-xs font-semibold uppercase text-gray-500 dark:text-gray-400'>MDX article output</p>
         <h2 className='text-2xl font-bold leading-tight text-gray-950 dark:text-white'>References in editorial prose</h2>
         <p className='max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400'>
           Authors write bibliography frontmatter and markers like [@HusseinYC18]. This frame mocks the generated output emitted by the blog rehype citation plugin.
@@ -322,7 +322,7 @@ const renderMdxExample = (name, componentModule) => {
         {(open, setOpen) => (
           <ExampleFrame>
             <Button type='button' onClick={ () => setOpen(true) }>Open image modal</Button>
-            <Component isOpen={ open } onClose={ () => setOpen(false) } src='/static/images/logo.svg' alt='Blog logo' caption='Accessible image preview with focus management.' />
+            <Component isOpen={ open } onClose={ () => setOpen(false) } src='/static/images/og-card.jpg' alt='Gaudi design system article preview' caption='Accessible image preview with focus management.' />
           </ExampleFrame>
         )}
       </OpenState>
@@ -420,7 +420,7 @@ const renderMdxExample = (name, componentModule) => {
           <sup id='fnref-1' className='mx-0.5 align-super text-xs'>
             <a
               href='#user-content-fn-1'
-              className='footnote-link inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-indigo-50 px-1.5 text-[11px] font-semibold text-indigo-700 underline-offset-2 hover:bg-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-950 dark:text-indigo-300'
+              className='footnote-link inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-indigo-50 px-1.5 text-xs font-semibold text-indigo-700 underline-offset-2 hover:bg-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-950 dark:text-indigo-300'
               data-footnote-ref='true'
               data-footnote-popover='true'
               data-footnote-number='1'
@@ -448,7 +448,7 @@ const renderMdxExample = (name, componentModule) => {
   case 'LatexText':
     return <ExampleFrame><p>Ordinal text stays readable: <Component>11$^&#123;th&#125;$ International Conference</Component></p></ExampleFrame>;
   case 'Mermaid':
-    return <ExampleFrame><Component id='storybook-mermaid-example' chart={ `flowchart TD
+    return <ExampleFrame><Component id='storybook-mermaid-example' description='A publishing workflow moves from draft to review and then publication.' chart={ `flowchart TD
   A[Draft] --> B[Review]
   B --> C[Publish]` } /></ExampleFrame>;
   case 'Preview':
@@ -576,7 +576,7 @@ const renderPostExample = (name, componentModule) => {
         <div className='grid grid-cols-1 gap-10 xl:grid-cols-12'>
           <article className='xl:col-span-8'>
             <div className='mb-10 rounded-lg border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900'>
-              <p className='text-sm font-semibold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400'>Scrollable article fixture</p>
+              <p className='text-sm font-semibold uppercase text-blue-600 dark:text-blue-400'>Scrollable article fixture</p>
               <h2 className='mt-2 text-2xl font-bold text-gray-950 dark:text-white'>A realistic table of contents example</h2>
               <p className='mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300'>
                 Scroll this story to see the sticky TOC stay in view, collapse inactive branches, and expand the active section as headings pass through the viewport.

@@ -1,10 +1,13 @@
-import { Card, Icon, Pill, Typography } from '../../src/index';
+import Card from '../../src/components/core/Card';
+import Icon from '../../src/components/core/Icon';
+import Pill from '../../src/components/core/Pill';
+import Typography from '../../src/foundations/Typography';
 
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
 const metricStats = [
   [ '86', 'component contracts', 'Folder-level ownership checks across the Gaudi package.' ],
-  [ '7', 'token families', 'Gray, neutral, blue, green, yellow, red, and indigo.' ],
+  [ '10', 'token families', 'Neutral, action, status, review, and attention colors.' ],
   [ '0', 'local component dirs', 'Reusable UI now resolves from the Gaudi package.' ]
 ];
 
@@ -18,14 +21,17 @@ const healthStats = [
   { 'change': '+18', 'label': 'documented stories', 'tone': 'green', 'value': '142' },
   { 'change': '+2', 'label': 'new Core components', 'tone': 'blue', 'value': '2' },
   { 'change': '0', 'label': 'fake links', 'tone': 'gray', 'value': '0' },
-  { 'change': 'AA', 'label': 'contrast target', 'tone': 'indigo', 'value': '4.5:1' }
+  { 'change': 'AA', 'label': 'contrast target', 'tone': 'teal', 'value': '4.5:1' }
 ];
 
 const toneClasses = {
+  'amber': 'bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
   'blue': 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
   'gray': 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
   'green': 'bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300',
-  'indigo': 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300'
+  'indigo': 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300',
+  'rose': 'bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300',
+  'teal': 'bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300'
 };
 
 const MetricGrid = () => (
@@ -34,7 +40,7 @@ const MetricGrid = () => (
       <div key={ label } className='bg-white p-6 dark:bg-gray-950'>
         <dt className='text-sm font-medium text-gray-500 dark:text-gray-400'>{label}</dt>
         <dd className='mt-3'>
-          <span className='block text-4xl font-extrabold tracking-tight text-gray-950 dark:text-white'>{value}</span>
+          <span className='block text-4xl font-extrabold text-gray-950 dark:text-white'>{value}</span>
           <span className='mt-3 block text-sm leading-6 text-gray-600 dark:text-gray-300'>{description}</span>
         </dd>
       </div>
@@ -46,7 +52,7 @@ const ChangelogStats = () => (
   <div className='overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950'>
     {changelog.map(([ date, title, body ], index) => (
       <article key={ title } className='grid gap-4 border-b border-gray-100 p-5 last:border-b-0 dark:border-gray-800 md:grid-cols-[9rem_1fr]'>
-        <time className='text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400'>{date}</time>
+        <time className='text-xs font-semibold uppercase text-blue-600 dark:text-blue-400'>{date}</time>
         <div>
           <div className='flex flex-wrap items-center gap-2'>
             <Typography variant='heading-sm'>{title}</Typography>
@@ -62,8 +68,8 @@ const ChangelogStats = () => (
 const GradientStats = () => (
   <section className='overflow-hidden rounded-lg bg-gray-950 p-8 text-white'>
     <div className='max-w-2xl'>
-      <Pill tone='blue' variant='soft'>system health</Pill>
-      <h3 className='mt-4 text-3xl font-extrabold tracking-tight'>Design-system coverage without local overrides.</h3>
+      <Pill tone='teal' variant='soft'>system health</Pill>
+      <h3 className='mt-4 text-3xl font-extrabold'>Design-system coverage without local overrides.</h3>
       <p className='mt-3 text-sm leading-6 text-white/80'>Use this treatment when numbers need to anchor a release note, migration recap, or quality report.</p>
     </div>
     <div className='mt-8 grid gap-4 md:grid-cols-4'>
@@ -71,7 +77,7 @@ const GradientStats = () => (
         <Card key={ item.label } variant='flat' className='border-white/10 bg-white/5 text-white'>
           <div className='flex items-start justify-between gap-4'>
             <div>
-              <p className='text-3xl font-extrabold tracking-tight'>{item.value}</p>
+              <p className='text-3xl font-extrabold'>{item.value}</p>
               <p className='mt-2 text-xs leading-5 text-white/70'>{item.label}</p>
             </div>
             <span className={ `rounded px-2 py-1 text-xs font-semibold ${toneClasses[item.tone]}` }>{item.change}</span>
@@ -141,7 +147,7 @@ const variantCode = {
   ))}
 </div>`,
   'dark': `<section className='rounded-lg bg-gray-950 p-8 text-white'>
-  <Pill tone='blue' variant='soft'>system health</Pill>
+  <Pill tone='teal' variant='soft'>system health</Pill>
   <Typography variant='heading-lg'>Design-system coverage.</Typography>
   <div className='grid gap-4 md:grid-cols-4'>
     {healthStats.map((item) => (
@@ -179,14 +185,13 @@ export default {
 };
 
 export const Default = {
-  'name': 'Stats Sections',
+  'name': 'Overview',
   'render': () => (
     <Page
       title='Stats Sections'
-      intro='Composable stats blocks for release notes, migration summaries, system-health snapshots, and compact editorial metrics.'
-      kicker='Blocks'
+      intro='Reference stats recipes for release notes, migration summaries, system-health snapshots, and compact editorial metrics.'
     >
-      <Section title='Usage' description='Stats blocks are editorial compositions. Keep metric labels visible and pair numbers with explanatory text.'>
+      <Section title='Usage' description='These stats examples are reference recipes, not package exports. Keep metric labels visible and pair numbers with explanatory text.'>
         <CodeBlock code={ usageCode } />
       </Section>
       <Section title='Variant Rules' description='Choose the presentation from the density and importance of the metrics.'>
@@ -208,7 +213,7 @@ export const Default = {
         <CompactStats />
         <CodeBlock code={ variantCode.compact } />
       </Section>
-      <Section title='Implementation Notes' description='Stats blocks must remain readable outside the visual treatment.'>
+      <Section title='Implementation Notes' description='Stats recipes must remain readable outside the visual treatment.'>
         <ul className='grid gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
           <li>Use semantic sections with labelled headings.</li>
           <li>Use <InlineCode>Card</InlineCode>, <InlineCode>Pill</InlineCode>, and token color classes instead of bespoke surfaces.</li>

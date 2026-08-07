@@ -27,9 +27,17 @@ import { Button, PostHeader } from '@gaudi/design-system';
 import '@gaudi/design-system/global.css';
 ```
 
+For route-level app code that imports one or two components, prefer leaf entrypoints
+so bundlers do not traverse the full convenience barrel:
+
+```js
+import Button from '@gaudi/design-system/core/Button';
+import PostHeader from '@gaudi/design-system/post/PostHeader';
+```
+
 MDX article components are exported from the MDX entrypoint (they are intentionally
 not re-exported from the root entry, so their heavy peer dependencies — recharts,
-framer-motion, mermaid, react-latex-next — stay out of apps that don't render articles):
+framer-motion, mermaid, katex — stay out of apps that don't render articles):
 
 ```js
 import { Callout, CitationPopover, CodeGroupTabs, Preview, Table } from '@gaudi/design-system/mdx';
@@ -48,7 +56,7 @@ footer, command launcher, theme switcher) read metadata and navigation links fro
 `SiteConfigProvider` context; `LayoutContainer` wires it up for you:
 
 ```jsx
-import LayoutContainer from '@gaudi/design-system/components/layout/LayoutContainer';
+import LayoutContainer from '@gaudi/design-system/layout/LayoutContainer';
 
 <LayoutContainer
   metadata={ siteMetadata }        // { author, title, locale, theme, github, linkedin, twitter, email, … }

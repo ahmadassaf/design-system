@@ -1,23 +1,53 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Button, buttonVariants } from '../../../index';
+import Button, { buttonTones, buttonVariants } from './Button';
 
 const componentDocs = getComponentDocs('Core/Button');
+const toneOptions = [ ...buttonTones ];
 
 export default {
   argTypes: {
+    'children': {
+      'control': 'text',
+      'description': 'Visible button label or content.'
+    },
+    'disabled': {
+      'control': 'boolean',
+      'description': 'Disables native buttons and removes disabled links from the tab order.',
+      'table': { 'defaultValue': { 'summary': false }, 'type': { 'summary': 'boolean' } }
+    },
+    'radius': {
+      'control': 'select',
+      'description': 'Controls the button corner radius.',
+      'options': [ 'sm', 'md', 'lg', 'full' ],
+      'table': { 'defaultValue': { 'summary': 'md' } }
+    },
     'size': {
       'control': 'select',
-      'options': [ 'xs', 'sm', 'md', 'lg' ]
+      'description': 'Controls button spacing and text size.',
+      'options': [ 'xs', 'sm', 'md', 'lg' ],
+      'table': { 'defaultValue': { 'summary': 'md' } }
     },
     'tone': {
       'control': 'select',
-      'options': [ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ]
+      'description': 'Maps the action to an approved semantic color family.',
+      'options': toneOptions,
+      'table': { 'defaultValue': { 'summary': 'accent' } }
     },
     'variant': {
       'control': 'select',
-      'options': [ ...Object.keys(buttonVariants.variants.variant) ]
+      'description': 'Sets the action hierarchy and visual treatment.',
+      'options': [ ...Object.keys(buttonVariants.variants.variant) ],
+      'table': { 'defaultValue': { 'summary': 'solid' } }
     }
+  },
+  args: {
+    children: 'Button',
+    disabled: false,
+    radius: 'md',
+    size: 'md',
+    tone: 'accent',
+    variant: 'solid'
   },
   component: Button,
   parameters: {
@@ -29,6 +59,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-button',
   title: 'Core/Button'
 };
 
@@ -37,16 +68,21 @@ export const Primary = {
     'children': 'Read article',
     'onClick': fn(),
     'size': 'md',
-    'tone': 'blue',
+    'tone': 'accent',
     'variant': 'solid'
   },
   'play': async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const button = canvas.getByRole('button', { 'name': 'Read article' });
+    const button = canvas.getByRole('button', { 'name': args.children });
+    const expectedClasses = buttonVariants({
+      radius: args.radius,
+      size: args.size,
+      tone: args.tone,
+      variant: args.variant
+    }).split(' ');
 
     await expect(button).toHaveAttribute('type', 'button');
-    await expect(button).toHaveClass('bg-blue-600', 'text-white');
-    await expect(button).toHaveClass('rounded-md', 'px-6', 'py-3');
+    await expect(button).toHaveClass(...expectedClasses);
 
     await userEvent.click(button);
 
@@ -58,7 +94,7 @@ export const Secondary = {
   'args': {
     'children': 'Browse posts',
     'size': 'md',
-    'tone': 'gray',
+    'tone': 'neutral',
     'variant': 'outline'
   },
   'play': async ({ canvasElement }) => {
@@ -67,7 +103,7 @@ export const Secondary = {
 
     await expect(button).toBeEnabled();
     await expect(button).toHaveAttribute('type', 'button');
-    await expect(button).toHaveClass('border', 'border-gray-300', 'text-gray-700');
+    await expect(button).toHaveClass('border', 'border-border', 'text-foreground');
   }
 };
 
@@ -75,7 +111,7 @@ export const LinkButton = {
   'args': {
     'children': 'Open blog',
     'href': '/blog',
-    'tone': 'blue',
+    'tone': 'accent',
     'variant': 'outline'
   },
   'play': async ({ canvasElement }) => {
@@ -83,7 +119,7 @@ export const LinkButton = {
     const link = canvas.getByRole('link', { 'name': 'Open blog' });
 
     await expect(new URL(link.href).pathname).toBe('/blog');
-    await expect(link).toHaveClass('border', 'border-blue-200', 'text-blue-700');
+    await expect(link).toHaveClass('border', 'border-accent-muted', 'text-accent');
     await expect(link).not.toHaveAttribute('target');
     await expect(link).not.toHaveAttribute('aria-disabled');
   }
@@ -93,16 +129,16 @@ export const AllVariants = {
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByRole('button', { name: 'solid' })).toHaveClass('bg-blue-600', 'text-white');
-    await expect(canvas.getByRole('button', { name: 'soft' })).toHaveClass('bg-blue-50', 'text-blue-700');
-    await expect(canvas.getByRole('button', { name: 'outline' })).toHaveClass('border', 'border-blue-200', 'text-blue-700');
-    await expect(canvas.getByRole('button', { name: 'ghost' })).toHaveClass('text-blue-700');
-    await expect(canvas.getByRole('button', { name: 'subtle' })).toHaveClass('p-0', 'text-blue-600');
+    await expect(canvas.getByRole('button', { name: 'solid' })).toHaveClass('bg-accent', 'text-accent-foreground');
+    await expect(canvas.getByRole('button', { name: 'soft' })).toHaveClass('bg-accent-subtle', 'text-accent');
+    await expect(canvas.getByRole('button', { name: 'outline' })).toHaveClass('border', 'border-accent-muted', 'text-accent');
+    await expect(canvas.getByRole('button', { name: 'ghost' })).toHaveClass('text-accent');
+    await expect(canvas.getByRole('button', { name: 'subtle' })).toHaveClass('min-h-11', 'p-0', 'text-accent');
   },
   'render': () => (
     <div className='flex max-w-4xl flex-wrap items-center gap-4 p-6'>
       {Object.keys(buttonVariants.variants.variant).map((variant) => (
-        <Button key={ variant } variant={ variant } tone='blue'>
+        <Button key={ variant } variant={ variant } tone='accent'>
           {variant}
         </Button>
       ))}
@@ -132,17 +168,18 @@ export const Tones = {
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByRole('button', { name: 'gray' })).toHaveClass('bg-gray-700', 'text-white');
-    await expect(canvas.getByRole('button', { name: 'neutral' })).toHaveClass('bg-neutral-700', 'text-white');
-    await expect(canvas.getByRole('button', { name: 'blue' })).toHaveClass('bg-blue-600', 'text-white');
-    await expect(canvas.getByRole('button', { name: 'green' })).toHaveClass('bg-green-700', 'text-white');
-    await expect(canvas.getByRole('button', { name: 'yellow' })).toHaveClass('bg-yellow-500', 'text-gray-950');
-    await expect(canvas.getByRole('button', { name: 'red' })).toHaveClass('bg-red-600', 'text-white');
-    await expect(canvas.getByRole('button', { name: 'indigo' })).toHaveClass('bg-indigo-600', 'text-white');
+    await expect(canvas.getByRole('button', { name: 'neutral' })).toHaveClass('bg-foreground', 'text-text-inverse');
+    await expect(canvas.getByRole('button', { name: 'accent' })).toHaveClass('bg-accent', 'text-accent-foreground');
+    await expect(canvas.getByRole('button', { name: 'attention' })).toHaveClass('bg-attention', 'text-attention-foreground');
+    await expect(canvas.getByRole('button', { name: 'danger' })).toHaveClass('bg-danger', 'text-danger-foreground');
+    await expect(canvas.getByRole('button', { name: 'discovery' })).toHaveClass('bg-discovery', 'text-discovery-foreground');
+    await expect(canvas.getByRole('button', { name: 'info' })).toHaveClass('bg-info', 'text-info-foreground');
+    await expect(canvas.getByRole('button', { name: 'success' })).toHaveClass('bg-success', 'text-success-foreground');
+    await expect(canvas.getByRole('button', { name: 'warning' })).toHaveClass('bg-warning', 'text-warning-foreground');
   },
   'render': () => (
     <div className='flex max-w-4xl flex-wrap items-center gap-3 p-6'>
-      {[ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ].map((tone) => (
+      {toneOptions.map((tone) => (
         <Button key={ tone } tone={ tone }>{tone}</Button>
       ))}
     </div>

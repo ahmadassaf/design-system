@@ -1,3 +1,8 @@
+import Check from 'lucide-react/dist/esm/icons/check.js';
+import Copy from 'lucide-react/dist/esm/icons/copy.js';
+import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert.js';
+import { useState } from 'react';
+
 const escapeHtml = (value) => value
   .replaceAll('&', '&amp;')
   .replaceAll('"', '&quot;')
@@ -43,13 +48,43 @@ const languageLabels = {
   'tsx': 'TSX'
 };
 
-export const HighlightedCode = ({ code, language = 'jsx' }) => (
-  <div className='overflow-hidden rounded-lg border border-gray-800 bg-gray-950 shadow-sm'>
-    <div className='border-b border-gray-800 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400'>
-      {languageLabels[language] || language}
+export const HighlightedCode = ({ code, copyable = true, language = 'jsx' }) => {
+  const [ copyState, setCopyState ] = useState('idle');
+  const copyLabel = copyState === 'copied' ? 'Copied' : copyState === 'error' ? 'Retry copy' : 'Copy code';
+  const copyStatus = copyState === 'copied' ? 'Code copied.' : copyState === 'error' ? 'Copy failed. Select Retry copy to try again.' : '';
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopyState('copied');
+    } catch {
+      setCopyState('error');
+    }
+  };
+
+  return (
+    <div className='overflow-hidden rounded-lg border border-gray-800 bg-gray-950 shadow-sm'>
+      <div className='flex min-h-10 items-center justify-between gap-3 border-b border-gray-800 px-4 py-1 text-xs font-semibold uppercase text-gray-400'>
+        <span>{languageLabels[language] || language}</span>
+        {copyable ? (
+          <>
+            <button
+              type='button'
+              onClick={ handleCopy }
+              className='inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-md px-3 text-gray-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400'
+              aria-label={ copyLabel }
+              title={ copyLabel }
+            >
+              {copyState === 'copied' ? <Check aria-hidden='true' size={ 16 } /> : copyState === 'error' ? <TriangleAlert aria-hidden='true' size={ 16 } /> : <Copy aria-hidden='true' size={ 16 } />}
+              {copyState === 'idle' ? null : <span>{copyLabel}</span>}
+            </button>
+            <span className='sr-only' aria-live='polite'>{copyStatus}</span>
+          </>
+        ) : null}
+      </div>
+      <pre className='overflow-auto whitespace-pre-wrap break-words p-4 text-left text-xs leading-6 text-gray-100'>
+        <code dangerouslySetInnerHTML={{ '__html': highlightCode(code) }} />
+      </pre>
     </div>
-    <pre className='overflow-auto whitespace-pre-wrap break-words p-4 text-left text-xs leading-6 text-gray-100'>
-      <code dangerouslySetInnerHTML={{ '__html': highlightCode(code) }} />
-    </pre>
-  </div>
-);
+  );
+};

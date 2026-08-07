@@ -2,7 +2,7 @@ import { expect } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
-import { MenuLogo } from '../../../index';
+import MenuLogo from './MenuLogo';
 
 import * as componentModule from './index';
 
@@ -22,7 +22,7 @@ export default {
       page: createComponentDocsPage(componentDocs)
     }
   },
-  tags: [ '!autodocs', '!dev' ],
+  tags: [ '!autodocs' ],
   title: 'Navigation/MenuLogo'
 };
 

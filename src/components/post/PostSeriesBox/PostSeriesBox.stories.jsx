@@ -59,18 +59,20 @@ export const Example = {
   }
 };
 
-export const EmptySeries = {
+export const NoSeries = {
   args: {
     series: []
   },
   render: (args) => (
-    <div className='max-w-3xl p-6'>
+    <div className='max-w-3xl space-y-3 p-6'>
       <PostSeriesBox { ...args } />
+      <p className='text-sm text-gray-600 dark:text-gray-300'>No series navigation is rendered when a post does not belong to a series.</p>
     </div>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
     await expect(canvas.queryByRole('button')).not.toBeInTheDocument();
+    await expect(canvas.getByText('No series navigation is rendered when a post does not belong to a series.')).toBeVisible();
   }
 };

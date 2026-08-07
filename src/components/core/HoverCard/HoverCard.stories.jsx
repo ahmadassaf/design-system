@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-hovercard',
   title: 'Core/HoverCard'
 };
 
@@ -23,7 +24,7 @@ export const Example = {
   render: () => (
     <StoryStage className='flex items-center justify-center' minHeight='min-h-72'>
       <HoverCard
-        trigger={ <button type='button' className='text-sm font-semibold text-blue-600'>Knowledge graphs</button> }
+        trigger={ <button type='button' className='min-h-11 text-sm font-semibold text-blue-600'>Knowledge graphs</button> }
         content='Graph-shaped context for linking concepts, entities, and sources.'
       />
     </StoryStage>
@@ -53,7 +54,7 @@ export const RichContent = {
   render: () => (
     <StoryStage className='flex items-center justify-center' minHeight='min-h-72'>
       <HoverCard
-        trigger={ <button type='button' className='rounded-md bg-gray-950 px-3 py-2 text-sm font-semibold text-white'>Gaudi</button> }
+        trigger={ <button type='button' className='min-h-11 rounded-md bg-gray-950 px-3 py-2 text-sm font-semibold text-white'>Gaudi</button> }
         content={ (
           <div className='space-y-2'>
             <p className='font-semibold text-gray-950 dark:text-white'>Gaudi Design System</p>

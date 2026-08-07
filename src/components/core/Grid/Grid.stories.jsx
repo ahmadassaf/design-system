@@ -1,7 +1,7 @@
 import { expect, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
-import { Grid, GridItem } from '../../../index';
+import { Grid, GridItem } from './Grid';
 
 const componentDocs = getComponentDocs('Core/Grid');
 
@@ -26,6 +26,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-grid',
   title: 'Core/Grid'
 };
 

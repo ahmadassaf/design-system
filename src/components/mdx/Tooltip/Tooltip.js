@@ -56,7 +56,7 @@ export default function Tooltip({ message, text, children }) {
       <button
         type='button'
         aria-label='More information'
-        className='group relative ml-1 inline-flex items-center align-middle rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500'
+        className='ds-control-hit-target group relative ml-1 inline-flex items-center align-middle rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500'
         aria-describedby={ tooltipText ? tooltipId : undefined }
         onBlur={ () => setTooltipOpen(false) }
         onClick={ () => setTooltipOpen(!tooltipOpen) }

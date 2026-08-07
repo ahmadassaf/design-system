@@ -1,5 +1,10 @@
+import Card from '../../src/components/core/Card';
+import { Grid, GridItem } from '../../src/components/core/Grid';
+import Icon from '../../src/components/core/Icon';
+import Link from '../../src/components/core/Link';
+import Pill from '../../src/components/core/Pill';
 import Post from '../../src/components/post/Post';
-import { Card, Grid, GridItem, Icon, Link, Pill, Typography } from '../../src/index';
+import Typography from '../../src/foundations/Typography';
 
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
@@ -96,7 +101,7 @@ const ArchiveBlog = () => (
   <div className='rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950'>
     {posts.map((post) => (
       <Link key={ post.slug } href='' className='grid gap-3 border-b border-gray-100 p-4 last:border-b-0 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900 md:grid-cols-[8rem_1fr_auto]'>
-        <time className='text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400'>{post.date.slice(0, 4)}</time>
+        <time className='text-xs font-semibold uppercase text-gray-500 dark:text-gray-400'>{post.date.slice(0, 4)}</time>
         <span className='text-sm font-semibold text-gray-950 dark:text-white'>{post.title}</span>
         <span className='text-xs capitalize text-gray-500 dark:text-gray-400'>{post.category}</span>
       </Link>
@@ -188,20 +193,19 @@ export default {
 };
 
 export const Default = {
-  'name': 'Blog Sections',
+  'name': 'Overview',
   'render': () => (
     <Page
       title='Blog Sections'
-      intro='Blog-listing blocks that match the current editorial system: feature lead, compact list, cards, and archive treatments.'
-      kicker='Blocks'
+      intro='Reference recipes for blog listings that match the current editorial system: feature lead, compact list, cards, and archive treatments.'
     >
-      <Section title='Usage' description='Blog section blocks are page compositions. Prefer the package post/card primitives and pass real content records from the app.'>
+      <Section title='Usage' description='These are reference page recipes, not package block exports. Compose them from the exported Post and Card primitives and pass real content records from the app.'>
         <CodeBlock code={ usageCode } />
       </Section>
       <Section title='Variant Rules' description='Choose the layout from reading intent, not decoration.'>
         <VariantTable />
       </Section>
-      <Section title='Available Variants' description='The block shapes currently documented for blog listing pages.'>
+      <Section title='Available Variants' description='The recipe shapes currently documented for blog listing pages.'>
         <BlogSectionVariants />
       </Section>
       <Section title='Featured Lead' description='Use for index pages where one article should lead the page.'>

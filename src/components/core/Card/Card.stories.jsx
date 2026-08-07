@@ -1,6 +1,8 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, within } from 'storybook/test';
-import { Button, Card, Pill } from '../../../index';
+import Button from '../Button';
+import Pill from '../Pill';
+import Card from './Card';
 
 const componentDocs = getComponentDocs('Core/Card');
 
@@ -9,6 +11,10 @@ export default {
     'padding': {
       'control': 'select',
       'options': [ 'none', 'sm', 'md', 'lg' ]
+    },
+    'titleLevel': {
+      'control': 'select',
+      'options': [ 2, 3, 4, 5, 6 ]
     },
     'variant': {
       'control': 'select',
@@ -25,6 +31,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-card',
   title: 'Core/Card'
 };
 
@@ -40,7 +47,7 @@ export const Variants = {
     const canvas = within(canvasElement);
 
     for (const variant of [ 'elevated', 'outline', 'soft', 'flat' ]) {
-      const heading = canvas.getByRole('heading', { 'level': 4, 'name': variant });
+      const heading = canvas.getByRole('heading', { 'level': 3, 'name': variant });
       const card = heading.closest('div')?.parentElement;
 
       await expect(heading).toBeVisible();
@@ -56,7 +63,7 @@ export const Default = {
   },
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const heading = canvas.getByRole('heading', { 'level': 4, 'name': 'Design System Card' });
+    const heading = canvas.getByRole('heading', { 'level': 3, 'name': 'Design System Card' });
     const card = heading.closest('div')?.parentElement;
     const subtitle = canvas.getByText('Reusable content frame with title, description, and optional actions.');
 
@@ -73,7 +80,7 @@ export const WithContent = {
       <Card title='Building with tokens' subtitle='Cards should be plain containers, not layout decoration.'>
         <div className='mt-4 flex items-center gap-3'>
           <Pill tone='blue'>Foundations</Pill>
-          <Button variant='outline' tone='gray' size='sm'>Open</Button>
+          <Button variant='outline' tone='neutral' size='sm'>Open</Button>
         </div>
       </Card>
     </div>
@@ -81,7 +88,7 @@ export const WithContent = {
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByRole('heading', { 'level': 4, 'name': 'Building with tokens' })).toBeInTheDocument();
+    await expect(canvas.getByRole('heading', { 'level': 3, 'name': 'Building with tokens' })).toBeInTheDocument();
     await expect(canvas.getByText('Cards should be plain containers, not layout decoration.')).toBeVisible();
     await expect(canvas.getByText('Foundations')).toBeVisible();
     await expect(canvas.getByRole('button', { 'name': 'Open' })).toBeEnabled();
@@ -102,7 +109,7 @@ export const Padding = {
     const canvas = within(canvasElement);
 
     for (const padding of [ 'none', 'sm', 'md', 'lg' ]) {
-      await expect(canvas.getByRole('heading', { 'level': 4, 'name': padding })).toBeVisible();
+      await expect(canvas.getByRole('heading', { 'level': 3, 'name': padding })).toBeVisible();
     }
 
     await expect(canvas.getByText('Content supplies its own spacing.')).toBeVisible();
@@ -121,7 +128,7 @@ export const Interactive = {
   ),
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const heading = canvas.getByRole('heading', { 'level': 4, 'name': 'Interactive card' });
+    const heading = canvas.getByRole('heading', { 'level': 3, 'name': 'Interactive card' });
     const card = heading.closest('div')?.parentElement;
     const link = canvas.getByRole('link', { 'name': 'Open article' });
 

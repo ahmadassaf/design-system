@@ -15,6 +15,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-datatable',
   title: 'Core/DataTable'
 };
 
@@ -37,10 +38,13 @@ export const Example = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const table = canvas.getByRole('table');
+    const scrollRegion = canvas.getByRole('region', { name: 'Scrollable data table' });
     const headers = canvas.getAllByRole('columnheader');
     const rows = canvas.getAllByRole('row');
 
     expect(table).toBeVisible();
+    expect(scrollRegion).toHaveAttribute('tabindex', '0');
+    expect(scrollRegion).toHaveAccessibleDescription('Scroll horizontally to see all columns.');
     expect(headers.map((header) => header.textContent)).toEqual([ 'Component', 'Layer', 'Status' ]);
     headers.forEach((header) => {
       expect(header).toHaveAttribute('scope', 'col');
@@ -78,10 +82,12 @@ export const WithCaptionAndCustomCells = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const table = canvas.getByRole('table', { name: 'Core component status' });
+    const scrollRegion = canvas.getByRole('region', { name: 'Core component status scrollable table' });
     const caption = canvas.getByText('Core component status');
     const statusBadges = canvas.getAllByText('Ready');
 
     expect(table).toBeVisible();
+    expect(scrollRegion).toHaveAttribute('tabindex', '0');
     expect(caption.tagName).toBe('CAPTION');
     expect(statusBadges).toHaveLength(2);
     statusBadges.forEach((badge) => {

@@ -8,12 +8,18 @@ export const Pagination = ({ children, className, label = 'Pagination' }) => <na
 export const PaginationContent = ({ children, className }) => <div role='list' className={ cn('m-0 flex flex-row flex-nowrap items-center gap-1 p-0', className) }>{children}</div>;
 export const PaginationItem = ({ children, className }) => <div role='listitem' className={ cn('m-0 p-0', className) }>{children}</div>;
 
-const actionClassName = 'group inline-flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition-all duration-200 hover:border-blue-300 hover:bg-gray-50 hover:text-blue-600 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:border-border-dark dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400 dark:focus-visible:ring-offset-gray-950';
-const disabledActionClassName = 'inline-flex cursor-not-allowed items-center rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-400 dark:border-border-dark dark:bg-gray-800 dark:text-gray-600';
+const actionClassName = 'group inline-flex min-h-11 items-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition-all duration-200 hover:border-blue-300 hover:bg-gray-50 hover:text-blue-600 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 motion-reduce:transition-none dark:border-border-dark dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400 dark:focus-visible:ring-offset-gray-950';
+const disabledActionClassName = 'inline-flex min-h-11 cursor-not-allowed items-center rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-400 dark:border-border-dark dark:bg-gray-800 dark:text-gray-600';
 
 export const PaginationLink = ({ children, className, disabled = false, href, isActive, onClick }) => {
   const classes = cn(
-    'inline-flex size-9 cursor-pointer items-center justify-center rounded-md text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-blue-400 dark:focus-visible:ring-offset-gray-950', isActive && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-white dark:text-white dark:hover:text-white', disabled && 'pointer-events-none cursor-not-allowed opacity-45', className
+    'inline-flex size-11 cursor-pointer items-center justify-center rounded-md text-sm font-medium',
+    'text-gray-700 transition-colors hover:bg-gray-100 hover:text-blue-600 hover:no-underline',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 motion-reduce:transition-none',
+    'dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-blue-400 dark:focus-visible:ring-offset-gray-950',
+    isActive && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-white dark:text-white dark:hover:text-white',
+    disabled && 'pointer-events-none cursor-not-allowed opacity-45',
+    className
   );
 
   if (disabled)
@@ -50,7 +56,7 @@ export const PaginationPrevious = ({ className, disabled = false, href = '#', la
   if (onClick)
     return <button type='button' onClick={ onClick } className={ classes } { ...props }><Icon name='ArrowLeft' decorative size='xs' className='mr-2 transition-transform duration-200 group-hover:-translate-x-1' />{label}</button>;
 
-  return <Link href={ href } variant='bare' className={ classes } { ...props }><Icon name='ArrowLeft' decorative size='xs' className='mr-2 transition-transform duration-200 group-hover:-translate-x-1' />{label}</Link>;
+  return <Link href={ href } variant='bare' className={ classes } { ...props }><Icon name='ArrowLeft' decorative size='xs' className='mr-2 transition-transform duration-200 group-hover:-translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0' />{label}</Link>;
 };
 
 export const PaginationNext = ({ className, disabled = false, href = '#', label = 'Next', onClick, ...props }) => {
@@ -62,10 +68,10 @@ export const PaginationNext = ({ className, disabled = false, href = '#', label 
   if (onClick)
     return <button type='button' onClick={ onClick } className={ classes } { ...props }>{label}<Icon name='ArrowRight' decorative size='xs' className='ml-2 transition-transform duration-200 group-hover:translate-x-1' /></button>;
 
-  return <Link href={ href } variant='bare' className={ classes } { ...props }>{label}<Icon name='ArrowRight' decorative size='xs' className='ml-2 transition-transform duration-200 group-hover:translate-x-1' /></Link>;
+  return <Link href={ href } variant='bare' className={ classes } { ...props }>{label}<Icon name='ArrowRight' decorative size='xs' className='ml-2 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0' /></Link>;
 };
 
-export const PaginationEllipsis = ({ className }) => <span className={ cn('inline-flex size-9 items-center justify-center text-sm text-gray-500', className) }>...</span>;
+export const PaginationEllipsis = ({ className }) => <span className={ cn('inline-flex size-11 items-center justify-center text-sm text-gray-500', className) }>...</span>;
 
 export const PaginationStatus = ({ className, currentPage = 1, getHref = (page) => `?page=${page}`, onPageChange, totalPages = 1 }) => (
   <span className={ cn('group/pagination-status relative inline-flex justify-center', className) }>

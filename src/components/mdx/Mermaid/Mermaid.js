@@ -10,13 +10,21 @@
  * @version 1.0.0
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+
+import sanitizeHtml from '../../../utilities/sanitizeHtml';
 
 // Lazy load mermaid only when component is used
 const loadMermaid = async() => {
-  const { 'default': mermaid } = await import('mermaid/dist/mermaid.esm.min.mjs');
+  const { 'default': mermaid } = await import('mermaid/dist/mermaid.core.mjs');
 
   return mermaid;
+};
+
+const getThemeColor = (name) => {
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  return value || 'currentColor';
 };
 
 /**
@@ -25,14 +33,17 @@ const loadMermaid = async() => {
  * @param {Object} props - Component props
  * @param {string} props.chart - The mermaid chart definition
  * @param {string} [props.className] - Additional CSS classes
+ * @param {string} [props.description] - Accessible text alternative
  * @param {string} [props.id] - Custom ID for the diagram
  * @returns {JSX.Element} Rendered Mermaid diagram
  *
  * @example
- * <Mermaid chart="graph TD; A-->B; B-->C;" />
+ * <Mermaid chart="graph TD; A-->B; B-->C;" description="A flows to B, then B flows to C." />
  */
-const Mermaid = ({ chart, className = '', id }) => {
+const Mermaid = ({ chart, className = '', description = 'Diagram', id }) => {
   const elementRef = useRef(null);
+  const generatedDescriptionId = useId();
+  const descriptionId = id ? `${id}-description` : generatedDescriptionId;
   const [ svg, setSvg ] = useState('');
   const [ error, setError ] = useState('');
   const [ isClient, setIsClient ] = useState(false);
@@ -70,15 +81,15 @@ const Mermaid = ({ chart, className = '', id }) => {
           'startOnLoad': false,
           'theme': 'default',
           'themeVariables': {
-            'altSectionBkgColor': '#ffffff',
-            'gridColor': '#e5e7eb',
-            'lineColor': '#6b7280',
-            'primaryBorderColor': '#d1d5db',
-            'primaryColor': '#3b82f6',
-            'primaryTextColor': '#1f2937',
-            'secondaryColor': '#e5e7eb',
-            'sectionBkgColor': '#f9fafb',
-            'tertiaryColor': '#f3f4f6'
+            'altSectionBkgColor': getThemeColor('--ds-color-mermaid-alt-section-bg'),
+            'gridColor': getThemeColor('--ds-color-mermaid-grid'),
+            'lineColor': getThemeColor('--ds-color-mermaid-line'),
+            'primaryBorderColor': getThemeColor('--ds-color-mermaid-primary-border'),
+            'primaryColor': getThemeColor('--ds-color-mermaid-primary'),
+            'primaryTextColor': getThemeColor('--ds-color-mermaid-primary-text'),
+            'secondaryColor': getThemeColor('--ds-color-mermaid-secondary'),
+            'sectionBkgColor': getThemeColor('--ds-color-mermaid-section-bg'),
+            'tertiaryColor': getThemeColor('--ds-color-mermaid-tertiary')
           }
         });
 
@@ -96,15 +107,14 @@ const Mermaid = ({ chart, className = '', id }) => {
 
           if (cancelled) return;
 
-          setSvg(renderedSvg);
+          setSvg(sanitizeHtml(renderedSvg, { 'allowStyleTags': true }));
           setError('');
         } finally {
           renderContainer.remove();
         }
-      } catch (err) {
+      } catch {
         if (cancelled) return;
 
-        console.error('Mermaid rendering error:', err);
         setError('Failed to render diagram');
         setSvg('');
       }
@@ -136,7 +146,7 @@ const Mermaid = ({ chart, className = '', id }) => {
     return (
       <div className={ `mermaid-error bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 my-4 ${className}` }>
         <div className='flex items-center'>
-          <svg className='h-5 w-5 text-red-500 mr-2' fill='currentColor' viewBox='0 0 20 20'>
+          <svg className='h-5 w-5 text-red-500 mr-2' fill='currentColor' viewBox='0 0 20 20' aria-hidden='true'>
             <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z' clipRule='evenodd' />
           </svg>
           <span className='text-red-700 dark:text-red-300 text-sm font-medium'>
@@ -165,11 +175,15 @@ const Mermaid = ({ chart, className = '', id }) => {
     );
 
   return (
-    <div
+    <figure
       ref={ elementRef }
+      aria-labelledby={ descriptionId }
       className={ `mermaid-diagram bg-white dark:bg-gray-900 rounded-lg p-4 my-6 border border-gray-200 dark:border-gray-700 overflow-x-auto ${className}` }
-      dangerouslySetInnerHTML={{ '__html': svg }}
-    />
+      role='img'
+    >
+      <div aria-hidden='true' dangerouslySetInnerHTML={{ '__html': svg }} />
+      <figcaption id={ descriptionId } className='sr-only'>{description}</figcaption>
+    </figure>
   );
 };
 

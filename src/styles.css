@@ -8,18 +8,55 @@
     --ds-color-accent-foreground: #ffffff;
     --ds-color-accent-muted: #dbeafe;
     --ds-color-accent-subtle: #eff6ff;
+    --ds-color-attention: #be123c;
+    --ds-color-attention-border: #fecdd3;
+    --ds-color-attention-foreground: #ffffff;
+    --ds-color-attention-muted: #ffe4e6;
+    --ds-color-attention-subtle: #fff1f2;
     --ds-color-border: #d4d4d4;
     --ds-color-border-dark: #303030;
     --ds-color-border-muted: #f5f5f5;
+    --ds-color-danger: #dc2626;
+    --ds-color-danger-border: #fecaca;
+    --ds-color-danger-foreground: #ffffff;
+    --ds-color-danger-muted: #fee2e2;
+    --ds-color-danger-subtle: #fef2f2;
     --ds-color-dark: #171717;
+    --ds-color-discovery: #0f766e;
+    --ds-color-discovery-border: #99f6e4;
+    --ds-color-discovery-foreground: #ffffff;
+    --ds-color-discovery-muted: #ccfbf1;
+    --ds-color-discovery-subtle: #f0fdfa;
+    --ds-color-info: #2563eb;
+    --ds-color-info-border: #bfdbfe;
+    --ds-color-info-foreground: #ffffff;
+    --ds-color-info-muted: #dbeafe;
+    --ds-color-info-subtle: #eff6ff;
     --ds-color-surface: #ffffff;
     --ds-color-surface-dark: #171717;
     --ds-color-surface-muted: #fafafa;
     --ds-color-surface-raised: #ffffff;
+    --ds-color-success: #15803d;
+    --ds-color-success-border: #bbf7d0;
+    --ds-color-success-foreground: #ffffff;
+    --ds-color-success-muted: #dcfce7;
+    --ds-color-success-subtle: #f0fdf4;
     --ds-color-text: #171717;
     --ds-color-text-inverse: #ffffff;
     --ds-color-text-muted: #404040;
     --ds-color-text-subtle: #737373;
+    --ds-color-warning: #b45309;
+    --ds-color-warning-border: #fcd34d;
+    --ds-color-warning-foreground: #ffffff;
+    --ds-color-warning-muted: #fef3c7;
+    --ds-color-warning-subtle: #fffbeb;
+    --ds-color-aurora-primary-start: rgb(191 219 254 / 0.9);
+    --ds-color-aurora-primary-mid: rgb(219 234 254 / 0.8);
+    --ds-color-aurora-secondary-mid: rgb(199 210 254 / 0.3);
+    --ds-color-aurora-tertiary-mid: rgb(199 210 254 / 0.2);
+    --ds-color-aurora-dark-primary: rgb(30 64 175 / 0.4);
+    --ds-color-aurora-dark-secondary: rgb(67 56 202 / 0.28);
+    --ds-color-aurora-dark-tertiary: rgb(30 58 138 / 0.22);
 
     /* MDX prose extras (code, citations, footnotes, captions) */
     --ds-color-caption-text: #6b7280;
@@ -43,7 +80,38 @@
     --ds-color-code-inline-text: rgb(31, 41, 55);
     --ds-color-code-line-highlight-bg: #c8c8ff1a;
     --ds-color-code-line-highlight-border: #60a5fa;
+    --ds-color-code-tab-text: #9ca3af;
+    --ds-color-code-tab-text-active: #60a5fa;
+    --ds-color-code-tab-text-hover: #d1d5db;
+    --ds-color-mermaid-alt-section-bg: #ffffff;
+    --ds-color-mermaid-grid: #e5e7eb;
+    --ds-color-mermaid-line: #6b7280;
+    --ds-color-mermaid-primary: #3b82f6;
+    --ds-color-mermaid-primary-border: #d1d5db;
+    --ds-color-mermaid-primary-text: #1f2937;
+    --ds-color-mermaid-secondary: #e5e7eb;
+    --ds-color-mermaid-section-bg: #f9fafb;
+    --ds-color-mermaid-tertiary: #f3f4f6;
+    --ds-color-popover-bg: rgba(255, 255, 255, 0.95);
+    --ds-color-popover-border: rgba(255, 255, 255, 0.3);
+    --ds-color-popover-divider: rgba(229, 231, 235, 0.3);
+    --ds-color-popover-link: #3b82f6;
+    --ds-color-popover-link-hover: #2563eb;
+    --ds-color-popover-sheen: rgba(255, 255, 255, 0.1);
+    --ds-color-popover-strong: #1f2937;
+    --ds-color-popover-text: #374151;
     --ds-color-references-rule: #ddd;
+    --ds-shadow-popover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+    /* Charts */
+    --ds-color-chart-1: #2563eb;
+    --ds-color-chart-2: #0f766e;
+    --ds-color-chart-3: #4f46e5;
+    --ds-color-chart-4: #d97706;
+    --ds-color-chart-5: #be123c;
+    --ds-color-chart-6: #64748b;
+    --ds-color-chart-cursor: rgba(37, 99, 235, 0.08);
+    --ds-color-chart-grid: rgba(148, 163, 184, 0.35);
 
     /* Table component */
     --ds-color-scrollbar-thumb: #d1d5db;
@@ -66,6 +134,7 @@
     --ds-color-launcher-input-text: rgba(17, 24, 39, 0.95);
     --ds-color-launcher-item-selected-bg: rgba(59, 130, 246, 0.1);
     --ds-color-launcher-item-text: #374151;
+    --ds-color-launcher-overlay-bg: rgba(17, 24, 39, 0.28);
     --ds-color-launcher-placeholder: rgba(107, 114, 128, 0.75);
     --ds-color-launcher-scrollbar-thumb: rgba(156, 163, 175, 0.35);
     --ds-color-launcher-text: #111827;
@@ -82,6 +151,13 @@
     --ds-font-mono: "JetBrains Mono", Menlo, Monaco, monospace;
     --ds-line-height-body: 1.6;
     --ds-line-height-prose: 1.7;
+    --ds-motion-duration-feedback: 120ms;
+    --ds-motion-duration-focal: 560ms;
+    --ds-motion-duration-overlay: 320ms;
+    --ds-motion-duration-state: 180ms;
+    --ds-motion-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+    --ds-motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ds-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
     --ds-prose-font-size: 1rem;
     --ds-prose-max-width: none;
     --ds-prose-h1-margin-top: 1.25em;
@@ -95,17 +171,104 @@
     --ds-radius-card: 0.5rem;
     --ds-radius-control: 0.5rem;
     --ds-radius-pill: 0.125rem;
+    --ds-radius-sm: 0.375rem;
     --ds-shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --ds-shadow-card-hover: 0 10px 20px -12px rgb(0 0 0 / 0.25);
+    --ds-shadow-floating: 0 2px 3px -1px rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(25, 28, 33, 0.02), 0 0 0 1px rgba(25, 28, 33, 0.08);
+  }
+
+  /*
+   * Aurora background gradients. Plain CSS (not Tailwind utilities) so the
+   * effect never depends on the consumer's Tailwind content scanning —
+   * symlinked local installs are not scanned and would silently drop the
+   * classes. Light values mirror blue-200/blue-100/indigo-200; dark values
+   * are blue-800/blue-900/indigo-800/indigo-900 glows over the dark surface.
+   */
+  .aurora-primary {
+    background-image: linear-gradient(to bottom right, var(--ds-color-aurora-primary-start), var(--ds-color-aurora-primary-mid), transparent);
+  }
+
+  .aurora-secondary {
+    background-image: linear-gradient(to top left, transparent, var(--ds-color-aurora-secondary-mid), transparent);
+  }
+
+  .aurora-tertiary {
+    background-image: linear-gradient(to bottom right, transparent, var(--ds-color-aurora-tertiary-mid), transparent);
+  }
+
+  /*
+   * In dark mode the aurora is a single composed glow on an ::before of the
+   * stable .aurora container (works with any inner markup); the per-layer
+   * gradients are disabled so the light values never bleed through.
+   */
+  .dark .aurora-primary,
+  .dark .aurora-secondary,
+  .dark .aurora-tertiary {
+    background-image: none;
+  }
+
+  .dark .aurora::before {
+    background:
+      radial-gradient(ellipse 55% 60% at 85% 0%, var(--ds-color-aurora-dark-primary), transparent 70%),
+      radial-gradient(ellipse 45% 45% at 100% 25%, var(--ds-color-aurora-dark-secondary), transparent 70%),
+      radial-gradient(ellipse 70% 40% at 60% 0%, var(--ds-color-aurora-dark-tertiary), transparent 75%);
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
   }
 
   .dark {
+    /*
+     * Dark base is #1a1a1a, not near-black: pure black with white text
+     * causes halation. Body text tops out at neutral-300; white is
+     * reserved for headings via explicit classes.
+     */
+    --ds-color-accent: #93c5fd;
+    --ds-color-accent-dark: #bfdbfe;
+    --ds-color-accent-foreground: #172554;
+    --ds-color-accent-muted: #1e3a8a;
+    --ds-color-accent-subtle: #172554;
     --ds-color-border: #303030;
-    --ds-color-surface: #171717;
+    --ds-color-attention: #fda4af;
+    --ds-color-attention-border: #be123c;
+    --ds-color-attention-foreground: #4c0519;
+    --ds-color-attention-muted: #881337;
+    --ds-color-attention-subtle: #4c0519;
+    --ds-color-danger: #fca5a5;
+    --ds-color-danger-border: #b91c1c;
+    --ds-color-danger-foreground: #450a0a;
+    --ds-color-danger-muted: #7f1d1d;
+    --ds-color-danger-subtle: #450a0a;
+    --ds-color-discovery: #5eead4;
+    --ds-color-discovery-border: #0f766e;
+    --ds-color-discovery-foreground: #042f2e;
+    --ds-color-discovery-muted: #134e4a;
+    --ds-color-discovery-subtle: #042f2e;
+    --ds-color-info: #93c5fd;
+    --ds-color-info-border: #1d4ed8;
+    --ds-color-info-foreground: #172554;
+    --ds-color-info-muted: #1e3a8a;
+    --ds-color-info-subtle: #172554;
+    --ds-color-surface: #1a1a1a;
     --ds-color-surface-muted: #262626;
-    --ds-color-text: #f5f5f5;
-    --ds-color-text-muted: #d4d4d4;
+    --ds-color-success: #86efac;
+    --ds-color-success-border: #166534;
+    --ds-color-success-foreground: #052e16;
+    --ds-color-success-muted: #14532d;
+    --ds-color-success-subtle: #052e16;
+    --ds-color-text: #d4d4d4;
+    --ds-color-text-muted: #a3a3a3;
     --ds-color-text-subtle: #a3a3a3;
+    --ds-color-warning: #fcd34d;
+    --ds-color-warning-border: #b45309;
+    --ds-color-warning-foreground: #451a03;
+    --ds-color-warning-muted: #78350f;
+    --ds-color-warning-subtle: #451a03;
+    --ds-color-aurora-primary-start: rgb(30 64 175 / 0.4);
+    --ds-color-aurora-primary-mid: rgb(30 58 138 / 0.22);
+    --ds-color-aurora-secondary-mid: rgb(67 56 202 / 0.28);
+    --ds-color-aurora-tertiary-mid: rgb(30 58 138 / 0.18);
 
     /* MDX prose extras */
     --ds-color-citation-back-active-bg: #1e3a8a;
@@ -124,6 +287,37 @@
     --ds-color-code-inline-bg: rgba(75, 85, 99, 0.3);
     --ds-color-code-inline-border: rgba(75, 85, 99, 0.5);
     --ds-color-code-inline-text: rgb(229, 231, 235);
+    --ds-color-code-tab-text: #9ca3af;
+    --ds-color-code-tab-text-active: #93c5fd;
+    --ds-color-code-tab-text-hover: #e5e7eb;
+    --ds-color-mermaid-alt-section-bg: #111827;
+    --ds-color-mermaid-grid: #374151;
+    --ds-color-mermaid-line: #9ca3af;
+    --ds-color-mermaid-primary: #60a5fa;
+    --ds-color-mermaid-primary-border: #4b5563;
+    --ds-color-mermaid-primary-text: #f3f4f6;
+    --ds-color-mermaid-secondary: #1f2937;
+    --ds-color-mermaid-section-bg: #111827;
+    --ds-color-mermaid-tertiary: #1f2937;
+    --ds-color-popover-bg: rgba(31, 41, 55, 0.95);
+    --ds-color-popover-border: rgba(255, 255, 255, 0.1);
+    --ds-color-popover-divider: rgba(75, 85, 99, 0.3);
+    --ds-color-popover-link: #60a5fa;
+    --ds-color-popover-link-hover: #93c5fd;
+    --ds-color-popover-sheen: rgba(255, 255, 255, 0.05);
+    --ds-color-popover-strong: #f3f4f6;
+    --ds-color-popover-text: #e5e7eb;
+    --ds-shadow-popover: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+    /* Charts */
+    --ds-color-chart-1: #60a5fa;
+    --ds-color-chart-2: #2dd4bf;
+    --ds-color-chart-3: #a5b4fc;
+    --ds-color-chart-4: #f59e0b;
+    --ds-color-chart-5: #fb7185;
+    --ds-color-chart-6: #94a3b8;
+    --ds-color-chart-cursor: rgba(59, 130, 246, 0.16);
+    --ds-color-chart-grid: rgba(148, 163, 184, 0.26);
 
     /* Table component */
     --ds-color-scrollbar-thumb: #6b7280;
@@ -153,6 +347,290 @@
 }
 
 @layer components {
+  @keyframes ds-command-overlay-in {
+    from {
+      opacity: 0.01;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ds-command-panel-in {
+    from {
+      filter: blur(8px);
+      opacity: 0.01;
+      transform: translate3d(0, -10px, 0) scale(0.98);
+    }
+
+    to {
+      filter: blur(0);
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes ds-disclosure-in {
+    from {
+      clip-path: inset(0 0 12px 0);
+      opacity: 0.01;
+      transform: translate3d(0, -4px, 0);
+    }
+
+    to {
+      clip-path: inset(0);
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes ds-popover-in {
+    from {
+      opacity: 0.01;
+      transform: translate3d(0, -4px, 0) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  .ds-motion-press {
+    transition-duration: var(--ds-motion-duration-feedback);
+    transition-property: background-color, border-color, box-shadow, color, transform;
+    transition-timing-function: var(--ds-motion-ease-out);
+  }
+
+  .ds-motion-press:not(:disabled):not([aria-disabled='true']):active {
+    transform: translate3d(0, 1px, 0);
+  }
+
+  .ds-motion-state {
+    transition-duration: var(--ds-motion-duration-state);
+    transition-property: background-color, border-color, box-shadow, color, opacity, transform;
+    transition-timing-function: var(--ds-motion-ease-out);
+  }
+
+  .ds-motion-icon {
+    transition-duration: var(--ds-motion-duration-state);
+    transition-property: color, transform;
+    transition-timing-function: var(--ds-motion-ease-out);
+  }
+
+  .ds-motion-disclosure {
+    animation: ds-disclosure-in var(--ds-motion-duration-state) var(--ds-motion-ease-out) both;
+    transform-origin: top;
+  }
+
+  .ds-motion-popover {
+    animation: ds-popover-in var(--ds-motion-duration-state) var(--ds-motion-ease-out) both;
+    transform-origin: top center;
+  }
+
+  .ds-motion-toggle-track {
+    transition-duration: var(--ds-motion-duration-state);
+    transition-property: background-color, border-color, box-shadow;
+    transition-timing-function: var(--ds-motion-ease-out);
+  }
+
+  .ds-motion-toggle-thumb {
+    transition-duration: var(--ds-motion-duration-state);
+    transition-property: box-shadow, transform;
+    transition-timing-function: var(--ds-motion-ease-out);
+  }
+
+  .ds-control-hit-target::before {
+    content: '';
+    height: 44px;
+    left: 50%;
+    pointer-events: auto;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-root]) {
+    animation: ds-command-panel-in var(--ds-motion-duration-overlay) var(--ds-motion-ease-out) both;
+    background: var(--ds-color-launcher-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--ds-color-launcher-border);
+    border-radius: var(--ds-radius-card);
+    box-shadow: var(--ds-shadow-launcher);
+    color: var(--ds-color-launcher-text);
+    display: flex;
+    flex-direction: column;
+    max-height: min(520px, calc(100vh - 6rem));
+    max-width: min(48rem, calc(100vw - 2rem));
+    overflow: hidden;
+    transform-origin: top center;
+    width: min(48rem, calc(100vw - 2rem));
+  }
+
+  .gaudi-command-launcher :where(.command-palette) {
+    inset: 0;
+    position: fixed;
+    z-index: var(--ds-z-overlay);
+  }
+
+  .gaudi-command-launcher :where(.command-palette__overlay) {
+    animation: ds-command-overlay-in var(--ds-motion-duration-overlay) var(--ds-motion-ease-out) both;
+    background: var(--ds-color-launcher-overlay-bg);
+    inset: 0;
+    position: absolute;
+  }
+
+  .gaudi-command-launcher :where(.command-palette__viewport) {
+    align-items: flex-start;
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    overflow-y: auto;
+    padding: min(12vh, 7rem) 1rem 1rem;
+    position: absolute;
+  }
+
+  .gaudi-command-launcher--keyboard :where([data-cmdk-item]) {
+    pointer-events: none;
+  }
+
+  .gaudi-command-launcher--keyboard :where([data-cmdk-item][aria-selected='true']) {
+    pointer-events: auto;
+  }
+
+  .gaudi-command-launcher :where(.command-palette [data-cmdk-item] > div:first-child) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .gaudi-command-launcher :where(.command-palette h4:first-child) {
+    display: none;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-input]) {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--ds-color-launcher-border);
+    color: var(--ds-color-launcher-input-text);
+    font-size: 16px;
+    min-height: 56px;
+    outline: none;
+    padding: 16px 20px;
+    width: 100%;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-input]::placeholder) {
+    color: var(--ds-color-launcher-placeholder);
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-list]) {
+    flex: 1 1 auto;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 8px 8px 16px;
+    scroll-padding-block: 8px 16px;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-item]) {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: var(--ds-radius-control);
+    color: var(--ds-color-launcher-item-text);
+    cursor: pointer;
+    display: block;
+    outline: none;
+    padding: 0;
+    text-align: left;
+    text-decoration: none;
+    transition-duration: var(--ds-motion-duration-feedback);
+    transition-property: background-color, transform;
+    transition-timing-function: var(--ds-motion-ease-out);
+    width: 100%;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-item][aria-selected='true']) {
+    background: var(--ds-color-launcher-item-selected-bg);
+    transform: translate3d(2px, 0, 0);
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-item]:focus-visible) {
+    box-shadow: 0 0 0 2px var(--ds-color-accent);
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-item][aria-disabled='true']) {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-empty]) {
+    color: var(--ds-color-launcher-heading);
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-group-heading]) {
+    color: var(--ds-color-launcher-heading);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin: 0;
+    padding: 12px 16px 8px;
+    text-transform: uppercase;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-separator]) {
+    background: var(--ds-color-launcher-border);
+    height: 1px;
+    margin: 8px 0;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-list]::-webkit-scrollbar) {
+    width: 6px;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-list]::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  .gaudi-command-launcher :where([data-cmdk-list]::-webkit-scrollbar-thumb) {
+    background: var(--ds-color-launcher-scrollbar-thumb);
+    border-radius: 999px;
+  }
+
+  @media (max-width: 640px) {
+    .gaudi-command-launcher :where(.command-palette__viewport) {
+      padding: 4rem 0.75rem 0.75rem;
+    }
+
+    .gaudi-command-launcher :where([data-cmdk-root]) {
+      max-height: calc(100vh - 4.75rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ds-motion-disclosure,
+    .ds-motion-popover,
+    .gaudi-command-launcher :where(.command-palette__overlay),
+    .gaudi-command-launcher :where([data-cmdk-root]) {
+      animation: none !important;
+    }
+
+    .ds-motion-press,
+    .ds-motion-icon,
+    .ds-motion-state,
+    .ds-motion-toggle-thumb,
+    .ds-motion-toggle-track,
+    .gaudi-command-launcher :where([data-cmdk-item]) {
+      transition-duration: 0ms !important;
+    }
+
+    .ds-motion-press:not(:disabled):not([aria-disabled='true']):active,
+    .gaudi-command-launcher :where([data-cmdk-item][aria-selected='true']) {
+      transform: none !important;
+    }
+  }
+
   .prose {
     color: var(--ds-color-text);
     font-size: var(--ds-prose-font-size);

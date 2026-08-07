@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Icon } from '../../src/index';
+import Icon from '../../src/components/core/Icon';
 
 import { CheckList, CodeBlock, InlineCode, Page, Section, Table, Td, Th } from './StoryDocs';
 
@@ -79,7 +79,7 @@ const CopyButton = ({ children, label, value }) => {
   return (
     <button
       type='button'
-      className='rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-gray-600 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-700 dark:hover:text-blue-300'
+      className='rounded border border-gray-200 bg-white px-1.5 py-0.5 text-xs font-semibold text-gray-600 shadow-sm transition-colors hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-700 dark:hover:text-blue-300'
       aria-label={ `Copy ${label}` }
       title={ `Copy ${label}` }
       onClick={ handleCopy }
@@ -106,16 +106,16 @@ const IconTile = ({ name }) => {
 };
 
 export default {
+  id: 'overview-icons',
   parameters: {
-    layout: 'fullscreen',
-    options: { 'showPanel': false }
+    layout: 'fullscreen'
   },
   tags: [ '!autodocs' ],
-  title: 'Overview/Icons'
+  title: 'Overview'
 };
 
 export const Default = {
-  'name': 'Icons',
+  name: 'Icons',
   'render': () => (
     <Page
       title='Icons'
@@ -245,7 +245,7 @@ export const iconLabels = {
         </Table>
 
         <CodeBlock code={ `pnpm lint
-pnpm storybook:build
+pnpm build-storybook
 rg 'from ['\\''"](@heroicons|react-icons|lucide-react|@tabler/icons-react)' src app layouts lib scripts | rg -v 'src/icons/index.jsx'` } />
       </Section>
 

@@ -2,31 +2,31 @@ import { cn } from '../../utilities/cn';
 
 export const typographyVariants = {
   'author-name': {
-    'className': 'text-4xl font-extrabold leading-[1.12] tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl sm:leading-[1.08] md:text-6xl md:leading-[1.08] text-balance break-words',
+    'className': 'text-4xl font-extrabold leading-[1.12] text-gray-900 dark:text-gray-100 sm:text-6xl sm:leading-[1.08] md:text-6xl md:leading-[1.08] text-balance break-words',
     'element': 'h1'
   },
   'author-role': {
-    'className': 'text-xl leading-8 tracking-tight text-gray-600 dark:text-gray-300 md:text-2xl md:leading-9',
-    'element': 'h3'
+    'className': 'text-xl leading-8 text-gray-600 dark:text-gray-300 md:text-2xl md:leading-9',
+    'element': 'p'
   },
   'card-subtitle': {
     'className': 'text-lg font-medium text-gray-600 dark:text-gray-400',
-    'element': 'h4'
+    'element': 'p'
   },
   'card-title': {
     'className': 'text-xl font-bold text-gray-900 dark:text-white leading-tight',
     'element': 'h3'
   },
   'display-lg': {
-    'className': 'text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.12] tracking-tight text-gray-900 dark:text-gray-100 text-balance',
+    'className': 'text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.12] text-gray-900 dark:text-gray-100 text-balance',
     'element': 'h1'
   },
   'display-xl': {
-    'className': 'text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.08] tracking-tight text-gray-900 dark:text-gray-100 text-balance',
+    'className': 'text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.08] text-gray-900 dark:text-gray-100 text-balance',
     'element': 'h1'
   },
   'error-title': {
-    'className': 'text-7xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-gray-100 md:border-r-2 md:border-gray-900 md:pr-6 md:text-8xl dark:md:border-gray-100',
+    'className': 'text-7xl font-extrabold leading-none text-gray-900 dark:text-gray-100 md:border-r-2 md:border-gray-900 md:pr-6 md:text-8xl dark:md:border-gray-100',
     'element': 'h1'
   },
   'heading-lg': {
@@ -34,7 +34,7 @@ export const typographyVariants = {
     'element': 'h2'
   },
   'heading-md': {
-    'className': 'text-[1.375rem] font-bold leading-[1.25] text-gray-900 dark:text-white md:text-2xl',
+    'className': 'text-2xl font-bold leading-[1.25] text-gray-900 dark:text-white',
     'element': 'h3'
   },
   'heading-sm': {
@@ -42,19 +42,23 @@ export const typographyVariants = {
     'element': 'h4'
   },
   'heading-xl': {
-    'className': 'text-4xl font-bold leading-[1.12] tracking-tight text-gray-900 text-balance dark:text-white sm:text-[2.875rem]',
+    'className': 'text-4xl font-bold leading-[1.12] text-gray-900 text-balance dark:text-white sm:text-5xl',
     'element': 'h2'
   },
+  'list-title': {
+    'className': 'text-xl font-semibold leading-tight text-gray-900 dark:text-white md:text-2xl',
+    'element': 'h3'
+  },
   'metadata': {
-    'className': 'text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400',
+    'className': 'text-xs font-medium uppercase tabular-nums text-gray-500 dark:text-gray-400',
     'element': 'p'
   },
   'paragraph-lg': {
-    'className': 'text-xl leading-9 text-gray-700 dark:text-gray-300 md:text-[1.375rem]',
+    'className': 'text-xl leading-9 text-gray-700 dark:text-gray-300 md:text-2xl',
     'element': 'p'
   },
   'paragraph-md': {
-    'className': 'text-[1.0625rem] leading-8 text-gray-700 dark:text-gray-300 md:text-lg',
+    'className': 'text-base leading-8 text-gray-700 dark:text-gray-300 md:text-lg',
     'element': 'p'
   },
   'paragraph-sm': {
@@ -62,15 +66,15 @@ export const typographyVariants = {
     'element': 'p'
   },
   'post-meta': {
-    'className': 'text-sm leading-6 text-gray-500 dark:text-gray-400',
+    'className': 'text-sm leading-6 tabular-nums text-gray-500 dark:text-gray-400',
     'element': 'p'
   },
   'post-subtitle': {
     'className': 'w-full text-lg leading-8 text-gray-600 dark:text-gray-300 sm:text-xl sm:leading-9 md:text-2xl md:leading-10',
-    'element': 'h3'
+    'element': 'p'
   },
   'post-title': {
-    'className': 'w-full text-4xl font-extrabold leading-[1.16] tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl sm:leading-[1.14] lg:text-6xl lg:leading-[1.12] break-words',
+    'className': 'w-full text-4xl font-extrabold leading-[1.16] text-gray-900 dark:text-gray-100 sm:text-5xl sm:leading-[1.14] lg:text-6xl lg:leading-[1.12] break-words',
     'element': 'h1'
   },
   'prose-lead': {
@@ -79,26 +83,26 @@ export const typographyVariants = {
   },
   'subtitle-lg': {
     'className': 'text-xl md:text-2xl font-medium text-gray-600 dark:text-gray-300 leading-snug',
-    'element': 'h3'
+    'element': 'p'
   },
   'subtitle-md': {
     'className': 'text-xl font-medium leading-snug text-gray-600 dark:text-gray-400 md:text-2xl',
-    'element': 'h4'
+    'element': 'p'
   },
   'subtitle-xl': {
-    'className': 'text-2xl sm:text-3xl font-medium tracking-tight text-gray-600 dark:text-gray-300 leading-snug',
-    'element': 'h2'
+    'className': 'text-2xl sm:text-3xl font-medium text-gray-600 dark:text-gray-300 leading-snug',
+    'element': 'p'
   },
   'title-lg': {
-    'className': 'text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white',
+    'className': 'text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-gray-900 dark:text-white',
     'element': 'h1'
   },
   'title-md': {
-    'className': 'text-3xl sm:text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100',
+    'className': 'text-3xl sm:text-4xl font-extrabold leading-9 text-gray-900 dark:text-gray-100 text-balance',
     'element': 'h1'
   },
   'title-xl': {
-    'className': 'text-5xl font-extrabold leading-[1.05] tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl md:text-7xl lg:text-[5.25rem]',
+    'className': 'text-5xl font-extrabold leading-[1.05] text-gray-900 dark:text-gray-100 sm:text-6xl md:text-7xl lg:text-8xl text-balance',
     'element': 'h1'
   }
 };

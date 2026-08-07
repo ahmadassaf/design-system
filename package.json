@@ -16,9 +16,17 @@
     },
     "./global.css": "./src/global.css",
     "./styles.css": "./src/styles.css",
+    "./blocks/*": {
+      "import": "./src/components/blocks/*/index.js",
+      "default": "./src/components/blocks/*/index.js"
+    },
     "./components/*": {
       "import": "./src/components/*",
       "default": "./src/components/*"
+    },
+    "./core/*": {
+      "import": "./src/components/core/*/index.js",
+      "default": "./src/components/core/*/index.js"
     },
     "./core": {
       "import": "./src/components/core/index.js",
@@ -32,6 +40,14 @@
       "import": "./src/icons/index.jsx",
       "default": "./src/icons/index.jsx"
     },
+    "./layout/LayoutContainer": {
+      "import": "./src/components/layout/LayoutContainer/LayoutContainer.js",
+      "default": "./src/components/layout/LayoutContainer/LayoutContainer.js"
+    },
+    "./layout/*": {
+      "import": "./src/components/layout/*/index.js",
+      "default": "./src/components/layout/*/index.js"
+    },
     "./layout": {
       "import": "./src/components/layout/index.js",
       "default": "./src/components/layout/index.js"
@@ -44,9 +60,17 @@
       "import": "./src/components/mdx/runtime.js",
       "default": "./src/components/mdx/runtime.js"
     },
+    "./navigation/*": {
+      "import": "./src/components/navigation/*/index.js",
+      "default": "./src/components/navigation/*/index.js"
+    },
     "./navigation": {
       "import": "./src/components/navigation/index.js",
       "default": "./src/components/navigation/index.js"
+    },
+    "./post/*": {
+      "import": "./src/components/post/*/index.js",
+      "default": "./src/components/post/*/index.js"
     },
     "./post": {
       "import": "./src/components/post/index.js",
@@ -80,21 +104,19 @@
   "scripts": {
     "build-storybook": "storybook build",
     "lint": "eslint .",
+    "pack:check": "npm pack --dry-run",
     "test:contracts": "node --test $(find src -name '*.contract.test.js' | sort)",
     "test-storybook": "vitest --project=storybook",
     "storybook": "storybook dev -p 6006",
     "version:bump": "node scripts/bump-version.mjs"
   },
   "peerDependencies": {
-    "@headlessui/react": "^1.7.19",
-    "@heroicons/react": "^2.2.0",
     "@radix-ui/react-hover-card": "^1.1.15",
-    "@tabler/icons-react": "^3.31.0",
-    "@tmikeladze/react-cmdk": "^1.3.15",
     "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
     "framer-motion": "^12.9.2",
+    "katex": "^0.18.1",
     "lucide-react": "^0.544.0",
     "mermaid": "^11.12.0",
     "mini-svg-data-uri": "^1.4.0",
@@ -102,9 +124,7 @@
     "next-themes": "^0.4.6",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
-    "react-icons": "^5.5.0",
-    "react-latex-next": "^3.0.0",
-    "recharts": "^2.15.4",
+    "recharts": "^3.10.0",
     "socket.io-client": "^4.7.2",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": ">=4.0.0"
@@ -116,16 +136,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@headlessui/react": "^1.7.19",
-    "@heroicons/react": "^2.2.0",
     "@radix-ui/react-hover-card": "^1.1.15",
-    "@storybook/addon-a11y": "^10.0.8",
-    "@storybook/addon-docs": "^10.0.8",
-    "@storybook/addon-vitest": "^10.4.2",
-    "@storybook/nextjs-vite": "^10.0.8",
-    "@tabler/icons-react": "^3.31.0",
+    "@storybook/addon-a11y": "^10.5.6",
+    "@storybook/addon-docs": "^10.5.6",
+    "@storybook/addon-vitest": "^10.5.6",
+    "@storybook/nextjs-vite": "^10.5.6",
     "@tailwindcss/vite": "^4.3.0",
-    "@tmikeladze/react-cmdk": "^1.3.15",
     "@vercel/analytics": "^1.5.0",
     "@vitest/browser-playwright": "^4.1.8",
     "clsx": "^2.1.1",
@@ -136,6 +152,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "framer-motion": "^12.9.2",
     "globals": "^17.7.0",
+    "katex": "^0.18.1",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.544.0",
     "mermaid": "^11.12.0",
@@ -145,11 +162,10 @@
     "playwright": "^1.60.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-icons": "^5.5.0",
-    "react-latex-next": "^3.0.0",
-    "recharts": "^2.15.4",
+    "recharts": "^3.10.0",
     "socket.io-client": "^4.7.2",
-    "storybook": "^10.0.8",
+    "storybook": "^10.5.6",
+    "styled-jsx": "5.1.6",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.4",
     "vitest": "^4.1.8"

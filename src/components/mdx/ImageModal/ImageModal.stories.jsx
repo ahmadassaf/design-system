@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-imagemodal',
   title: 'MDX/ImageModal'
 };
 
@@ -32,8 +33,8 @@ export const Example = {
       name: 'Accessible image preview with focus management.'
     });
 
-    await expect(screen.getByRole('button', { name: 'Close modal' })).toHaveFocus();
-    await expect(within(dialog).getByRole('img', { name: 'Blog logo' })).toBeVisible();
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Close modal' })).toHaveFocus());
+    await expect(within(dialog).getByRole('img', { name: 'Gaudi design system article preview' })).toBeVisible();
     await expect(within(dialog).getByText('Accessible image preview with focus management.')).toBeVisible();
 
     await userEvent.keyboard('{Escape}');

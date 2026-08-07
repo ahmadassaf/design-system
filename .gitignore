@@ -3,6 +3,8 @@ storybook-static
 .next
 dist
 coverage
+.impeccable/critique/
+.impeccable/visual/
 .DS_Store
 pnpm-debug.log*
 .env

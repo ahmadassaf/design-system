@@ -49,7 +49,7 @@ const defaultSocialLinks = [
 
 const FooterSection = ({ links = [], title }) => (
   <div>
-    <h3 className='text-[1.0625rem] font-semibold leading-7 text-gray-950 dark:text-white'>{title}</h3>
+    <h3 className='text-lg font-semibold leading-7 text-gray-950 dark:text-white'>{title}</h3>
     <ul role='list' className='mt-4 space-y-3'>
       {links.map((link) => (
         <li key={ `${title}-${link.href}-${link.label}` }>
@@ -125,9 +125,9 @@ const EditorialFooter = ({
       <div className='grid gap-10 lg:grid-cols-[1.2fr_2fr]'>
         <div>
           {brandTitle ? (
-            <h3 className='text-3xl font-bold tracking-tight text-gray-950 dark:text-white'>{brandTitle}</h3>
+            <h3 className='text-3xl font-bold text-gray-950 dark:text-white'>{brandTitle}</h3>
           ) : null}
-          <p className={ `${brandTitle ? 'mt-4 ' : ''}max-w-md text-[0.9375rem] leading-6 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
+          <p className={ `${brandTitle ? 'mt-4 ' : ''}max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
           <div className='mt-6 flex gap-5'>
             {socialIconLinks(socialLinks).map((link) => (
               <Icon

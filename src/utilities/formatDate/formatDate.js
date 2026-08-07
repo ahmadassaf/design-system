@@ -19,16 +19,25 @@
  * formatDate('2023-12-25') // "December 25, 2023"
  * formatDate('2023-12-25', 'de-DE') // "25. Dezember 2023"
  */
-const formatDate = (date, locale = 'en-US') => {
-  const parsed = new Date(date);
+const defaultLocale = 'en-US';
+const dateOptions = {
+  'day': 'numeric',
+  'month': 'long',
+  'year': 'numeric'
+};
+
+const formatDate = (date, locale = defaultLocale) => {
+  if (date === null || typeof date === 'undefined' || date === '') return '';
+
+  const parsed = date instanceof Date ? date : new Date(date);
 
   if (Number.isNaN(parsed.getTime())) return '';
 
-  return parsed.toLocaleDateString(locale, {
-    'day': 'numeric',
-    'month': 'long',
-    'year': 'numeric'
-  });
+  try {
+    return new Intl.DateTimeFormat(locale || defaultLocale, dateOptions).format(parsed);
+  } catch {
+    return new Intl.DateTimeFormat(defaultLocale, dateOptions).format(parsed);
+  }
 };
 
 export default formatDate;

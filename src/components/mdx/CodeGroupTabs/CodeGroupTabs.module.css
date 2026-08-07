@@ -3,8 +3,8 @@
 }
 
 .root :global(.rcg-tab-container) {
-  background: #070910;
-  border-radius: 6px 6px 0 0;
+  background: var(--ds-color-code-block-bg);
+  border-radius: var(--ds-radius-card) var(--ds-radius-card) 0 0;
   display: flex;
   margin: 0;
   padding: 8px 0 0;
@@ -14,10 +14,10 @@
 .root :global(.rcg-tab) {
   background: transparent;
   border: none;
-  color: #9ca3af;
+  color: var(--ds-color-code-tab-text);
   cursor: pointer;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  font-size: 13px;
+  font-family: var(--ds-font-mono);
+  font-size: 0.875rem;
   font-weight: 400;
   margin: 0;
   padding: 8px 16px 12px;
@@ -26,11 +26,11 @@
 }
 
 .root :global(.rcg-tab:hover) {
-  color: #d1d5db;
+  color: var(--ds-color-code-tab-text-hover);
 }
 
 .root :global(.rcg-tab.active) {
-  color: #60a5fa;
+  color: var(--ds-color-code-tab-text-active);
 }
 
 .root :global(.rcg-block) {
@@ -42,11 +42,12 @@
 }
 
 .root :global(.rcg-block pre) {
-  background: #070910 !important;
-  border-radius: 0 0 6px 6px !important;
+  background: var(--ds-color-code-block-bg) !important;
+  border-radius: 0 0 var(--ds-radius-card) var(--ds-radius-card) !important;
+  color: var(--ds-color-text-inverse) !important;
   margin: 0 !important;
 }
 
-.root :global(.rcg-block pre) {
-  margin-top: -19px !important;
+.root :global(.rcg-block pre code) {
+  color: var(--ds-color-text-inverse) !important;
 }

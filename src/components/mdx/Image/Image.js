@@ -24,7 +24,7 @@ const NextImage = resolveNextImage(NextImageModule);
  * Renders an optimized image using Next.js Image component with modal functionality
  *
  * @param {Object} props - All Next.js Image component props
- * @param {string} [props.alt=''] - Alt text for the image (defaults to empty so images are treated as decorative unless described)
+ * @param {string} [props.alt] - Alt text for the image. Falls back to caption; pass an empty string only for decorative images.
  * @param {string} [props.caption] - Optional image caption
  * @param {string} [props.darkSrc] - Optional dark-mode image source
  * @param {string} [props.fallback] - Optional fallback image source after load failure
@@ -36,10 +36,11 @@ const NextImage = resolveNextImage(NextImageModule);
  * // In MDX content:
  * <Image src="/static/images/example.jpg" width={500} height={300} />
  */
-const Image = ({ alt = '', caption, darkSrc, fallback, src, ...rest }) => {
+const Image = ({ alt, caption, darkSrc, fallback, src, ...rest }) => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ currentSrc, setCurrentSrc ] = useState(src);
   const [ erroredSources, setErroredSources ] = useState({});
+  const imageAlt = alt ?? caption ?? '';
 
   useEffect(() => {
     setCurrentSrc(src);
@@ -56,7 +57,7 @@ const Image = ({ alt = '', caption, darkSrc, fallback, src, ...rest }) => {
   const createImageProps = (imageSrc, className) => {
     return {
       ...rest,
-      alt,
+      'alt': imageAlt,
       'blurDataURL': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
       className,
       'loading': 'lazy',
@@ -71,23 +72,38 @@ const Image = ({ alt = '', caption, darkSrc, fallback, src, ...rest }) => {
   };
 
   const renderImage = (imageSrc, className = '') => {
-    const imageProps = createImageProps(getDisplaySrc(imageSrc), `cursor-pointer hover:opacity-90 transition-opacity duration-200 ${className || rest.className || ''}`);
-    const nativeImageProps = { ...imageProps };
+    const displaySrc = getDisplaySrc(imageSrc);
 
-    delete nativeImageProps.blurDataURL;
-    delete nativeImageProps.placeholder;
-    delete nativeImageProps.priority;
+    if (!displaySrc) return null;
 
-    return NextImage ? <NextImage { ...imageProps } /> : <img { ...nativeImageProps } />;
+    const imageProps = createImageProps(displaySrc, `cursor-pointer hover:opacity-90 transition-opacity duration-200 ${className || rest.className || ''}`);
+    const {
+      alt: nativeAlt,
+      blurDataURL,
+      className: nativeClassName,
+      loading,
+      onError,
+      placeholder,
+      priority,
+      sizes,
+      src: nativeSrc,
+      ...nativeImageProps
+    } = imageProps;
+
+    void blurDataURL;
+    void placeholder;
+    void priority;
+
+    return NextImage ? <NextImage { ...imageProps } /> : <img { ...nativeImageProps } alt={ nativeAlt } className={ nativeClassName } loading={ loading } onError={ onError } sizes={ sizes } src={ nativeSrc } />;
   };
 
   return (
     <figure>
-      <Button variant='ghost' tone='gray' size='sm' className='block max-w-full p-0 hover:bg-transparent dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(src)) } aria-label={ alt ? `Open image: ${alt}` : 'Open image' }>
+      <Button variant='ghost' tone='neutral' size='sm' className='block max-w-full p-0 hover:bg-transparent dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(src)) } aria-label={ imageAlt ? `Open image: ${imageAlt}` : 'Open image preview' }>
         {renderImage(src, darkSrc ? `${rest.className || ''} dark:hidden` : rest.className)}
       </Button>
       {darkSrc && (
-        <Button variant='ghost' tone='gray' size='sm' className='hidden max-w-full p-0 hover:bg-transparent dark:block dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(darkSrc)) } aria-label={ alt ? `Open image: ${alt}` : 'Open image' }>
+        <Button variant='ghost' tone='neutral' size='sm' className='hidden max-w-full p-0 hover:bg-transparent dark:block dark:hover:bg-transparent' onClick={ () => handleImageClick(getDisplaySrc(darkSrc)) } aria-label={ imageAlt ? `Open image: ${imageAlt}` : 'Open image preview' }>
           {renderImage(darkSrc, rest.className)}
         </Button>
       )}
@@ -97,7 +113,7 @@ const Image = ({ alt = '', caption, darkSrc, fallback, src, ...rest }) => {
         isOpen={ isModalOpen }
         onClose={ () => setIsModalOpen(false) }
         src={ currentSrc }
-        alt={ alt }
+        alt={ imageAlt }
         caption={ caption }
       />
     </figure>
