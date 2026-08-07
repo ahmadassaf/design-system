@@ -1,6 +1,6 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, within } from 'storybook/test';
-import { Badge, badgeVariants } from '../../../index';
+import Badge, { badgeVariants } from './Badge';
 
 const componentDocs = getComponentDocs('Core/Badge');
 const getBadgeRoot = (element) => element.classList.contains('inline-flex') ? element : element.parentElement;
@@ -30,6 +30,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-badge',
   title: 'Core/Badge'
 };
 
@@ -45,8 +46,8 @@ export const Default = {
     const badge = getBadgeRoot(label);
 
     await expect(label).toBeVisible();
-    await expect(badge).toHaveClass('bg-blue-600');
-    await expect(badge).toHaveClass('text-white');
+    await expect(badge).toHaveClass('bg-accent');
+    await expect(badge).toHaveClass('text-accent-foreground');
     await expect(badge).toHaveClass('uppercase');
     await expect(badge?.tagName).toBe('SPAN');
     await expect(canvas.queryByRole('link')).not.toBeInTheDocument();
@@ -64,14 +65,16 @@ export const LinkedAndStatus = {
 
     await expect(linkedBadge).toHaveAttribute('href', '/blog/tags/engineering');
     await expect(linkedBadge).toHaveTextContent('Engineering');
-    await expect(linkedBadge).toHaveClass('bg-gray-100');
+    await expect(linkedBadge).toHaveClass('bg-surface-muted');
+    await expect(linkedBadge).toHaveClass('text-text-muted');
     await expect(linkedBadge).toHaveClass('uppercase');
     await expect(stableLabel).toBeVisible();
-    await expect(stableBadge).toHaveClass('bg-green-50');
+    await expect(stableBadge).toHaveClass('bg-success-subtle');
     await expect(stableBadge?.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
     await expect(deprecatedLabel).toBeVisible();
     await expect(deprecatedBadge).toHaveClass('border');
-    await expect(deprecatedBadge).toHaveClass('text-red-700');
+    await expect(deprecatedBadge).toHaveClass('border-danger-border');
+    await expect(deprecatedBadge).toHaveClass('text-danger');
   },
   'render': () => (
     <div className='flex flex-wrap items-center gap-2 p-6'>
@@ -92,7 +95,7 @@ export const Sizes = {
     labels.forEach((size) => {
       const badge = getBadgeRoot(canvas.getByText(size));
 
-      expect(badge).toHaveClass('bg-blue-50', 'text-blue-700');
+      expect(badge).toHaveClass('bg-accent-subtle', 'text-accent');
       expect(badge).toHaveTextContent(size);
     });
   },
@@ -112,9 +115,9 @@ export const Variants = {
     const soft = getBadgeRoot(canvas.getByText('soft'));
     const outline = getBadgeRoot(canvas.getByText('outline'));
 
-    await expect(solid).toHaveClass('bg-green-700', 'text-white');
-    await expect(soft).toHaveClass('bg-green-50', 'text-green-700');
-    await expect(outline).toHaveClass('border', 'border-green-200', 'text-green-700');
+    await expect(solid).toHaveClass('bg-success', 'text-success-foreground');
+    await expect(soft).toHaveClass('bg-success-subtle', 'text-success');
+    await expect(outline).toHaveClass('border', 'border-success-border', 'text-success');
   },
   'render': () => (
     <div className='flex max-w-3xl flex-wrap gap-2 p-6'>

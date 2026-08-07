@@ -2,7 +2,7 @@ import { expect, userEvent, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
-import { Menu } from '../../../index';
+import Menu from './Menu';
 
 import * as componentModule from './index';
 
@@ -89,7 +89,7 @@ export default {
       page: createComponentDocsPage(componentDocs)
     }
   },
-  tags: [ '!autodocs', '!dev' ],
+  tags: [ '!autodocs' ],
   title: 'Navigation/Menu'
 };
 
@@ -101,8 +101,24 @@ export const PrimaryNavigation = {
   render: (args) => <Menu { ...args } />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const mobileTrigger = canvas.queryByRole('button', { name: 'Open main menu' });
 
     await expect(canvas.getByRole('link', { name: 'Ahmad Assaf' })).toHaveAttribute('href', '/');
+
+    if (mobileTrigger) {
+      await userEvent.click(mobileTrigger);
+
+      const page = within(document.body);
+      const dialog = await page.findByRole('dialog', { name: 'Mobile navigation' });
+      const mobileNavigation = within(dialog);
+
+      await expect(mobileNavigation.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/blog/projects');
+      await userEvent.click(mobileNavigation.getByRole('button', { name: 'Close menu' }));
+      await expect(page.queryByRole('dialog', { name: 'Mobile navigation' })).not.toBeInTheDocument();
+
+      return;
+    }
+
     await expect(canvas.getByRole('button', { name: 'Open search' })).toBeInTheDocument();
     await expect(canvas.getByRole('button', { name: 'Toggle Dark Mode' })).toBeInTheDocument();
     await expect(canvas.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/blog/projects');

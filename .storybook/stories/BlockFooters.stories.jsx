@@ -1,5 +1,8 @@
+import Button from '../../src/components/core/Button';
+import Field, { FieldInput } from '../../src/components/core/Field';
+import Link from '../../src/components/core/Link';
+import Pill from '../../src/components/core/Pill';
 import Footer from '../../src/components/layout/Footer';
-import { Button, Field, FieldInput, Link, Pill } from '../../src/index';
 
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
@@ -51,7 +54,7 @@ const NewsletterFooter = () => (
     <div className='grid gap-8 p-8 lg:grid-cols-[1.2fr_1fr]'>
       <div>
         <Pill tone='blue' variant='soft'>newsletter</Pill>
-        <h3 className='mt-4 text-3xl font-extrabold tracking-tight'>Notes on AI, data, and engineering systems.</h3>
+        <h3 className='mt-4 text-3xl font-extrabold'>Notes on AI, data, and engineering systems.</h3>
         <p className='mt-3 text-sm leading-6 text-white/75'>A footer treatment for pages where subscription is the primary secondary action.</p>
       </div>
       <form className='flex flex-col gap-3 self-end sm:flex-row'>
@@ -59,7 +62,7 @@ const NewsletterFooter = () => (
           <label className='sr-only' htmlFor='footer-email'>Email address</label>
           <FieldInput id='footer-email' type='email' placeholder='you@example.com' className='min-h-11 border-white/10 bg-white/10 text-white placeholder:text-white/50 focus:ring-blue-500' />
         </Field>
-        <Button type='submit' tone='blue' variant='solid'>Subscribe</Button>
+        <Button type='submit' tone='accent' variant='solid'>Subscribe</Button>
       </form>
     </div>
     <div className='border-t border-white/10 px-8 py-5 text-sm text-white/60'>No spam. No fake urgency. Just useful notes.</div>
@@ -140,14 +143,13 @@ export default {
 };
 
 export const Default = {
-  'name': 'Footer Blocks',
+  'name': 'Overview',
   'render': () => (
     <Page
-      title='Footer Blocks'
-      intro='Footer compositions for the current blog footer, editorial sitemap footers, newsletter-first pages, and compact utility pages.'
-      kicker='Blocks'
+      title='Footer Recipes'
+      intro='Reference compositions built from the exported Footer component for editorial sitemaps, newsletter-first pages, and compact utility pages.'
     >
-      <Section title='Usage' description='Use the shared Footer component for real blog footers. Custom footer blocks are examples for page-specific composition.'>
+      <Section title='Usage' description='Use the exported Footer component for production footers. The other examples are reference recipes for page-specific composition.'>
         <CodeBlock code={ usageCode } />
       </Section>
       <Section title='Variant Rules' description='Choose a footer by navigation density and primary action.'>

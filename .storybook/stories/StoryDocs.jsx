@@ -1,13 +1,20 @@
-import { Button, Card, Typography } from '../../src/index';
+import { Children, isValidElement } from 'react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right.js';
+import ArrowUp from 'lucide-react/dist/esm/icons/arrow-up.js';
+
+import Button from '../../src/components/core/Button';
+import Card from '../../src/components/core/Card';
+import Typography from '../../src/foundations/Typography';
 
 import { HighlightedCode } from './HighlightedCode';
 
-export const GaudiLogo = ({ className = '' }) => (
+export const GaudiLogo = ({ className = '', decorative = false }) => (
   <svg
     viewBox='0 0 96 96'
     className={ `block shrink-0 text-gray-950 dark:text-white ${className}` }
-    role='img'
-    aria-label='Gaudi'
+    role={ decorative ? undefined : 'img' }
+    aria-label={ decorative ? undefined : 'Gaudi' }
+    aria-hidden={ decorative ? 'true' : undefined }
     focusable='false'
   >
     <path
@@ -21,7 +28,7 @@ export const InlineCode = ({ children }) => (
   <code className='rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[0.8em] text-gray-800 dark:bg-gray-800 dark:text-gray-100'>{children}</code>
 );
 
-const autoCodePattern = /(@[a-z0-9-]+\/[a-z0-9-/.]+|(?:src|app|data|meta|layouts|lib|scripts|styles|public|contentlayer)(?:\/[A-Za-z0-9_.*-]+)+|\[@[^\]]+\]|<\/?[A-Za-z][A-Za-z0-9]*>?|data-[A-Za-z0-9-*]+|aria-[A-Za-z0-9-]+|[a-z]+[A-Z][A-Za-z0-9]*|Cmd\/Ctrl \+ K|Cmd\/Ctrl|Next\.js|MDX|JSX|BibTeX|Recharts|React|Tailwind)/g;
+const autoCodePattern = /(@[a-z0-9-]+\/[a-z0-9-/.]+|(?:src|app|data|meta|layouts|lib|scripts|styles|public|contentlayer)(?:\/[A-Za-z0-9_.*-]+)+|\[@[^\]]+\]|<\/?[A-Za-z][A-Za-z0-9]*>?|data-[A-Za-z0-9-*]+|aria-[A-Za-z0-9-]+|[A-Z]?[a-z]+[A-Z][A-Za-z0-9]*|Cmd\/Ctrl \+ K|Cmd\/Ctrl|Next\.js|MDX|JSX|BibTeX|Recharts|React|Tailwind)/g;
 
 const renderAutoCode = (text, keyPrefix) => text.split(autoCodePattern).map((part, index) => {
   if (!part) return null;
@@ -46,30 +53,59 @@ export const InlineText = ({ children }) => {
 };
 
 export const pageParameters = {
-  'layout': 'fullscreen',
-  'options': {
-    'showPanel': false
-  }
+  'layout': 'fullscreen'
 };
 
-export const Page = ({ children, intro, kicker, showLogo = false, title }) => (
-  <div className='min-h-screen bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
-    <div className='w-full max-w-none space-y-14 px-6 py-8 sm:px-8 lg:px-10'>
+const toSectionId = (title) => title
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/(^-|-$)/g, '');
+
+const getTableColumnCount = (children) => {
+  let columnCount = 0;
+
+  const visit = (nodes) => {
+    Children.forEach(nodes, (node) => {
+      if (columnCount || !isValidElement(node)) return;
+      if (node.type === 'tr') {
+        columnCount = Children.count(node.props.children);
+        return;
+      }
+
+      visit(node.props.children);
+    });
+  };
+
+  visit(children);
+  return columnCount;
+};
+
+export const Page = ({ children, intro, showLogo = true, title }) => (
+  <div id='page-top' className='min-h-screen scroll-mt-4 bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
+    <div className='mx-auto w-full max-w-7xl space-y-10 px-6 py-8 sm:px-8 lg:px-10'>
       <header className='max-w-3xl space-y-4'>
-        {kicker ? <div className='inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300'>{kicker}</div> : null}
-        <div className='flex items-center gap-4'>
+        <div className='flex flex-wrap items-center gap-4'>
           {showLogo ? <GaudiLogo className='h-16 w-16' /> : null}
-          <Typography variant='heading-xl'>{title}</Typography>
+          <Typography as='h1' variant='heading-xl'>{title}</Typography>
         </div>
         {intro ? <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'><InlineText>{intro}</InlineText></p> : null}
       </header>
       {children}
+      <footer className='flex justify-end border-t border-gray-200 pt-4 dark:border-gray-800'>
+        <a
+          href='#page-top'
+          className='group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-gray-600 underline-offset-4 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 dark:text-gray-300 dark:hover:text-blue-300'
+        >
+          Back to top
+          <ArrowUp aria-hidden='true' size={ 16 } className='transition-transform group-hover:-translate-y-0.5' />
+        </a>
+      </footer>
     </div>
   </div>
 );
 
-export const Section = ({ children, description, title }) => (
-  <section className='space-y-4'>
+export const Section = ({ children, description, id, title }) => (
+  <section id={ id || toSectionId(title) } className='scroll-mt-28 space-y-4'>
     <div className='max-w-3xl space-y-2'>
       <Typography variant='heading-lg'>{title}</Typography>
       {description ? <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'><InlineText>{description}</InlineText></p> : null}
@@ -78,7 +114,15 @@ export const Section = ({ children, description, title }) => (
   </section>
 );
 
-export const CodeBlock = ({ code, language = 'jsx' }) => <HighlightedCode code={ code } language={ language } />;
+export const CodeBlock = ({ code, language = 'jsx', wide = false }) => {
+  const needsWideMeasure = wide || code.split('\n').some((line) => line.length > 96);
+
+  return (
+    <div className={ needsWideMeasure ? 'max-w-full' : 'max-w-3xl' }>
+      <HighlightedCode code={ code } language={ language } />
+    </div>
+  );
+};
 
 export const Stat = ({ label, value }) => (
   <div className='rounded-lg border border-gray-200 bg-white p-4 text-center dark:border-gray-800 dark:bg-gray-900'>
@@ -99,10 +143,13 @@ export const PrincipleCard = ({ description, number, title }) => (
 
 export const QuickLink = ({ description, storyId, title }) => (
   <a
-    href={ `?path=/story/${storyId}` }
-    className='block rounded-lg border border-gray-200 bg-white p-4 text-left transition-colors hover:border-blue-300 hover:no-underline dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-700'
+    href={ `./?path=/${storyId.endsWith('--docs') ? 'docs' : 'story'}/${storyId}` }
+    className='group block h-full rounded-lg border border-gray-200 bg-white p-4 text-left transition-colors hover:border-blue-300 hover:no-underline dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-700'
   >
-    <p className='mb-1 text-sm font-semibold text-gray-950 dark:text-white'>{title}</p>
+    <div className='mb-1 flex items-center justify-between gap-3'>
+      <p className='text-sm font-semibold text-gray-950 dark:text-white'>{title}</p>
+      <ArrowRight aria-hidden='true' size={ 16 } className='shrink-0 text-blue-600 transition-transform group-hover:translate-x-0.5 dark:text-blue-300' />
+    </div>
     <p className='text-xs leading-5 text-gray-500 dark:text-gray-400'><InlineText>{description}</InlineText></p>
   </a>
 );
@@ -116,17 +163,23 @@ export const Badge = ({ children, tone = 'gray' }) => {
     'yellow': 'bg-yellow-50 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300'
   };
 
-  return <span className={ `inline-flex rounded px-2 py-0.5 text-[11px] font-semibold ${tones[tone] || tones.gray}` }>{children}</span>;
+  return <span className={ `inline-flex rounded px-2 py-0.5 text-xs font-semibold ${tones[tone] || tones.gray}` }>{children}</span>;
 };
 
-export const Table = ({ children }) => (
-  <div className='overflow-x-auto rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900'>
-    <table className='w-full min-w-[720px] border-collapse text-left'>{children}</table>
+export const Table = ({ children, label = 'Documentation table' }) => {
+  const columnCount = getTableColumnCount(children);
+
+  return (
+  <div className='ds-docs-table-frame max-w-full rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900' data-columns={ columnCount }>
+    <div className='ds-docs-table-scroll max-w-full overflow-x-auto' role='region' tabIndex={ 0 } aria-label={ label }>
+      <table className='ds-docs-table w-full border-collapse text-left' data-columns={ columnCount }>{children}</table>
+    </div>
   </div>
-);
+  );
+};
 
 export const Th = ({ children }) => (
-  <th scope='col' className='border-b border-gray-200 bg-gray-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300'>{children}</th>
+  <th scope='col' className='border-b border-gray-200 bg-gray-50 px-4 py-3 text-xs font-semibold uppercase text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300'>{children}</th>
 );
 
 export const Td = ({ children, mono = false }) => (
@@ -145,7 +198,7 @@ export const CheckList = ({ items }) => (
 );
 
 export const CommandButton = ({ children }) => (
-  <Button variant='outline' tone='gray' size='sm' as='button' type='button'>{children}</Button>
+  <Button variant='outline' tone='neutral' size='sm' type='button'>{children}</Button>
 );
 
 export const DocCard = Card;

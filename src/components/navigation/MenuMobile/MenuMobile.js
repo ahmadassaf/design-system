@@ -6,7 +6,7 @@
  * @description Mobile responsive navigation menu component that provides a full-screen overlay
  * navigation experience for mobile devices. Features categories, navigation links, search functionality,
  * and newsletter signup. Includes proper accessibility attributes and smooth animations.
- * Only visible on mobile/tablet devices (hidden on desktop).
+ * The parent menu closes it when the layout crosses the desktop breakpoint.
  *
  * @author Ahmad Assaf
  * @version 1.0.0
@@ -15,10 +15,16 @@
 import React from 'react';
 
 import Button from '../../core/Button';
+import DialogPortal from '../../core/DialogPortal';
 import Icon from '../../core/Icon';
 import Link from '../../core/Link';
 import NewsletterForm from '../../layout/NewsletterForm';
 import MenuSearch from '../MenuSearch';
+
+const formatCategoryTitle = (title) => title
+  .split('-')
+  .map((word) => word.toLowerCase() === 'ai' ? 'AI' : `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
+  .join(' ');
 
 /**
  * Renders a full-screen mobile navigation menu
@@ -33,7 +39,8 @@ import MenuSearch from '../MenuSearch';
  * @param {string} props.categories[].id - Unique identifier for the category
  * @param {string} props.categories[].title - Display title of the category
  * @param {string} props.categories[].description - Brief description of the category
- * @param {Array<Object>} props.links - Array of main navigation link objects
+ * @param {Object} [props.blogLink] - Explicit primary blog destination
+ * @param {Array<Object>} props.links - Array of additional navigation link objects
  * @param {string} props.links[].href - URL for the navigation link
  * @param {string} props.links[].title - Display text for the navigation link
  * @param {Function} props.setMobileMenuOpen - Function to close the mobile menu
@@ -54,19 +61,14 @@ import MenuSearch from '../MenuSearch';
  * />
  *
  * @example
- * // Menu automatically hides on desktop (lg:hidden class)
- * // and provides full navigation for mobile users
+ * // The parent menu closes this dialog when the desktop breakpoint is reached.
  */
-const MenuMobile = ({ categories, links, setMobileMenuOpen, setLauncherOpen }) => {
+const MenuMobile = ({ blogLink = { href: '/blog', title: 'Blog' }, categories = [], links = [], setMobileMenuOpen, setLauncherOpen }) => {
   const dialogRef = React.useRef(null);
   const closeButtonRef = React.useRef(null);
-  const previouslyFocusedElementRef = React.useRef(null);
+  const categoriesId = React.useId();
 
   React.useEffect(() => {
-    previouslyFocusedElementRef.current = document.activeElement;
-    closeButtonRef.current?.focus();
-    document.body.style.overflow = 'hidden';
-
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setMobileMenuOpen(false);
@@ -101,55 +103,64 @@ const MenuMobile = ({ categories, links, setMobileMenuOpen, setLauncherOpen }) =
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-      previouslyFocusedElementRef.current?.focus?.();
     };
   }, [ setMobileMenuOpen ]);
 
-  return (
-    <div ref={ dialogRef } className='lg:hidden' role='dialog' aria-modal='true' aria-label='Mobile navigation'>
+  const handleSearchOpen = (open) => {
+    if (open) setMobileMenuOpen(false);
+    setLauncherOpen(open);
+  };
 
-      <div className='fixed inset-y-0 right-0 z-1000 w-full overflow-y-auto bg-white px-6 py-8 shadow-sm dark:bg-gray-900 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
-        <div className='mb-10 flex items-start justify-between gap-4'>
+  return (
+    <DialogPortal initialFocusRef={ closeButtonRef }>
+    <div ref={ dialogRef } role='dialog' aria-modal='true' aria-label='Mobile navigation'>
+
+      <div className='fixed inset-y-0 right-0 z-[var(--ds-z-overlay)] w-full overflow-y-auto bg-white px-6 py-8 shadow-sm dark:bg-gray-900 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+          <div className='mb-10 flex items-start justify-between gap-4'>
           <div className='w-full'>
-            <MenuSearch className='w-full sm:w-full' setOpen={ setLauncherOpen }></MenuSearch>
+            <MenuSearch className='w-full sm:w-full' setOpen={ handleSearchOpen }></MenuSearch>
           </div>
-          <Button ref={ closeButtonRef } variant='ghost' tone='gray' size='sm' className='h-10 w-10 shrink-0 p-0' onClick={ () => setMobileMenuOpen(false) }>
+          <Button ref={ closeButtonRef } variant='ghost' tone='neutral' size='sm' className='h-11 w-11 shrink-0 p-0' onClick={ () => setMobileMenuOpen(false) }>
             <span className='sr-only'>Close menu</span>
             <Icon name='X' decorative size='md' />
           </Button>
         </div>
-        <div className='flow-root'>
+        <nav aria-label='Mobile navigation links' className='flow-root'>
           <div className='-my-6 divide-y divide-gray-500/10'>
-            <div className='space-y-2 pb-6'>
-
-              <Link href={ `/blog` } onClick={ () => setMobileMenuOpen(false) } className='-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>Blog</Link>
-              <div className='-mx-3'>
-
-                <div className='mt-2 space-y-2' id='disclosure-1'>
+            <ul className='space-y-2 pb-6'>
+              <li>
+                <Link href={ blogLink.href } onClick={ () => setMobileMenuOpen(false) } className='-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-blue-950 hover:bg-blue-50 hover:text-blue-900 dark:text-white dark:hover:bg-blue-950/40 dark:hover:text-blue-200'>{blogLink.title}</Link>
+                {categories.length ? <>
+                  <span className='sr-only' id={ categoriesId }>Blog categories</span>
+                  <ul aria-labelledby={ categoriesId } className='-mx-3 mt-2 space-y-2'>
                   {categories.map((category) => (
-                    <Link key={ category.id } href={ `/blog/categories/${category.id}` } onClick={ () => setMobileMenuOpen(false) } className='group capitalize block rounded-lg py-2 pl-6 pr-3 text-sm font-medium leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900'>{category.title.replace('-', ' ')}
-                      <p className='mt-1 text-gray-600 font-light text-s dark:text-gray-100 dark:group-hover:text-gray-600'>{category.description}</p>
-                    </Link>
+                    <li key={ category.id }>
+                      <Link href={ `/blog/categories/${category.id}` } onClick={ () => setMobileMenuOpen(false) } className='group block rounded-lg py-2 pl-6 pr-3 text-sm font-medium leading-7 text-blue-950 hover:bg-blue-50 hover:text-blue-900 dark:text-white dark:hover:bg-blue-950/40 dark:hover:text-blue-200'>{formatCategoryTitle(category.title)}
+                        <span className='mt-1 block text-sm font-light text-gray-600 group-hover:text-blue-800 dark:text-gray-100 dark:group-hover:text-blue-200'>{category.description}</span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                  </ul>
+                </> : null}
+              </li>
 
-              </div>
-
-              {links.slice(1, links.length).map((link) => (
-                <Link key={ link.href } href={ link.href } onClick={ () => setMobileMenuOpen(false) } className='-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-blue-50 dark:text-white dark:hover:text-gray-900 whitespace-nowrap'>{link.title}</Link>
+              {links.map((link) => (
+                <li key={ link.href }>
+                  <Link href={ link.href } onClick={ () => setMobileMenuOpen(false) } className='-mx-3 block whitespace-nowrap rounded-lg px-3 py-2 text-base font-medium leading-7 text-blue-950 hover:bg-blue-50 hover:text-blue-900 dark:text-white dark:hover:bg-blue-950/40 dark:hover:text-blue-200'>{link.title}</Link>
+                </li>
               ))}
 
-            </div>
+            </ul>
 
             <div>
               <NewsletterForm />
             </div>
 
           </div>
-        </div>
+        </nav>
       </div>
     </div>
+    </DialogPortal>
   );
 };
 

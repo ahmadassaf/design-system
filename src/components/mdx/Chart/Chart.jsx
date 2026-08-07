@@ -2,26 +2,26 @@
 
 import { useLayoutEffect, useRef } from 'react';
 
-import * as AreaModule from 'recharts/lib/cartesian/Area.js';
-import * as BarModule from 'recharts/lib/cartesian/Bar.js';
-import * as CartesianGridModule from 'recharts/lib/cartesian/CartesianGrid.js';
-import * as LineModule from 'recharts/lib/cartesian/Line.js';
-import * as ScatterModule from 'recharts/lib/cartesian/Scatter.js';
-import * as XAxisModule from 'recharts/lib/cartesian/XAxis.js';
-import * as YAxisModule from 'recharts/lib/cartesian/YAxis.js';
-import * as RechartsAreaChartModule from 'recharts/lib/chart/AreaChart.js';
-import * as RechartsBarChartModule from 'recharts/lib/chart/BarChart.js';
-import * as RechartsComposedChartModule from 'recharts/lib/chart/ComposedChart.js';
-import * as RechartsLineChartModule from 'recharts/lib/chart/LineChart.js';
-import * as RechartsPieChartModule from 'recharts/lib/chart/PieChart.js';
-import * as RechartsRadialBarChartModule from 'recharts/lib/chart/RadialBarChart.js';
-import * as RechartsScatterChartModule from 'recharts/lib/chart/ScatterChart.js';
-import * as CellModule from 'recharts/lib/component/Cell.js';
-import * as LegendModule from 'recharts/lib/component/Legend.js';
-import * as ResponsiveContainerModule from 'recharts/lib/component/ResponsiveContainer.js';
-import * as RechartsTooltipModule from 'recharts/lib/component/Tooltip.js';
-import * as PieModule from 'recharts/lib/polar/Pie.js';
-import * as RadialBarModule from 'recharts/lib/polar/RadialBar.js';
+import * as AreaModule from 'recharts/es6/cartesian/Area.js';
+import * as BarModule from 'recharts/es6/cartesian/Bar.js';
+import * as CartesianGridModule from 'recharts/es6/cartesian/CartesianGrid.js';
+import * as LineModule from 'recharts/es6/cartesian/Line.js';
+import * as ScatterModule from 'recharts/es6/cartesian/Scatter.js';
+import * as XAxisModule from 'recharts/es6/cartesian/XAxis.js';
+import * as YAxisModule from 'recharts/es6/cartesian/YAxis.js';
+import * as RechartsAreaChartModule from 'recharts/es6/chart/AreaChart.js';
+import * as RechartsBarChartModule from 'recharts/es6/chart/BarChart.js';
+import * as RechartsComposedChartModule from 'recharts/es6/chart/ComposedChart.js';
+import * as RechartsLineChartModule from 'recharts/es6/chart/LineChart.js';
+import * as RechartsPieChartModule from 'recharts/es6/chart/PieChart.js';
+import * as RechartsRadialBarChartModule from 'recharts/es6/chart/RadialBarChart.js';
+import * as RechartsScatterChartModule from 'recharts/es6/chart/ScatterChart.js';
+import * as CellModule from 'recharts/es6/component/Cell.js';
+import * as LegendModule from 'recharts/es6/component/Legend.js';
+import * as ResponsiveContainerModule from 'recharts/es6/component/ResponsiveContainer.js';
+import * as RechartsTooltipModule from 'recharts/es6/component/Tooltip.js';
+import * as PieModule from 'recharts/es6/polar/Pie.js';
+import * as RadialBarModule from 'recharts/es6/polar/RadialBar.js';
 
 import { cn } from '../../../utilities/cn';
 
@@ -70,9 +70,16 @@ const isChartRuntimeReady = [
   YAxis
 ].every(Boolean);
 
-const chartColors = [ '#2563eb', '#16a34a', '#4f46e5', '#ca8a04', '#dc2626', '#64748b' ];
+const chartColors = [
+  'var(--ds-color-chart-1)',
+  'var(--ds-color-chart-2)',
+  'var(--ds-color-chart-3)',
+  'var(--ds-color-chart-4)',
+  'var(--ds-color-chart-5)',
+  'var(--ds-color-chart-6)'
+];
 
-const axisClassName = 'fill-gray-500 text-[11px] dark:fill-gray-400';
+const axisClassName = 'fill-gray-500 text-xs dark:fill-gray-400';
 
 const defaultMargins = { 'bottom': 8, 'left': 8, 'right': 16, 'top': 16 };
 
@@ -208,7 +215,7 @@ const ChartTooltip = ({ active, label, payload }) => {
 
 const SharedAxes = ({ showGrid, xKey }) => (
   <>
-    {showGrid ? <CartesianGrid strokeDasharray='3 3' stroke='rgba(148, 163, 184, 0.35)' vertical={ false } /> : null}
+    {showGrid ? <CartesianGrid strokeDasharray='3 3' stroke='var(--ds-color-chart-grid)' vertical={ false } /> : null}
     <XAxis axisLine={ false } className={ axisClassName } dataKey={ xKey } tickLine={ false } />
     <YAxis axisLine={ false } className={ axisClassName } tickLine={ false } width={ 38 } />
   </>
@@ -216,7 +223,7 @@ const SharedAxes = ({ showGrid, xKey }) => (
 
 const SharedChartChrome = ({ showLegend, showTooltip }) => (
   <>
-    {showTooltip ? <RechartsTooltip content={ <ChartTooltip /> } cursor={{ 'fill': 'rgba(37, 99, 235, 0.08)' }} /> : null}
+    {showTooltip ? <RechartsTooltip content={ <ChartTooltip /> } cursor={{ 'fill': 'var(--ds-color-chart-cursor)' }} /> : null}
     {showLegend ? <Legend iconType='circle' wrapperStyle={{ 'fontSize': 12, 'paddingTop': 12 }} /> : null}
   </>
 );
@@ -453,7 +460,7 @@ export const ScatterChart = ({
     <ChartFrame ariaLabel={ ariaLabel } className={ className } description={ description } height={ height } title={ title }>
       <ResponsiveContainer height='100%' minWidth={ 0 } width='100%'>
         <RechartsScatterChart margin={ defaultMargins }>
-          {showGrid ? <CartesianGrid strokeDasharray='3 3' stroke='rgba(148, 163, 184, 0.35)' /> : null}
+          {showGrid ? <CartesianGrid strokeDasharray='3 3' stroke='var(--ds-color-chart-grid)' /> : null}
           <XAxis axisLine={ false } className={ axisClassName } dataKey={ xKey } name={ xKey } tickLine={ false } type='number' />
           <YAxis axisLine={ false } className={ axisClassName } dataKey={ yKey } name={ yKey } tickLine={ false } type='number' width={ 38 } />
           {showTooltip ? <RechartsTooltip content={ <ChartTooltip /> } cursor={{ 'strokeDasharray': '3 3' }} /> : null}

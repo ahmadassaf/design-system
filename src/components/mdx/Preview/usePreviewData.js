@@ -87,13 +87,22 @@ const setCached = (url, data) => {
 // Request deduplication to prevent duplicate API calls for the same URL
 const pendingRequests = new Map();
 
+const getHostnameFallback = (url, fallback = url) => {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return fallback;
+  }
+};
+
 /**
  * Fetch preview metadata from the API with a timeout. Returns data or an
  * error-shaped object; throws on network failure.
  */
 const fetchPreviewData = async(url, timeout) => {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  const safeTimeout = Number.isFinite(timeout) && timeout > 0 ? timeout : 20000;
+  const timeoutId = setTimeout(() => controller.abort(), safeTimeout);
 
   try {
     const response = await fetch(`/api/preview?url=${encodeURIComponent(url)}`, {
@@ -118,6 +127,12 @@ const fetchPreviewData = async(url, timeout) => {
     }
 
     const parsedData = await response.json();
+
+    if (!parsedData || typeof parsedData !== 'object') return {
+      'error': true,
+      'errorMessage': 'Preview response was empty',
+      'status': 502
+    };
 
     if (parsedData.error) return {
       'error': true,
@@ -217,7 +232,7 @@ export function usePreviewData(url, customTitle, options = {}) {
 
         setCached(url, result);
 
-        const resolvedTitle = result.error ? { 'title': customTitle || new URL(url).hostname } : {};
+        const resolvedTitle = result.error ? { 'title': customTitle || getHostnameFallback(url) } : {};
 
         setState({ 'data': { ...withTitle(result, customTitle), ...resolvedTitle }, 'error': null, 'loading': false });
       } catch (err) {
@@ -234,8 +249,8 @@ export function usePreviewData(url, customTitle, options = {}) {
 
         const errorData = {
           'error': true,
-          'errorMessage': err.message,
-          'status': err.status || 404,
+          'errorMessage': err?.message || 'Failed to fetch preview',
+          'status': err?.status || 404,
           'title': fallbackTitle
         };
 
@@ -244,7 +259,7 @@ export function usePreviewData(url, customTitle, options = {}) {
 
         setState({
           'data': errorData,
-          'error': err.name !== 'AbortError' && !err.message.includes('HTTP') ? err : null,
+          'error': err?.name !== 'AbortError' && !String(err?.message || '').includes('HTTP') ? err : null,
           'loading': false
         });
       }

@@ -2,7 +2,7 @@
  * FAQ Component
  *
  * @description Collapsible FAQ section with expandable question-answer pairs.
- * Features smooth animations and accessible disclosure patterns using Headless UI.
+ * Features accessible disclosure patterns using native buttons and controlled panels.
  * Used within MDX content to present frequently asked questions in an organized format.
  *
  * @author Ahmad Assaf
@@ -11,9 +11,42 @@
 
 'use client';
 
-import { Disclosure } from '@headlessui/react';
+import { useId, useState } from 'react';
 
 import Icon from '../../core/Icon';
+
+const FaqItem = ({ faq }) => {
+  const [ open, setOpen ] = useState(false);
+  const panelId = useId();
+
+  return (
+    <div className='pt-6'>
+      <dt>
+        <button
+          aria-controls={ panelId }
+          aria-expanded={ open }
+          className='flex min-h-11 w-full items-center justify-between text-left text-gray-900 dark:text-white'
+          type='button'
+          onClick={ () => setOpen((currentOpen) => !currentOpen) }
+        >
+          <span className='text-base font-semibold leading-7'>{faq.question}</span>
+          <span className='ml-6 flex h-7 items-center'>
+            {open ? (
+              <Icon name='Minus' size='sm' decorative />
+            ) : (
+              <Icon name='Plus' size='sm' decorative />
+            )}
+          </span>
+        </button>
+      </dt>
+      {open ? (
+        <dd id={ panelId } className='mt-2 p-0'>
+          <p className='text-base leading-7 text-gray-600 dark:text-gray-300'>{faq.answer}</p>
+        </dd>
+      ) : null}
+    </div>
+  );
+};
 
 /**
  * Renders a collapsible FAQ section
@@ -31,35 +64,17 @@ import Icon from '../../core/Icon';
  *   { question: "How do I get started?", answer: "Begin by reading the official documentation." }
  * ]} />
  */
-const Faq = ({ questions }) => (
-  <div className='mx-auto my-8'>
-    <h2 className='mt-0 border-b border-gray-900/10 pb-3 text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:border-white/10 dark:text-white'>FAQ</h2>
+const Faq = ({ heading = 'FAQ', headingLevel = 2, questions }) => {
+  const Heading = ({ 2: 'h2', 3: 'h3', 4: 'h4', 5: 'h5', 6: 'h6' })[headingLevel] || 'h2';
+
+  return <div className='mx-auto my-8'>
+    <Heading className='mt-0 border-b border-gray-900/10 pb-3 text-2xl font-bold leading-10 text-gray-900 dark:border-white/10 dark:text-white'>{heading}</Heading>
     <dl className='mt-8 space-y-6 divide-y divide-gray-900/10 dark:divide-white/10'>
       {questions.map((faq) => (
-        <Disclosure as='div' key={ faq.question } className='pt-6'>
-          {({ open }) => (
-            <>
-              <dt>
-                <Disclosure.Button className='flex w-full items-start justify-between text-left text-gray-900 dark:text-white'>
-                  <span className='text-base font-semibold leading-7'>{faq.question}</span>
-                  <span className='ml-6 flex h-7 items-center'>
-                    {open ? (
-                      <Icon name='Minus' size='sm' decorative />
-                    ) : (
-                      <Icon name='Plus' size='sm' decorative />
-                    )}
-                  </span>
-                </Disclosure.Button>
-              </dt>
-              <Disclosure.Panel as='dd' className='mt-2 p-0'>
-                <p className='text-base leading-7 text-gray-600 dark:text-gray-300'>{faq.answer}</p>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
+        <FaqItem key={ faq.question } faq={ faq } />
       ))}
     </dl>
-  </div>
-);
+  </div>;
+};
 
 export default Faq;

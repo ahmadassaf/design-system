@@ -6,28 +6,25 @@ import publications from '../fixtures/site/publications.json';
 import tags from '../fixtures/site/tags.json';
 import navigationMetadata from '../fixtures/site/navigationMetadata.mjs';
 
+import { AccordionGroup } from '../../src/components/core/Accordion';
 import Aurora from '../../src/components/layout/Aurora';
+import Button from '../../src/components/core/Button';
+import Card from '../../src/components/core/Card';
+import CmdLauncherShortcut from '../../src/components/core/CmdLauncherShortcut';
+import { FieldInput } from '../../src/components/core/Field';
 import Footer from '../../src/components/layout/Footer';
 import FloatingMenu from '../../src/components/navigation/FloatingMenu';
+import { Grid } from '../../src/components/core/Grid';
+import Icon from '../../src/components/core/Icon';
+import Link from '../../src/components/core/Link';
 import Menu from '../../src/components/navigation/Menu';
-import {
-  Button,
-  Card,
-  AccordionGroup,
-  CmdLauncherShortcut,
-  FieldInput,
-  Grid,
-  Icon,
-  Link,
-  PaginationBar,
-  Pill,
-  Post,
-  POSTS_PER_PAGE,
-  Search,
-  TextHighlight,
-  ThoughtsSection,
-  Typography
-} from '../../src/index';
+import { PaginationBar, POSTS_PER_PAGE } from '../../src/components/core/Pagination';
+import Pill from '../../src/components/core/Pill';
+import Search from '../../src/components/layout/Search';
+import { TextHighlight } from '../../src/components/core/TextHighlight';
+import Post from '../../src/components/post/Post';
+import ThoughtsSection from '../../src/components/blocks/ThoughtsSection';
+import Typography from '../../src/foundations/Typography';
 
 const siteMetadata = {
   author: 'Ahmad Assaf',
@@ -495,7 +492,7 @@ const HomePage = () => (
             {regularPosts[6] ? <Post frontMatter={ regularPosts[6] } /> : null}
           </ul>
           <div className='flex justify-end md:flex-shrink-0'>
-            <Button variant='outline' tone='blue' size='md' href='/blog' aria-label='View all blog posts'>
+            <Button variant='outline' tone='accent' size='md' href='/blog' aria-label='View all blog posts'>
               View All Posts
               <Icon name='ArrowRight' decorative size='xs' />
             </Button>
@@ -591,11 +588,11 @@ const CategoriesPageView = () => {
           </Grid>
           <div className='mb-8 flex justify-end'>
             <div className='inline-flex gap-2'>
-              <Button onClick={ () => setViewMode('cards') } variant={ viewMode === 'cards' ? 'solid' : 'outline' } tone={ viewMode === 'cards' ? 'blue' : 'gray' } size='sm'>
+              <Button onClick={ () => setViewMode('cards') } variant={ viewMode === 'cards' ? 'solid' : 'outline' } tone={ viewMode === 'cards' ? 'accent' : 'neutral' } size='sm'>
                 <Icon name='Grid3X3' size='sm' decorative />
                 Cards
               </Button>
-              <Button onClick={ () => setViewMode('list') } variant={ viewMode === 'list' ? 'solid' : 'outline' } tone={ viewMode === 'list' ? 'blue' : 'gray' } size='sm'>
+              <Button onClick={ () => setViewMode('list') } variant={ viewMode === 'list' ? 'solid' : 'outline' } tone={ viewMode === 'list' ? 'accent' : 'neutral' } size='sm'>
                 <Icon name='List' size='sm' decorative />
                 List
               </Button>
@@ -937,7 +934,7 @@ const AboutPage = () => {
   return (
     <PageShell>
       <div>
-        <main className='isolate'>
+        <div className='isolate'>
           <div>
             <div className='overflow-hidden'>
               <div className='pb-32 pt-8'>
@@ -1018,13 +1015,14 @@ const AboutPage = () => {
               ))}
             </Grid>
           </div>
-        </main>
+        </div>
       </div>
     </PageShell>
   );
 };
 
 export default {
+  id: 'layout-examples',
   parameters: {
     nextjs: {
       appDirectory: true,
@@ -1060,7 +1058,7 @@ export const CategoryPageWithPostsAndPagination = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByRole('textbox', { name: 'Search articles' })).toBeVisible();
+    await expect(canvas.getByRole('searchbox', { name: 'Filter articles' })).toBeVisible();
     await expect(canvas.getByRole('navigation', { name: 'Pagination' })).toBeVisible();
   }
 };

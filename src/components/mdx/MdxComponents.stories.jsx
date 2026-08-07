@@ -2,12 +2,12 @@ import { CheckList, CodeBlock, InlineCode, Page, QuickLink, Section, Table, Td, 
 import { expect, within } from 'storybook/test';
 
 export default {
+  id: 'mdx-overview',
   parameters: {
-    layout: 'fullscreen',
-    options: { showPanel: false }
+    layout: 'fullscreen'
   },
   tags: [ '!autodocs' ],
-  title: 'MDX/Overview'
+  title: 'MDX'
 };
 
 export const Default = {
@@ -18,14 +18,13 @@ export const Default = {
     await expect(canvas.getByRole('heading', { name: 'MDX Components' })).toBeVisible();
     await expect(canvas.getAllByText('CitationTracker').length).toBeGreaterThanOrEqual(2);
     await expect(canvas.getAllByText('CodeGroupTabs').length).toBeGreaterThanOrEqual(1);
-    await expect(canvas.getByRole('link', { name: /Callout/ })).toHaveAttribute('href', '?path=/story/mdx-callout--example');
-    await expect(canvas.getByRole('link', { name: /Citation/ })).toHaveAttribute('href', '?path=/story/mdx-citation--example');
+    await expect(canvas.getByRole('link', { name: /Callout/ })).toHaveAttribute('href', './?path=/story/mdx-callout--example');
+    await expect(canvas.getByRole('link', { name: /Citation/ })).toHaveAttribute('href', './?path=/story/mdx-citation--example');
   },
   render: () => (
     <Page
       title='MDX Components'
       intro='MDX components are the article-authoring layer for Gaudi. They let posts mix normal markdown with a small set of structured components for callouts, media, charts, citations, previews, details, and article-specific UI.'
-      kicker='Authoring'
     >
       <Section title='What MDX Means Here' description='Posts are still markdown-first. MDX is used only when the article needs richer structure than markdown can provide.'>
         <Table>
@@ -40,6 +39,12 @@ export const Default = {
         </Table>
       </Section>
 
+      <details id='pipeline-internals' className='group scroll-mt-28 rounded-lg border border-gray-200 bg-gray-50/60 p-4 open:bg-white dark:border-gray-800 dark:bg-gray-900/60 dark:open:bg-gray-950'>
+        <summary className='cursor-pointer text-sm font-semibold text-gray-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 dark:text-white'>
+          Pipeline internals
+          <span className='ml-2 font-normal text-gray-500 dark:text-gray-400'>Compilation stages and citation hydration</span>
+        </summary>
+        <div className='pt-2'>
       <Section title='Rendering Pipeline' description='The blog uses Contentlayer and the unified ecosystem. Authors write MDX; remark works on the markdown tree, rehype works on the HTML tree, and Gaudi components hydrate the final article UI.'>
         <Table>
           <thead>
@@ -78,6 +83,8 @@ The same source can be cited again later [@HusseinYC18].` }
           </tbody>
         </Table>
       </Section>
+        </div>
+      </details>
 
       <Section title='Author Syntax' description='This is the shape authors should write in a post file. No local imports are needed when the blog MDX provider exposes the component map.'>
         <CodeBlock
@@ -141,10 +148,8 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
         <div className='grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
           <QuickLink title='Callout' description='Article notices and supporting context.' storyId='mdx-callout--example' />
           <QuickLink title='Chart' description='Recharts-powered article data visualization.' storyId='mdx-chart--bar' />
-          <QuickLink title='Table' description='Markdown and component-rendered article tables.' storyId='mdx-table--example' />
           <QuickLink title='Video' description='Thumbnail-triggered article video embeds.' storyId='mdx-video--example' />
           <QuickLink title='Citation' description='Reference markers, source popovers, and tracked back-links.' storyId='mdx-citation--example' />
-          <QuickLink title='Mermaid' description='Diagram snippets embedded in prose.' storyId='mdx-mermaid--example' />
         </div>
       </Section>
     </Page>

@@ -91,9 +91,9 @@ export default function ThoughtsSection({ thoughts }) {
 
           {/* View All Button */}
           <div className='flex justify-end md:flex-shrink-0 md:pt-1'>
-            <Button variant='outline' tone='blue' size='md' href='/thoughts' aria-label='View all thoughts'>
+            <Button variant='outline' tone='accent' size='md' href='/thoughts' aria-label='View all thoughts'>
               View All Thoughts
-              <svg className='h-4 w-4 transition-transform group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <svg className='h-4 w-4 transition-transform group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={ 2 } d='M9 5l7 7-7 7' />
               </svg>
             </Button>

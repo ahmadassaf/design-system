@@ -14,6 +14,54 @@ import SocialIcon from '../../core/Icon';
 import Link from '../../core/Link';
 import { cn } from '../../../utilities/cn';
 
+const safeUrlProtocols = new Set([ 'http:', 'https:' ]);
+
+const isSafeAbsoluteUrl = (value) => {
+  try {
+    return safeUrlProtocols.has(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+};
+
+const encodePath = (value) => String(value || '')
+  .replace(/^\/+/, '')
+  .replace(/\.mdx$/i, '')
+  .split('/')
+  .filter(Boolean)
+  .map((segment) => encodeURIComponent(segment))
+  .join('/');
+
+const buildEditUrl = (siteMetadata = {}, externalLink) => {
+  if (!siteMetadata.postsRepo || !externalLink || !isSafeAbsoluteUrl(siteMetadata.postsRepo)) return null;
+
+  const repoUrl = siteMetadata.postsRepo.replace(/\/+$/, '');
+  const sourcePath = encodePath(externalLink);
+
+  return sourcePath ? `${repoUrl}/blob/master/${sourcePath}.mdx` : null;
+};
+
+const buildShareTarget = (siteMetadata = {}, slug, externalLink) => {
+  if (siteMetadata.siteUrl && slug && isSafeAbsoluteUrl(siteMetadata.siteUrl)) {
+    const baseUrl = siteMetadata.siteUrl.endsWith('/') ? siteMetadata.siteUrl : `${siteMetadata.siteUrl}/`;
+
+    return new URL(`blog/${encodePath(slug)}`, baseUrl).href;
+  }
+
+  return isSafeAbsoluteUrl(externalLink) ? externalLink : '';
+};
+
+const buildShareUrl = ({ externalLink, siteMetadata, slug, tags, title }) => {
+  const shareUrl = new URL('https://x.com/share');
+  const hashtags = Array.isArray(tags) ? tags.map((tag) => String(tag).replace(/\s+/g, '')).filter(Boolean).join(',') : '';
+
+  shareUrl.searchParams.set('text', title || '');
+  shareUrl.searchParams.set('url', buildShareTarget(siteMetadata, slug, externalLink));
+  shareUrl.searchParams.set('hashtags', hashtags);
+
+  return shareUrl.href;
+};
+
 /**
  * Post sharing component with social media and GitHub integration
  *
@@ -39,31 +87,22 @@ import { cn } from '../../../utilities/cn';
  *   externalLink="content/blog/my-post"
  * />
  */
-const PostSharing = ({ className, classNames = {}, siteMetadata, title, tags, externalLink }) => {
-
-  /**
-   * Generates the GitHub edit URL for the post source
-   *
-   * @description Creates a direct link to the post's source file on GitHub for editing.
-   * Constructs the URL using the site's posts repository and the external link path.
-   *
-   * @param {string} externalLink - The file path or external link identifier
-   * @returns {string} The complete GitHub URL for editing the post
-   */
-  const editUrl = (externalLink) => `${siteMetadata.postsRepo}/blob/master/${externalLink}.mdx`;
+const PostSharing = ({ className, classNames = {}, siteMetadata, slug, title, tags, externalLink }) => {
+  const editUrl = buildEditUrl(siteMetadata, externalLink);
+  const shareUrl = buildShareUrl({ externalLink, siteMetadata, slug, tags, title });
 
   return (
     <div className={ cn('my-4 flex pt-4 text-sm text-gray-700 max-sm:text-xs dark:text-gray-300', className, classNames.root) }>
       <div className={ cn('mr-2 flex space-x-2 hover:text-blue-700', classNames.action) }>
         <SocialIcon
           kind='twitter'
-          href={ `http://x.com/share?text=${title}&url=${externalLink}&hashtags=${tags?.map((t) => t.replaceAll(' ', '')).join(',') || ''}` }
+          href={ shareUrl }
           label='Share post on X'
         />
       </div>
       <div className={ cn('mr-4 flex space-x-2 hover:text-blue-700', classNames.source) }>
-        <SocialIcon kind='github' href={ siteMetadata.github } />
-        <Link href={ editUrl(externalLink) } className={ classNames.link }>View on GitHub</Link>
+        <SocialIcon kind='github' href={ siteMetadata?.github } />
+        {editUrl ? <Link href={ editUrl } className={ classNames.link }>View on GitHub</Link> : null}
       </div>
     </div>
   );

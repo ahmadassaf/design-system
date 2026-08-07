@@ -39,30 +39,35 @@ const Card = ({
   radius,
   subtitle,
   title,
-  variant
-}) => (
-  <div
+  titleLevel = 3,
+  variant,
+  ...props
+}) => {
+  const Title = ({ 2: 'h2', 3: 'h3', 4: 'h4', 5: 'h5', 6: 'h6' })[titleLevel] || 'h3';
+
+  return <div
     className={ cardVariants({
       'className': cn(interactive && 'hover:shadow-md', className, classNames.root),
       padding,
       radius,
       variant
     }) }
+    { ...props }
   >
     <div className={ cn('relative z-10', classNames.body) }>
       {title ? (
-        <h4 className={ cn('mt-1 text-base font-bold tracking-wide text-gray-950 dark:text-white', classNames.title) }>
+        <Title className={ cn('mt-1 text-base font-bold text-gray-950 dark:text-white', classNames.title) }>
           {title}
-        </h4>
+        </Title>
       ) : null}
       {subtitle ? (
-        <p className={ cn('mt-2 text-sm leading-relaxed tracking-wide text-gray-700 dark:text-gray-300', classNames.subtitle) }>
+        <p className={ cn('mt-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300', classNames.subtitle) }>
           {subtitle}
         </p>
       ) : null}
       {children}
     </div>
-  </div>
-);
+  </div>;
+};
 
 export default Card;

@@ -21,6 +21,34 @@ import { SiteConfigProvider } from '../../../utilities/SiteConfig';
 
 const ThemeProvider = dynamic(() => import('../../../utilities/ThemeProvider'));
 
+const getThemeCookieStore = async () => {
+  try {
+    return await cookies();
+  } catch {
+    return null;
+  }
+};
+
+const resolveJsonLd = async (jsonLd) => {
+  try {
+    return typeof jsonLd === 'function' ? await jsonLd() : jsonLd;
+  } catch {
+    return null;
+  }
+};
+
+const serializeJsonLd = (jsonLd) => {
+  if (!jsonLd) return null;
+
+  try {
+    const serialized = JSON.stringify(jsonLd);
+
+    return serialized ? serialized.replace(/</g, '\\u003c') : null;
+  } catch {
+    return null;
+  }
+};
+
 /**
  * Main layout container component that wraps all page content
  *
@@ -44,12 +72,19 @@ const ThemeProvider = dynamic(() => import('../../../utilities/ThemeProvider'));
  * </LayoutContainer>
  */
 export default async function LayoutContainer({ children, footerProps, jsonLd, menuProps, metadata = {}, navigation }) {
-  const themeCookie = await cookies();
-  const theme = themeCookie.get('__theme__')?.value || metadata.theme || 'system';
-  const jsonLdData = typeof jsonLd === 'function' ? jsonLd() : jsonLd;
+  const themeCookie = await getThemeCookieStore();
+  const theme = themeCookie?.get('__theme__')?.value || metadata.theme || 'system';
+  const jsonLdMarkup = serializeJsonLd(await resolveJsonLd(jsonLd));
 
   return (
-    <div className='bg-white text-black antialiased dark:bg-neutral-950 dark:text-white'>
+    <div className='bg-background text-foreground antialiased'>
+
+      <a
+        href='#main-content'
+        className='sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--ds-z-max)] focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-text focus:shadow-lg dark:focus:bg-surface-dark dark:focus:text-text-inverse'
+      >
+        Skip to content
+      </a>
 
       {/* Aurora wraps all content and provides the shared light/dark background treatment. */}
       <Aurora>
@@ -59,11 +94,11 @@ export default async function LayoutContainer({ children, footerProps, jsonLd, m
 
         <SiteConfigProvider metadata={ metadata } navigation={ navigation }>
           <div className='relative w-full sm:w-[95%] xl:w-[90%] isolate xl:max-w-6xl px-4 sm:px-8 dark:z-10'>
-            <div className='flex min-h-screen flex-col justify-between'>
+            <div className='flex min-h-dvh flex-col justify-between'>
               <FloatingMenu/>
               <Menu { ...menuProps } />
-              {jsonLdData ? <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': JSON.stringify(jsonLdData) }} key='jsonld'/> : null}
-              <main className='mb-4'>{children}</main>
+              {jsonLdMarkup ? <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': jsonLdMarkup }} key='jsonld'/> : null}
+              <main id='main-content' className='mb-4'>{children}</main>
               <Footer { ...footerProps } />
             </div>
           </div>

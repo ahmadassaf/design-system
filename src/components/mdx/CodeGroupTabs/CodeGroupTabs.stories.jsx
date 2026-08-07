@@ -5,6 +5,7 @@ import CodeGroupTabs from './CodeGroupTabs';
 export default {
   component: CodeGroupTabs,
   tags: [ 'autodocs' ],
+  id: 'mdx-codegrouptabs',
   title: 'MDX/CodeGroupTabs'
 };
 

@@ -23,7 +23,7 @@
 .frame {
   background: var(--ds-color-table-frame-bg);
   border: 1px solid var(--ds-color-table-border);
-  border-radius: 0.75rem;
+  border-radius: var(--ds-radius-card);
   box-shadow: var(--ds-shadow-table);
 }
 

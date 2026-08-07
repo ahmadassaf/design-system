@@ -1,6 +1,6 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { Carousel, carouselVariants } from '../../../index';
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
+import Carousel, { carouselVariants } from './Carousel';
 
 const componentDocs = getComponentDocs('Core/Carousel');
 
@@ -31,7 +31,7 @@ const editorialItems = [
   }
 ];
 
-const appleItems = [
+const railItems = [
   {
     'content': 'Use this variant for horizontal editorial cards where the image and title do most of the work. The expanded state gives readers more detail without navigating away.',
     'description': 'A larger card format for feature collections.',
@@ -48,7 +48,7 @@ const appleItems = [
   },
   {
     'content': 'Use concise labels and meaningful accessible names. Decorative images can use an empty alt value.',
-    'description': 'A product-style carousel card treatment.',
+    'description': 'An editorial rail card treatment.',
     'eyebrow': 'Product',
     'id': 'product',
     'title': 'Launching a focused component system.'
@@ -76,6 +76,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-carousel',
   title: 'Core/Carousel'
 };
 
@@ -120,7 +121,7 @@ export const Standard = {
   }
 };
 
-export const AppleCards = {
+export const EditorialRail = {
   'args': {
     'ariaLabel': 'Featured cards',
     'classNames': {
@@ -128,9 +129,9 @@ export const AppleCards = {
       'eyebrow': '!text-white/85 drop-shadow-sm',
       'title': '!text-white drop-shadow-sm'
     },
-    'items': appleItems,
+    'items': railItems,
     'loop': true,
-    'variant': 'apple'
+    'variant': 'rail'
   },
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -140,23 +141,25 @@ export const AppleCards = {
 
     await userEvent.click(canvas.getByRole('button', { 'name': 'Open Enhance your productivity.' }));
 
-    const dialog = await canvas.findByRole('dialog', { 'name': 'Enhance your productivity.' });
+    const dialog = await screen.findByRole('dialog', { 'name': 'Enhance your productivity.' });
     await expect(dialog).toHaveAttribute('aria-modal', 'true');
-    await expect(canvas.getByRole('button', { 'name': 'Go to slide 2' })).toHaveAttribute('aria-current', 'true');
+    await expect(canvas.getByRole('button', { 'name': 'Go to slide 2', hidden: true })).toHaveAttribute('aria-current', 'true');
     await expect(within(dialog).getByText('Dense but readable cards for grouped content.')).toBeInTheDocument();
     await expect(within(dialog).getByText('Cards keep a consistent width, snap in a horizontal rail, and expose a dialog for deeper content when selected.')).toBeVisible();
 
-    await userEvent.click(within(dialog).getAllByRole('button', { 'name': 'Close carousel card' })[1]);
+    await userEvent.click(within(dialog).getByRole('button', { 'name': 'Close carousel card' }));
 
-    await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
 
-    await userEvent.click(canvas.getByRole('button', { 'name': 'Open Launching a focused component system.' }));
+    const nextDialogTrigger = await canvas.findByRole('button', { 'name': 'Open Launching a focused component system.' });
 
-    await expect(await canvas.findByRole('dialog', { 'name': 'Launching a focused component system.' })).toBeVisible();
+    await userEvent.click(nextDialogTrigger);
+
+    await expect(await screen.findByRole('dialog', { 'name': 'Launching a focused component system.' })).toBeVisible();
 
     await userEvent.keyboard('{Escape}');
 
-    await waitFor(() => expect(canvas.queryByRole('dialog')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   }
 };
 

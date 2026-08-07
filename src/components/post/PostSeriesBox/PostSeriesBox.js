@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import Button from '../../core/Button';
 import Icon from '../../core/Icon';
@@ -46,13 +46,13 @@ import { cn } from '../../../utilities/cn';
  */
 const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
   const [ isExpanded, setIsExpanded ] = useState(false);
+  const contentId = useId();
 
   if (!series || series.length === 0) return null;
 
   const currentPostIndex = series.findIndex((post) => post.slug === slug);
   const completedCount = currentPostIndex >= 0 ? currentPostIndex + 1 : 0;
   const totalCount = series.length;
-  const progressPercentage = (completedCount / totalCount) * 100;
 
   return (
     <div className={ cn('mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-border-dark dark:bg-gray-800', className, classNames.root) }>
@@ -65,24 +65,18 @@ const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
         onClick={ () => setIsExpanded(!isExpanded) }
         className={ cn('w-full cursor-pointer rounded-none p-3 text-left font-normal hover:bg-transparent dark:hover:bg-transparent sm:p-4', classNames.trigger) }
         aria-expanded={ isExpanded }
-        aria-controls='series-content'
+        aria-controls={ contentId }
       >
-        <div className='flex w-full items-center justify-between gap-4'>
+          <div className='flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4'>
           <div className='flex min-w-0 flex-1 items-center gap-2 sm:gap-3'>
             <Icon name='Square3Stack3DIcon' size='sm' decorative className='text-blue-500' />
-            <span className='text-sm sm:text-[15px] font-medium text-gray-900 dark:text-gray-100 truncate'>
+            <span className='min-w-0 break-words text-sm font-medium text-gray-900 [overflow-wrap:anywhere] dark:text-gray-100 sm:text-base'>
               {series[0].series}
             </span>
           </div>
 
-          <div className='flex items-center space-x-2 flex-shrink-0'>
-            <div className='w-12 sm:w-16 h-1 bg-gray-200 dark:bg-gray-700 rounded-full' role='progressbar' aria-label='Series progress' aria-valuemin={ 0 } aria-valuemax={ totalCount } aria-valuenow={ completedCount }>
-              <div
-                className='h-full bg-green-600 rounded-full transition-all duration-300'
-                style={{ 'width': `${progressPercentage}%` }}
-              />
-            </div>
-            <span className='text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap'>
+          <div className='flex flex-shrink-0 items-center space-x-2 self-end sm:self-auto'>
+            <span className='whitespace-nowrap text-xs text-gray-500 dark:text-gray-400'>
               {completedCount}/{totalCount}
             </span>
 
@@ -90,20 +84,34 @@ const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
               name='ChevronDown'
               size='sm'
               decorative
-              className={ `text-gray-400 transition-transform duration-200 ${
+              className={ `text-gray-400 transition-transform duration-200 motion-reduce:transition-none ${
                 isExpanded ? 'rotate-180' : ''
               }` }
             />
           </div>
         </div>
       </Button>
+      <div
+        className='h-1 w-full overflow-hidden bg-gray-200 dark:bg-gray-700'
+        role='progressbar'
+        aria-label='Series progress'
+        aria-valuemin='0'
+        aria-valuemax={ totalCount }
+        aria-valuenow={ completedCount }
+      >
+        <div
+          className='h-full bg-blue-600 transition-[width] duration-200 motion-reduce:transition-none dark:bg-blue-400'
+          style={{ width: `${totalCount ? (completedCount / totalCount) * 100 : 0}%` }}
+        />
+      </div>
 
       {/* Expandable Content */}
       <div
-        id='series-content'
+        id={ contentId }
+        hidden={ !isExpanded }
         className={ cn(`overflow-hidden transition-all duration-300 ease-out ${
           isExpanded ? 'max-h-[500px] sm:max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`, classNames.body) }
+        } motion-reduce:transition-none`, classNames.body) }
       >
         <div className='px-3 sm:px-4 pb-3 sm:pb-4 border-t border-gray-200 dark:border-border-dark'>
           <div className='mt-3 sm:mt-4 space-y-2 overflow-y-auto max-h-[450px] sm:max-h-80'>
@@ -133,7 +141,7 @@ const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
 
                   <div className='flex-1 min-w-0'>
                     {isCurrentPost ? (
-                      <span className='text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 block sm:inline'>
+                      <span aria-current='step' className='block text-xs font-medium text-gray-900 dark:text-gray-100 sm:inline sm:text-sm'>
                         {post.title}
                       </span>
                     ) : (

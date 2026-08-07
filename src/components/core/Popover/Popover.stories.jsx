@@ -30,6 +30,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-popover',
   title: 'Core/Popover'
 };
 

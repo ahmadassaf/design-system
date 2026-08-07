@@ -1,7 +1,7 @@
 import { expect, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
-import { Terminal, terminalVariants } from '../../../index';
+import Terminal, { terminalVariants } from './Terminal';
 
 const componentDocs = getComponentDocs('Core/Terminal');
 
@@ -105,6 +105,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-terminal',
   title: 'Core/Terminal'
 };
 

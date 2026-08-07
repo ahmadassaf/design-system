@@ -25,6 +25,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-pagination',
   title: 'Core/Pagination'
 };
 

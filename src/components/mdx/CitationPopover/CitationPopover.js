@@ -40,9 +40,16 @@ const setStoredCitation = (citationKey, originCitationId) => {
   try {
     window.localStorage.setItem(`citation-last-${citationKey}`, originCitationId);
   } catch {
-
     // Storage can be unavailable in private or restricted browser contexts.
   }
+};
+
+const normalizeCitationValue = (value, fallback = '') => {
+  if (value === null || typeof value === 'undefined') return fallback;
+
+  const normalized = String(value).trim();
+
+  return normalized || fallback;
 };
 
 /**
@@ -79,8 +86,10 @@ const prepareCitationTriggers = () => {
  * Parse citation content for popover display
  */
 const parseCitationContent = (citationTexts, citationNumbers, citationKeys, citationText) => {
+  const fallbackContent = citationText || 'Citation not found';
+
   if (!citationTexts || !citationNumbers || !citationKeys)
-    return { 'content': citationText || 'Citation not found', 'type': 'text' };
+    return { 'content': fallbackContent, 'type': 'text' };
 
   try {
     const texts = readJsonArray(citationTexts);
@@ -88,16 +97,16 @@ const parseCitationContent = (citationTexts, citationNumbers, citationKeys, cita
     const keys = readJsonArray(citationKeys);
 
     if (texts.length === 0)
-      return { 'content': citationText || 'Citation not found', 'type': 'text' };
+      return { 'content': fallbackContent, 'type': 'text' };
 
     if (texts.length === 1)
-      return { 'content': texts[0], 'type': 'single' };
+      return { 'content': normalizeCitationValue(texts[0], fallbackContent), 'type': 'single' };
 
     return {
       'items': texts.map((text, index) => ({
-        'key': keys[index],
-        'number': numbers[index],
-        text
+        'key': normalizeCitationValue(keys[index], null),
+        'number': normalizeCitationValue(numbers[index], index + 1),
+        'text': normalizeCitationValue(text, fallbackContent)
       })),
       'type': 'multiple'
     };
@@ -109,18 +118,22 @@ const parseCitationContent = (citationTexts, citationNumbers, citationKeys, cita
 const calculatePosition = (targetRect, popoverWidth, popoverHeight) => {
   const margin = 12;
   const offset = 8;
+  const viewportWidth = Math.max(window.innerWidth || 0, margin * 2);
+  const viewportHeight = Math.max(window.innerHeight || 0, margin * 2);
+  const safePopoverWidth = Math.min(popoverWidth, Math.max(viewportWidth - (margin * 2), 0)) || popoverWidth;
+  const safePopoverHeight = Math.min(popoverHeight, Math.max(viewportHeight - (margin * 2), 0)) || popoverHeight;
   const centerX = targetRect.left + (targetRect.width / 2);
   const below = targetRect.bottom + offset;
-  const above = targetRect.top - popoverHeight - offset;
+  const above = targetRect.top - safePopoverHeight - offset;
 
-  let left = centerX - (popoverWidth / 2);
+  let left = centerX - (safePopoverWidth / 2);
   let top = below;
 
-  if (below + popoverHeight > window.innerHeight - margin && above > margin)
+  if (below + safePopoverHeight > viewportHeight - margin && above > margin)
     top = above;
 
-  left = Math.max(margin, Math.min(left, window.innerWidth - popoverWidth - margin));
-  top = Math.max(margin, Math.min(top, window.innerHeight - popoverHeight - margin));
+  left = Math.max(margin, Math.min(left, Math.max(margin, viewportWidth - safePopoverWidth - margin)));
+  top = Math.max(margin, Math.min(top, Math.max(margin, viewportHeight - safePopoverHeight - margin)));
 
   return { left, top };
 };
@@ -216,7 +229,7 @@ const CitationPopover = () => {
       setPopover({
         'content': parsedContent,
         'left': Math.round(position.left),
-        'number': target.textContent,
+        'number': target.textContent?.trim() || undefined,
         'originCitationId': target.id,
         'top': Math.round(position.top)
       });
@@ -397,24 +410,28 @@ const CitationPopover = () => {
               )}
 
               {popover.content.type === 'multiple' && (
-                popover.content.items.map((item, index) => (
-                  <div
-                    key={ index }
-                    className={ `${styles.item} ${styles.multiple}` }
-                    data-citation-key={ item.key }
-                    data-citation-popover-item='multiple'
-                    role='link'
-                    tabIndex={ 0 }
-                    onKeyDown={ (event) => {
-                      if (event.key === 'Enter' || event.key === ' ') event.currentTarget.click();
-                    } }
-                  >
-                    <div className={ styles.number }>{item.number}</div>
-                    <div className={ styles.citationContent }>
-                      <LatexText>{item.text}</LatexText>
+                popover.content.items.map((item, index) => {
+                  const isInteractive = Boolean(item.key);
+
+                  return (
+                    <div
+                      key={ `${item.key || item.number}-${index}` }
+                      className={ `${styles.item} ${styles.entry} ${isInteractive ? styles.multiple : ''}` }
+                      data-citation-key={ item.key || undefined }
+                      data-citation-popover-item={ isInteractive ? 'multiple' : undefined }
+                      role={ isInteractive ? 'link' : undefined }
+                      tabIndex={ isInteractive ? 0 : undefined }
+                      onKeyDown={ isInteractive ? (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') event.currentTarget.click();
+                      } : undefined }
+                    >
+                      <div className={ styles.number }>{item.number}</div>
+                      <div className={ styles.citationContent }>
+                        <LatexText>{item.text}</LatexText>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
 
               {popover.content.type === 'text' && (

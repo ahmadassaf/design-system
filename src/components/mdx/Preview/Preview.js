@@ -18,6 +18,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Icon from '../../core/Icon';
 import Link from '../../core/Link';
 import Pill from '../../core/Pill';
+import formatDate from '../../../utilities/formatDate';
 
 import { getPreviewImageUrl, NPM_HOSTNAME, usePreviewData } from './usePreviewData';
 
@@ -36,12 +37,19 @@ export const PreviewLoadingSkeleton = ({ className = '' }) => (
  * Helper function to normalize favicon URLs
  */
 const normalizeFaviconURL = (favicon) => {
-  if (!favicon) return null;
-  if (favicon.startsWith('//')) return `https:${favicon}`;
-  if (favicon.startsWith('/')) return favicon;
-  if (!favicon.startsWith('http')) return `https://${favicon}`;
+  const normalizedFavicon = String(favicon || '').trim();
 
-  return favicon;
+  if (!normalizedFavicon) return null;
+  if (normalizedFavicon.startsWith('//')) return `https:${normalizedFavicon}`;
+  if (normalizedFavicon.startsWith('/')) return normalizedFavicon;
+
+  try {
+    const faviconUrl = new URL(normalizedFavicon.includes('://') ? normalizedFavicon : `https://${normalizedFavicon}`);
+
+    return faviconUrl.protocol === 'http:' || faviconUrl.protocol === 'https:' ? faviconUrl.href : null;
+  } catch {
+    return null;
+  }
 };
 
 /**
@@ -77,13 +85,7 @@ const formatTitle = (title, url) => {
 };
 
 const formatPreviewDate = (date) => {
-  if (!date) return '';
-
-  return new Date(date).toLocaleDateString('en-US', {
-    'day': 'numeric',
-    'month': 'long',
-    'year': 'numeric'
-  });
+  return formatDate(date);
 };
 
 /**
@@ -96,19 +98,19 @@ const getPlatformIcon = (url, type, hasFavicon) => {
     const hostname = new URL(url).hostname.toLowerCase();
 
     if (type === 'video' || hostname.includes('youtube.com') || hostname.includes('youtu.be')) return (
-      <svg className='h-3 w-3 ml-1 text-red-500' fill='currentColor' viewBox='0 0 20 20'>
+      <svg className='h-3 w-3 ml-1 text-red-500' fill='currentColor' viewBox='0 0 20 20' aria-hidden='true'>
         <path d='M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l4 2A1 1 0 0020 14V6a1 1 0 00-1.447-.894l-4 2z' />
       </svg>
     );
 
     if (type === 'repository' || hostname.includes('github.com')) return (
-      <svg className='h-3 w-3 ml-1 text-gray-600 dark:text-gray-300' fill='currentColor' viewBox='0 0 20 20'>
+      <svg className='h-3 w-3 ml-1 text-gray-600 dark:text-gray-300' fill='currentColor' viewBox='0 0 20 20' aria-hidden='true'>
         <path fillRule='evenodd' d='M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.84 9.49.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.86-2.78.6-3.37-1.18-3.37-1.18-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.52 1.02 1.52 1.02.89 1.52 2.33 1.08 2.9.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.02-2.68-.1-.25-.44-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.58 9.58 0 0110 4.8c.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.54 1.37.2 2.39.1 2.64.64.7 1.02 1.59 1.02 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48A10.02 10.02 0 0020 10c0-5.523-4.477-10-10-10z' clipRule='evenodd' />
       </svg>
     );
 
     if (type === 'package' || hostname.includes(NPM_HOSTNAME)) return (
-      <svg className='h-3 w-3 ml-1 text-red-500' fill='currentColor' viewBox='0 0 20 20'>
+      <svg className='h-3 w-3 ml-1 text-red-500' fill='currentColor' viewBox='0 0 20 20' aria-hidden='true'>
         <path d='M10 2.5V5h5v10H5V5h2.5V2.5h2.5zm0 5H7.5V10H10V7.5zm0 5H7.5V15H10v-2.5z' />
       </svg>
     );
@@ -407,7 +409,7 @@ const Preview = memo(function Preview({
                     {data?.type === 'wikipedia' && data?.excerpt ? (
                       <div className='bg-gradient-to-br from-gray-50 to-gray-100 p-6 dark:from-gray-800 dark:to-gray-900'>
                         <div className='flex items-center gap-2 mb-3'>
-                          <svg className={ `h-5 w-5 ${bodyTextClass}` } fill='currentColor' viewBox='0 0 20 20'>
+                          <svg className={ `h-5 w-5 ${bodyTextClass}` } fill='currentColor' viewBox='0 0 20 20' aria-hidden='true'>
                             <path d='M9 4.804A1 1 0 017.53 5.02L5.032 9.513a1 1 0 00.268 1.537l2.5 1.5a1 1 0 001.2-.268l2.5-3.5a1 1 0 00-.134-1.366l-2-1.612zM11 4.804a1 1 0 011.47.216l2.498 4.493a1 1 0 01-.268 1.537l-2.5 1.5a1 1 0 01-1.2-.268l-2.5-3.5a1 1 0 01.134-1.366l2-1.612z' />
                           </svg>
                           <span className='text-sm font-semibold text-gray-700 dark:text-gray-300'>Wikipedia Article</span>
@@ -479,7 +481,7 @@ const Preview = memo(function Preview({
                               {data?.publishedTime && (
                                 <>
                                   <span>·</span>
-                                  <span>{new Date(data.publishedTime).toLocaleDateString()}</span>
+                                  <span>{formatPreviewDate(data.publishedTime)}</span>
                                 </>
                               )}
                               {data?.readingTime && (

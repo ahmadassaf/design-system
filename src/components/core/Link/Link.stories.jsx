@@ -1,14 +1,15 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, within } from 'storybook/test';
-import { Link } from '../../../index';
+import Link from './Link';
 
 const componentDocs = getComponentDocs('Core/Link');
+const toneOptions = [ 'gray', 'neutral', 'blue', 'teal', 'green', 'amber', 'yellow', 'red', 'rose', 'indigo' ];
 
 export default {
   argTypes: {
     'tone': {
       'control': 'select',
-      'options': [ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ]
+      'options': toneOptions
     },
     'variant': {
       'control': 'select',
@@ -25,6 +26,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-link',
   title: 'Core/Link'
 };
 
@@ -91,14 +93,17 @@ export const Tones = {
     await expect(canvas.getByRole('link', { 'name': 'gray' })).toHaveClass('text-gray-700');
     await expect(canvas.getByRole('link', { 'name': 'neutral' })).toHaveClass('text-gray-950');
     await expect(canvas.getByRole('link', { 'name': 'blue' })).toHaveClass('text-blue-600');
+    await expect(canvas.getByRole('link', { 'name': 'teal' })).toHaveClass('text-teal-700');
     await expect(canvas.getByRole('link', { 'name': 'green' })).toHaveClass('text-green-700');
+    await expect(canvas.getByRole('link', { 'name': 'amber' })).toHaveClass('text-amber-700');
     await expect(canvas.getByRole('link', { 'name': 'yellow' })).toHaveClass('text-yellow-800');
     await expect(canvas.getByRole('link', { 'name': 'red' })).toHaveClass('text-red-700');
+    await expect(canvas.getByRole('link', { 'name': 'rose' })).toHaveClass('text-rose-700');
     await expect(canvas.getByRole('link', { 'name': 'indigo' })).toHaveClass('text-indigo-700');
   },
   'render': () => (
     <div className='flex flex-wrap items-center gap-4 p-6'>
-      {[ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ].map((tone) => (
+      {toneOptions.map((tone) => (
         <Link key={ tone } href='/blog' tone={ tone }>{tone}</Link>
       ))}
     </div>

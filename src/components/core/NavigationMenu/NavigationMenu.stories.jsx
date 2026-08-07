@@ -15,6 +15,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-navigationmenu',
   title: 'Core/NavigationMenu'
 };
 

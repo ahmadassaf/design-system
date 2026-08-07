@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-aside',
   title: 'MDX/Aside'
 };
 
@@ -23,10 +24,10 @@ export const Example = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const asideText = canvas.getByText('Additional context that supports the article without interrupting the main argument.');
-    const aside = asideText.closest('.text-sm');
+    const aside = asideText.closest('aside');
 
     await expect(asideText).toBeVisible();
-    await expect(aside).toHaveClass('text-sm', 'leading-6', 'border-l-4', 'bg-gray-50');
+    await expect(aside).toHaveClass('rounded-md', 'border', 'border-border', 'bg-surface-muted', 'text-sm', 'leading-6', 'text-text-muted');
     await expect(aside).toHaveTextContent('Additional context that supports the article without interrupting the main argument.');
   },
   'render': () => renderComponentExample('MDX/Aside', componentModule)

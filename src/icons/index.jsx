@@ -1,78 +1,103 @@
-import { FaLinkedin, FaYoutube } from 'react-icons/fa';
-import { FaMinus, FaPlus } from 'react-icons/fa6';
-import { GoRepoForked, GoStar } from 'react-icons/go';
-import { HiSquare3Stack3D } from 'react-icons/hi2';
-import { IoArrowUpCircleOutline } from 'react-icons/io5';
-import { LiaChartAreaSolid,
-  LiaChessKnightSolid,
-  LiaCodepen,
-  LiaCubesSolid,
-  LiaHandshake,
-  LiaRobotSolid } from 'react-icons/lia';
-import { RiMailOpenFill, RiMoonClearFill, RiSunFill, RiTwitterXFill } from 'react-icons/ri';
-import { SiDocker,
-  SiGit,
-  SiHtml5,
-  SiJavascript,
-  SiJson,
-  SiMarkdown,
-  SiNodedotjs,
-  SiPython,
-  SiReact,
-  SiTypescript } from 'react-icons/si';
-import { TbFaceIdError } from 'react-icons/tb';
-import { VscFile, VscFolder, VscFolderOpened, VscGithub } from 'react-icons/vsc';
-import { IconCheck, IconCopy } from '@tabler/icons-react';
-import { ArrowRightOnRectangleIcon as HeroArrowRightOnRectangleIcon,
-  BookOpenIcon as HeroBookOpenIcon,
-  ChatBubbleLeftRightIcon as HeroChatBubbleLeftRightIcon,
-  CodeBracketIcon as HeroCodeBracketIcon,
-  EnvelopeIcon as HeroEnvelopeIcon,
-  FingerPrintIcon as HeroFingerPrintIcon,
-  HomeIcon as HeroHomeIcon,
-  IdentificationIcon as HeroIdentificationIcon,
-  LightBulbIcon as HeroLightBulbIcon,
-  NewspaperIcon as HeroNewspaperIcon,
-  RectangleGroupIcon as HeroRectangleGroupIcon,
-  RectangleStackIcon as HeroRectangleStackIcon,
-  TagIcon as HeroTagIcon,
-  UserGroupIcon as HeroUserGroupIcon } from '@heroicons/react/24/outline';
-import { ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  BookOpen,
-  CalendarDays,
-  Check,
-  ChevronDown,
-  ChevronRight,
-  Clock,
-  Code,
-  Copy,
-  File,
-  FileText,
-  Flame,
-  Folder,
-  FolderOpen,
-  Grid3X3,
-  Handshake,
-  Home,
-  Image,
-  Info,
-  Link,
-  Link2Off,
-  List,
-  Minus,
-  Moon,
-  PanelsTopLeft,
-  Plus,
-  Search,
-  Sun,
-  Tags,
-  TriangleAlert,
-  X } from 'lucide-react';
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down.js';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left.js';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right.js';
+import ArrowUp from 'lucide-react/dist/esm/icons/arrow-up.js';
+import ArrowUpCircle from 'lucide-react/dist/esm/icons/arrow-up-circle.js';
+import Atom from 'lucide-react/dist/esm/icons/atom.js';
+import BookOpen from 'lucide-react/dist/esm/icons/book-open.js';
+import Bot from 'lucide-react/dist/esm/icons/bot.js';
+import Boxes from 'lucide-react/dist/esm/icons/boxes.js';
+import Braces from 'lucide-react/dist/esm/icons/braces.js';
+import CalendarDays from 'lucide-react/dist/esm/icons/calendar-days.js';
+import ChartArea from 'lucide-react/dist/esm/icons/chart-area.js';
+import Check from 'lucide-react/dist/esm/icons/check.js';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.js';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.js';
+import Clock from 'lucide-react/dist/esm/icons/clock.js';
+import Code from 'lucide-react/dist/esm/icons/code.js';
+import Code2 from 'lucide-react/dist/esm/icons/code-2.js';
+import Codepen from 'lucide-react/dist/esm/icons/codepen.js';
+import Container from 'lucide-react/dist/esm/icons/container.js';
+import Copy from 'lucide-react/dist/esm/icons/copy.js';
+import File from 'lucide-react/dist/esm/icons/file.js';
+import FileCode from 'lucide-react/dist/esm/icons/file-code.js';
+import FileJson from 'lucide-react/dist/esm/icons/file-json.js';
+import FileText from 'lucide-react/dist/esm/icons/file-text.js';
+import Fingerprint from 'lucide-react/dist/esm/icons/fingerprint.js';
+import Flame from 'lucide-react/dist/esm/icons/flame.js';
+import Folder from 'lucide-react/dist/esm/icons/folder.js';
+import FolderOpen from 'lucide-react/dist/esm/icons/folder-open.js';
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js';
+import GitFork from 'lucide-react/dist/esm/icons/git-fork.js';
+import Github from 'lucide-react/dist/esm/icons/github.js';
+import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3.js';
+import Handshake from 'lucide-react/dist/esm/icons/handshake.js';
+import Home from 'lucide-react/dist/esm/icons/home.js';
+import IdCard from 'lucide-react/dist/esm/icons/id-card.js';
+import Image from 'lucide-react/dist/esm/icons/image.js';
+import Info from 'lucide-react/dist/esm/icons/info.js';
+import Layers from 'lucide-react/dist/esm/icons/layers.js';
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.js';
+import Link from 'lucide-react/dist/esm/icons/link.js';
+import Link2Off from 'lucide-react/dist/esm/icons/link-2-off.js';
+import Linkedin from 'lucide-react/dist/esm/icons/linkedin.js';
+import List from 'lucide-react/dist/esm/icons/list.js';
+import LogOut from 'lucide-react/dist/esm/icons/log-out.js';
+import MailOpen from 'lucide-react/dist/esm/icons/mail-open.js';
+import Menu from 'lucide-react/dist/esm/icons/menu.js';
+import MessagesSquare from 'lucide-react/dist/esm/icons/messages-square.js';
+import Minus from 'lucide-react/dist/esm/icons/minus.js';
+import Moon from 'lucide-react/dist/esm/icons/moon.js';
+import Newspaper from 'lucide-react/dist/esm/icons/newspaper.js';
+import PanelsTopLeft from 'lucide-react/dist/esm/icons/panels-top-left.js';
+import Plus from 'lucide-react/dist/esm/icons/plus.js';
+import ScanFace from 'lucide-react/dist/esm/icons/scan-face.js';
+import Search from 'lucide-react/dist/esm/icons/search.js';
+import Shapes from 'lucide-react/dist/esm/icons/shapes.js';
+import SquareStack from 'lucide-react/dist/esm/icons/square-stack.js';
+import Star from 'lucide-react/dist/esm/icons/star.js';
+import Sun from 'lucide-react/dist/esm/icons/sun.js';
+import Tag from 'lucide-react/dist/esm/icons/tag.js';
+import Tags from 'lucide-react/dist/esm/icons/tags.js';
+import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert.js';
+import Twitter from 'lucide-react/dist/esm/icons/twitter.js';
+import Users from 'lucide-react/dist/esm/icons/users.js';
+import X from 'lucide-react/dist/esm/icons/x.js';
+import Youtube from 'lucide-react/dist/esm/icons/youtube.js';
 
-import { cn } from '../utilities/cn';
+const safeIconLinkProtocols = new Set([ 'http:', 'https:', 'mailto:', 'tel:' ]);
+
+const flattenIconClasses = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.flatMap(flattenIconClasses);
+  if (typeof value === 'object')
+    return Object.entries(value)
+      .filter(([ , enabled ]) => Boolean(enabled))
+      .map(([ className ]) => className);
+
+  return [ String(value) ];
+};
+
+const iconClassName = (...values) => flattenIconClasses(values).join(' ');
+
+const normalizeIconHref = (href) => {
+  if (typeof href !== 'string') return null;
+
+  const normalizedHref = href.trim();
+
+  if (!normalizedHref) return null;
+  if (normalizedHref.startsWith('/') || normalizedHref.startsWith('#')) return normalizedHref;
+
+  try {
+    const parsed = normalizedHref.startsWith('//') ? new URL(normalizedHref, 'https:') : new URL(normalizedHref);
+
+    return safeIconLinkProtocols.has(parsed.protocol) ? normalizedHref : null;
+  } catch {
+    return null;
+  }
+};
+
+const isExternalIconHref = (href) => typeof href === 'string' && (/^https?:\/\//i.test(href) || href.startsWith('//'));
 
 export const iconRegistry = {
   'ArrowDown': ArrowDown,
@@ -81,19 +106,19 @@ export const iconRegistry = {
   'ArrowLongLeftIcon': ArrowLeft,
   'ArrowLongRightIcon': ArrowRight,
   'ArrowRight': ArrowRight,
-  'ArrowRightOnRectangleIcon': HeroArrowRightOnRectangleIcon,
+  'ArrowRightOnRectangleIcon': LogOut,
   'ArrowUp': ArrowUp,
-  'ArrowUpCircle': IoArrowUpCircleOutline,
+  'ArrowUpCircle': ArrowUpCircle,
   'ArrowUpIcon': ArrowUp,
   'BookOpen': BookOpen,
-  'BookOpenIcon': HeroBookOpenIcon,
+  'BookOpenIcon': BookOpen,
   'Calendar': CalendarDays,
   'CalendarDaysIcon': CalendarDays,
-  'ChartArea': LiaChartAreaSolid,
-  'ChatBubbleLeftRightIcon': HeroChatBubbleLeftRightIcon,
+  'ChartArea': ChartArea,
+  'ChatBubbleLeftRightIcon': MessagesSquare,
   'Check': Check,
-  'CheckIcon': IconCheck,
-  'ChessKnight': LiaChessKnightSolid,
+  'CheckIcon': Check,
+  'ChessKnight': Shapes,
   'ChevronDown': ChevronDown,
   'ChevronDownIcon': ChevronDown,
   'ChevronRight': ChevronRight,
@@ -101,87 +126,88 @@ export const iconRegistry = {
   'Clock': Clock,
   'ClockIcon': Clock,
   'Code': Code,
-  'CodeBracketIcon': HeroCodeBracketIcon,
-  'Codepen': LiaCodepen,
+  'CodeBracketIcon': Code2,
+  'Codepen': Codepen,
   'Copy': Copy,
-  'CopyIcon': IconCopy,
-  'Cubes': LiaCubesSolid,
-  'EnvelopeIcon': HeroEnvelopeIcon,
+  'CopyIcon': Copy,
+  'Cubes': Boxes,
+  'EnvelopeIcon': MailOpen,
   'ExclamationTriangleIcon': TriangleAlert,
   'ExternalLink': Link,
-  'FaceIdError': TbFaceIdError,
+  'FaceIdError': ScanFace,
   'File': File,
   'FileText': FileText,
-  'FingerPrintIcon': HeroFingerPrintIcon,
+  'FingerPrintIcon': Fingerprint,
   'Flame': Flame,
   'Folder': Folder,
   'FolderOpen': FolderOpen,
-  'Fork': GoRepoForked,
-  'Github': VscGithub,
+  'Fork': GitFork,
+  'Github': Github,
   'Grid': Grid3X3,
   'Grid3X3': Grid3X3,
   'Handshake': Handshake,
-  'HandshakeLine': LiaHandshake,
+  'HandshakeLine': Handshake,
   'Home': Home,
-  'HomeIcon': HeroHomeIcon,
-  'IdentificationIcon': HeroIdentificationIcon,
+  'HomeIcon': Home,
+  'IdentificationIcon': IdCard,
   'Image': Image,
   'Info': Info,
   'InformationCircleIcon': Info,
-  'LightBulbIcon': HeroLightBulbIcon,
+  'LightBulbIcon': Lightbulb,
   'Link': Link,
   'LinkIcon': Link,
   'LinkSlashIcon': Link2Off,
-  'Linkedin': FaLinkedin,
+  'Linkedin': Linkedin,
   'List': List,
   'MagnifyingGlassIcon': Search,
-  'Mail': RiMailOpenFill,
+  'Mail': MailOpen,
+  'Menu': Menu,
   'Minus': Minus,
-  'MinusIcon': FaMinus,
+  'MinusIcon': Minus,
   'Moon': Moon,
-  'MoonFill': RiMoonClearFill,
-  'NewspaperIcon': HeroNewspaperIcon,
+  'MoonFill': Moon,
+  'NewspaperIcon': Newspaper,
   'Panels': PanelsTopLeft,
   'PhotoIcon': Image,
   'Plus': Plus,
-  'PlusIcon': FaPlus,
-  'RectangleGroupIcon': HeroRectangleGroupIcon,
-  'RectangleStackIcon': HeroRectangleStackIcon,
-  'Robot': LiaRobotSolid,
+  'PlusIcon': Plus,
+  'RectangleGroupIcon': PanelsTopLeft,
+  'RectangleStackIcon': Layers,
+  'Robot': Bot,
   'Search': Search,
-  'Square3Stack3DIcon': HiSquare3Stack3D,
-  'Star': GoStar,
+  'Square3Stack3DIcon': SquareStack,
+  'Star': Star,
   'Sun': Sun,
-  'SunFill': RiSunFill,
-  'TagIcon': HeroTagIcon,
+  'SunFill': Sun,
+  'TagIcon': Tag,
   'Tags': Tags,
-  'Twitter': RiTwitterXFill,
-  'UserGroupIcon': HeroUserGroupIcon,
-  'VscFile': VscFile,
-  'VscFolder': VscFolder,
-  'VscFolderOpened': VscFolderOpened,
+  'Twitter': Twitter,
+  'UserGroupIcon': Users,
+  'VscFile': File,
+  'VscFolder': Folder,
+  'VscFolderOpened': FolderOpen,
   'Warning': TriangleAlert,
   'X': X,
-  'Youtube': FaYoutube,
+  'Youtube': Youtube,
   'css': Code,
-  'docker': SiDocker,
-  'file': VscFile,
-  'folder': VscFolder,
-  'folder-open': VscFolderOpened,
-  'git': SiGit,
-  'github': VscGithub,
-  'html': SiHtml5,
-  'javascript': SiJavascript,
-  'json': SiJson,
-  'linkedin': FaLinkedin,
-  'mail': RiMailOpenFill,
-  'markdown': SiMarkdown,
-  'node': SiNodedotjs,
-  'python': SiPython,
-  'react': SiReact,
-  'twitter': RiTwitterXFill,
-  'typescript': SiTypescript,
-  'youtube': FaYoutube
+  'docker': Container,
+  'file': File,
+  'folder': Folder,
+  'folder-open': FolderOpen,
+  'git': GitBranch,
+  'github': Github,
+  'html': FileCode,
+  'javascript': Braces,
+  'json': FileJson,
+  'linkedin': Linkedin,
+  'mail': MailOpen,
+  'markdown': FileText,
+  'node': Boxes,
+  'python': Code2,
+  'react': Atom,
+  'twitter': Twitter,
+  'typescript': FileCode,
+  'youtube': Youtube
 };
 
 export const iconLabels = {
@@ -207,15 +233,21 @@ export const iconSizes = {
 };
 
 export const iconColors = {
+  'amber': 'text-amber-700 dark:text-amber-300',
+  'attention': 'text-rose-700 dark:text-rose-300',
   'blue': 'text-blue-600 dark:text-blue-400',
   'danger': 'text-red-600 dark:text-red-400',
   'dim': 'text-gray-400 dark:text-gray-500',
   'green': 'text-green-600 dark:text-green-400',
+  'info': 'text-blue-600 dark:text-blue-400',
   'muted': 'text-gray-500 dark:text-gray-400',
   'neutral': 'text-gray-700 dark:text-gray-200',
   'primary': 'text-blue-600 dark:text-blue-400',
   'red': 'text-red-600 dark:text-red-400',
-  'warning': 'text-yellow-700 dark:text-yellow-300',
+  'rose': 'text-rose-700 dark:text-rose-300',
+  'success': 'text-green-600 dark:text-green-400',
+  'teal': 'text-teal-700 dark:text-teal-300',
+  'warning': 'text-amber-700 dark:text-amber-300',
   'yellow': 'text-yellow-600 dark:text-yellow-300'
 };
 
@@ -243,25 +275,26 @@ const Icon = ({
   if (!IconComponent) return null;
 
   const accessibleLabel = label || title || iconLabels[iconName];
-  const isDecorative = decorative ?? (!href && !accessibleLabel);
+  const safeHref = normalizeIconHref(href);
+  const isDecorative = decorative ?? (!safeHref && !accessibleLabel);
   const svg = (
     <IconComponent
       aria-hidden={ isDecorative ? 'true' : ariaHidden }
-      aria-label={ !href && !isDecorative ? accessibleLabel : undefined }
-      role={ !href && !isDecorative ? 'img' : undefined }
-      className={ cn('shrink-0', iconSizes[size] || iconSizes.md, color ? iconColors[color] : undefined, className) }
+      aria-label={ !safeHref && !isDecorative ? accessibleLabel : undefined }
+      role={ !safeHref && !isDecorative ? 'img' : undefined }
+      className={ iconClassName('shrink-0', iconSizes[size] || iconSizes.md, color ? iconColors[color] : undefined, className) }
       { ...props }
     />
   );
 
-  if (!href) return svg;
+  if (!safeHref) return svg;
 
   return (
     <a
-      className={ cn('inline-flex items-center text-sm text-gray-500 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400', linkClassName) }
-      target={ target || (href.startsWith('http') ? '_blank' : undefined) }
-      rel={ rel || (href.startsWith('http') ? 'noopener noreferrer' : undefined) }
-      href={ href }
+      className={ iconClassName('inline-flex items-center text-sm text-gray-500 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400', linkClassName) }
+      target={ target || (isExternalIconHref(safeHref) ? '_blank' : undefined) }
+      rel={ rel || (isExternalIconHref(safeHref) ? 'noopener noreferrer' : undefined) }
+      href={ safeHref }
       aria-label={ accessibleLabel || iconName }
     >
       {svg}

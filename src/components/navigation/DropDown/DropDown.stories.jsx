@@ -3,7 +3,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
-import { DropDown } from '../../../index';
+import DropDown from './DropDown';
 
 import * as componentModule from './index';
 
@@ -24,7 +24,7 @@ export default {
       page: createComponentDocsPage(componentDocs)
     }
   },
-  tags: [ '!autodocs', '!dev' ],
+  tags: [ '!autodocs' ],
   title: 'Navigation/DropDown'
 };
 
@@ -34,18 +34,25 @@ export const Example = {
 
 const ToggleDisclosureExample = (args) => {
   const [ menuDropDownOpen, setMenuDropDownOpen ] = useState(false);
+  const controlsId = 'story-disclosure-panel';
+  const triggerId = 'story-disclosure-trigger';
   const handleSetMenuDropDownOpen = (nextOpen) => {
     args.setMenuDropDownOpen(nextOpen);
     setMenuDropDownOpen(nextOpen);
   };
 
   return (
-    <DropDown
-      className='story-dropdown-trigger'
-      name={ args.name }
-      menuDropDownOpen={ menuDropDownOpen }
-      setMenuDropDownOpen={ handleSetMenuDropDownOpen }
-    />
+    <>
+      <DropDown
+        className='story-dropdown-trigger'
+        controlsId={ controlsId }
+        id={ triggerId }
+        name={ args.name }
+        menuDropDownOpen={ menuDropDownOpen }
+        setMenuDropDownOpen={ handleSetMenuDropDownOpen }
+      />
+      <div id={ controlsId } aria-labelledby={ triggerId } hidden={ !menuDropDownOpen } />
+    </>
   );
 };
 
@@ -55,7 +62,10 @@ export const ToggleDisclosure = {
     const canvas = within(canvasElement);
     const trigger = canvas.getByRole('button', { name: args.name });
 
-    await expect(trigger).toHaveAttribute('aria-controls', 'disclosure-1');
+    const controlsId = trigger.getAttribute('aria-controls');
+
+    await expect(controlsId).toBeTruthy();
+    await expect(document.getElementById(controlsId)).toBeInTheDocument();
     await expect(trigger).toHaveAttribute('aria-expanded', 'false');
 
     await userEvent.click(trigger);

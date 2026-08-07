@@ -1,7 +1,7 @@
 import { expect, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
-import { Pill, pillVariants } from '../../../index';
+import Pill, { pillVariants } from './Pill';
 
 const componentDocs = getComponentDocs('Core/Pill');
 
@@ -30,6 +30,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-pill',
   title: 'Core/Pill'
 };
 
@@ -44,7 +45,7 @@ export const Default = {
     const pill = canvas.getByText('Engineering').parentElement;
 
     await expect(pill.tagName).toBe('SPAN');
-    await expect(pill).toHaveClass('bg-blue-600', 'text-white', 'uppercase');
+    await expect(pill).toHaveClass('bg-accent', 'text-accent-foreground', 'uppercase');
     await expect(canvas.queryByRole('link', { name: 'Engineering' })).toBeNull();
   }
 };
@@ -53,13 +54,16 @@ export const Tones = {
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByText('blue').parentElement).toHaveClass('bg-blue-600', 'text-white');
-    await expect(canvas.getByText('gray').parentElement).toHaveClass('bg-gray-600', 'text-white');
-    await expect(canvas.getByText('green').parentElement).toHaveClass('bg-green-700', 'text-white');
-    await expect(canvas.getByText('indigo').parentElement).toHaveClass('bg-indigo-600', 'text-white');
-    await expect(canvas.getByText('neutral').parentElement).toHaveClass('bg-neutral-600', 'text-white');
-    await expect(canvas.getByText('red').parentElement).toHaveClass('bg-red-600', 'text-white');
-    await expect(canvas.getByText('yellow').parentElement).toHaveClass('bg-yellow-500', 'text-gray-950');
+    await expect(canvas.getByText('blue').parentElement).toHaveClass('bg-accent', 'text-accent-foreground');
+    await expect(canvas.getByText('gray').parentElement).toHaveClass('bg-foreground', 'text-text-inverse');
+    await expect(canvas.getByText('green').parentElement).toHaveClass('bg-success', 'text-success-foreground');
+    await expect(canvas.getByText('indigo').parentElement).toHaveClass('bg-info', 'text-info-foreground');
+    await expect(canvas.getByText('neutral').parentElement).toHaveClass('bg-foreground', 'text-text-inverse');
+    await expect(canvas.getByText('red').parentElement).toHaveClass('bg-danger', 'text-danger-foreground');
+    await expect(canvas.getByText('amber').parentElement).toHaveClass('bg-warning', 'text-warning-foreground');
+    await expect(canvas.getByText('rose').parentElement).toHaveClass('bg-attention', 'text-attention-foreground');
+    await expect(canvas.getByText('teal').parentElement).toHaveClass('bg-discovery', 'text-discovery-foreground');
+    await expect(canvas.getByText('yellow').parentElement).toHaveClass('bg-warning', 'text-warning-foreground');
   },
   'render': () => (
     <div className='flex max-w-3xl flex-wrap gap-2 p-6'>
@@ -74,11 +78,11 @@ export const Variants = {
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByText('solid').parentElement).toHaveClass('bg-green-700', 'text-white');
-    await expect(canvas.getByText('soft').parentElement).toHaveClass('bg-green-50', 'text-green-700');
-    await expect(canvas.getByText('outline').parentElement).toHaveClass('border', 'border-green-200');
-    await expect(canvas.getByText('ghost').parentElement).toHaveClass('text-green-700');
-    await expect(canvas.getByText('subtle').parentElement).toHaveClass('text-green-700');
+    await expect(canvas.getByText('solid').parentElement).toHaveClass('bg-success', 'text-success-foreground');
+    await expect(canvas.getByText('soft').parentElement).toHaveClass('bg-success-subtle', 'text-success');
+    await expect(canvas.getByText('outline').parentElement).toHaveClass('border', 'border-success-border');
+    await expect(canvas.getByText('ghost').parentElement).toHaveClass('text-success');
+    await expect(canvas.getByText('subtle').parentElement).toHaveClass('text-success');
     await expect(canvas.getByText('Live').parentElement.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
   },
   'render': () => (
@@ -95,8 +99,8 @@ export const Sizes = {
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await expect(canvas.getByText('xs').parentElement).toHaveClass('text-[10px]', 'px-1.5');
-    await expect(canvas.getByText('sm').parentElement).toHaveClass('text-[11px]', 'px-2');
+    await expect(canvas.getByText('xs').parentElement).toHaveClass('text-xs', 'px-1.5');
+    await expect(canvas.getByText('sm').parentElement).toHaveClass('text-xs', 'px-2');
     await expect(canvas.getByText('md').parentElement).toHaveClass('text-xs', 'px-2.5');
     await expect(canvas.getByText('lg').parentElement).toHaveClass('text-sm', 'px-3');
   },
@@ -117,10 +121,10 @@ export const LinkedAndStatus = {
     const deprecatedPill = canvas.getByText('Deprecated').parentElement;
 
     await expect(linkedPill).toHaveAttribute('href', '/blog/tags/engineering');
-    await expect(linkedPill).toHaveClass('bg-gray-100', 'text-gray-700');
-    await expect(stablePill).toHaveClass('bg-green-50', 'text-green-700');
+    await expect(linkedPill).toHaveClass('bg-surface-muted', 'text-text-muted');
+    await expect(stablePill).toHaveClass('bg-success-subtle', 'text-success');
     await expect(stablePill.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
-    await expect(deprecatedPill).toHaveClass('border', 'border-red-200', 'text-red-700');
+    await expect(deprecatedPill).toHaveClass('border', 'border-danger-border', 'text-danger');
   },
   'render': () => (
     <div className='flex flex-wrap items-center gap-2 p-6'>

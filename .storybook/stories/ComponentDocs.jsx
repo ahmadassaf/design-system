@@ -1,42 +1,71 @@
-import { Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import { Controls, Description, Primary, Subtitle, Title } from '@storybook/addon-docs/blocks';
 
 import { HighlightedCode } from './HighlightedCode';
+import { GaudiLogo, Table } from './StoryDocs';
 
 const groupDocs = {
   'Blocks': {
     'accessibility': 'Blocks compose exported Gaudi components into full page sections. They must preserve semantic headings, readable focus order, and links/buttons with accessible names.',
-    'description': 'documents full-section page compositions built from Gaudi primitives and domain components.'
+    'description': 'documents full-section page compositions built from Gaudi primitives and domain components.',
+    'recovery': [
+      'Keep the surrounding page usable when one section cannot load, and provide a local retry or alternate path.',
+      'Preserve the user\'s scroll position and completed work while the failed section recovers.'
+    ]
   },
   'Content': {
     'accessibility': 'Content components should preserve semantic structure, readable labels, image alt text, and keyboard access for modals, search, pagination, and dropdown controls.',
-    'description': 'supports reusable blog browsing, reading, and supporting page composition.'
+    'description': 'supports reusable blog browsing, reading, and supporting page composition.',
+    'recovery': [
+      'Keep available content readable when a secondary asset or request fails.',
+      'Name the missing content and provide a retry or direct navigation path without clearing user context.'
+    ]
   },
   'Core': {
     'accessibility': 'Core components set the baseline accessibility contract: semantic elements, visible focus, readable contrast, keyboard support, and correct disabled states.',
-    'description': 'is a reusable UI component exported by the design system package and the canonical core subpath.'
+    'description': 'is a reusable UI component exported by the design system package and the canonical core subpath.',
+    'recovery': [
+      'Preserve entered values, selections, and nearby context when validation or an async action fails.',
+      'Name the problem beside its source and provide a direct correction, retry, or safe exit.'
+    ]
   },
   'Layout': {
     'accessibility': 'Layout components should preserve document landmarks, reading order, and form semantics. They must not trap focus or create non-semantic wrappers around interactive content.',
-    'description': 'provides consistent spacing, width, and page shell composition.'
+    'description': 'provides consistent spacing, width, and page shell composition.',
+    'recovery': [
+      'Keep primary landmarks and navigation available when nested content enters an empty or error state.',
+      'Prevent loading or fallback content from shifting the page shell or stealing focus.'
+    ]
   },
   'MDX': {
     'accessibility': 'MDX components must keep article semantics intact: real headings, tables, code blocks, captions, alt text, and keyboard-accessible expandable content.',
-    'description': 'renders long-form article content with consistent editorial structure.'
+    'description': 'renders long-form article content with consistent editorial structure.',
+    'recovery': [
+      'Keep the surrounding article readable when an embed, citation, diagram, or media asset fails.',
+      'Render a labelled fallback with the original source or retry path instead of removing the failed content silently.'
+    ]
   },
   'Navigation': {
     'accessibility': 'Navigation components must use semantic links, nav landmarks where appropriate, visible focus, readable labels, and Escape behavior for temporary menus.',
-    'description': 'supports shared blog navigation, menu composition, and search entry points.'
+    'description': 'supports shared blog navigation, menu composition, and search entry points.',
+    'recovery': [
+      'Keep the current location and query intact when navigation or search produces no destination.',
+      'Escape should close temporary layers in reverse order and return focus to the trigger.'
+    ]
   },
   'Post': {
     'accessibility': 'Post components must preserve article landmarks, heading hierarchy, readable metadata, and link semantics for breadcrumbs, sharing, series, and table of contents.',
-    'description': 'composes article chrome, metadata, navigation, and reading aids.'
+    'description': 'composes article chrome, metadata, navigation, and reading aids.',
+    'recovery': [
+      'Keep the article body and primary navigation available when optional metadata or related content is missing.',
+      'Use explicit unavailable states for sharing, series, and adjacent-post actions rather than broken or empty controls.'
+    ]
   }
 };
 
 const usageExamples = {
   'Core/CmdLauncher': "import { CmdLauncher } from '@gaudi/design-system';\n\n<MenuSearch setOpen={setOpen} />\n<CmdLauncher\n  open={open}\n  setOpen={setOpen}\n  posts={posts}\n  projects={projects}\n  publications={publications}\n  tags={tags}\n  thoughts={thoughts}\n/>",
   'Blocks/Thoughts': "import { ThoughtsSection } from '@gaudi/design-system';\n\n<ThoughtsSection thoughts={thoughts} />",
-  'Layout': "import LayoutContainer from '@gaudi/design-system/components/layout/LayoutContainer';\n\n<LayoutContainer>{children}</LayoutContainer>",
+  'Layout': "import LayoutContainer from '@gaudi/design-system/layout/LayoutContainer';\n\n<LayoutContainer>{children}</LayoutContainer>",
   'MDX/Aside': '<Aside>\n  Additional context for the article that should sit outside the main argument.\n</Aside>',
   'MDX/Callout': "<Callout type='info'>\n  Useful article context that readers should notice before continuing.\n</Callout>",
   'MDX/Chart': "<BarChart\n  title='Article views'\n  ariaLabel='Article views by day'\n  data={[\n    { label: 'Mon', views: 124 },\n    { label: 'Tue', views: 168 },\n  ]}\n  yKey='views'\n/>\n\n<LineChart\n  title='Subscriber trend'\n  ariaLabel='Subscribers by day'\n  data={[\n    { label: 'Mon', subscribers: 8 },\n    { label: 'Tue', subscribers: 12 },\n  ]}\n  yKey='subscribers'\n/>",
@@ -50,7 +79,7 @@ const usageExamples = {
   'MDX/Image': "<Image\n  src='/static/images/posts/gaudi.svg'\n  fallback='/static/images/logo.svg'\n  darkSrc='/static/images/posts/gaudi-dark.svg'\n  alt='Gaudi diagram'\n  caption='Project architecture diagram.'\n  width={420}\n  height={260}\n/>",
   'MDX/ImageModal': "<ImageModal src='/static/images/diagram.png' alt='Architecture diagram' />",
   'MDX/LatexText': '<LatexText>11$^{th}$ International Conference</LatexText>',
-  'MDX/Mermaid': "<Mermaid\n  id='architecture-flow'\n  chart={`flowchart TD\n  A[Draft] --> B[Review]`}\n/>",
+  'MDX/Mermaid': "<Mermaid\n  id='architecture-flow'\n  description='Draft moves to review before publication.'\n  chart={`flowchart TD\n  A[Draft] --> B[Review]`}\n/>",
   'MDX/Overview': "# Article title\n\nIntroductory prose can use normal markdown.\n\n<Callout type='info'>Article context.</Callout>\n\n<Quote text='Readable examples matter.' author='Gaudi' />",
   'MDX/Preview': "[assaf.website](https://assaf.website)\n\n[Unavailable link](https://this-link-will-not-work.invalid)\n\n[Internal blog link](/blog/engineering/gaudi-my-bash-framework)\n\n<!-- Generated by the blog pipeline:\n<Preview url='https://assaf.website' title='assaf.website' />\n<Preview url='https://this-link-will-not-work.invalid' title='Unavailable link' />\n<Preview internal url='/blog/engineering/gaudi-my-bash-framework' title='Internal blog link' />\n-->\n\n<!-- Direct component usage is reserved for React pages and deterministic Storybook examples. -->",
   'MDX/Quote': "<Quote text='Good component systems make product code calmer.' author='Design System' />",
@@ -62,7 +91,7 @@ const usageExamples = {
   'Navigation/MenuBlog': "import { MenuBlog } from '@gaudi/design-system';\n\n<MenuBlog categories={categories} />",
   'Navigation/MenuLogo': "import { MenuLogo } from '@gaudi/design-system';\n\n<MenuLogo />",
   'Navigation/MenuMain': "import { MenuMain } from '@gaudi/design-system';\n\n<MenuMain categories={categories} allPosts={posts} />",
-  'Navigation/MenuMobile': "import { MenuMobile } from '@gaudi/design-system';\n\n<MenuMobile\n  categories={categories}\n  links={links}\n  setMobileMenuOpen={setOpen}\n  setLauncherOpen={setLauncherOpen}\n/>",
+  'Navigation/MenuMobile': "import { MenuMobile } from '@gaudi/design-system';\n\n<MenuMobile\n  blogLink={{ href: '/blog', title: 'Blog' }}\n  categories={categories}\n  links={links}\n  setMobileMenuOpen={setOpen}\n  setLauncherOpen={setLauncherOpen}\n/>",
   'Navigation/MenuSearch': "import { MenuSearch } from '@gaudi/design-system';\n\n<MenuSearch setOpen={setLauncherOpen} />",
   'Core/Accordion': "import { AccordionGroup } from '@gaudi/design-system';\n\n<AccordionGroup\n  items={[\n    { value: 'usage', title: 'When should I use it?', content: 'Use accordions for compact progressive disclosure.' },\n  ]}\n/>",
   'Post/Breadcrumbs': "import { Breadcrumbs } from '@gaudi/design-system';\n\n<Breadcrumbs\n  pages={[\n    { name: 'Blog', href: '/blog' },\n    { name: 'Design Systems', href: '/blog/design-systems', current: true },\n  ]}\n/>",
@@ -72,7 +101,8 @@ const usageExamples = {
   'Core/Banner': "import { Banner } from '@gaudi/design-system';\n\n<Banner title='Now published' href='/blog'>\n  New essays and project notes are available.\n</Banner>",
   'Post/Post': "import { Post } from '@gaudi/design-system';\n\n<Post frontMatter={frontMatter} />",
   'Core/Breadcrumb': "import { BreadcrumbTrail } from '@gaudi/design-system';\n\n<BreadcrumbTrail\n  items={[\n    { href: '/', label: 'Home' },\n    { href: '/blog', label: 'Blog' },\n    { current: true, label: 'Design Systems' },\n  ]}\n/>",
-  'Core/Button': "import { Button } from '@gaudi/design-system';\n\n<Button variant='solid' tone='blue' size='md'>Read article</Button>",
+  'Core/Button': "import { Button } from '@gaudi/design-system';\n\n<Button variant='solid' tone='accent' size='md'>Read article</Button>",
+  'Core/DialogPortal': "import { DialogPortal } from '@gaudi/design-system';\n\n{open ? (\n  <DialogPortal initialFocusRef={closeButtonRef}>\n    <div role='dialog' aria-modal='true' aria-labelledby='dialog-title'>\n      <h2 id='dialog-title'>Confirm publication</h2>\n      <button ref={closeButtonRef} onClick={() => setOpen(false)}>Close</button>\n    </div>\n  </DialogPortal>\n) : null}",
   'Post/PostHeader': "import { PostHeader } from '@gaudi/design-system';\n\n<PostHeader frontMatter={frontMatter} siteMetadata={siteMetadata} toc={toc} />",
   'Core/Card': "import { Card } from '@gaudi/design-system';\n\n<Card title='Building with tokens' subtitle='Cards frame reusable content.' />",
   'Post/PostNavigation': "import { PostNavigation } from '@gaudi/design-system';\n\n<PostNavigation prev={previousPost} next={nextPost} />",
@@ -84,7 +114,7 @@ const usageExamples = {
   'Core/DataTable': "import { DataTable } from '@gaudi/design-system';\n\n<DataTable\n  columns={[{ key: 'component', header: 'Component' }]}\n  rows={[{ component: 'Button' }]}\n/>",
   'Core/Field': "import { Field, FieldDescription, FieldInput, FieldLabel } from '@gaudi/design-system';\n\n<Field>\n  <FieldLabel htmlFor='email'>Email</FieldLabel>\n  <FieldInput id='email' type='email' />\n  <FieldDescription>Used for article updates only.</FieldDescription>\n</Field>",
   'Core/Grid': "import { Grid, GridItem } from '@gaudi/design-system';\n\n<Grid columns='3' gap='md'>\n  <GridItem title='Tokens' description='Color, type, spacing, and shape definitions.' />\n</Grid>",
-  'Core/HoverCard': "import { Button, HoverCard } from '@gaudi/design-system';\n\n<HoverCard trigger={<Button variant='soft' tone='gray'>Knowledge graphs</Button>}>\n  Graph-shaped context for concepts and sources.\n</HoverCard>",
+  'Core/HoverCard': "import { Button, HoverCard } from '@gaudi/design-system';\n\n<HoverCard trigger={<Button variant='soft' tone='neutral'>Knowledge graphs</Button>}>\n  Graph-shaped context for concepts and sources.\n</HoverCard>",
   'Core/Icon': "import { Icon } from '@gaudi/design-system';\n\n<Icon name='Info' label='More information' color='primary' size='lg' />",
   'Core/Kbd': "import { Kbd } from '@gaudi/design-system';\n\n<Kbd keys='command,shift,k' size='sm' variant='raised' />",
   'Core/Link': "import { Link } from '@gaudi/design-system';\n\n<Link href='/blog' variant='inline' tone='blue'>Read the blog</Link>",
@@ -101,10 +131,34 @@ const usageExamples = {
 };
 
 const componentDocs = {
+  'Navigation/MenuMobile': {
+    'accessibility': 'MenuMobile renders a named modal dialog with initial Close focus, focus containment, Escape dismissal, a labelled navigation landmark, and real lists and links for every destination.',
+    'decisionRules': [
+      'Pass the primary Blog destination through `blogLink`; use `links` only for additional top-level destinations.',
+      'Keep category ids stable because they form `/blog/categories/:id` destinations.',
+      'Mount MenuMobile only while open so DialogPortal can isolate the page and restore focus to the trigger.'
+    ],
+    'description': 'MenuMobile renders the compact navigation dialog, blog categories, search entry point, and newsletter action.',
+    'props': [
+      [ 'blogLink', '{ href, title }', "{ href: '/blog', title: 'Blog' }", 'Explicit primary Blog destination rendered before its categories.' ],
+      [ 'categories', 'Array<{ id, title, description }>', '[]', 'Blog category destinations and their supporting descriptions.' ],
+      [ 'links', 'Array<{ href, title }>', '[]', 'Additional top-level destinations. No position carries special meaning.' ],
+      [ 'setMobileMenuOpen', '(open: boolean) => void', '-', 'Closes the dialog after navigation, search launch, Escape, or the Close action.' ],
+      [ 'setLauncherOpen', '(open: boolean) => void', '-', 'Opens the search launcher after the mobile dialog closes.' ]
+    ],
+    'recovery': [
+      'Keep the current page intact when the menu closes without navigation and restore focus to its trigger.',
+      'If category data is unavailable, retain the primary Blog and top-level destinations instead of rendering broken category links.'
+    ]
+  },
   'Core/CmdLauncher': {
     'accessibility': 'CmdLauncher is a keyboard-first overlay. Keep focus visible, support Escape close/back behavior, expose readable result labels, and make Cmd/Ctrl + K available without hiding the visible trigger.',
     'description': 'CmdLauncher provides the blog-wide command palette for navigation, content search, and theme actions.',
     'overview': 'Use CmdLauncher with a visible trigger such as MenuSearch. MenuSearch already includes the keyboard hint, so do not render CmdLauncherShortcut beside it in the header example.',
+    'recovery': [
+      'Keep the query and current page intact when a search returns no results; offer a clear route back to all destinations.',
+      'Escape closes the current level first, then the launcher, so keyboard users can recover without losing context.'
+    ],
     'props': [
       [ 'open', 'boolean', '-', 'Controlled palette state.' ],
       [ 'setOpen', '(open: boolean) => void', '-', 'State setter used by the trigger, shortcut, keyboard handler, and close behavior.' ],
@@ -139,7 +193,7 @@ const componentDocs = {
       [ 'label', 'string', '-', 'Initials or readable fallback label.' ],
       [ 'fallback', 'string | boolean', '-', 'Shows the silhouette fallback when image data is unavailable.' ],
       [ 'size', 'xs | sm | md | lg', 'md', 'Controls rendered avatar dimensions and initials size.' ],
-      [ 'tone', 'gray | neutral | blue | green | yellow | red | indigo', 'gray', 'Background token used for initials avatars.' ],
+      [ 'tone', 'gray | neutral | blue | teal | green | amber | yellow | red | rose | indigo', 'gray', 'Background token used for initials avatars.' ],
       [ 'shape', 'square | circle', 'square', 'Controls avatar border radius.' ],
       [ 'className', 'string', '-', 'Root class override.' ]
     ]
@@ -153,7 +207,7 @@ const componentDocs = {
       [ 'href', 'string', '-', 'Turns the banner copy into a navigation link.' ],
       [ 'ariaLabel', 'string', 'title + children', 'Accessible label for linked banners.' ],
       [ 'size', 'xs | sm | md | lg', 'md', 'Controls vertical and horizontal padding.' ],
-      [ 'tone', 'gray | neutral | blue | green | yellow | red | indigo', 'gray', 'Color family for the banner.' ],
+      [ 'tone', 'gray | neutral | blue | teal | green | amber | yellow | red | rose | indigo', 'gray', 'Color family for the banner.' ],
       [ 'variant', 'solid | soft | outline', 'soft', 'Visual treatment.' ],
       [ 'className', 'string', '-', 'Root class override.' ],
       [ 'classNames', '{ root, body, action }', '-', 'Slot-level class overrides.' ]
@@ -182,24 +236,54 @@ const componentDocs = {
   },
   'Core/Button': {
     'accessibility': 'Button renders native buttons for actions and links for navigation. Disabled link variants are removed from tab order.',
+    'decisionRules': [
+      'Use `solid` with `accent` for the one primary action in a local group.',
+      'Use `outline` or `soft` with `neutral` for secondary actions that still need a visible target.',
+      'Use `ghost`, `subtle`, or inline Link for quiet navigation and toolbar actions.',
+      'Choose semantic tones by meaning: `success`, `warning`, `danger`, `attention`, `discovery`, or `info`.'
+    ],
     'description': 'Button renders the Gaudi action and link-button variants.',
     'props': [
       [ 'children', 'ReactNode', '-', 'Visible button label or content.' ],
       [ 'variant', 'solid | soft | outline | ghost | subtle', 'solid', 'Reusable visual treatment.' ],
       [ 'size', 'xs | sm | md | lg', 'md', 'Controls spacing and text size.' ],
-      [ 'tone', 'gray | neutral | blue | green | yellow | red | indigo', 'blue', 'Color family for the selected variant.' ],
+      [ 'tone', 'accent | neutral | success | warning | danger | attention | discovery | info', 'accent', 'Semantic meaning for the action. Legacy hue names remain supported as compatibility aliases.' ],
       [ 'radius', 'sm | md | lg | full', 'md', 'Button corner radius.' ],
       [ 'href', 'string', '-', 'Renders an internal Next link or safe external anchor.' ],
       [ 'disabled', 'boolean', 'false', 'Disables native buttons and removes disabled links from the tab order.' ],
-      [ 'as', 'ElementType', 'button', 'Optional semantic element override when neither button nor link behavior is correct.' ],
       [ 'className', 'string', '-', 'Root class override.' ]
+    ]
+  },
+  'Core/DialogPortal': {
+    'accessibility': 'DialogPortal isolates body-level background siblings with inert and aria-hidden, locks body scroll by default, moves focus to initialFocusRef, and restores the previously focused trigger on unmount. The dialog content must provide role dialog, aria-modal, a readable name, Escape handling, and its own focus containment.',
+    'decisionRules': [
+      'Use DialogPortal only for modal content that must isolate the page behind it.',
+      'Pass initialFocusRef to the safest action, usually Close or Cancel.',
+      'Keep non-modal popovers and disclosures in normal document flow.'
+    ],
+    'description': 'DialogPortal renders modal content at the document body and manages page isolation, scroll locking, initial focus, and focus restoration.',
+    'props': [
+      [ 'children', 'ReactNode', '-', 'The labelled dialog surface rendered into the body-level portal.' ],
+      [ 'initialFocusRef', 'RefObject<HTMLElement>', '-', 'Receives focus after the portal mounts.' ],
+      [ 'lockScroll', 'boolean', 'true', 'Locks body scrolling while the portal is mounted.' ],
+      [ 'restoreFocus', 'boolean', 'true', 'Returns focus to the previously focused connected element on unmount.' ]
+    ],
+    'recovery': [
+      'Always provide an explicit Close or Cancel action and support Escape in the dialog implementation.',
+      'Keep destructive confirmation separate from the safe exit and restore focus to the opening control.'
     ]
   },
   'Core/Card': {
     'accessibility': 'Card is a structural container. Put links or buttons inside it rather than making the whole card a fake control.',
+    'decisionRules': [
+      'Use Card to frame one reusable content unit, not as page scaffolding.',
+      'Put real links and buttons inside the card instead of turning the whole surface into a fake control.',
+      'Avoid nested cards; separate sections with spacing or a table/list pattern instead.'
+    ],
     'description': 'Card frames reusable content with title, subtitle, and optional children.',
     'props': [
       [ 'title', 'ReactNode', '-', 'Optional card heading.' ],
+      [ 'titleLevel', '2 | 3 | 4 | 5 | 6', '3', 'Semantic level for the optional card heading.' ],
       [ 'subtitle', 'ReactNode', '-', 'Supporting description under the title.' ],
       [ 'children', 'ReactNode', '-', 'Body content, actions, or nested composition.' ],
       [ 'variant', 'elevated | outline | soft | flat', 'elevated', 'Container surface treatment.' ],
@@ -290,9 +374,21 @@ const componentDocs = {
     'overview': 'Authors do not write a React component for each footnote. They write standard markdown footnote syntax in the post. The blog MDX pipeline extracts the definitions, enhances the generated footnote reference anchors with `data-footnote-*` attributes, and may visually collapse the bottom notes section. Gaudi only owns the small client runtime that reads those generated attributes and shows the preview popover on hover or keyboard focus.',
     'usageTitle': 'Authoring Example'
   },
+  'MDX/Faq': {
+    'accessibility': 'Faq uses a semantic definition list and native disclosure buttons. Choose a headingLevel that follows the surrounding article heading without skipping a level.',
+    'props': [
+      [ 'questions', 'Array<{ question, answer }>', '-', 'Question and answer disclosures.' ],
+      [ 'heading', 'ReactNode', 'FAQ', 'Visible section heading.' ],
+      [ 'headingLevel', '2 | 3 | 4 | 5 | 6', '2', 'Semantic level for the section heading.' ]
+    ]
+  },
   'MDX/Image': {
     'accessibility': 'Image keeps article images semantic with alt text, figure captions, and a button trigger for the modal preview.',
     'description': 'Image renders editorial MDX images with caption, dark-mode source, fallback source, and click-to-open modal behavior.',
+    'recovery': [
+      'Provide a valid fallback source for editorial images that can fail independently of the article.',
+      'Keep useful alt text available when both image sources fail; never replace the article with an empty frame.'
+    ],
     'props': [
       [ 'src', 'string', '-', 'Primary image source.' ],
       [ 'fallback', 'string', '-', 'Fallback image source used after load failure.' ],
@@ -304,6 +400,19 @@ const componentDocs = {
       [ 'fill', 'boolean', 'false', 'Uses the parent box instead of explicit dimensions.' ],
       [ 'sizes', 'string', '-', 'Responsive image sizes hint passed to Next image.' ],
       [ 'className', 'string', '-', 'Image class override.' ]
+    ]
+  },
+  'MDX/Mermaid': {
+    'accessibility': 'Mermaid exposes the rendered diagram as one labelled figure. Provide a concise description that communicates the diagram meaning without relying on shape, position, or color.',
+    'props': [
+      [ 'chart', 'string', '-', 'Mermaid chart definition.' ],
+      [ 'description', 'string', 'Diagram', 'Accessible text alternative for the rendered diagram.' ],
+      [ 'id', 'string', 'generated', 'Stable Mermaid render identifier.' ],
+      [ 'className', 'string', '-', 'Root figure class override.' ]
+    ],
+    'recovery': [
+      'Render a readable diagram error next to the source context when Mermaid cannot parse the chart.',
+      'Keep the page usable after a rendering failure and let authors correct the chart without losing surrounding article content.'
     ]
   },
   'MDX/Preview': {
@@ -333,6 +442,10 @@ const componentDocs = {
       'Internal previews skip remote fetching and can use local metadata supplied by the app or generated pipeline.'
     ],
     'overview': 'Authors should usually write normal markdown links. During compilation, the blog turns eligible external markdown links into `Preview` components with `remarkLinks`, then turns eligible internal blog anchors into `Preview internal` components with `rehypeInternalLinks`. Gaudi owns the rendered inline link, fallback state, loading skeleton, and hover card UI; the blog owns the markdown transforms and preview API.',
+    'recovery': [
+      'Preserve the original destination link while preview metadata loads or fails, so navigation never depends on the enrichment API.',
+      'Name the unavailable preview and keep the supplied title visible; a failed hover card must not become an empty interaction.'
+    ],
     'props': [
       [ 'url', 'string', '-', 'Target URL to link to and preview.' ],
       [ 'title', 'string', '-', 'Optional custom title that overrides fetched preview metadata.' ],
@@ -350,11 +463,11 @@ const componentDocs = {
   },
   'Core/Carousel': {
     'accessibility': 'Carousel exposes a labelled carousel region, native previous/next buttons, aria-live status updates, keyboard arrow support, and named indicators.',
-    'description': 'Carousel renders standard feature slides and Apple-style editorial card rails.',
+    'description': 'Carousel renders standard feature slides and editorial card rails.',
     'props': [
       [ 'items', 'Array<{ id, title, description, eyebrow, image, alt, href, action, content }>', '[]', 'Slide data. Standard uses the active item; apple renders the horizontal rail.' ],
       [ 'ariaLabel', 'string', 'Carousel', 'Accessible name for the carousel region.' ],
-      [ 'variant', 'standard | apple', 'standard', 'Slide format.' ],
+      [ 'variant', 'standard | rail | apple', 'standard', 'Slide format. Use rail for editorial card rails; apple remains a legacy alias.' ],
       [ 'size', 'sm | md | lg', 'md', 'Controls max width and slide/card height.' ],
       [ 'radius', 'none | sm | md | lg', 'lg', 'Slide/card corner radius.' ],
       [ 'controls', 'boolean', 'true', 'Shows previous and next buttons.' ],
@@ -378,13 +491,19 @@ const componentDocs = {
     ]
   },
   'Core/DataTable': {
-    'accessibility': 'DataTable renders a real table with column headers and optional caption. Use render functions for cells without changing table semantics.',
+    'accessibility': 'DataTable renders a real table with column headers and an optional caption inside a labelled, keyboard-focusable horizontal scroll region. Use render functions for cells without changing table semantics.',
+    'decisionRules': [
+      'Use DataTable for actual tabular comparison, not card grids or definition lists.',
+      'Keep captions and column headers meaningful so the table remains understandable out of context.',
+      'Wrap dense tables in the provided scroll region rather than forcing columns to shrink past readability.'
+    ],
     'description': 'DataTable renders small tabular datasets with tokenized table chrome.',
     'props': [
       [ 'columns', 'Array<{ key, header, render? }>', '[]', 'Column definitions. render(row) customizes a cell while preserving table semantics.' ],
       [ 'rows', 'Array<Record<string, unknown>>', '[]', 'Rows keyed by column key. row.id is used as the stable key when present.' ],
       [ 'caption', 'ReactNode', '-', 'Optional table caption.' ],
-      [ 'className', 'string', '-', 'Scrollable wrapper class override.' ]
+      [ 'overflowLabel', 'string', 'Scrollable data table', 'Accessible name for the horizontal scroll region when no caption is present.' ],
+      [ 'className', 'string', '-', 'Outer table frame class override.' ]
     ]
   },
   'MDX/Video': {
@@ -406,7 +525,16 @@ const componentDocs = {
   },
   'Core/Field': {
     'accessibility': 'Field keeps label, input, description, and error markup colocated so form controls can be wired with id/htmlFor.',
+    'decisionRules': [
+      'Use a persistent FieldLabel; placeholders are examples, not labels.',
+      'Put requirements and recovery text next to the field before submission.',
+      'Use FieldError and aria-invalid for invalid states instead of relying on red borders alone.'
+    ],
     'description': 'Field composes form label, description, error, and input building blocks.',
+    'recovery': [
+      'Keep the entered value when validation fails and move the actionable message next to the input.',
+      'State the problem and the correction in plain language, then clear `aria-invalid` as soon as the value becomes valid.'
+    ],
     'props': [
       [ 'children', 'ReactNode', '-', 'Composes label, input, description, and error slots or supplies slot text.' ],
       [ 'htmlFor', 'string', '-', 'Connects the visible label to the input id.' ],
@@ -453,6 +581,11 @@ const componentDocs = {
   },
   'Core/Icon': {
     'accessibility': 'Decorative icons are hidden from assistive technology. Informative or icon-only links need a readable label.',
+    'decisionRules': [
+      'Use the Gaudi icon registry; do not import vendor icons directly outside `src/icons/index.jsx`.',
+      'Mark decorative icons as decorative and label meaningful icon-only controls.',
+      'Keep icon size and stroke aligned with the surrounding text or control.'
+    ],
     'description': 'Icon renders entries from the centralized icon registry.',
     'props': [
       [ 'name', 'registry icon name', '-', 'Renders an icon from the Gaudi registry.' ],
@@ -461,7 +594,7 @@ const componentDocs = {
       [ 'label', 'string', '-', 'Accessible label for informative icons and icon links.' ],
       [ 'decorative', 'boolean', 'false', 'Hides the SVG from assistive technology when the icon is visual only.' ],
       [ 'size', 'xs | sm | md | lg | xl | 2xl | number', 'md', 'Controls icon dimensions.' ],
-      [ 'color', 'neutral | muted | primary | blue | green | yellow | red | danger | warning | dim', 'currentColor', 'Token color shortcut.' ],
+      [ 'color', 'neutral | muted | primary | info | success | warning | danger | attention | blue | teal | green | amber | yellow | red | rose | dim', 'currentColor', 'Token color shortcut.' ],
       [ 'strokeWidth', 'number', 'icon default', 'Adjusts line icon stroke width when the registry entry supports it.' ],
       [ 'className', 'string', '-', 'Root class override.' ]
     ]
@@ -485,7 +618,7 @@ const componentDocs = {
       [ 'href', 'internal | anchor | external URL', '-', 'Internal routes use Next Link; anchors and external URLs use native anchors.' ],
       [ 'prefetch', 'boolean', 'true', 'Next.js prefetch behavior for internal links.' ],
       [ 'variant', 'inline | muted | nav | bare', 'inline', 'Text link style.' ],
-      [ 'tone', 'gray | neutral | blue | green | yellow | red | indigo', 'neutral', 'Color family. Default is black/gray and turns blue on hover.' ],
+      [ 'tone', 'gray | neutral | blue | teal | green | amber | yellow | red | rose | indigo', 'neutral', 'Color family. Default is black/gray and turns blue on hover.' ],
       [ 'className', 'string', '-', 'Root class override.' ]
     ]
   },
@@ -527,11 +660,16 @@ const componentDocs = {
   },
   'Core/Pill': {
     'accessibility': 'Pill includes visible text so status or category meaning is not color-only.',
+    'decisionRules': [
+      'Use Pill for compact metadata, tags, filters, and status labels.',
+      'Use Badge when the label is a secondary status inside another component.',
+      'Keep the visible label as the source of meaning; color only supports scanning.'
+    ],
     'description': 'Pill renders compact category and status labels.',
     'props': [
       [ 'children', 'ReactNode', '-', 'Visible category, status, or tag label.' ],
       [ 'size', 'xs | sm | md | lg', 'md', 'Controls padding and text size.' ],
-      [ 'tone', 'gray | neutral | blue | green | yellow | red | indigo', 'blue', 'Color family.' ],
+      [ 'tone', 'gray | neutral | blue | teal | green | amber | yellow | red | rose | indigo', 'blue', 'Semantic tone alias mapped through Gaudi tokens rather than raw palette utilities.' ],
       [ 'variant', 'solid | soft | outline | ghost | subtle', 'solid', 'Visual treatment.' ],
       [ 'radius', 'sm | md | full', 'sm', 'Corner radius.' ],
       [ 'href', 'string', '-', 'Renders the pill as a navigation link.' ],
@@ -552,7 +690,16 @@ const componentDocs = {
   },
   'Core/Select': {
     'accessibility': 'Select uses a native button trigger, listbox semantics, aria-expanded, aria-selected, aria-multiselectable for multi-select, and keyboard support for Arrow keys, Enter, Space, Home, End, and Escape.',
+    'decisionRules': [
+      'Use Select when choices are bounded; use search or command palette when users need discovery across content.',
+      'Enable `searchable` once the list is too long to scan comfortably.',
+      'Use `multiple` only when the user truly needs a set; otherwise keep the decision singular.'
+    ],
     'description': 'Select renders a styled option picker with searchable combobox behavior and multi-select support.',
+    'recovery': [
+      'Keep the existing selection when filtering returns no matches and expose `emptyText` as the recovery message.',
+      'Invalid state must be paired with nearby text that explains the required correction; color and `aria-invalid` alone are insufficient.'
+    ],
     'props': [
       [ 'options', 'Array<{ label, value, disabled }>', '[]', 'Selectable options. Option children are also normalized when options is empty.' ],
       [ 'value', 'string | string[]', '-', 'Controlled selected value. Arrays are used for multiple mode.' ],
@@ -631,7 +778,7 @@ const componentDocs = {
     'props': [
       [ 'children', 'ReactNode', '-', 'Inline text to emphasize.' ],
       [ 'variant', 'marker | soft | underline', 'marker', 'Highlight treatment.' ],
-      [ 'tone', 'gray | neutral | blue | green | yellow | red | indigo', 'blue', 'Color family.' ],
+      [ 'tone', 'gray | neutral | blue | teal | green | amber | yellow | red | rose | indigo', 'blue', 'Color family.' ],
       [ 'radius', 'none | sm | md', 'sm', 'Corner radius for filled variants.' ],
       [ 'animate', 'boolean', 'true', 'Enables the marker draw animation.' ],
       [ 'className', 'string', '-', 'Root class override.' ]
@@ -659,17 +806,24 @@ export const getComponentDocs = (title) => {
     ...overrides,
     'component': component,
     'description': overrides.description || `${component} ${docs.description}`,
+    'decisionRules': overrides.decisionRules || [],
     'donts': overrides.donts || [],
     'dos': overrides.dos || [],
     'group': group,
+    'recovery': overrides.recovery || [],
     'title': title,
     'usage': usage,
     'usageLanguage': overrides.usageLanguage || (group === 'MDX' ? 'mdx' : 'jsx')
   };
 };
 
+const toSectionId = (title) => title
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/(^-|-$)/g, '');
+
 const Section = ({ children, title }) => (
-  <section className='sb-unstyled ds-docs-section'>
+  <section id={ toSectionId(title) } className='sb-unstyled ds-docs-section scroll-mt-28'>
     <h2>{title}</h2>
     {children}
   </section>
@@ -679,7 +833,7 @@ const CodeValue = ({ children }) => (
   <code className='ds-docs-code-value'>{children}</code>
 );
 
-const autoCodePattern = /(@[a-z0-9-]+\/[a-z0-9-/.]+|(?:src|app|data|meta|layouts|lib|scripts|styles|public|contentlayer)(?:\/[A-Za-z0-9_.*-]+)+|\[@[^\]]+\]|<\/?[A-Za-z][A-Za-z0-9]*>?|data-[A-Za-z0-9-*]+|aria-[A-Za-z0-9-]+|[a-z]+[A-Z][A-Za-z0-9]*|Cmd\/Ctrl \+ K|Cmd\/Ctrl|Next\.js|MDX|JSX|BibTeX|Recharts|React|Tailwind)/g;
+const autoCodePattern = /(@[a-z0-9-]+\/[a-z0-9-/.]+|(?:src|app|data|meta|layouts|lib|scripts|styles|public|contentlayer)(?:\/[A-Za-z0-9_.*-]+)+|\[@[^\]]+\]|<\/?[A-Za-z][A-Za-z0-9]*>?|data-[A-Za-z0-9-*]+|aria-[A-Za-z0-9-]+|[A-Z]?[a-z]+[A-Z][A-Za-z0-9]*|Cmd\/Ctrl \+ K|Cmd\/Ctrl|Next\.js|MDX|JSX|BibTeX|Recharts|React|Tailwind)/g;
 
 const renderAutoCode = (text, keyPrefix) => text.split(autoCodePattern).map((part, index) => {
   if (!part) return null;
@@ -713,50 +867,84 @@ const AccessibilityTable = ({ docs }) => (
   <p><InlineText>{docs.accessibility}</InlineText></p>
 );
 
-const PropsTable = ({ rows }) => (
-  <div className='overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800'>
-    <table>
-      <thead>
-        <tr>
-          <th scope='col'>Prop</th>
-          <th scope='col'>Type / Values</th>
-          <th scope='col'>Default</th>
-          <th scope='col'>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map(([ name, values, defaultValue, description = '-' ]) => (
-          <tr key={ name }>
-            <td><InlineText>{name}</InlineText></td>
-            <td><CodeValue>{values}</CodeValue></td>
-            <td><CodeValue>{defaultValue}</CodeValue></td>
-            <td><InlineText>{description}</InlineText></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+const RecoveryGuidance = ({ items }) => <List items={ items } />;
+
+const DecisionRules = ({ rules }) => (
+  <ul className='grid gap-2'>
+    {rules.map((rule) => (
+      <li key={ rule } className='flex gap-2 text-sm leading-7 text-gray-600 dark:text-gray-300'>
+        <span aria-hidden='true' className='mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600 dark:bg-blue-400' />
+        <span><InlineText>{rule}</InlineText></span>
+      </li>
+    ))}
+  </ul>
 );
 
-const Related = ({ docs }) => {
-  const related = [ docs.group, 'Overview/Accessibility', 'Overview/Typography', 'Overview/Colors & Tokens' ];
-
-  return (
-    <div className='ds-docs-related'>
-      {related.map((item) => <span key={ item }>{item}</span>)}
+const PropsTable = ({ rows }) => (
+  <>
+    <dl className='divide-y divide-gray-200 border-y border-gray-200 md:hidden dark:divide-gray-800 dark:border-gray-800'>
+      {rows.map(([ name, values, defaultValue, description = '-' ]) => (
+        <div key={ name } className='grid gap-2 py-4'>
+          <dt className='font-semibold text-gray-900 dark:text-gray-100'><InlineText>{name}</InlineText></dt>
+          <dd className='flex flex-wrap items-baseline gap-2 text-xs text-gray-500 dark:text-gray-400'>
+            <span className='font-semibold uppercase'>Type</span>
+            <CodeValue>{values}</CodeValue>
+          </dd>
+          <dd className='flex flex-wrap items-baseline gap-2 text-xs text-gray-500 dark:text-gray-400'>
+            <span className='font-semibold uppercase'>Default</span>
+            <CodeValue>{defaultValue}</CodeValue>
+          </dd>
+          <dd className='text-sm leading-6 text-gray-600 dark:text-gray-300'><InlineText>{description}</InlineText></dd>
+        </div>
+      ))}
+    </dl>
+    <div className='hidden md:block'>
+      <Table label='Component properties'>
+        <thead>
+          <tr>
+            <th scope='col'>Prop</th>
+            <th scope='col'>Type / Values</th>
+            <th scope='col'>Default</th>
+            <th scope='col'>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([ name, values, defaultValue, description = '-' ]) => (
+            <tr key={ name }>
+              <td><InlineText>{name}</InlineText></td>
+              <td><CodeValue>{values}</CodeValue></td>
+              <td><CodeValue>{defaultValue}</CodeValue></td>
+              <td><InlineText>{description}</InlineText></td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
-  );
-};
+  </>
+);
+
+const hasDistinctOverview = (docs) => Boolean(docs.overview && docs.overview.trim() !== docs.description.trim());
 
 export const ComponentDocumentation = ({ docs }) => (
   <div className='sb-unstyled ds-docs-page'>
     <div className='ds-docs-title'>
+      <GaudiLogo className='h-8 w-8' />
       <h1>{docs.component}</h1>
     </div>
     <p><InlineText>{docs.description}</InlineText></p>
 
-    <Section title='Overview'>
+    {hasDistinctOverview(docs) ? <Section title='Overview'>
       <p><InlineText>{docs.overview || docs.description}</InlineText></p>
+    </Section> : null}
+
+    {docs.decisionRules.length ? (
+      <Section title='Decision Rules'>
+        <DecisionRules rules={ docs.decisionRules } />
+      </Section>
+    ) : null}
+
+    <Section title={ docs.usageTitle || 'Canonical Usage' }>
+      <HighlightedCode code={ docs.usage } language={ docs.usageLanguage } />
     </Section>
 
     {docs.dos.length ? <Section title='When To Use'>
@@ -770,6 +958,12 @@ export const ComponentDocumentation = ({ docs }) => (
     <Section title='Accessibility'>
       <AccessibilityTable docs={ docs } />
     </Section>
+
+    {docs.recovery.length ? (
+      <Section title='States & Recovery'>
+        <RecoveryGuidance items={ docs.recovery } />
+      </Section>
+    ) : null}
 
     {docs.notes?.length ? (
       <Section title='API Notes'>
@@ -789,11 +983,6 @@ export const ComponentDocumentation = ({ docs }) => (
       </Section>
     ) : null}
 
-    <Section title={ docs.usageTitle || 'Usage' }>
-      <HighlightedCode code={ docs.usage } language={ docs.usageLanguage } />
-    </Section>
-
-    {docs.related ? <Section title='Related'><Related docs={ docs } /></Section> : null}
   </div>
 );
 
@@ -803,13 +992,30 @@ export const createComponentDocsPage = (docs, options = {}) => {
     <>
       <div className='sb-unstyled ds-docs-page'>
         <div className='ds-docs-title'>
-          <Title />
+          <GaudiLogo className='h-8 w-8' />
+          <div className='ds-docs-title-copy'><Title /></div>
         </div>
         <Subtitle />
         <Description />
-
-        <Section title='Overview'>
+        {hasDistinctOverview(docs) ? <Section title='Overview'>
           <p><InlineText>{docs.overview || docs.description}</InlineText></p>
+        </Section> : null}
+
+        {docs.decisionRules.length ? (
+          <Section title='Decision Rules'>
+            <DecisionRules rules={ docs.decisionRules } />
+          </Section>
+        ) : null}
+
+        {stories ? (
+          <Section title='Interactive Preview'>
+            <Primary />
+            <Controls />
+          </Section>
+        ) : null}
+
+        <Section title={ docs.usageTitle || 'Canonical Usage' }>
+          <HighlightedCode code={ docs.usage } language={ docs.usageLanguage } />
         </Section>
 
         {docs.dos.length ? <Section title='When To Use'>
@@ -823,6 +1029,12 @@ export const createComponentDocsPage = (docs, options = {}) => {
         <Section title='Accessibility'>
           <AccessibilityTable docs={ docs } />
         </Section>
+
+        {docs.recovery.length ? (
+          <Section title='States & Recovery'>
+            <RecoveryGuidance items={ docs.recovery } />
+          </Section>
+        ) : null}
 
         {docs.notes?.length ? (
           <Section title='API Notes'>
@@ -842,21 +1054,8 @@ export const createComponentDocsPage = (docs, options = {}) => {
           </Section>
         ) : null}
 
-        <Section title={ docs.usageTitle || 'Usage' }>
-          <HighlightedCode code={ docs.usage } language={ docs.usageLanguage } />
-        </Section>
-
-        {docs.related ? <Section title='Related'><Related docs={ docs } /></Section> : null}
       </div>
 
-      {stories ? (
-        <div className='sb-unstyled ds-docs-blocks'>
-          <Section title='Examples'>
-            <Primary />
-            <Stories includePrimary={ false } />
-          </Section>
-        </div>
-      ) : null}
     </>
   );
 

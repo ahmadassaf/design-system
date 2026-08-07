@@ -1,18 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import CommandPaletteModule, { filterItems, getItemIndex } from '@tmikeladze/react-cmdk';
 import { useTheme } from 'next-themes';
 
 import Icon from '../Icon';
 import Kbd from '../Kbd';
-import { cn } from '../../../utilities/cn';
 import { useSiteConfig } from '../../../utilities/SiteConfig';
-
-import '@tmikeladze/react-cmdk/dist/cmdk.css';
-import styles from './CommandLauncher.module.css';
-
-const CommandPalette = CommandPaletteModule?.default || CommandPaletteModule;
+import CommandPalette, { filterItems, getItemIndex } from './CommandPalette';
 
 const omit = (item, keys) => {
   const result = { ...item };
@@ -25,13 +19,46 @@ const omit = (item, keys) => {
 };
 
 const normalizeSlug = (value = '') => String(value).replace(/^\//, '');
+const allowedExternalProtocols = new Set([ 'http:', 'https:', 'mailto:' ]);
+
+const normalizeExternalUrl = (value) => {
+  if (!value) return null;
+
+  try {
+    const url = new URL(String(value).trim());
+
+    return allowedExternalProtocols.has(url.protocol) ? url.href : null;
+  } catch {
+    return null;
+  }
+};
+
+const normalizeEmailUrl = (email) => {
+  const address = String(email || '').trim();
+
+  if (!address || /[\s<>"'`]/.test(address) || !address.includes('@')) return null;
+
+  return normalizeExternalUrl(`mailto:${address}`);
+};
+
+const createExternalAction = (url) => () => {
+  const href = normalizeExternalUrl(url);
+
+  if (!href || typeof window === 'undefined') return;
+
+  try {
+    window.open(href, '_blank', 'noopener,noreferrer')?.focus();
+  } catch {
+
+    // Browser policies can block popups or external handlers.
+  }
+};
 
 const commandItemProps = ({ closeOnSelect, href, onClick }) => {
   return {
     ...(typeof closeOnSelect === 'boolean' ? { closeOnSelect } : {}),
     ...(href ? { href } : {}),
-    ...(onClick ? { onClick } : {}),
-    'showType': false
+    ...(onClick ? { onClick } : {})
   };
 };
 
@@ -49,7 +76,7 @@ const CmdItem = ({ category, children, count, icon, subtitle, title, type = 'nav
   const resolvedSubtitle = subtitle || (type === 'post' && category ? category.replace(/[-_]/g, ' ') : null) || (type === 'tag' && typeof count !== 'undefined' ? `${count} ${count === 1 ? 'post' : 'posts'}` : null);
 
   return (
-    <div className='group flex w-full items-center gap-3 rounded-lg px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70'>
+    <div className='group flex w-full items-center gap-3 rounded-lg px-4 py-3'>
       {icon ? <Icon name={ icon } decorative size='md' className='text-gray-600 dark:text-gray-300' /> : null}
       <div className='min-w-0 flex-1'>
         <div className='truncate text-sm font-medium text-gray-950 dark:text-gray-100'>{title || children}</div>
@@ -144,14 +171,18 @@ const CollectionPage = ({ id, items, search, setPage }) => {
 const buildSocialItems = (metadata = {}, social) => {
   if (social) return social;
 
-  const openExternal = (url) => () => window.open(url, '_blank', 'noopener,noreferrer')?.focus();
   const items = [];
+  const linkedin = normalizeExternalUrl(metadata.linkedin);
+  const twitter = normalizeExternalUrl(metadata.twitter);
+  const github = normalizeExternalUrl(metadata.github);
+  const youtube = normalizeExternalUrl(metadata.youtube);
+  const email = normalizeEmailUrl(metadata.email);
 
-  if (metadata.linkedin) items.push({ 'children': 'LinkedIn', 'closeOnSelect': false, 'icon': 'UserGroupIcon', 'id': 'linkedin', 'onClick': openExternal(metadata.linkedin), 'title': 'LinkedIn profile' });
-  if (metadata.twitter) items.push({ 'children': 'Twitter', 'closeOnSelect': false, 'icon': 'ChatBubbleLeftRightIcon', 'id': 'twitter', 'onClick': openExternal(metadata.twitter), 'title': 'Twitter profile' });
-  if (metadata.github) items.push({ 'children': 'GitHub', 'closeOnSelect': false, 'icon': 'CodeBracketIcon', 'id': 'github', 'onClick': openExternal(metadata.github), 'title': 'GitHub profile' });
-  if (metadata.youtube) items.push({ 'children': 'YouTube', 'closeOnSelect': false, 'icon': 'VideoCameraIcon', 'id': 'youtube', 'onClick': openExternal(metadata.youtube), 'title': 'YouTube channel' });
-  if (metadata.email) items.push({ 'children': 'Mail', 'closeOnSelect': false, 'icon': 'EnvelopeIcon', 'id': 'mail', 'onClick': openExternal(`mailto:${metadata.email}`), 'title': 'Send an email' });
+  if (linkedin) items.push({ 'children': 'LinkedIn', 'closeOnSelect': false, 'icon': 'UserGroupIcon', 'id': 'linkedin', 'onClick': createExternalAction(linkedin), 'title': 'LinkedIn profile' });
+  if (twitter) items.push({ 'children': 'Twitter', 'closeOnSelect': false, 'icon': 'ChatBubbleLeftRightIcon', 'id': 'twitter', 'onClick': createExternalAction(twitter), 'title': 'Twitter profile' });
+  if (github) items.push({ 'children': 'GitHub', 'closeOnSelect': false, 'icon': 'CodeBracketIcon', 'id': 'github', 'onClick': createExternalAction(github), 'title': 'GitHub profile' });
+  if (youtube) items.push({ 'children': 'YouTube', 'closeOnSelect': false, 'icon': 'VideoCameraIcon', 'id': 'youtube', 'onClick': createExternalAction(youtube), 'title': 'YouTube channel' });
+  if (email) items.push({ 'children': 'Mail', 'closeOnSelect': false, 'icon': 'EnvelopeIcon', 'id': 'mail', 'onClick': createExternalAction(email), 'title': 'Send an email' });
 
   return items;
 };
@@ -219,24 +250,25 @@ const CommandLauncher = ({
     {
       'heading': 'Explore content',
       'id': 'cmdLauncher',
+      /* Collection entries only appear when the consumer actually supplied that collection. */
       'items': [
         { 'children': 'Home', 'cmdIcon': 'HomeIcon', 'href': '/', 'id': 'home' },
         { 'children': 'Blog', 'cmdIcon': 'BookOpenIcon', 'href': '/blog', 'id': 'blog' },
-        { 'children': 'Projects', 'closeOnSelect': false, 'cmdIcon': 'RectangleGroupIcon', 'id': 'projects', 'onClick': () => {
+        ...(collections.projects.length ? [{ 'children': 'Projects', 'closeOnSelect': false, 'cmdIcon': 'RectangleGroupIcon', 'id': 'projects', 'onClick': () => {
           setPage('projects'); setSearch('');
-        } },
-        { 'children': 'Posts', 'closeOnSelect': false, 'cmdIcon': 'RectangleStackIcon', 'id': 'posts_list', 'onClick': () => {
+        } }] : []),
+        ...(collections.posts.length ? [{ 'children': 'Posts', 'closeOnSelect': false, 'cmdIcon': 'RectangleStackIcon', 'id': 'posts_list', 'onClick': () => {
           setPage('posts'); setSearch('');
-        } },
-        { 'children': 'Thoughts', 'closeOnSelect': false, 'cmdIcon': 'LightBulbIcon', 'id': 'thoughts', 'onClick': () => {
+        } }] : []),
+        ...(collections.thoughts.length ? [{ 'children': 'Thoughts', 'closeOnSelect': false, 'cmdIcon': 'LightBulbIcon', 'id': 'thoughts', 'onClick': () => {
           setPage('thoughts'); setSearch('');
-        } },
-        { 'children': 'Publications', 'closeOnSelect': false, 'cmdIcon': 'NewspaperIcon', 'id': 'publications', 'onClick': () => {
+        } }] : []),
+        ...(collections.publications.length ? [{ 'children': 'Publications', 'closeOnSelect': false, 'cmdIcon': 'NewspaperIcon', 'id': 'publications', 'onClick': () => {
           setPage('publications'); setSearch('');
-        } },
-        { 'children': 'Tags', 'closeOnSelect': false, 'cmdIcon': 'TagIcon', 'id': 'tags', 'onClick': () => {
+        } }] : []),
+        ...(collections.tags.length ? [{ 'children': 'Tags', 'closeOnSelect': false, 'cmdIcon': 'TagIcon', 'id': 'tags', 'onClick': () => {
           setPage('tags'); setSearch('');
-        } }
+        } }] : [])
       ]
     },
     {
@@ -275,7 +307,7 @@ const CommandLauncher = ({
     if (!open) return undefined;
 
     const handleKeyDown = (event) => {
-      if ([ 'ArrowDown', 'ArrowUp', 'Enter', 'Escape' ].includes(event.key)) setIsKeyboardMode(true);
+      if ([ 'ArrowDown', 'ArrowUp', 'End', 'Enter', 'Escape', 'Home' ].includes(event.key)) setIsKeyboardMode(true);
     };
     const handleMouseMove = () => setIsKeyboardMode(false);
 
@@ -289,8 +321,9 @@ const CommandLauncher = ({
   }, [ open ]);
 
   return (
-    <div className={ cn(styles.root, isKeyboardMode && styles.keyboardMode) }>
+    <div className={ isKeyboardMode ? 'gaudi-command-launcher gaudi-command-launcher--keyboard' : 'gaudi-command-launcher' }>
       <CommandPalette
+        className={ isKeyboardMode ? 'gaudi-command-launcher gaudi-command-launcher--keyboard' : 'gaudi-command-launcher' }
         footer={ <LauncherFooter /> }
         isOpen={ open }
         onChangeOpen={ setOpen }

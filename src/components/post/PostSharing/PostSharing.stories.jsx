@@ -46,10 +46,10 @@ export const Example = {
     const sourceLink = canvas.getByRole('link', { name: 'View on GitHub' });
     const shareUrl = new URL(shareLink.href);
 
-    await expect(shareUrl.origin).toBe('http://x.com');
+    await expect(shareUrl.origin).toBe('https://x.com');
     await expect(shareUrl.pathname).toBe('/share');
     await expect(shareUrl.searchParams.get('text')).toBe(args.title);
-    await expect(shareUrl.searchParams.get('url')).toBe(args.externalLink);
+    await expect(shareUrl.searchParams.get('url')).toBe(`${args.siteMetadata.siteUrl}/blog/${args.slug}`);
     await expect(shareUrl.searchParams.get('hashtags')).toBe('designsystems,react');
     await expect(githubProfileLink).toHaveAttribute('href', args.siteMetadata.github);
     await expect(sourceLink).toHaveAttribute('href', `${args.siteMetadata.postsRepo}/blob/master/${args.externalLink}.mdx`);

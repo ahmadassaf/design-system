@@ -52,6 +52,8 @@ const MenuBlog = ({ categories }) => {
   const [ alignment, setAlignment ] = React.useState('center');
   const containerRef = React.useRef(null);
   const dropdownRef = React.useRef(null);
+  const dropdownId = React.useId();
+  const triggerId = `${dropdownId}-trigger`;
 
   React.useLayoutEffect(() => {
     if (!menuBlogOpen) return;
@@ -85,10 +87,12 @@ const MenuBlog = ({ categories }) => {
 
   return (<li ref={ containerRef } className='relative'>
 
-    <MenuDropDown name='Categories' menuDropDownOpen={ menuBlogOpen } setMenuDropDownOpen={ setMenuBlogOpen }></MenuDropDown>
+    <MenuDropDown controlsId={ dropdownId } id={ triggerId } name='Categories' menuDropDownOpen={ menuBlogOpen } outsideClickRef={ containerRef } setMenuDropDownOpen={ setMenuBlogOpen }></MenuDropDown>
 
     {menuBlogOpen ? (
       <div
+        id={ dropdownId }
+        aria-labelledby={ triggerId }
         ref={ dropdownRef }
         className={ cn(
           'absolute top-full z-50 mt-3 flex w-screen max-w-max px-3 py-2',

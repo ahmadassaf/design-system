@@ -1,10 +1,16 @@
 import { useState } from 'react';
 
 import ArticleContentLayout from '../../src/components/layout/ArticleContentLayout';
+import Banner from '../../src/components/core/Banner';
+import Button from '../../src/components/core/Button';
+import Card from '../../src/components/core/Card';
+import { Grid, GridItem } from '../../src/components/core/Grid';
+import Icon from '../../src/components/core/Icon';
 import Faq from '../../src/components/mdx/Faq';
+import Pill from '../../src/components/core/Pill';
 import PostHeader from '../../src/components/post/PostHeader';
 import TableOfContents from '../../src/components/post/TableOfContents';
-import { Banner, Button, Card, Grid, GridItem, Icon, Pill, Typography } from '../../src/index';
+import Typography from '../../src/foundations/Typography';
 
 import { CodeBlock, InlineCode, Page, pageParameters, Section, Table, Td, Th } from './StoryDocs';
 
@@ -157,10 +163,7 @@ const FullArticle = () => {
         >
           <Banner tone='blue' variant='soft'>This article is part of a series and includes an in-page table of contents.</Banner>
           <ArticleBody />
-          <div className='space-y-4'>
-            <Typography variant='heading-lg'>FAQ</Typography>
-            <Faq questions={ faqs } />
-          </div>
+          <Faq questions={ faqs } />
         </ArticleContentLayout>
       </main>
     </div>
@@ -208,7 +211,7 @@ const ContentVariants = () => (
     <GridItem variant='soft' title='Full Article' description='Header, metadata, tags, series, article body, FAQ, and TOC.' icon={ <Icon name='BookOpen' decorative className='text-blue-600 dark:text-blue-400' /> } />
     <GridItem variant='soft' title='No TOC' description='Shorter articles keep the same header and body rhythm without an aside.' icon={ <Icon name='FileText' decorative className='text-gray-600 dark:text-gray-400' /> } />
     <GridItem variant='soft' title='Series Only' description='Use when sequence navigation matters more than section navigation.' icon={ <Icon name='Square3Stack3DIcon' decorative className='text-indigo-600 dark:text-indigo-400' /> } />
-    <GridItem variant='soft' title='Composable Parts' description='Reusable blocks can be combined without page-specific CSS.' icon={ <Icon name='Grid' decorative className='text-green-600 dark:text-green-400' /> } />
+    <GridItem variant='soft' title='Composable Parts' description='Public primitives can be combined without page-specific CSS.' icon={ <Icon name='Grid' decorative className='text-green-600 dark:text-green-400' /> } />
   </Grid>
 );
 
@@ -291,14 +294,13 @@ export default {
 };
 
 export const Default = {
-  'name': 'Blog Content Sections',
+  'name': 'Overview',
   'render': () => (
     <Page
       title='Blog Content Sections'
       intro='Article-content compositions showing the post header with and without series navigation, table of contents, banners, FAQs, and content sections.'
-      kicker='Blocks'
     >
-      <Section title='Usage' description='Article content blocks are assembled from post and layout primitives. The page supplies content, TOC data, and open state.'>
+      <Section title='Usage' description='These article-content recipes are assembled from exported Post and Layout primitives. The consuming page supplies content, TOC data, and open state.'>
         <CodeBlock code={ usageCode } />
       </Section>
       <Section title='Variant Rules' description='Use the same article shell and only remove aids that are not useful for the content length.'>
@@ -319,7 +321,7 @@ export const Default = {
         <SeriesOnly />
         <CodeBlock code={ variantCode.series } />
       </Section>
-      <Section title='Composition Parts' description='Concise map of the article blocks available for long-form posts.'>
+      <Section title='Composition Parts' description='Concise map of the public primitives used by these long-form article recipes.'>
         <ContentCards />
         <CodeBlock code={ variantCode.parts } />
       </Section>

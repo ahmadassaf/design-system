@@ -4,18 +4,18 @@ import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { lucideIconOptimizeDeps } from './.storybook/viteOptimizeDeps.js';
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
 const lodashEsDir = resolve(rootDir, 'node_modules/lodash-es');
 
 export default defineConfig({
-  esbuild: {
-    include: /src\/.*\.js$/,
-    loader: 'jsx'
-  },
   plugins: [
     tailwindcss()
   ],
+  optimizeDeps: {
+    include: lucideIconOptimizeDeps
+  },
   resolve: {
     alias: [
       {
@@ -25,14 +25,6 @@ export default defineConfig({
       {
         find: /^lodash\/(.+)$/,
         replacement: `${lodashEsDir}/$1.js`
-      },
-      {
-        find: /^recharts$/,
-        replacement: resolve(rootDir, 'node_modules/recharts/lib/index.js')
-      },
-      {
-        find: /^recharts\/es6\/(?<path>.+)$/,
-        replacement: `${resolve(rootDir, 'node_modules/recharts/lib')}/$<path>`
       }
     ]
   },

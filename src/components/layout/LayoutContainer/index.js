@@ -1,2 +1,2 @@
-export { default } from './LayoutContainer';
-export * from './LayoutContainer';
+export { default } from './LayoutContainer.js';
+export * from './LayoutContainer.js';

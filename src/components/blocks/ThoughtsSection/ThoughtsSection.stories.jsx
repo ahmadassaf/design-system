@@ -1,7 +1,7 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, userEvent, within } from 'storybook/test';
 
-import { ThoughtsSection } from '../../../index';
+import ThoughtsSection from './ThoughtsSection';
 
 const componentDocs = getComponentDocs('Blocks/Thoughts');
 const thoughts = [
@@ -48,6 +48,7 @@ export default {
 };
 
 export const RecentThoughts = {
+  'name': 'Overview',
   'play': async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const firstThoughtLink = canvas.getByRole('link', { 'name': /Explicit contracts make components durable/ });

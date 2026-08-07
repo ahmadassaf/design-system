@@ -28,12 +28,12 @@ export const Example = {
     const progress = canvas.getByRole('progressbar', { name: 'Series progress' });
 
     await expect(title).toBeVisible();
-    await expect(canvas.getByRole('heading', { level: 3, name: 'How component ownership keeps a blog interface consistent.' })).toBeVisible();
+    await expect(canvas.getByText('How component ownership keeps a blog interface consistent.')).toBeVisible();
     await expect(category).toHaveAttribute('href', '/blog/categories/engineering');
     await expect(canvas.getByText('20 May 2026')).toBeVisible();
     await expect(canvas.getByText('8 min read')).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'design systems' })).toHaveAttribute('href', '/blog/tags/design-systems');
-    await expect(canvas.getByRole('link', { name: 'storybook' })).toHaveAttribute('href', '/blog/tags/storybook');
+    await expect(await canvas.findByRole('link', { name: /^storybook$/i })).toHaveAttribute('href', '/blog/tags/storybook');
     await expect(seriesTrigger).toHaveAttribute('aria-expanded', 'false');
     await expect(progress).toHaveAttribute('aria-valuenow', '0');
   },

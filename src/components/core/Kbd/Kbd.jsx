@@ -1,6 +1,3 @@
-import { cn } from '../../../utilities/cn';
-import { createVariants } from '../../../utilities/variants';
-
 const keyMap = {
   'alt': '⌥',
   'backspace': '⌫',
@@ -44,26 +41,53 @@ const keyLabelMap = {
   'win': 'Windows'
 };
 
-export const kbdVariants = createVariants({
+const kbdVariantConfig = {
   'base': 'inline-flex min-w-[1.5rem] items-center justify-center border font-semibold shadow-[0_2px_0_0_rgba(0,0,0,0.08)] dark:shadow-[0_2px_0_0_rgba(0,0,0,0.5)]',
-  'defaultVariants': {
+  'defaults': {
     'size': 'md',
     'variant': 'raised'
   },
-  'variants': {
-    'size': {
-      'lg': 'px-2.5 py-1.5 text-sm',
-      'md': 'px-2 py-1 text-xs',
-      'sm': 'px-1.5 py-0.5 text-[11px]',
-      'xs': 'px-1 py-0.5 text-[10px]'
-    },
-    'variant': {
-      'flat': 'rounded-md border-gray-200 bg-gray-50 text-gray-800 shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200',
-      'outline': 'rounded-md border-gray-300 bg-transparent text-gray-800 shadow-none dark:border-gray-600 dark:text-gray-200',
-      'raised': 'rounded-md border-gray-300 bg-gradient-to-t from-gray-100 to-gray-50 text-gray-800 dark:border-gray-600 dark:from-gray-800 dark:to-gray-700 dark:text-gray-200'
-    }
+  'size': {
+    'lg': 'px-2.5 py-1.5 text-sm',
+    'md': 'px-2 py-1 text-xs',
+    'sm': 'px-1.5 py-0.5 text-xs',
+    'xs': 'px-1 py-0.5 text-xs'
+  },
+  'variant': {
+    'flat': 'rounded-md border-gray-200 bg-gray-50 text-gray-800 shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200',
+    'outline': 'rounded-md border-gray-300 bg-transparent text-gray-800 shadow-none dark:border-gray-600 dark:text-gray-200',
+    'raised': 'rounded-md border-gray-300 bg-gradient-to-t from-gray-100 to-gray-50 text-gray-800 dark:border-gray-600 dark:from-gray-800 dark:to-gray-700 dark:text-gray-200'
   }
-});
+};
+
+const flattenClasses = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.flatMap(flattenClasses);
+  if (typeof value === 'object')
+    return Object.entries(value)
+      .filter(([ , enabled ]) => Boolean(enabled))
+      .map(([ className ]) => className);
+
+  return [ String(value) ];
+};
+
+export const kbdVariants = ({ className, size, variant } = {}) => {
+  const resolvedSize = size || kbdVariantConfig.defaults.size;
+  const resolvedVariant = variant || kbdVariantConfig.defaults.variant;
+
+  return flattenClasses([
+    kbdVariantConfig.base,
+    kbdVariantConfig.size[resolvedSize],
+    kbdVariantConfig.variant[resolvedVariant],
+    className
+  ]).join(' ');
+};
+
+kbdVariants.variants = {
+  'size': kbdVariantConfig.size,
+  'variant': kbdVariantConfig.variant
+};
+kbdVariants.defaultVariants = kbdVariantConfig.defaults;
 
 const Kbd = ({ children, className, keys, size, variant }) => {
   let content = children;
@@ -92,7 +116,7 @@ const Kbd = ({ children, className, keys, size, variant }) => {
   }
 
   return (
-    <kbd className={ cn(classes) } aria-label={ accessibleLabel }>
+    <kbd className={ classes } aria-label={ accessibleLabel }>
       {content}
     </kbd>
   );

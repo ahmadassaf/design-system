@@ -43,12 +43,12 @@ const MenuSearch = ({ className, setOpen }) => (
       variant='outline'
       tone='gray'
       size='sm'
-      className='group h-10 w-full justify-between gap-3 rounded-lg border-gray-200 bg-white/85 px-3 text-left text-sm font-normal text-gray-500 shadow-sm backdrop-blur hover:border-blue-200 hover:bg-white hover:text-gray-950 focus-visible:border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0 dark:border-gray-800 dark:bg-gray-950/80 dark:text-gray-400 dark:hover:border-blue-800 dark:hover:bg-gray-950 dark:hover:text-gray-100 dark:focus-visible:border-gray-700'
+      className='group h-11 w-full justify-between gap-3 rounded-lg border-gray-200 bg-white/85 px-3 text-left text-sm font-normal text-gray-500 shadow-sm backdrop-blur hover:border-blue-200 hover:bg-white hover:text-gray-950 focus-visible:border-blue-500 focus-visible:ring-blue-500 dark:border-gray-800 dark:bg-gray-950/80 dark:text-gray-400 dark:hover:border-blue-800 dark:hover:bg-gray-950 dark:hover:text-gray-100 dark:focus-visible:border-blue-400 dark:focus-visible:ring-blue-400'
       onClick={ () => setOpen(true) }
       aria-label='Open search'
     >
       <span className='truncate'>Search</span>
-      <span className='flex shrink-0 items-center gap-1' aria-hidden='true'>
+      <span className='hidden shrink-0 items-center gap-1 lg:flex' aria-hidden='true'>
         <Kbd keys='command' size='xs' variant='flat' />
         <Kbd keys='k' size='xs' variant='flat' />
       </span>

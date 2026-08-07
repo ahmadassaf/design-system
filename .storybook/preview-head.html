@@ -1,0 +1,18 @@
+<script>
+  (() => {
+    const globals = new URLSearchParams(window.location.search).get('globals') || '';
+    const isDark = globals.split(';').includes('theme:dark');
+
+    if (!isDark) return;
+
+    document.documentElement.classList.add('dark');
+    document.documentElement.style.colorScheme = 'dark';
+  })();
+</script>
+<style>
+  html.dark,
+  html.dark body {
+    background: #171717;
+    color-scheme: dark;
+  }
+</style>

@@ -1,15 +1,16 @@
 import { expect, within } from 'storybook/test';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
-import { TextHighlight } from '../../../index';
+import { TextHighlight } from './TextHighlight';
 
 const componentDocs = getComponentDocs('Core/TextHighlight');
+const toneOptions = [ 'gray', 'neutral', 'blue', 'teal', 'green', 'amber', 'yellow', 'red', 'rose', 'indigo' ];
 
 export default {
   argTypes: {
     'tone': {
       'control': 'select',
-      'options': [ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ]
+      'options': toneOptions
     },
     'variant': {
       'control': 'select',
@@ -26,6 +27,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-texthighlight',
   title: 'Core/TextHighlight'
 };
 
@@ -64,14 +66,17 @@ export const Tones = {
     const canvas = within(canvasElement);
 
     expect(canvas.getByText('blue')).toHaveClass('from-blue-100', 'to-blue-300');
+    expect(canvas.getByText('teal')).toHaveClass('from-teal-100', 'to-teal-300');
     expect(canvas.getByText('green')).toHaveClass('from-green-100', 'to-green-300');
+    expect(canvas.getByText('amber')).toHaveClass('from-amber-100', 'to-amber-300');
     expect(canvas.getByText('yellow')).toHaveClass('from-yellow-100', 'to-yellow-300');
     expect(canvas.getByText('red')).toHaveClass('from-red-100', 'to-red-300');
-    expect(canvas.getByText('indigo')).toHaveClass('from-indigo-100', 'to-indigo-300');
+    expect(canvas.getByText('rose')).toHaveClass('from-rose-100', 'to-rose-300');
+    expect(canvas.getByText('indigo')).toHaveClass('from-sky-100', 'to-blue-300');
   },
   'render': () => (
     <div className='space-y-3 p-6 text-xl font-semibold text-gray-900 dark:text-gray-100'>
-      {[ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ].map((tone) => (
+      {toneOptions.map((tone) => (
         <p key={ tone }>
           <TextHighlight tone={ tone } animate={ false }>{tone}</TextHighlight> highlight tone
         </p>
@@ -85,7 +90,7 @@ export const Static = {
     const canvas = within(canvasElement);
     const highlight = canvas.getByText('visual regression tests stable');
 
-    expect(highlight).toHaveClass('bg-linear-to-r', 'from-indigo-100', 'to-indigo-300');
+    expect(highlight).toHaveClass('bg-linear-to-r', 'from-sky-100', 'to-blue-300');
     expect(highlight).not.toHaveAttribute('style');
   },
   'render': () => (

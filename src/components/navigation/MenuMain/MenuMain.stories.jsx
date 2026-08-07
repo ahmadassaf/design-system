@@ -59,6 +59,10 @@ export const Example = {
     await expect(canvas.getByText('Component contracts for navigation')).toBeVisible();
     await expect(canvas.queryByText('Older post outside the recent list')).toBeNull();
 
+    await userEvent.click(canvas.getByRole('heading', { name: 'Recent posts' }));
+    await expect(blogButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getByRole('heading', { name: 'Recent posts' })).toBeVisible();
+
     await userEvent.click(blogButton);
 
     await expect(blogButton).toHaveAttribute('aria-expanded', 'false');

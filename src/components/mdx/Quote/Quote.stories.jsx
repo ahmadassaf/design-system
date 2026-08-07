@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-quote',
   title: 'MDX/Quote'
 };
 
@@ -30,7 +31,7 @@ export const Example = {
     await expect(figure).toBeInTheDocument();
     await expect(figure?.querySelector('blockquote')).toContainElement(quoteText);
     await expect(author.tagName.toLowerCase()).toBe('cite');
-    await expect(title.tagName.toLowerCase()).toBe('cite');
+    await expect(title.tagName.toLowerCase()).toBe('span');
   },
   'render': () => renderComponentExample('MDX/Quote', componentModule)
 };

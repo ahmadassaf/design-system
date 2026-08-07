@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 
 import Button from '../../core/Button';
+import DialogPortal from '../../core/DialogPortal';
 import Icon from '../../core/Icon';
 import { cn } from '../../../utilities/cn';
 
@@ -68,11 +69,6 @@ const Video = ({
   useEffect(() => {
     if (!open) return undefined;
 
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = 'hidden';
-    closeRef.current?.focus();
-
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         setOpen(false);
@@ -98,13 +94,8 @@ const Video = ({
     };
 
     document.addEventListener('keydown', onKeyDown);
-
-    const trigger = triggerRef.current;
-
     return () => {
-      document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', onKeyDown);
-      trigger?.focus();
     };
   }, [ open ]);
 
@@ -139,8 +130,9 @@ const Video = ({
       </Button>
 
       {open ? (
-        <div className={ cn('fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6', classNames.dialog) } role='dialog' aria-modal='true' aria-labelledby={ dialogTitleId } data-video-dialog>
-          <Button variant='ghost' tone='gray' size='sm' className={ cn('absolute inset-0 rounded-none bg-gray-950/80 p-0 backdrop-blur-sm hover:bg-gray-950/80', classNames.overlay) } aria-label='Close video dialog' onClick={ () => setOpen(false) } />
+        <DialogPortal initialFocusRef={ closeRef }>
+        <div className={ cn('fixed inset-0 z-[var(--ds-z-overlay)] flex items-center justify-center p-4 sm:p-6', classNames.dialog) } role='dialog' aria-modal='true' aria-labelledby={ dialogTitleId } data-video-dialog>
+          <Button variant='ghost' tone='neutral' size='sm' className={ cn('absolute inset-0 rounded-none bg-gray-950/80 p-0 backdrop-blur-sm hover:bg-gray-950/80', classNames.overlay) } aria-label='Close video dialog' onClick={ () => setOpen(false) } />
           <div
             className={ cn(
               'relative z-10 w-full max-w-5xl overflow-hidden rounded-lg bg-black shadow-2xl transition duration-200 data-open:translate-x-0 data-open:translate-y-0 data-open:scale-100 data-open:opacity-100', panelAnimation, classNames.panel
@@ -154,7 +146,7 @@ const Video = ({
                 variant='ghost'
                 tone='gray'
                 size='sm'
-                className={ cn('inline-flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400', classNames.close) }
+                className={ cn('inline-flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400', classNames.close) }
                 aria-label='Close video dialog'
                 onClick={ () => setOpen(false) }
               >
@@ -174,6 +166,7 @@ const Video = ({
             </div>
           </div>
         </div>
+        </DialogPortal>
       ) : null}
     </>
   );

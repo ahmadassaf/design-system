@@ -42,6 +42,7 @@ import { cn } from '../../../utilities/cn';
  * @param {Object} [props.siteMetadata={}] - Site configuration object
  * @param {string} props.siteMetadata.locale - Site locale for date formatting
  * @param {Array} props.toc - Table of contents array
+ * @param {1|2|3|4|5|6} [props.titleLevel=1] - Semantic heading level for the post title
  *
  * @returns {JSX.Element} Complete post header with all metadata
  *
@@ -53,7 +54,9 @@ import { cn } from '../../../utilities/cn';
  *   toc={tableOfContents}
  * />
  */
-const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata = {}, tocControl }) => (
+const titleElements = { 1: 'h1', 2: 'h2', 3: 'h3', 4: 'h4', 5: 'h5', 6: 'h6' };
+
+const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata = {}, titleLevel = 1, tocControl }) => (
   <div className={ cn('w-full pt-10 max-xl:w-full sm:pt-12 lg:pt-14', className, classNames.root) }>
 
     <div className={ cn('mb-2 flex flex-wrap items-center gap-3', classNames.meta) }>
@@ -74,7 +77,7 @@ const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata
       )}
     </div>
     <div className={ cn('text-left', classNames.body) }>
-      <Typography variant='post-title' className={ cn('pb-3', classNames.title) }>
+      <Typography as={ titleElements[titleLevel] || titleElements[1] } variant='post-title' className={ cn('pb-3', classNames.title) }>
         {frontMatter.title}
       </Typography>
       <Typography variant='post-subtitle' className={ classNames.subtitle }>

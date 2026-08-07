@@ -21,6 +21,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-breadcrumb',
   title: 'Core/Breadcrumb'
 };
 

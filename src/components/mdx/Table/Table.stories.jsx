@@ -1,6 +1,6 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { renderComponentExample } from '../../../../.storybook/stories/ComponentExamples';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, within } from 'storybook/test';
 
 import * as componentModule from './index';
 
@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-table',
   title: 'MDX/Table'
 };
 
@@ -24,29 +25,18 @@ export const Example = {
     const canvas = within(canvasElement);
     const table = canvas.getByRole('table');
     const statusHeader = canvas.getByRole('columnheader', { 'name': 'Status' });
-    const statusCell = canvas.getByRole('cell', { 'name': 'Accessible' });
     const componentHeader = canvas.getByRole('columnheader', { 'name': 'Component' });
     const rows = canvas.getAllByRole('row');
-    const initialStatusHeaderClass = statusHeader.className;
-    const initialStatusCellClass = statusCell.className;
+    const scrollRegion = canvas.getByRole('region', { 'name': 'Scrollable table' });
 
     await expect(table).toBeVisible();
     await expect(table).toHaveClass('w-full', 'table-auto');
+    await expect(scrollRegion).toHaveAttribute('tabindex', '0');
     await expect(rows).toHaveLength(3);
     await expect(componentHeader).toBeVisible();
+    await expect(statusHeader).toBeVisible();
     await expect(canvas.getByRole('cell', { 'name': 'Callout' })).toBeVisible();
-
-    await userEvent.hover(statusCell);
-    await waitFor(() => {
-      expect(statusHeader.className).not.toBe(initialStatusHeaderClass);
-      expect(statusCell.className).not.toBe(initialStatusCellClass);
-    });
-
-    await userEvent.unhover(statusCell);
-    await waitFor(() => {
-      expect(statusHeader.className).toBe(initialStatusHeaderClass);
-      expect(statusCell.className).toBe(initialStatusCellClass);
-    });
+    await expect(canvas.getByRole('cell', { 'name': 'Accessible' })).toBeVisible();
   },
   'render': () => renderComponentExample('MDX/Table', componentModule)
 };

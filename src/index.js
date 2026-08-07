@@ -1,6 +1,6 @@
 /*
  * MDX components are intentionally NOT re-exported here: they pull heavy peer
- * dependencies (recharts, framer-motion, react-latex-next, mermaid) that most
+ * dependencies (recharts, framer-motion, katex, mermaid) that most
  * consumers never need. Import them from '@gaudi/design-system/mdx' instead,
  * and the compiled-MDX runtime from '@gaudi/design-system/mdx/runtime'.
  */
@@ -11,7 +11,7 @@ export * from './components/navigation';
 export * from './components/post';
 export { default as Typography, variants as TypographyVariants, typographyVariants } from './foundations/Typography';
 export { getIcon, iconColors, iconLabels, iconRegistry, iconSizes } from './icons';
-export { colors, radii, shadows, tokens, typography } from './tokens';
+export { colors, motion, radii, shadows, tokens, typography } from './tokens';
 export { cn } from './utilities/cn';
 export { coreContent, omit, pick, sortPosts } from './utilities/content';
 export { createVariants } from './utilities/variants';

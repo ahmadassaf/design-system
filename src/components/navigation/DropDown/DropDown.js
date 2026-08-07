@@ -37,8 +37,9 @@ import { cn } from '../../../utilities/cn';
  *   setMenuDropDownOpen={setIsOpen}
  * />
  */
-const MenuDropDown = ({ className, name, menuDropDownOpen, setMenuDropDownOpen }) => {
+const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsideClickRef, setMenuDropDownOpen }) => {
   const [ mounted, setMounted ] = React.useState(false);
+  const triggerRef = React.useRef(null);
 
   // Only show dynamic classes after mount to prevent hydration mismatch
   React.useEffect(() => {
@@ -59,18 +60,22 @@ const MenuDropDown = ({ className, name, menuDropDownOpen, setMenuDropDownOpen }
     setMenuDropDownOpen(false);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key !== 'Escape' || !menuDropDownOpen) return;
+    event.preventDefault();
+    setMenuDropDownOpen(false);
+  };
+
   /**
    * Custom hook for detecting clicks outside a component
    *
    * @param {Function} callback - Function to call when outside click is detected
    * @returns {React.RefObject} Ref to attach to the component
    */
-  const useOutsideClick = (callback) => {
-    const ref = React.useRef();
-
+  const useOutsideClick = (callback, boundaryRef) => {
     React.useEffect(() => {
       const handleClick = (event) => {
-        if (ref.current && !ref.current.contains(event.target)) callback();
+        if (boundaryRef.current && !boundaryRef.current.contains(event.target)) callback();
       };
 
       document.addEventListener('click', handleClick);
@@ -78,28 +83,29 @@ const MenuDropDown = ({ className, name, menuDropDownOpen, setMenuDropDownOpen }
       return () => {
         document.removeEventListener('click', handleClick);
       };
-    }, [ callback, ref ]);
-
-    return ref;
+    }, [ boundaryRef, callback ]);
   };
 
-  const ref = useOutsideClick(handleClickOutside);
+  useOutsideClick(handleClickOutside, outsideClickRef || triggerRef);
 
   return (
     <Button
-      ref={ ref }
+      ref={ triggerRef }
       variant='ghost'
       tone='neutral'
       size='sm'
       className={ cn(
-        'cursor-pointer gap-1 rounded-lg px-3 py-2 text-sm font-medium leading-6 text-gray-950 hover:bg-transparent hover:text-blue-600 dark:text-gray-100 dark:hover:bg-transparent dark:hover:text-blue-400', mounted && menuDropDownOpen && 'text-blue-600 dark:text-blue-400', className
+        'cursor-pointer gap-1 rounded-md px-3 py-2 text-base font-medium leading-6 text-gray-950 hover:bg-transparent hover:text-blue-600 lg:text-lg dark:text-gray-100 dark:hover:bg-transparent dark:hover:text-blue-300', mounted && menuDropDownOpen && 'text-blue-600 dark:text-blue-300', className
       ) }
-      aria-controls='disclosure-1'
+      aria-controls={ controlsId }
       aria-expanded={ mounted ? menuDropDownOpen : false }
+      aria-haspopup='true'
+      id={ id }
       onClick={ handlemenuDropDownOpen }
+      onKeyDown={ handleKeyDown }
     >
       { name }
-      <Icon name='ChevronDown' decorative size='xs' className={ `flex-none text-gray-400 transition-transform duration-200 ${mounted && menuDropDownOpen ? 'rotate-180' : ''}` } />
+      <Icon name='ChevronDown' decorative size='xs' className={ `flex-none text-gray-400 transition-transform duration-200 motion-reduce:transition-none ${mounted && menuDropDownOpen ? 'rotate-180' : ''}` } />
     </Button>
   );
 };

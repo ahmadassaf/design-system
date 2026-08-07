@@ -1,6 +1,6 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, within } from 'storybook/test';
-import { Icon } from '../../../index';
+import Icon from './Icon';
 
 const componentDocs = getComponentDocs('Core/Icon');
 
@@ -8,7 +8,7 @@ export default {
   argTypes: {
     'color': {
       'control': 'select',
-      'options': [ undefined, 'neutral', 'muted', 'primary', 'blue', 'green', 'yellow', 'red', 'danger', 'warning', 'dim' ]
+      'options': [ undefined, 'neutral', 'muted', 'primary', 'info', 'success', 'warning', 'danger', 'attention', 'blue', 'teal', 'green', 'amber', 'yellow', 'red', 'rose', 'dim' ]
     },
     'name': {
       'control': 'select',
@@ -29,6 +29,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-icon',
   title: 'Core/Icon'
 };
 
@@ -121,22 +122,30 @@ export const Colors = {
       'neutral',
       'muted',
       'primary',
+      'info',
+      'success',
+      'warning',
+      'danger',
+      'attention',
       'blue',
+      'teal',
       'green',
+      'amber',
       'yellow',
       'red',
-      'danger',
-      'warning',
+      'rose',
       'dim'
     ].forEach((color) => {
       expect(canvas.getByRole('img', { 'name': `${color} information icon` })).toBeVisible();
     });
     expect(canvas.getByRole('img', { 'name': 'danger information icon' })).toHaveClass('text-red-600');
-    expect(canvas.getByRole('img', { 'name': 'warning information icon' })).toHaveClass('text-yellow-700');
+    expect(canvas.getByRole('img', { 'name': 'warning information icon' })).toHaveClass('text-amber-700');
+    expect(canvas.getByRole('img', { 'name': 'attention information icon' })).toHaveClass('text-rose-700');
+    expect(canvas.getByRole('img', { 'name': 'teal information icon' })).toHaveClass('text-teal-700');
   },
   'render': () => (
     <div className='flex flex-wrap items-center gap-4 p-6'>
-      {[ 'neutral', 'muted', 'primary', 'blue', 'green', 'yellow', 'red', 'danger', 'warning', 'dim' ].map((color) => (
+      {[ 'neutral', 'muted', 'primary', 'info', 'success', 'warning', 'danger', 'attention', 'blue', 'teal', 'green', 'amber', 'yellow', 'red', 'rose', 'dim' ].map((color) => (
         <Icon key={ color } name='Info' label={ `${color} information icon` } color={ color } size='lg' />
       ))}
     </div>

@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import CommandLauncher from '../../core/CmdLauncher';
@@ -57,11 +57,25 @@ const Menu = ({
   const menuCategories = categoriesProp || [];
   const menuPublications = publicationsProp || [];
   const menuTags = tagsProp || [];
+  const blogLink = navigation.links.find((link) => link.href === '/blog' || link.href === '/blog/');
+  const mobileLinks = navigation.links.filter((link) => link !== blogLink);
 
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
   const [ LauncherOpen, LauncherSetOpen ] = useState(false);
 
-  return (<nav aria-label='Main navigation' className='flex min-h-20 items-center justify-between gap-5 py-6'>
+  useEffect(() => {
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    const closeOnDesktop = (event) => {
+      if (event.matches) setMobileMenuOpen(false);
+    };
+
+    closeOnDesktop(desktopQuery);
+    desktopQuery.addEventListener('change', closeOnDesktop);
+
+    return () => desktopQuery.removeEventListener('change', closeOnDesktop);
+  }, []);
+
+  return (<nav aria-label='Main navigation' className='flex min-h-20 items-center justify-between gap-5 py-10 lg:py-12'>
 
     <Link href='/' aria-label={ metadata.author.name || metadata.title || 'Home' } variant='bare' className='shrink-0 text-gray-950 dark:text-white'>
       <ThemeLogo />
@@ -73,9 +87,15 @@ const Menu = ({
           if (
             (link.hideInPath === '*' && !path.includes(link.showInPath)) || path.includes(link.hideInPath)) return null;
 
+          const isActive = path === link.href || (link.href !== '/' && path.startsWith(`${link.href}/`));
+
           return (
             <li key={ link.href }>
-              <Link href={ link.href } className='whitespace-nowrap px-1 py-2 text-sm font-medium lg:text-base'>
+              <Link
+                href={ link.href }
+                aria-current={ isActive ? 'page' : undefined }
+                className={ `whitespace-nowrap px-1 py-2 text-base font-medium lg:text-lg ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}` }
+              >
                 {link.title}
               </Link>
             </li>
@@ -91,13 +111,21 @@ const Menu = ({
       <ThemeSwitch />
 
       <div className='flex lg:hidden'>
-        <Button variant='ghost' tone='gray' size='sm' className='h-10 w-10 p-0' onClick={ () => setMobileMenuOpen(true) }>
+        <Button variant='ghost' tone='neutral' size='sm' className='h-11 w-11 p-0' onClick={ () => setMobileMenuOpen(true) }>
           <span className='sr-only'>Open main menu</span>
           <Icon name='Menu' decorative size='md' />
         </Button>
       </div>
 
-      {mobileMenuOpen ? (<MenuMobile categories={ menuCategories } links={ navigation.links } setMobileMenuOpen={ setMobileMenuOpen } setLauncherOpen={ LauncherSetOpen } />) : null}
+      {mobileMenuOpen ? (
+        <MenuMobile
+          blogLink={ blogLink }
+          categories={ menuCategories }
+          links={ mobileLinks }
+          setMobileMenuOpen={ setMobileMenuOpen }
+          setLauncherOpen={ LauncherSetOpen }
+        />
+      ) : null}
       <CommandLauncher
         tags={ menuTags }
         projects={ projects }

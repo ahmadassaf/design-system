@@ -1,26 +1,46 @@
 import packageJson from '../../package.json';
 
-import { CheckList, CodeBlock, InlineCode, Page, QuickLink, Section, Table, Td, Th } from './StoryDocs';
+import { CodeBlock, InlineCode, Page, QuickLink, Section, Table, Td, Th } from './StoryDocs';
 
 export default {
+  id: 'overview-getting-started',
   parameters: {
-    layout: 'fullscreen',
-    options: { 'showPanel': false }
+    layout: 'fullscreen'
   },
   tags: [ '!autodocs' ],
-  title: 'Overview/Getting Started'
+  title: 'Overview'
 };
 
 export const Default = {
-  'name': 'Getting Started',
+  name: 'Getting Started',
   'render': () => (
     <Page
-      kicker={ `v${packageJson.version}` }
       showLogo
       title='Gaudi Design System'
       intro='Gaudi is the design system for the blog and related interface work. The source repository is ahmadassaf/design-system, while the package import name is @gaudi/design-system.'
     >
-      <Section title='Use The Package' description='Install Gaudi, import its stylesheet once, then consume UI from package exports.'>
+      <Section title='Start Here' description='Install once, reuse documented components, and keep application policy outside the package.'>
+        <ol aria-label='Gaudi setup workflow' className='grid border-y border-gray-200 md:grid-cols-3 md:divide-x md:divide-gray-200 dark:border-gray-800 dark:md:divide-gray-800'>
+          {[
+            [ '1', 'Install once', 'Add Gaudi and import its global stylesheet at the application root.' ],
+            [ '2', 'Reuse first', 'Search Storybook for an existing component, block, or page pattern.' ],
+            [ '3', 'Verify the boundary', 'Keep product data and policy in the application, then run the documented checks.' ]
+          ].map(([ number, title, description ]) => (
+            <li key={ number } className='flex gap-3 px-1 py-4 md:px-5 md:first:pl-0'>
+              <span className='flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300'>{number}</span>
+              <span>
+                <strong className='block text-sm text-gray-950 dark:text-white'>{title}</strong>
+                <span className='mt-1 block text-xs leading-5 text-gray-600 dark:text-gray-300'>{description}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section title='Install And Import' description='The repository distribution targets React 19 and Next.js 15. Import the stylesheet once at the application root.'>
+        <p className='max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
+          Package v{packageJson.version} installs from the default GitHub branch and exposes the stable <InlineCode>@gaudi/design-system</InlineCode> import name.
+        </p>
         <CodeBlock
           language='jsx'
           code={ `pnpm add github:ahmadassaf/design-system
@@ -32,84 +52,53 @@ export default function RootLayout({ children }) {
   return <html lang="en"><body>{children}</body></html>;
 }` }
         />
-      </Section>
-
-      <Section title='Imports' description='Prefer stable package imports. Deep imports are reserved for documented component families.'>
-        <Table>
+        <Table label='Package imports'>
           <thead>
             <tr><Th>Path</Th><Th>Use</Th></tr>
           </thead>
           <tbody>
             <tr><Td mono>@gaudi/design-system</Td><Td>Core components, domain components, and shared tokens exposed from the root API.</Td></tr>
             <tr><Td mono>@gaudi/design-system/global.css</Td><Td>Tailwind, CSS variables, base compatibility, reduced motion, and global primitives.</Td></tr>
-            <tr><Td mono>@gaudi/design-system/tokens</Td><Td>Structured color, typography, radius, and shadow tokens.</Td></tr>
+            <tr><Td mono>@gaudi/design-system/tokens</Td><Td>Structured color, typography, motion, radius, and shadow tokens.</Td></tr>
             <tr><Td mono>@gaudi/design-system/mdx</Td><Td>MDX components for article content.</Td></tr>
           </tbody>
         </Table>
-        <CodeBlock
-          language='jsx'
-          code={ `import { Button, Card, Link, Pill } from '@gaudi/design-system';
-import { colors } from '@gaudi/design-system/tokens';
-import { Callout, Table } from '@gaudi/design-system/mdx';
-
-export function ArticleCard() {
-  return (
-    <Card title="Design systems" subtitle="Reusable article UI.">
-      <Pill tone="blue" variant="soft">Core</Pill>
-      <Button href="" size="sm">Read article</Button>
-    </Card>
-  );
-}` }
-        />
       </Section>
 
-      <Section title='Agent Usage' description='Agents working in the blog or Gaudi should follow the root AGENTS.md file before adding UI or styling.'>
-        <CheckList
-          items={ [
-            'Read `AGENTS.md` in `ahmadassaf/design-system` before changing reusable UI.',
-            'Import Gaudi from `@gaudi/design-system`; do not copy components into the blog.',
-            'Use `@gaudi/design-system/global.css`, the Tailwind preset, plugins, tokens, variants, and icon registry instead of app-local style hacks.',
-            'Keep content files, bibliography files, Contentlayer output, app API routes, and route metadata in the consuming app.',
-            'Document public Gaudi components with usage, variants, code examples, and accessibility notes.'
-          ] }
-        />
-        <CodeBlock
-          language='md'
-          code={ `Agent entrypoint:
-
-1. Read AGENTS.md.
-2. Check Storybook for the existing component or pattern.
-3. Reuse Gaudi tokens, variants, components, and icons.
-4. Put reusable UI changes in Gaudi, not in the blog app.
-5. Run git diff --check and pnpm test:contracts before committing.` }
-        />
+      <Section title='Package Boundary' description='Gaudi owns reusable presentation and interaction contracts. The consuming application owns product data and policy.'>
+        <Table label='Package ownership boundary'>
+          <thead><tr><Th>Concern</Th><Th>Gaudi owns</Th><Th>Application owns</Th></tr></thead>
+          <tbody>
+            <tr><Td>UI</Td><Td>Components, variants, tokens, icons, focus behavior, and responsive composition.</Td><Td>Route assembly, permissions, analytics, and product-specific decisions.</Td></tr>
+            <tr><Td>Data</Td><Td>Documented prop shapes and local display states.</Td><Td>Fetching, persistence, content records, metadata, and API routes.</Td></tr>
+            <tr><Td>Styles</Td><Td>Component styles and one intentional global stylesheet.</Td><Td>Page layout around Gaudi components, without copied components or broad overrides.</Td></tr>
+          </tbody>
+        </Table>
+        <p className='max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
+          Contributors and agents should read <InlineCode>AGENTS.md</InlineCode>, search Storybook before adding UI, and run the documented checks before committing.
+        </p>
       </Section>
 
-      <Section title='Conventions' description='The rules are intentionally small: keep reusable UI in Gaudi, keep route glue in the app, and document public APIs where they live.'>
-        <CheckList
-          items={ [
-            'Reusable UI belongs in the ahmadassaf/design-system repository, not app-local component folders.',
-            'Route-level data fetching, metadata, and one-off page composition stay in the app.',
-            'Core owns low-level reusable UI; domain sections compose Core instead of duplicating it.',
-            'Component-owned styles live with the component. Global CSS stays limited and intentional.',
-            'Use Gaudi tokens and approved palette families: gray, neutral, blue, green, yellow, red, and indigo.',
-            'Public components must have real stories, focused examples, and component-specific accessibility notes.'
-          ] }
-        />
-      </Section>
-
-      <Section title='Package Boundary'>
-        <div className='rounded-lg border border-gray-200 bg-white p-4 text-sm leading-7 text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300'>
-          New reusable UI goes into the <InlineCode>ahmadassaf/design-system</InlineCode> repository. The blog can import through
-          <InlineCode>@gaudi/design-system</InlineCode> or the Gaudi-backed <InlineCode>@/components/*</InlineCode> alias.
-          Avoid app-local copies and broad CSS overrides.
-        </div>
+      <Section title='Troubleshooting' description='Start with the visible symptom, confirm the likely boundary failure, then recover without replacing package components or adding global overrides.'>
+        <Table label='Getting started troubleshooting'>
+          <thead>
+            <tr><Th>Symptom</Th><Th>Likely cause</Th><Th>Recovery</Th></tr>
+          </thead>
+          <tbody>
+            <tr><Td>Components render without Gaudi styles</Td><Td mono>global.css is missing or imported below app styles</Td><Td>Import it once in the root layout, restart the bundler, and remove duplicate package CSS imports.</Td></tr>
+            <tr><Td>A package import cannot resolve</Td><Td>The path is not a documented package export</Td><Td>Use the Imports table or the component docs canonical import; keep LayoutContainer on its direct layout path.</Td></tr>
+            <tr><Td>A component loses theme or configuration context</Td><Td>The consuming shell omitted the documented provider or boundary props</Td><Td>Compare the canonical story, restore the shared shell, and pass application data through documented props.</Td></tr>
+            <tr><Td>An upgrade fails during build</Td><Td>React, Next.js, or the lockfile no longer matches the supported versions</Td><Td>Align the supported versions, reinstall dependencies, then run lint, contract tests, Storybook interactions, and the production build.</Td></tr>
+            <tr><Td>Keyboard or focus behavior regresses</Td><Td>A custom composition bypassed the documented interaction primitive</Td><Td>Reproduce the canonical story, restore its focus and Escape contract, and keep product-specific policy outside the primitive.</Td></tr>
+          </tbody>
+        </Table>
       </Section>
 
       <Section title='Next'>
         <div className='grid gap-3 md:grid-cols-2 xl:grid-cols-3'>
           <QuickLink title='Accessibility' description='Keyboard, screen-reader, contrast, focus, and testing rules.' storyId='overview-accessibility--default' />
-          <QuickLink title='Colors & Tokens' description='Palette, semantic tokens, CSS variables, radius, and shadows.' storyId='overview-colors-tokens--default' />
+          <QuickLink title='States & Recovery' description='Loading, empty, error, success, disabled, and recovery contracts.' storyId='overview-states-recovery--default' />
+          <QuickLink title='Colors & Tokens' description='Palette, semantic tokens, CSS variables, motion, radius, and shadows.' storyId='overview-colors-tokens--default' />
           <QuickLink title='Core Components' description='Canonical reusable UI APIs.' storyId='core-overview--default' />
         </div>
       </Section>

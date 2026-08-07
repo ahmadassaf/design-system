@@ -16,7 +16,8 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
-  title: 'MDX/Faq'
+  id: 'mdx-faq',
+  title: 'MDX/FAQ'
 };
 
 export const Example = {

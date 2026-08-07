@@ -2,6 +2,7 @@ import { expect, waitFor, within } from 'storybook/test';
 
 export default {
   tags: [ 'autodocs' ],
+  id: 'mdx-citationtracker',
   title: 'MDX/CitationTracker'
 };
 

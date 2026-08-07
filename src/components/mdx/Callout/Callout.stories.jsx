@@ -16,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'mdx-callout',
   title: 'MDX/Callout'
 };
 
@@ -23,12 +24,12 @@ export const Example = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const calloutText = canvas.getByText('Use callouts for important editorial context, warnings, and implementation notes.');
-    const body = calloutText.closest('.text-blue-800');
-    const callout = body?.parentElement;
+    const callout = calloutText.closest('aside');
+    const body = callout?.querySelector('div');
 
     await expect(calloutText).toBeVisible();
-    await expect(callout).toHaveClass('rounded-lg', 'border', 'border-blue-200', 'bg-gradient-to-br');
-    await expect(body).toHaveClass('text-blue-800');
+    await expect(callout).toHaveClass('rounded-md', 'border', 'border-info-border', 'bg-info-subtle');
+    await expect(body).toHaveClass('text-info');
     await expect(callout).toHaveTextContent('Use callouts for important editorial context, warnings, and implementation notes.');
   },
   'render': () => renderComponentExample('MDX/Callout', componentModule)

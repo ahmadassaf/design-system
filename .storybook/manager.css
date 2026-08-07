@@ -1,35 +1,190 @@
-/* Storybook manager chrome customisation for Gaudi. */
-
-button[aria-label='Create a new story'],
-button[title='Create a new story'] {
-  display: none !important;
-  pointer-events: none !important;
-}
-
 .sidebar-header,
 [data-testid='sidebar-header'] {
   display: none !important;
 }
 
-#storybook-explorer-searchfield {
-  border-radius: 8px !important;
-  font-size: 13px !important;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s !important;
+button[aria-label='Create a new story'],
+button[title='Create a new story'],
+button[aria-label='Open addon panel'],
+button[aria-label='Show addon panel'],
+button[aria-label='Run tests'],
+a[href*='/settings/whats-new'],
+#storybook-show-addon-panel,
+#storybook-panel-region,
+#storybook-panel-root {
+  display: none !important;
+  pointer-events: none !important;
 }
 
-#storybook-explorer-searchfield:focus {
-  border-color: #2563a8 !important;
-  box-shadow: 0 0 0 2px rgb(37 99 168 / 15%) !important;
-}
+@media (max-width: 768px) {
+  button[aria-label*='onboarding guide'] {
+    display: none !important;
+  }
 
-.sidebar-container button[data-nodetype] {
-  border-radius: 6px !important;
-}
+  #storybook-mobile-menu button[aria-label$='completed'] {
+    display: none !important;
+  }
 
-.sidebar-container button[data-selected='true'] {
-  background-color: rgb(37 99 168 / 8%) !important;
-  color: #2563a8 !important;
-  font-weight: 500 !important;
+  [aria-label='Grid visibility'],
+  [aria-label='Reload story'],
+  [aria-label='Preview background'],
+  [aria-label='Measure tool'],
+  [aria-label='Outline tool'],
+  [aria-label='Vision filter'],
+  [aria-label='Open in isolation mode'],
+  [aria-label='Change zoom level'],
+  [aria-label='Enter full screen'],
+  [aria-label='Open in editor'] {
+    display: none !important;
+  }
+
+  [role='toolbar'] {
+    height: 44px !important;
+    min-height: 44px !important;
+    overflow: visible !important;
+  }
+
+  [role='toolbar'] :is(button, [role='switch']) {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  header[role='banner'].sb-bar {
+    height: 44px !important;
+    min-height: 44px !important;
+  }
+
+  header[role='banner'].sb-bar button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  header[role='banner'].sb-bar > button[aria-label='Open navigation menu'] {
+    min-width: 0 !important;
+    flex: 1 1 auto;
+  }
+
+  main[aria-labelledby='main-preview-heading'] input[data-size-input] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  main[aria-labelledby='main-preview-heading'] button[aria-label='Rotate viewport'] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  .gaudi-mobile-preview-tools {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+  }
+
+  .gaudi-mobile-preview-tool,
+  .gaudi-mobile-menu-close {
+    display: inline-flex;
+    min-height: 44px;
+    min-width: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .gaudi-mobile-preview-tool:hover,
+  .gaudi-mobile-menu-close:hover {
+    background: rgb(0 0 0 / 6%);
+  }
+
+  .gaudi-mobile-preview-tool:focus-visible,
+  .gaudi-mobile-menu-close:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -4px;
+  }
+
+  .gaudi-manager-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .gaudi-mobile-preview-tool--viewport .gaudi-manager-icon {
+    width: 15px;
+    height: 11px;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+  }
+
+  #storybook-mobile-menu {
+    position: fixed !important;
+    inset: auto 0 0 !important;
+    z-index: 100001 !important;
+    display: grid !important;
+    width: 100% !important;
+    height: 80dvh !important;
+    grid-template-rows: 48px minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  body > div[inert]:has(+ [role='dialog'][aria-label='Menu']) {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 100000 !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  body > [role='dialog'][aria-label='Menu'] {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 100001 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none;
+  }
+
+  .gaudi-mobile-menu-close {
+    position: relative;
+    z-index: 2;
+    grid-row: 1;
+    justify-self: end;
+    margin: 4px 4px 0 auto;
+    pointer-events: auto;
+    font-size: 24px;
+  }
+
+  .gaudi-mobile-menu-close + #storybook-sidebar-region {
+    position: relative !important;
+    top: auto !important;
+    grid-row: 2;
+    min-height: 0;
+    height: auto !important;
+    pointer-events: auto;
+  }
+
+  #storybook-mobile-menu :is(
+    .search-result-item,
+    input,
+    nav a,
+    nav button,
+    button[aria-label='Tag filters'],
+    button[aria-label='Clear recently opened items']
+  ) {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  #storybook-mobile-menu button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  #storybook-mobile-menu .search-result-recentlyOpened ~ li:nth-of-type(n + 9) {
+    display: none !important;
+  }
 }

@@ -1,8 +1,9 @@
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, within } from 'storybook/test';
-import { Banner } from '../../../index';
+import Banner from './Banner';
 
 const componentDocs = getComponentDocs('Core/Banner');
+const toneOptions = [ 'gray', 'neutral', 'blue', 'teal', 'green', 'amber', 'yellow', 'red', 'rose', 'indigo' ];
 
 export default {
   component: Banner,
@@ -15,6 +16,7 @@ export default {
     }
   },
   tags: [ 'autodocs' ],
+  id: 'core-banner',
   title: 'Core/Banner'
 };
 
@@ -82,18 +84,21 @@ export const Tones = {
     const canvas = within(canvasElement);
     const banners = canvas.getAllByRole('status');
 
-    await expect(banners).toHaveLength(7);
+    await expect(banners).toHaveLength(10);
     await expect(banners[0]).toHaveClass('bg-gray-50', 'text-gray-900');
     await expect(banners[1]).toHaveClass('bg-neutral-50', 'text-neutral-900');
     await expect(banners[2]).toHaveClass('bg-blue-50', 'text-blue-900');
-    await expect(banners[3]).toHaveClass('bg-green-50', 'text-green-900');
-    await expect(banners[4]).toHaveClass('bg-yellow-50', 'text-yellow-950');
-    await expect(banners[5]).toHaveClass('bg-red-50', 'text-red-900');
-    await expect(banners[6]).toHaveClass('bg-indigo-50', 'text-indigo-900');
+    await expect(banners[3]).toHaveClass('bg-teal-50', 'text-teal-900');
+    await expect(banners[4]).toHaveClass('bg-green-50', 'text-green-900');
+    await expect(banners[5]).toHaveClass('bg-amber-50', 'text-amber-950');
+    await expect(banners[6]).toHaveClass('bg-yellow-50', 'text-yellow-950');
+    await expect(banners[7]).toHaveClass('bg-red-50', 'text-red-900');
+    await expect(banners[8]).toHaveClass('bg-rose-50', 'text-rose-900');
+    await expect(banners[9]).toHaveClass('bg-indigo-50', 'text-indigo-900');
   },
   'render': () => (
     <div className='space-y-3 p-6'>
-      {[ 'gray', 'neutral', 'blue', 'green', 'yellow', 'red', 'indigo' ].map((tone) => (
+      {toneOptions.map((tone) => (
         <Banner key={ tone } title={ tone } tone={ tone } variant='soft'>
           Concise announcement text.
         </Banner>
