@@ -55,6 +55,25 @@ const MenuBlog = ({ categories }) => {
   const dropdownId = React.useId();
   const triggerId = `${dropdownId}-trigger`;
 
+  const closeMenu = React.useCallback((returnFocus = false) => {
+    setMenuBlogOpen(false);
+    if (returnFocus) requestAnimationFrame(() => document.getElementById(triggerId)?.focus());
+  }, [ triggerId ]);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape' && menuBlogOpen) {
+      event.preventDefault();
+      closeMenu(true);
+
+      return;
+    }
+
+    if (event.key === 'ArrowDown' && event.target?.id === triggerId && menuBlogOpen) {
+      event.preventDefault();
+      dropdownRef.current?.querySelector('a[href]')?.focus();
+    }
+  };
+
   React.useLayoutEffect(() => {
     if (!menuBlogOpen) return;
 
@@ -62,9 +81,9 @@ const MenuBlog = ({ categories }) => {
       if (!containerRef.current || !dropdownRef.current) return;
 
       const triggerRect = containerRef.current.getBoundingClientRect();
-      const dropdownRect = dropdownRef.current.getBoundingClientRect();
+      const dropdownRect = dropdownRef.current.firstElementChild?.getBoundingClientRect() || dropdownRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
-      const gutter = 16;
+      const gutter = 12;
       const centeredLeft = triggerRect.left + (triggerRect.width / 2) - (dropdownRect.width / 2);
       const centeredRight = centeredLeft + dropdownRect.width;
 
@@ -85,7 +104,7 @@ const MenuBlog = ({ categories }) => {
     };
   }, [ menuBlogOpen ]);
 
-  return (<li ref={ containerRef } className='relative'>
+  return (<li ref={ containerRef } className='relative' onKeyDown={ handleKeyDown }>
 
     <MenuDropDown controlsId={ dropdownId } id={ triggerId } name='Categories' menuDropDownOpen={ menuBlogOpen } outsideClickRef={ containerRef } setMenuDropDownOpen={ setMenuBlogOpen }></MenuDropDown>
 
@@ -95,22 +114,22 @@ const MenuBlog = ({ categories }) => {
         aria-labelledby={ triggerId }
         ref={ dropdownRef }
         className={ cn(
-          'absolute top-full z-50 mt-3 flex w-screen max-w-max px-3 py-2',
+          'absolute top-full z-50 mt-2 flex w-screen max-w-max px-2',
           alignment === 'left' && 'left-0',
           alignment === 'center' && 'left-1/2 -translate-x-1/2',
           alignment === 'right' && 'right-0'
         ) }
       >
-        <div className='w-screen max-w-md flex-auto overflow-hidden rounded-2xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/10 dark:bg-gray-900 dark:ring-gray-700/60'>
-          <div className='p-4'>
+        <div className='w-screen max-w-sm flex-auto overflow-hidden rounded-xl bg-white text-sm leading-5 shadow-2xl shadow-gray-950/15 dark:bg-gray-900 dark:shadow-black/50'>
+          <div className='p-2'>
 
             {categories.map((category) => (
-              <div key={ category.id } className='group relative flex rounded-lg p-2 hover:bg-gray-50 dark:hover:bg-gray-800'>
+              <div key={ category.id } className='group relative flex rounded-lg px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800'>
                 <div>
-                  <Link href={ `/blog/categories/${category.id}` } className='font-medium capitalize text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400'>
+                  <Link href={ `/blog/categories/${category.id}` } className='text-sm font-semibold capitalize text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-300'>
                     {category.title.replace('-', ' ')}
                     <span className='absolute inset-0'></span>
-                    <p className='mt-1 text-sm font-light text-gray-600 dark:text-gray-300'>{category.description}</p>
+                    <p className='mt-0.5 text-xs font-normal leading-5 text-gray-600 dark:text-gray-300'>{category.description}</p>
                   </Link>
                 </div>
               </div>

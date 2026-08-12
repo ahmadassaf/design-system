@@ -98,7 +98,7 @@ export default async function LayoutContainer({ children, footerProps, jsonLd, m
               <FloatingMenu/>
               <Menu { ...menuProps } />
               {jsonLdMarkup ? <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': jsonLdMarkup }} key='jsonld'/> : null}
-              <main id='main-content' className='mb-4'>{children}</main>
+              <main id='main-content' className='mb-4 mt-4 lg:mt-6'>{children}</main>
               <Footer { ...footerProps } />
             </div>
           </div>

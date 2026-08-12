@@ -15,6 +15,7 @@
 import React from 'react';
 
 import MenuDropDown from '../DropDown';
+import Icon from '../../core/Icon';
 import Link from '../../core/Link';
 import formatDate from '../../../utilities/formatDate';
 import { useSiteConfig } from '../../../utilities/SiteConfig';
@@ -85,9 +86,9 @@ const MenuMain = ({ categories, allPosts }) => {
       if (!containerRef.current || !dropdownRef.current) return;
 
       const triggerRect = containerRef.current.getBoundingClientRect();
-      const dropdownRect = dropdownRef.current.getBoundingClientRect();
+      const dropdownRect = dropdownRef.current.firstElementChild?.getBoundingClientRect() || dropdownRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
-      const gutter = 16;
+      const gutter = 12;
       const centeredLeft = triggerRect.left + (triggerRect.width / 2) - (dropdownRect.width / 2);
       const centeredRight = centeredLeft + dropdownRect.width;
 
@@ -118,38 +119,41 @@ const MenuMain = ({ categories, allPosts }) => {
         aria-labelledby={ triggerId }
         ref={ dropdownRef }
         className={ cn(
-          'absolute top-full z-50 mt-3 flex w-screen max-w-max px-4',
+          'absolute top-full z-50 mt-2 flex w-screen max-w-max px-2',
           alignment === 'left' && 'left-0',
           alignment === 'center' && 'left-1/2 -translate-x-1/2',
           alignment === 'right' && 'right-0'
         ) }
       >
-        <div className='w-screen max-w-md flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/10 dark:bg-gray-900 dark:ring-gray-700/60'>
-          <div className='p-3'>
+        <div className='grid w-screen max-w-3xl flex-auto grid-cols-2 overflow-hidden rounded-xl bg-white text-sm leading-5 shadow-2xl shadow-gray-950/15 dark:bg-gray-900 dark:shadow-black/50'>
+          <div className='p-2'>
 
             {categories.map((category) => (
-              <div key={ category.id } className='group relative flex rounded-md px-3 py-2 hover:bg-surface-muted dark:hover:bg-gray-800'>
+              <div key={ category.id } className='group relative flex rounded-lg px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800'>
                 <div>
-                  <Link href={ `/blog/categories/${category.id}` } className='font-medium text-gray-900 dark:text-gray-100 hover:text-blue-600 capitalize dark:hover:text-blue-300'>
+                  <Link href={ `/blog/categories/${category.id}` } className='text-sm font-semibold capitalize text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-300'>
                     {category.title.replace('-', ' ')}
                     <span className='absolute inset-0'></span>
-                    <p className='mt-1 text-sm font-light text-gray-600 dark:text-gray-300'>{category.description}</p>
+                    <p className='mt-0.5 text-xs font-normal leading-5 text-gray-600 dark:text-gray-300'>{category.description}</p>
                   </Link>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className='bg-info-subtle p-3 dark:bg-gray-800'>
-            <div className='flex justify-between px-3 py-2'>
-              <h3 className='text-sm font-semibold leading-6 text-gray-500 dark:text-gray-400'>Recent posts</h3>
-              <Link href={ `/blog` } className='text-sm font-medium leading-6 text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-300' >See all &rarr;</Link>
+          <div className='bg-gray-50/80 p-2 dark:bg-gray-800/60'>
+            <div className='flex items-center justify-between px-3 py-2.5'>
+              <h3 className='text-sm font-semibold leading-5 text-gray-500 dark:text-gray-400'>Recent posts</h3>
+              <Link href={ `/blog` } className='inline-flex items-center gap-1 text-xs font-medium leading-5 text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-300'>
+                See all
+                <Icon name='ArrowRight' decorative size='xs' />
+              </Link>
             </div>
-            <ul role='list' className='py-2'>
+            <ul role='list' className='space-y-0.5 pb-1'>
               {allPosts.slice(0, 3).map((post) => (
-                <li key={ post.slug } className='group relative px-3 py-2'>
-                  <time dateTime={ post.date } className='block text-xs leading-6 text-gray-600 dark:text-gray-300 font-light'>{formatDate(post.date, metadata.locale)}</time>
-                  <Link href={ `/blog/${post.slug}` } className='block truncate text-sm font-medium leading-6 text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400'>
+                <li key={ post.slug } className='group relative rounded-lg px-3 py-2 hover:bg-white dark:hover:bg-gray-800'>
+                  <time dateTime={ post.date } className='block text-xs font-normal leading-5 text-gray-600 dark:text-gray-300'>{formatDate(post.date, metadata.locale)}</time>
+                  <Link href={ `/blog/${post.slug}` } className='block truncate text-sm font-medium leading-5 text-gray-900 hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400'>
                     {post.title}
                     <span className='absolute inset-0'></span>
                   </Link>

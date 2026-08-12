@@ -1,3 +1,6 @@
+import { FaLinkedin, FaYoutube } from 'react-icons/fa';
+import { RiMailOpenFill, RiTwitterXFill } from 'react-icons/ri';
+import { VscGithub } from 'react-icons/vsc';
 import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down.js';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left.js';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right.js';
@@ -29,7 +32,6 @@ import Folder from 'lucide-react/dist/esm/icons/folder.js';
 import FolderOpen from 'lucide-react/dist/esm/icons/folder-open.js';
 import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js';
 import GitFork from 'lucide-react/dist/esm/icons/git-fork.js';
-import Github from 'lucide-react/dist/esm/icons/github.js';
 import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3.js';
 import Handshake from 'lucide-react/dist/esm/icons/handshake.js';
 import Home from 'lucide-react/dist/esm/icons/home.js';
@@ -40,7 +42,6 @@ import Layers from 'lucide-react/dist/esm/icons/layers.js';
 import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.js';
 import Link from 'lucide-react/dist/esm/icons/link.js';
 import Link2Off from 'lucide-react/dist/esm/icons/link-2-off.js';
-import Linkedin from 'lucide-react/dist/esm/icons/linkedin.js';
 import List from 'lucide-react/dist/esm/icons/list.js';
 import LogOut from 'lucide-react/dist/esm/icons/log-out.js';
 import MailOpen from 'lucide-react/dist/esm/icons/mail-open.js';
@@ -60,10 +61,8 @@ import Sun from 'lucide-react/dist/esm/icons/sun.js';
 import Tag from 'lucide-react/dist/esm/icons/tag.js';
 import Tags from 'lucide-react/dist/esm/icons/tags.js';
 import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert.js';
-import Twitter from 'lucide-react/dist/esm/icons/twitter.js';
 import Users from 'lucide-react/dist/esm/icons/users.js';
 import X from 'lucide-react/dist/esm/icons/x.js';
-import Youtube from 'lucide-react/dist/esm/icons/youtube.js';
 
 const safeIconLinkProtocols = new Set([ 'http:', 'https:', 'mailto:', 'tel:' ]);
 
@@ -142,7 +141,7 @@ export const iconRegistry = {
   'Folder': Folder,
   'FolderOpen': FolderOpen,
   'Fork': GitFork,
-  'Github': Github,
+  'Github': VscGithub,
   'Grid': Grid3X3,
   'Grid3X3': Grid3X3,
   'Handshake': Handshake,
@@ -157,10 +156,10 @@ export const iconRegistry = {
   'Link': Link,
   'LinkIcon': Link,
   'LinkSlashIcon': Link2Off,
-  'Linkedin': Linkedin,
+  'Linkedin': FaLinkedin,
   'List': List,
   'MagnifyingGlassIcon': Search,
-  'Mail': MailOpen,
+  'Mail': RiMailOpenFill,
   'Menu': Menu,
   'Minus': Minus,
   'MinusIcon': Minus,
@@ -181,33 +180,33 @@ export const iconRegistry = {
   'SunFill': Sun,
   'TagIcon': Tag,
   'Tags': Tags,
-  'Twitter': Twitter,
+  'Twitter': RiTwitterXFill,
   'UserGroupIcon': Users,
   'VscFile': File,
   'VscFolder': Folder,
   'VscFolderOpened': FolderOpen,
   'Warning': TriangleAlert,
   'X': X,
-  'Youtube': Youtube,
+  'Youtube': FaYoutube,
   'css': Code,
   'docker': Container,
   'file': File,
   'folder': Folder,
   'folder-open': FolderOpen,
   'git': GitBranch,
-  'github': Github,
+  'github': VscGithub,
   'html': FileCode,
   'javascript': Braces,
   'json': FileJson,
-  'linkedin': Linkedin,
-  'mail': MailOpen,
+  'linkedin': FaLinkedin,
+  'mail': RiMailOpenFill,
   'markdown': FileText,
   'node': Boxes,
   'python': Code2,
   'react': Atom,
-  'twitter': Twitter,
+  'twitter': RiTwitterXFill,
   'typescript': FileCode,
-  'youtube': Youtube
+  'youtube': FaYoutube
 };
 
 export const iconLabels = {
