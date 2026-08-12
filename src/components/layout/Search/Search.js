@@ -19,6 +19,7 @@ import Icon from '../../core/Icon';
  * Subtle search input component for article filtering
  *
  * @param {Object} props - Component props
+ * @param {string} [props.clearLabel='Clear article filter'] - Accessible label for the clear button
  * @param {string} [props.label='Filter articles'] - Accessible input label
  * @param {string} [props.resultsId] - ID of the filtered results region
  * @param {Function} props.setSearchValue - Callback function to handle search value changes
@@ -29,7 +30,7 @@ import Icon from '../../core/Icon';
  * const [searchTerm, setSearchTerm] = useState('');
  * <Search setSearchValue={setSearchTerm} />
  */
-const Search = ({ label = 'Filter articles', resultsId, setSearchValue, value }) => {
+const Search = ({ clearLabel = 'Clear article filter', label = 'Filter articles', resultsId, setSearchValue, value }) => {
   const generatedId = useId();
   const inputId = `article-filter-${generatedId}`;
   const [ internalValue, setInternalValue ] = useState('');
@@ -60,7 +61,7 @@ const Search = ({ label = 'Filter articles', resultsId, setSearchValue, value })
       {currentValue ? (
         <button
           type='button'
-          aria-label='Clear article filter'
+          aria-label={ clearLabel }
           className='absolute right-0 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-gray-500 transition-colors hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:text-gray-100 dark:focus-visible:ring-blue-400'
           onClick={ () => handleChange('') }
         >
