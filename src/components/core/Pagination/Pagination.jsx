@@ -73,6 +73,23 @@ export const PaginationNext = ({ className, disabled = false, href = '#', label 
 
 export const PaginationEllipsis = ({ className }) => <span className={ cn('inline-flex size-11 items-center justify-center text-sm text-gray-500', className) }>...</span>;
 
+const getPageShortcuts = (currentPage, totalPages) => {
+  if (totalPages <= 5) return Array.from({ 'length': totalPages }, (_, index) => index + 1);
+
+  const pages = [ 1, currentPage - 1, currentPage, currentPage + 1, totalPages ]
+    .filter((page) => page >= 1 && page <= totalPages)
+    .filter((page, index, values) => values.indexOf(page) === index)
+    .sort((first, second) => first - second);
+
+  return pages.flatMap((page, index) => {
+    const previousPage = pages[index - 1];
+
+    if (previousPage && page - previousPage > 1) return [ `ellipsis-${previousPage}-${page}`, page ];
+
+    return [ page ];
+  });
+};
+
 export const PaginationStatus = ({ className, currentPage = 1, getHref = (page) => `?page=${page}`, onPageChange, totalPages = 1 }) => (
   <span className={ cn('group/pagination-status relative inline-flex justify-center', className) }>
     <span className='rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm outline-none transition-colors dark:border-border-dark dark:bg-gray-900 dark:text-gray-400'>
@@ -85,17 +102,21 @@ export const PaginationStatus = ({ className, currentPage = 1, getHref = (page) 
       aria-label='Page shortcuts'
       className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1 flex -translate-x-1/2 translate-y-0.5 flex-row flex-nowrap items-center gap-3 rounded-2xl border border-gray-200 bg-white p-2 opacity-0 shadow-xl shadow-gray-950/10 ring-1 ring-gray-950/5 transition duration-150 before:absolute before:left-0 before:top-full before:h-3 before:w-full before:content-[''] group-hover/pagination-status:pointer-events-auto group-hover/pagination-status:translate-y-0 group-hover/pagination-status:opacity-100 group-focus-within/pagination-status:pointer-events-auto group-focus-within/pagination-status:translate-y-0 group-focus-within/pagination-status:opacity-100 dark:border-gray-800 dark:bg-gray-950 dark:ring-white/10"
     >
-      {Array.from({ 'length': totalPages }).map((_, index) => {
-        const page = index + 1;
+      {getPageShortcuts(currentPage, totalPages).map((shortcut) => {
+        if (typeof shortcut === 'string') return (
+          <span key={ shortcut } role='listitem'>
+            <PaginationEllipsis />
+          </span>
+        );
 
         return (
-          <span key={ page } role='listitem'>
+          <span key={ shortcut } role='listitem'>
             <PaginationLink
-              href={ getHref(page) }
-              isActive={ page === currentPage }
-              onClick={ onPageChange ? () => onPageChange(page) : undefined }
+              href={ getHref(shortcut) }
+              isActive={ shortcut === currentPage }
+              onClick={ onPageChange ? () => onPageChange(shortcut) : undefined }
             >
-              {page}
+              {shortcut}
             </PaginationLink>
           </span>
         );

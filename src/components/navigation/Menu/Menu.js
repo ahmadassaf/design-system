@@ -75,7 +75,7 @@ const Menu = ({
     return () => desktopQuery.removeEventListener('change', closeOnDesktop);
   }, []);
 
-  return (<nav aria-label='Main navigation' className='flex min-h-20 items-center justify-between gap-5 py-10 lg:py-12'>
+  return (<nav aria-label='Main navigation' className='flex min-h-16 items-center justify-between gap-5 py-6 lg:py-8'>
 
     <Link href='/' aria-label={ metadata.author.name || metadata.title || 'Home' } variant='bare' className='shrink-0 text-gray-950 dark:text-white'>
       <ThemeLogo />
@@ -94,7 +94,7 @@ const Menu = ({
               <Link
                 href={ link.href }
                 aria-current={ isActive ? 'page' : undefined }
-                className={ `whitespace-nowrap px-1 py-2 text-base font-medium lg:text-lg ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}` }
+                className={ `whitespace-nowrap px-1 py-2 text-base font-medium ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}` }
               >
                 {link.title}
               </Link>

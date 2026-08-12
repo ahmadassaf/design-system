@@ -75,7 +75,7 @@ const socialIconLinks = (links = defaultSocialLinks) => links.filter((link) => l
 const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks }) => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
     <h2 id='footer-heading' className='sr-only'>Footer</h2>
-    <div className='mx-auto py-10 lg:py-14'>
+    <div className='mx-auto py-8 lg:py-10'>
       <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start'>
         <nav aria-label='Footer navigation' className='grid gap-8 sm:grid-cols-3'>
           {sections.filter((section) => section.links?.length).map((section) => (
@@ -121,7 +121,7 @@ const EditorialFooter = ({
 }) => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
     <h2 id='footer-heading' className='sr-only'>Footer</h2>
-    <div className='mx-auto py-10 lg:py-14'>
+    <div className='mx-auto py-8 lg:py-10'>
       <div className='grid gap-10 lg:grid-cols-[1.2fr_2fr]'>
         <div>
           {brandTitle ? (

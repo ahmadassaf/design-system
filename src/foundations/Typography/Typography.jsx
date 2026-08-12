@@ -29,6 +29,26 @@ export const typographyVariants = {
     'className': 'text-7xl font-extrabold leading-none text-gray-900 dark:text-gray-100 md:border-r-2 md:border-gray-900 md:pr-6 md:text-8xl dark:md:border-gray-100',
     'element': 'h1'
   },
+  'index-feature-summary': {
+    'className': 'max-w-[68ch] text-base leading-7 text-gray-700 dark:text-gray-300',
+    'element': 'p'
+  },
+  'index-feature-title': {
+    'className': 'text-xl font-bold leading-7 text-gray-900 dark:text-white text-pretty break-words',
+    'element': 'h3'
+  },
+  'index-hero-summary': {
+    'className': 'max-w-3xl text-lg leading-7 text-gray-700 dark:text-gray-300 md:text-xl md:leading-[1.5]',
+    'element': 'p'
+  },
+  'index-hero-title': {
+    'className': 'max-w-3xl text-[2rem] font-bold leading-[1.15] text-gray-900 text-balance break-words dark:text-white sm:text-[2.625rem] sm:leading-[1.12]',
+    'element': 'h2'
+  },
+  'index-list-title': {
+    'className': 'text-lg font-semibold leading-6 text-gray-900 dark:text-white md:text-xl md:leading-7',
+    'element': 'h3'
+  },
   'heading-lg': {
     'className': 'text-3xl font-bold leading-[1.35] text-gray-900 dark:text-white md:text-4xl',
     'element': 'h2'

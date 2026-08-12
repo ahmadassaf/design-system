@@ -13,8 +13,8 @@ const SearchExample = () => {
 
   return (
     <div className='mx-auto max-w-xl p-6'>
-      <Search setSearchValue={ setQuery } />
-      <p className='mt-4 text-sm text-gray-600 dark:text-gray-300' role='status'>
+      <Search resultsId='storybook-article-results' setSearchValue={ setQuery } value={ query } />
+      <p id='storybook-article-results' className='mt-4 text-sm text-gray-600 dark:text-gray-300' role='status'>
         {query ? `Filtering articles by “${query}”` : 'Showing all articles'}
       </p>
     </div>
@@ -96,6 +96,8 @@ export const ArticleSearch = {
 
     await userEvent.type(search, 'graphs');
     await expect(canvas.getByRole('status')).toHaveTextContent('Filtering articles by “graphs”');
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear article filter' }));
+    await expect(canvas.getByRole('status')).toHaveTextContent('Showing all articles');
   },
   render: () => <SearchExample />
 };

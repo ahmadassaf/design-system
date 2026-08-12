@@ -23,8 +23,9 @@ import Pill from '../../core/Pill';
  * @param {Object} props - Component props
  * @param {Object} props.frontMatter - Post front matter (title, date, slug, category, subtitle, draft)
  * @param {string} [props.locale] - Locale passed to the date formatter
+ * @param {string} [props.titleAs='h3'] - Heading element used for the post title
  */
-const Post = ({ frontMatter = {}, locale }) => {
+const Post = ({ frontMatter = {}, locale, titleAs = 'h3' }) => {
   const baseUrl = frontMatter.type === 'Thought' ? '/thoughts' : '/blog';
 
   return (
@@ -59,14 +60,14 @@ const Post = ({ frontMatter = {}, locale }) => {
             )}
           </div>
 
-          <Typography variant='list-title' as='h3' className='mb-1'>
+          <Typography variant='index-list-title' as={ titleAs } className='mb-1'>
             <Link href={ `${baseUrl}/${frontMatter.slug}` } className='font-semibold transition-colors duration-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'>
               {frontMatter.title}
             </Link>
           </Typography>
 
           {frontMatter.subtitle && (
-            <Typography variant='paragraph-sm' className='line-clamp-1 leading-relaxed dark:text-gray-300'>
+            <Typography variant='paragraph-sm' className='line-clamp-2 leading-5 dark:text-gray-300'>
               {frontMatter.subtitle}
             </Typography>
           )}
