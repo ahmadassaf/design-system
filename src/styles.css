@@ -50,10 +50,11 @@
     --ds-color-warning-foreground: #ffffff;
     --ds-color-warning-muted: #fef3c7;
     --ds-color-warning-subtle: #fffbeb;
-    --ds-color-aurora-primary-start: rgb(191 219 254 / 0.9);
-    --ds-color-aurora-primary-mid: rgb(219 234 254 / 0.8);
-    --ds-color-aurora-secondary-mid: rgb(199 210 254 / 0.3);
-    --ds-color-aurora-tertiary-mid: rgb(199 210 254 / 0.2);
+    --ds-color-aurora-base: rgb(255 255 255 / 0.62);
+    --ds-color-aurora-primary-start: rgb(191 219 254 / 0.98);
+    --ds-color-aurora-primary-mid: rgb(219 234 254 / 0.92);
+    --ds-color-aurora-secondary-mid: rgb(199 210 254 / 0.52);
+    --ds-color-aurora-tertiary-mid: rgb(199 210 254 / 0.4);
     --ds-color-aurora-dark-primary: rgb(30 64 175 / 0.4);
     --ds-color-aurora-dark-secondary: rgb(67 56 202 / 0.28);
     --ds-color-aurora-dark-tertiary: rgb(30 58 138 / 0.22);
@@ -128,17 +129,17 @@
     --ds-shadow-table: 0 1px 2px rgba(15, 23, 42, 0.04);
 
     /* Command launcher */
-    --ds-color-launcher-bg: rgba(255, 255, 255, 0.96);
+    --ds-color-launcher-bg: #ffffff;
     --ds-color-launcher-border: rgb(229, 231, 235);
     --ds-color-launcher-heading: rgba(107, 114, 128, 0.9);
     --ds-color-launcher-input-text: rgba(17, 24, 39, 0.95);
-    --ds-color-launcher-item-selected-bg: rgba(59, 130, 246, 0.1);
+    --ds-color-launcher-item-selected-bg: rgba(37, 99, 235, 0.08);
     --ds-color-launcher-item-text: #374151;
-    --ds-color-launcher-overlay-bg: rgba(17, 24, 39, 0.28);
+    --ds-color-launcher-overlay-bg: rgba(17, 24, 39, 0.34);
     --ds-color-launcher-placeholder: rgba(107, 114, 128, 0.75);
     --ds-color-launcher-scrollbar-thumb: rgba(156, 163, 175, 0.35);
     --ds-color-launcher-text: #111827;
-    --ds-shadow-launcher: 0 24px 48px -18px rgba(15, 23, 42, 0.32);
+    --ds-shadow-launcher: 0 28px 64px -24px rgba(15, 23, 42, 0.42), 0 10px 28px -18px rgba(15, 23, 42, 0.24);
 
     /* Z-index scale */
     --ds-z-raised: 5;
@@ -178,44 +179,60 @@
   }
 
   /*
-   * Aurora background gradients. Plain CSS (not Tailwind utilities) so the
-   * effect never depends on the consumer's Tailwind content scanning —
-   * symlinked local installs are not scanned and would silently drop the
-   * classes. Light values mirror blue-200/blue-100/indigo-200; dark values
-   * are blue-800/blue-900/indigo-800/indigo-900 glows over the dark surface.
+   * A slow-moving aurora curtain. Two repeating gradient fields form broad,
+   * blurred ribbons while the existing blue/indigo tokens keep the effect
+   * on-brand. Plain CSS keeps linked-package consumers reliable.
    */
-  .aurora-primary {
-    background-image: linear-gradient(to bottom right, var(--ds-color-aurora-primary-start), var(--ds-color-aurora-primary-mid), transparent);
+  .aurora-field {
+    animation: ds-aurora-drift 90s linear infinite;
+    background-image:
+      repeating-linear-gradient(
+        100deg,
+        var(--ds-color-aurora-base) 0%,
+        var(--ds-color-aurora-base) 7%,
+        transparent 10%,
+        transparent 12%,
+        var(--ds-color-aurora-base) 16%
+      ),
+      repeating-linear-gradient(
+        100deg,
+        var(--ds-color-aurora-primary-start) 10%,
+        var(--ds-color-aurora-primary-mid) 15%,
+        var(--ds-color-aurora-secondary-mid) 21%,
+        var(--ds-color-aurora-tertiary-mid) 27%,
+        var(--ds-color-aurora-primary-start) 33%
+      );
+    background-position: 50% 50%, 50% 50%;
+    background-size: 300% 200%, 200% 120%;
+    filter: blur(28px) saturate(1.2);
+    inset: -12rem;
+    opacity: 0.78;
+    will-change: background-position;
   }
 
-  .aurora-secondary {
-    background-image: linear-gradient(to top left, transparent, var(--ds-color-aurora-secondary-mid), transparent);
+  .aurora[data-radial-gradient='true'] .aurora-field {
+    mask-image: radial-gradient(ellipse 125% 92% at 76% -6%, black 38%, transparent 88%);
   }
 
-  .aurora-tertiary {
-    background-image: linear-gradient(to bottom right, transparent, var(--ds-color-aurora-tertiary-mid), transparent);
+  .aurora[data-animated='false'] .aurora-field {
+    animation-play-state: paused;
+    will-change: auto;
   }
 
-  /*
-   * In dark mode the aurora is a single composed glow on an ::before of the
-   * stable .aurora container (works with any inner markup); the per-layer
-   * gradients are disabled so the light values never bleed through.
-   */
-  .dark .aurora-primary,
-  .dark .aurora-secondary,
-  .dark .aurora-tertiary {
-    background-image: none;
+  .dark .aurora-field {
+    filter: blur(30px) saturate(1.3);
+    mix-blend-mode: screen;
+    opacity: 0.64;
   }
 
-  .dark .aurora::before {
-    background:
-      radial-gradient(ellipse 55% 60% at 85% 0%, var(--ds-color-aurora-dark-primary), transparent 70%),
-      radial-gradient(ellipse 45% 45% at 100% 25%, var(--ds-color-aurora-dark-secondary), transparent 70%),
-      radial-gradient(ellipse 70% 40% at 60% 0%, var(--ds-color-aurora-dark-tertiary), transparent 75%);
-    content: '';
-    inset: 0;
-    pointer-events: none;
-    position: absolute;
+  @keyframes ds-aurora-drift {
+    from {
+      background-position: 50% 50%, 50% 50%;
+    }
+
+    to {
+      background-position: 350% 50%, 350% 50%;
+    }
   }
 
   .dark {
@@ -265,10 +282,11 @@
     --ds-color-warning-foreground: #451a03;
     --ds-color-warning-muted: #78350f;
     --ds-color-warning-subtle: #451a03;
-    --ds-color-aurora-primary-start: rgb(30 64 175 / 0.4);
-    --ds-color-aurora-primary-mid: rgb(30 58 138 / 0.22);
-    --ds-color-aurora-secondary-mid: rgb(67 56 202 / 0.28);
-    --ds-color-aurora-tertiary-mid: rgb(30 58 138 / 0.18);
+    --ds-color-aurora-base: rgb(10 10 10 / 0.58);
+    --ds-color-aurora-primary-start: rgb(30 64 175 / 0.58);
+    --ds-color-aurora-primary-mid: rgb(30 58 138 / 0.38);
+    --ds-color-aurora-secondary-mid: rgb(67 56 202 / 0.46);
+    --ds-color-aurora-tertiary-mid: rgb(30 58 138 / 0.34);
 
     /* MDX prose extras */
     --ds-color-citation-back-active-bg: #1e3a8a;
@@ -333,16 +351,16 @@
     --ds-color-table-sticky-bg: #111827;
 
     /* Command launcher */
-    --ds-color-launcher-bg: rgba(17, 24, 39, 0.96);
+    --ds-color-launcher-bg: #111827;
     --ds-color-launcher-border: rgb(55, 65, 81);
     --ds-color-launcher-heading: rgb(156, 163, 175);
     --ds-color-launcher-input-text: rgb(243, 244, 246);
-    --ds-color-launcher-item-selected-bg: rgba(59, 130, 246, 0.24);
+    --ds-color-launcher-item-selected-bg: rgba(59, 130, 246, 0.16);
     --ds-color-launcher-item-text: rgb(243, 244, 246);
     --ds-color-launcher-placeholder: rgba(156, 163, 175, 0.85);
     --ds-color-launcher-scrollbar-thumb: rgba(75, 85, 99, 0.7);
     --ds-color-launcher-text: rgb(243, 244, 246);
-    --ds-shadow-launcher: 0 24px 48px -18px rgba(0, 0, 0, 0.72);
+    --ds-shadow-launcher: 0 28px 64px -24px rgba(0, 0, 0, 0.82), 0 10px 28px -18px rgba(0, 0, 0, 0.72);
   }
 }
 
@@ -359,9 +377,9 @@
 
   @keyframes ds-command-panel-in {
     from {
-      filter: blur(8px);
-      opacity: 0.01;
-      transform: translate3d(0, -10px, 0) scale(0.98);
+      filter: blur(6px);
+      opacity: 0.92;
+      transform: translate3d(0, -8px, 0) scale(0.985);
     }
 
     to {
@@ -455,18 +473,16 @@
   .gaudi-command-launcher :where([data-cmdk-root]) {
     animation: ds-command-panel-in var(--ds-motion-duration-overlay) var(--ds-motion-ease-out) both;
     background: var(--ds-color-launcher-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--ds-color-launcher-border);
     border-radius: var(--ds-radius-card);
     box-shadow: var(--ds-shadow-launcher);
     color: var(--ds-color-launcher-text);
     display: flex;
     flex-direction: column;
-    max-height: min(520px, calc(100vh - 6rem));
-    max-width: min(48rem, calc(100vw - 2rem));
+    max-height: min(26rem, calc(100dvh - 2rem));
+    max-width: min(46rem, calc(100vw - 2rem));
     overflow: hidden;
-    transform-origin: top center;
-    width: min(48rem, calc(100vw - 2rem));
+    transform-origin: center;
+    width: min(46rem, calc(100vw - 2rem));
   }
 
   .gaudi-command-launcher :where(.command-palette) {
@@ -476,28 +492,23 @@
   }
 
   .gaudi-command-launcher :where(.command-palette__overlay) {
+    appearance: none;
     animation: ds-command-overlay-in var(--ds-motion-duration-overlay) var(--ds-motion-ease-out) both;
     background: var(--ds-color-launcher-overlay-bg);
+    border: 0;
+    cursor: default;
     inset: 0;
     position: absolute;
   }
 
   .gaudi-command-launcher :where(.command-palette__viewport) {
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     inset: 0;
     justify-content: center;
     overflow-y: auto;
-    padding: min(12vh, 7rem) 1rem 1rem;
+    padding: 1rem;
     position: absolute;
-  }
-
-  .gaudi-command-launcher--keyboard :where([data-cmdk-item]) {
-    pointer-events: none;
-  }
-
-  .gaudi-command-launcher--keyboard :where([data-cmdk-item][aria-selected='true']) {
-    pointer-events: auto;
   }
 
   .gaudi-command-launcher :where(.command-palette [data-cmdk-item] > div:first-child) {
@@ -509,15 +520,59 @@
     display: none;
   }
 
+  .gaudi-command-launcher :where(.command-palette__search) {
+    align-items: center;
+    border-bottom: 1px solid var(--ds-color-launcher-border);
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 8px 0 12px;
+  }
+
+  .gaudi-command-launcher :where(.command-palette__search-icon) {
+    color: var(--ds-color-launcher-placeholder);
+  }
+
+  .gaudi-command-launcher :where(.command-palette__close) {
+    align-items: center;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: var(--ds-radius-sm);
+    color: var(--ds-color-launcher-heading);
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 32px;
+    justify-content: center;
+    padding: 0;
+    transition-duration: var(--ds-motion-duration-feedback);
+    transition-property: background-color, color;
+    transition-timing-function: var(--ds-motion-ease-out);
+    width: 32px;
+  }
+
+  .gaudi-command-launcher :where(.command-palette__close:hover) {
+    background: var(--ds-color-launcher-item-selected-bg);
+    color: var(--ds-color-launcher-input-text);
+  }
+
+  .gaudi-command-launcher :where(.command-palette__close:focus-visible) {
+    box-shadow: 0 0 0 2px var(--ds-color-accent);
+    outline: 0;
+  }
+
   .gaudi-command-launcher :where([data-cmdk-input]) {
     background: transparent;
     border: 0;
-    border-bottom: 1px solid var(--ds-color-launcher-border);
     color: var(--ds-color-launcher-input-text);
-    font-size: 16px;
-    min-height: 56px;
+    flex: 1 1 auto;
+    font-size: 15px;
+    line-height: 20px;
+    min-height: 43px;
+    min-width: 0;
     outline: none;
-    padding: 16px 20px;
+    padding: 0;
     width: 100%;
   }
 
@@ -527,7 +582,8 @@
 
   .gaudi-command-launcher :where([data-cmdk-list]) {
     flex: 1 1 auto;
-    max-height: 400px;
+    max-height: 380px;
+    min-height: 0;
     overflow-y: auto;
     padding: 8px 8px 16px;
     scroll-padding-block: 8px 16px;
@@ -546,18 +602,17 @@
     text-align: left;
     text-decoration: none;
     transition-duration: var(--ds-motion-duration-feedback);
-    transition-property: background-color, transform;
+    transition-property: background-color, color;
     transition-timing-function: var(--ds-motion-ease-out);
     width: 100%;
   }
 
   .gaudi-command-launcher :where([data-cmdk-item][aria-selected='true']) {
     background: var(--ds-color-launcher-item-selected-bg);
-    transform: translate3d(2px, 0, 0);
   }
 
   .gaudi-command-launcher :where([data-cmdk-item]:focus-visible) {
-    box-shadow: 0 0 0 2px var(--ds-color-accent);
+    box-shadow: inset 0 0 0 2px var(--ds-color-accent);
   }
 
   .gaudi-command-launcher :where([data-cmdk-item][aria-disabled='true']) {
@@ -600,15 +655,31 @@
 
   @media (max-width: 640px) {
     .gaudi-command-launcher :where(.command-palette__viewport) {
-      padding: 4rem 0.75rem 0.75rem;
+      align-items: flex-start;
+      padding: 3.5rem 0.75rem 0.75rem;
     }
 
     .gaudi-command-launcher :where([data-cmdk-root]) {
-      max-height: calc(100vh - 4.75rem);
+      max-height: min(34rem, calc(100dvh - 4.25rem));
+      max-width: calc(100vw - 1.5rem);
+      width: calc(100vw - 1.5rem);
+    }
+
+    .gaudi-command-launcher :where([data-cmdk-input]) {
+      font-size: 16px;
+    }
+
+    .gaudi-command-launcher :where([data-cmdk-list]) {
+      max-height: min(500px, calc(100dvh - 9rem));
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .aurora-field {
+      animation: none !important;
+      will-change: auto;
+    }
+
     .ds-motion-disclosure,
     .ds-motion-popover,
     .gaudi-command-launcher :where(.command-palette__overlay),
@@ -625,8 +696,7 @@
       transition-duration: 0ms !important;
     }
 
-    .ds-motion-press:not(:disabled):not([aria-disabled='true']):active,
-    .gaudi-command-launcher :where([data-cmdk-item][aria-selected='true']) {
+    .ds-motion-press:not(:disabled):not([aria-disabled='true']):active {
       transform: none !important;
     }
   }

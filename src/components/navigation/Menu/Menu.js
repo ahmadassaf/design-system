@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import CommandLauncher from '../../core/CmdLauncher';
@@ -67,6 +67,7 @@ const Menu = ({
 
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
   const [ LauncherOpen, LauncherSetOpen ] = useState(false);
+  const mobileMenuTriggerRef = useRef(null);
 
   useEffect(() => {
     const desktopQuery = window.matchMedia('(min-width: 1024px)');
@@ -115,7 +116,7 @@ const Menu = ({
       <ThemeSwitch />
 
       <div className='flex lg:hidden'>
-        <Button variant='ghost' tone='neutral' size='sm' className='h-11 w-11 p-0' onClick={ () => setMobileMenuOpen(true) }>
+        <Button ref={ mobileMenuTriggerRef } variant='ghost' tone='neutral' size='sm' className='h-11 w-11 p-0' onClick={ () => setMobileMenuOpen(true) }>
           <span className='sr-only'>Open main menu</span>
           <Icon name='Menu' decorative size='md' />
         </Button>
@@ -137,6 +138,7 @@ const Menu = ({
         thoughts={ thoughts }
         publications={ menuPublications }
         open={ LauncherOpen }
+        restoreFocusRef={ mobileMenuTriggerRef }
         setOpen={ LauncherSetOpen }
       />
     </div>

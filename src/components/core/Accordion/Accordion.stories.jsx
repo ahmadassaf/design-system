@@ -86,6 +86,29 @@ export const MultipleOpen = {
   )
 };
 
+export const Flush = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const firstTrigger = canvas.getByRole('button', { name: '2024' });
+
+    await expect(firstTrigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getByText('Two publications')).toBeVisible();
+    await expect(firstTrigger).toHaveClass('px-0', 'py-3.5', 'hover:bg-transparent', 'hover:text-blue-600');
+    await expect(firstTrigger.closest('[class*="divide-y"]')).not.toHaveClass('border-b', 'border-t');
+  },
+  render: () => (
+    <div className='max-w-xl p-6'>
+      <AccordionGroup
+        variant='flush'
+        items={ [
+          { content: 'Two publications', title: '2024', value: '2024' },
+          { content: 'Three publications', title: '2023', value: '2023' }
+        ] }
+      />
+    </div>
+  )
+};
+
 export const Composed = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -49,11 +49,11 @@ const defaultSocialLinks = [
 
 const FooterSection = ({ links = [], title }) => (
   <div>
-    <h3 className='text-lg font-semibold leading-7 text-gray-950 dark:text-white'>{title}</h3>
-    <ul role='list' className='mt-4 space-y-3'>
+    <h3 className='text-sm font-semibold leading-5 text-gray-950 dark:text-white'>{title}</h3>
+    <ul role='list' className='mt-3 space-y-2'>
       {links.map((link) => (
         <li key={ `${title}-${link.href}-${link.label}` }>
-          <Link href={ link.href } variant='muted' className='text-base font-normal leading-7 capitalize'>
+          <Link href={ link.href } variant='muted' className='text-sm font-normal leading-5 capitalize'>
             {link.label}
           </Link>
         </li>
@@ -75,9 +75,9 @@ const socialIconLinks = (links = defaultSocialLinks) => links.filter((link) => l
 const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks }) => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
     <h2 id='footer-heading' className='sr-only'>Footer</h2>
-    <div className='mx-auto py-8 lg:py-10'>
-      <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start'>
-        <nav aria-label='Footer navigation' className='grid gap-8 sm:grid-cols-3'>
+    <div className='mx-auto py-6 lg:py-8'>
+      <div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)] lg:items-start'>
+        <nav aria-label='Footer navigation' className='grid gap-6 sm:grid-cols-3'>
           {sections.filter((section) => section.links?.length).map((section) => (
             <FooterSection key={ section.title } links={ section.links } title={ section.title } />
           ))}
@@ -95,15 +95,15 @@ const StandardFooter = ({ copyrightName, newsletterProps, sections, socialLinks 
           }}
         />
       </div>
-      <div className='mt-8 border-t border-gray-200 dark:border-border-dark pt-8 md:flex md:items-center md:justify-between'>
+      <div className='mt-6 border-t border-gray-200 dark:border-border-dark pt-6 md:flex md:items-center md:justify-between'>
 
-        <div className='flex gap-5 md:order-2 sm:justify-center'>
+        <div className='flex gap-4 md:order-2 sm:justify-center'>
           {socialIconLinks(socialLinks).map((link) => (
             <Icon key={ link.kind } kind={ link.kind } href={ link.href } />
           ))}
         </div>
 
-        <p className='mt-8 text-sm text-gray-500 md:order-1 md:mt-0 sm:text-center dark:text-gray-400'>
+        <p className='mt-6 text-xs leading-5 text-gray-500 md:order-1 md:mt-0 sm:text-center dark:text-gray-400'>
           &copy; {new Date().getFullYear()} {resolveCopyrightName(copyrightName)}. All rights reserved.
         </p>
 
@@ -121,20 +121,20 @@ const EditorialFooter = ({
 }) => (
   <footer aria-labelledby='footer-heading' className='border-t border-gray-200 dark:border-border-dark'>
     <h2 id='footer-heading' className='sr-only'>Footer</h2>
-    <div className='mx-auto py-8 lg:py-10'>
-      <div className='grid gap-10 lg:grid-cols-[1.2fr_2fr]'>
+    <div className='mx-auto py-6 lg:py-8'>
+      <div className='grid gap-8 lg:grid-cols-[1.2fr_2fr]'>
         <div>
           {brandTitle ? (
-            <h3 className='text-3xl font-bold text-gray-950 dark:text-white'>{brandTitle}</h3>
+            <h3 className='text-xl font-semibold leading-7 text-gray-950 dark:text-white'>{brandTitle}</h3>
           ) : null}
-          <p className={ `${brandTitle ? 'mt-4 ' : ''}max-w-md text-sm leading-6 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
-          <div className='mt-6 flex gap-5'>
+          <p className={ `${brandTitle ? 'mt-3 ' : ''}max-w-md text-xs leading-5 text-gray-600 dark:text-gray-300` }>{brandDescription}</p>
+          <div className='mt-4 flex gap-4'>
             {socialIconLinks(socialLinks).map((link) => (
               <Icon
                 key={ link.kind }
                 kind={ link.kind }
-                size='lg'
-                className='h-[1.4375rem] w-[1.4375rem]'
+                size='md'
+                className='h-[1.125rem] w-[1.125rem]'
                 href={ link.href }
                 linkClassName='text-gray-950 hover:text-blue-600 dark:text-white dark:hover:text-blue-400'
               />
@@ -142,14 +142,14 @@ const EditorialFooter = ({
           </div>
         </div>
 
-        <nav aria-label='Footer navigation' className='grid gap-8 sm:grid-cols-3'>
+        <nav aria-label='Footer navigation' className='grid gap-6 sm:grid-cols-3'>
           {sections.filter((section) => section.links?.length).map((section) => (
             <FooterSection key={ section.title } links={ section.links } title={ section.title } />
           ))}
         </nav>
       </div>
 
-      <p className='mt-10 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-border-dark dark:text-gray-400'>
+      <p className='mt-8 border-t border-gray-200 pt-5 text-xs leading-5 text-gray-500 dark:border-border-dark dark:text-gray-400'>
         &copy; {new Date().getFullYear()} {resolveCopyrightName(copyrightName)}. All rights reserved.
       </p>
     </div>

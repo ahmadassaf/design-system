@@ -71,29 +71,61 @@ const itemConfig = {
   'thought': { 'showSubtitle': true }
 };
 
-const CmdItem = ({ category, children, count, icon, subtitle, title, type = 'navigation' }) => {
+const CmdItem = ({ category, children, count, icon, inlineMetadata = false, subtitle, title, type = 'navigation' }) => {
   const config = itemConfig[type] || itemConfig.navigation;
-  const resolvedSubtitle = subtitle || (type === 'post' && category ? category.replace(/[-_]/g, ' ') : null) || (type === 'tag' && typeof count !== 'undefined' ? `${count} ${count === 1 ? 'post' : 'posts'}` : null);
+  const resolvedSubtitle = (type === 'post' && category ? category.replace(/[-_]/g, ' ') : null) || (type === 'tag' && typeof count !== 'undefined' ? `${count} ${count === 1 ? 'post' : 'posts'}` : null) || subtitle;
+  const showSubtitle = config.showSubtitle && resolvedSubtitle;
 
   return (
-    <div className='group flex w-full items-center gap-3 rounded-lg px-4 py-3'>
+    <div className={ `group flex w-full items-center gap-3 rounded-lg px-4 ${showSubtitle && !inlineMetadata ? 'py-2.5' : 'py-3'}` }>
       {icon ? <Icon name={ icon } decorative size='md' className='text-gray-600 dark:text-gray-300' /> : null}
-      <div className='min-w-0 flex-1'>
-        <div className='truncate text-sm font-medium text-gray-950 dark:text-gray-100'>{title || children}</div>
-        {config.showSubtitle && resolvedSubtitle ? (
-          <div className='mt-0.5 truncate text-xs capitalize text-gray-500 dark:text-gray-400'>{resolvedSubtitle}</div>
-        ) : null}
-      </div>
+      {inlineMetadata ? (
+        <>
+          <div className='min-w-0 flex-1 truncate text-sm font-medium text-gray-950 dark:text-gray-100'>{title || children}</div>
+          {showSubtitle ? (
+            <div
+              className={ [
+                'ml-auto max-w-[38%] shrink-0 truncate text-right text-xs text-gray-500 sm:max-w-[45%] dark:text-gray-400',
+                type === 'post' ? 'capitalize' : ''
+              ].filter(Boolean).join(' ') }
+              data-cmdk-item-meta
+            >
+              {resolvedSubtitle}
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <div className='min-w-0 flex-1'>
+          <div className='truncate text-sm font-medium text-gray-950 dark:text-gray-100'>{title || children}</div>
+          {showSubtitle ? (
+            <div className='mt-0.5 truncate text-xs text-gray-500 dark:text-gray-400'>{resolvedSubtitle}</div>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 };
 
 const LauncherFooter = () => (
-  <div className='border-t border-gray-200 bg-white px-3 py-2 dark:border-gray-800 dark:bg-gray-900'>
-    <div className='flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400'>
-      <span className='hidden items-center gap-1 sm:flex'><Kbd keys='enter' size='xs' /> to select</span>
-      <span className='flex items-center gap-1'><Kbd keys='down' size='xs' /><Kbd keys='up' size='xs' /> to navigate</span>
-      <span className='flex items-center gap-1'><Kbd keys='escape' size='xs' /> to close / go back</span>
+  <div className='border-t border-gray-200 bg-gray-50/80 px-3 py-1.5 dark:border-gray-800 dark:bg-gray-900/80'>
+    <div className='flex min-h-5 items-center text-[11px] leading-none text-gray-500 dark:text-gray-400'>
+      <div className='flex items-center gap-3.5'>
+        <span className='flex items-center gap-1.5'>
+          <span className='inline-flex items-center gap-0.5'>
+            <Kbd keys='up' size='3xs' variant='flat' />
+            <Kbd keys='down' size='3xs' variant='flat' />
+          </span>
+          <span>Navigate</span>
+        </span>
+        <span className='hidden items-center gap-1.5 sm:flex'>
+          <Kbd keys='enter' size='3xs' variant='flat' />
+          <span>Select</span>
+        </span>
+      </div>
+      <span className='ml-auto flex items-center gap-1.5'>
+        <Kbd keys='escape' size='3xs' variant='flat' />
+        <span>Close</span>
+      </span>
     </div>
   </div>
 );
@@ -112,13 +144,13 @@ const prepareCollection = (collection, type) => (collection || []).map((item) =>
     return omit({ ...base, 'href': `/blog/${normalizeSlug(item.slug)}` }, [ 'draft', 'externalLink', 'featured', 'filePath', 'readingTime', 'sameAs', 'tableOfContents', 'venueType' ]);
 
   if (type === 'project')
-    return omit({ ...base, 'href': `/blog/projects/${normalizeSlug(item.slug)}`, 'subtitle': item.description || item.summary }, [ 'draft', 'externalLink', 'featured', 'filePath' ]);
+    return omit({ ...base, 'href': `/blog/projects/${normalizeSlug(item.slug)}`, 'subtitle': item.subtitle || item.description || item.summary }, [ 'draft', 'externalLink', 'featured', 'filePath' ]);
 
   if (type === 'thought')
     return omit({ ...base, 'href': `/thoughts/${normalizeSlug(item.slug)}`, 'subtitle': item.summary || item.description }, [ 'draft', 'featured', 'filePath' ]);
 
   if (type === 'publication')
-    return omit({ ...base, 'href': item.href, 'subtitle': item.venue || item.year }, [ 'sameAs', 'venueType' ]);
+    return omit({ ...base, 'href': item.href, 'subtitle': item.year }, [ 'sameAs', 'venueType' ]);
 
   return base;
 });
@@ -136,11 +168,11 @@ const prepareTags = (tags = []) => tags.map((tag) => {
 });
 
 const collectionPageConfig = {
-  'posts': { 'heading': 'Posts', 'icon': 'BookOpenIcon', 'label': 'Posts', 'type': 'post' },
-  'projects': { 'heading': 'Projects', 'icon': 'RectangleGroupIcon', 'label': 'Projects', 'type': 'project' },
-  'publications': { 'heading': 'Publications', 'icon': 'NewspaperIcon', 'label': 'Publications', 'type': 'publication' },
-  'tags': { 'heading': 'Tags', 'icon': 'TagIcon', 'label': 'Tags', 'type': 'tag' },
-  'thoughts': { 'heading': 'Thoughts', 'icon': 'LightBulbIcon', 'label': 'Thoughts', 'type': 'thought' }
+  'posts': { 'heading': 'Posts', 'inlineMetadata': true, 'label': 'Posts', 'type': 'post' },
+  'projects': { 'heading': 'Projects', 'inlineMetadata': false, 'label': 'Projects', 'type': 'project' },
+  'publications': { 'heading': 'Publications', 'inlineMetadata': true, 'label': 'Publications', 'type': 'publication' },
+  'tags': { 'heading': 'Tags', 'inlineMetadata': true, 'label': 'Tags', 'type': 'tag' },
+  'thoughts': { 'heading': 'Thoughts', 'inlineMetadata': false, 'label': 'Thoughts', 'type': 'thought' }
 };
 
 const CollectionPage = ({ id, items, search, setPage }) => {
@@ -153,7 +185,7 @@ const CollectionPage = ({ id, items, search, setPage }) => {
         <CommandPalette.List key={ list.id } heading={ list.heading }>
           {list.items.map(({ category, children, count, 'id': itemId, subtitle, title, type, ...rest }) => (
             <CommandPalette.ListItem key={ itemId } index={ getItemIndex(filtered, itemId) } { ...commandItemProps(rest) }>
-              <CmdItem title={ title } subtitle={ subtitle } category={ category } count={ count } type={ type || config.type }>
+              <CmdItem inlineMetadata={ config.inlineMetadata } title={ title } subtitle={ subtitle } category={ category } count={ count } type={ type || config.type }>
                 {children}
               </CmdItem>
             </CommandPalette.ListItem>
@@ -178,11 +210,11 @@ const buildSocialItems = (metadata = {}, social) => {
   const youtube = normalizeExternalUrl(metadata.youtube);
   const email = normalizeEmailUrl(metadata.email);
 
-  if (linkedin) items.push({ 'children': 'LinkedIn', 'closeOnSelect': false, 'icon': 'UserGroupIcon', 'id': 'linkedin', 'onClick': createExternalAction(linkedin), 'title': 'LinkedIn profile' });
-  if (twitter) items.push({ 'children': 'Twitter', 'closeOnSelect': false, 'icon': 'ChatBubbleLeftRightIcon', 'id': 'twitter', 'onClick': createExternalAction(twitter), 'title': 'Twitter profile' });
-  if (github) items.push({ 'children': 'GitHub', 'closeOnSelect': false, 'icon': 'CodeBracketIcon', 'id': 'github', 'onClick': createExternalAction(github), 'title': 'GitHub profile' });
-  if (youtube) items.push({ 'children': 'YouTube', 'closeOnSelect': false, 'icon': 'VideoCameraIcon', 'id': 'youtube', 'onClick': createExternalAction(youtube), 'title': 'YouTube channel' });
-  if (email) items.push({ 'children': 'Mail', 'closeOnSelect': false, 'icon': 'EnvelopeIcon', 'id': 'mail', 'onClick': createExternalAction(email), 'title': 'Send an email' });
+  if (email) items.push({ 'children': 'Email', 'closeOnSelect': false, 'icon': 'Mail', 'id': 'mail', 'onClick': createExternalAction(email), 'title': 'Email' });
+  if (github) items.push({ 'children': 'GitHub', 'closeOnSelect': false, 'icon': 'Github', 'id': 'github', 'onClick': createExternalAction(github), 'title': 'GitHub' });
+  if (youtube) items.push({ 'children': 'YouTube', 'closeOnSelect': false, 'icon': 'Youtube', 'id': 'youtube', 'onClick': createExternalAction(youtube), 'title': 'YouTube' });
+  if (linkedin) items.push({ 'children': 'LinkedIn', 'closeOnSelect': false, 'icon': 'Linkedin', 'id': 'linkedin', 'onClick': createExternalAction(linkedin), 'title': 'LinkedIn' });
+  if (twitter) items.push({ 'children': 'X', 'closeOnSelect': false, 'icon': 'Twitter', 'id': 'twitter', 'onClick': createExternalAction(twitter), 'title': 'X' });
 
   return items;
 };
@@ -212,8 +244,8 @@ const SocialPage = ({ items = [], search, setPage }) => {
 };
 
 const NoResults = ({ search }) => (
-  <div className='flex items-center gap-3 p-5 text-sm text-gray-500 dark:text-gray-400'>
-    <Icon name='FaceIdError' decorative size='md' />
+  <div className='flex items-center gap-2.5 p-4 text-sm text-gray-500 dark:text-gray-400'>
+    <Icon name='FaceIdError' decorative size='sm' />
     <span>No results for “{search}”.</span>
   </div>
 );
@@ -223,6 +255,7 @@ const CommandLauncher = ({
   posts = [],
   projects = [],
   publications = [],
+  restoreFocusRef,
   setOpen,
   social,
   tags = [],
@@ -231,7 +264,6 @@ const CommandLauncher = ({
   const [ page, setPage ] = useState('root');
   const [ search, setSearch ] = useState('');
   const [ selected, setSelected ] = useState(0);
-  const [ isKeyboardMode, setIsKeyboardMode ] = useState(true);
   const { resolvedTheme, setTheme, theme } = useTheme();
   const { metadata } = useSiteConfig();
   const socialItems = useMemo(() => buildSocialItems(metadata, social), [ metadata, social ]);
@@ -303,33 +335,17 @@ const CommandLauncher = ({
     return () => document.removeEventListener('keydown', down);
   }, [ setOpen ]);
 
-  useEffect(() => {
-    if (!open) return undefined;
-
-    const handleKeyDown = (event) => {
-      if ([ 'ArrowDown', 'ArrowUp', 'End', 'Enter', 'Escape', 'Home' ].includes(event.key)) setIsKeyboardMode(true);
-    };
-    const handleMouseMove = () => setIsKeyboardMode(false);
-
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [ open ]);
-
   return (
-    <div className={ isKeyboardMode ? 'gaudi-command-launcher gaudi-command-launcher--keyboard' : 'gaudi-command-launcher' }>
+    <div className='gaudi-command-launcher'>
       <CommandPalette
-        className={ isKeyboardMode ? 'gaudi-command-launcher gaudi-command-launcher--keyboard' : 'gaudi-command-launcher' }
+        className='gaudi-command-launcher'
         footer={ <LauncherFooter /> }
         isOpen={ open }
         onChangeOpen={ setOpen }
         onChangeSearch={ setSearch }
         onChangeSelected={ setSelected }
         page={ page }
+        restoreFocusRef={ restoreFocusRef }
         search={ search }
         selected={ selected }
         showType={ false }

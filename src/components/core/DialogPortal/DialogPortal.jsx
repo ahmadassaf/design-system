@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const DialogPortal = ({ children, initialFocusRef, lockScroll = true, restoreFocus = true }) => {
+const DialogPortal = ({ children, initialFocusRef, lockScroll = true, restoreFocus = true, restoreFocusRef }) => {
   const [ portalNode, setPortalNode ] = useState(null);
   const previouslyFocusedElementRef = useRef(null);
 
@@ -29,6 +29,7 @@ const DialogPortal = ({ children, initialFocusRef, lockScroll = true, restoreFoc
       hadInert: element.hasAttribute('inert'),
       ariaHidden: element.getAttribute('aria-hidden')
     }));
+    const fallbackFocusElement = restoreFocusRef?.current;
     const previousBodyOverflow = document.body.style.overflow;
 
     backgroundElements.forEach((element) => {
@@ -52,11 +53,13 @@ const DialogPortal = ({ children, initialFocusRef, lockScroll = true, restoreFoc
       if (lockScroll) document.body.style.overflow = previousBodyOverflow;
 
       const previouslyFocusedElement = previouslyFocusedElementRef.current;
+      const focusTarget = previouslyFocusedElement instanceof HTMLElement && previouslyFocusedElement.isConnected
+        ? previouslyFocusedElement
+        : fallbackFocusElement;
 
-      if (restoreFocus && previouslyFocusedElement instanceof HTMLElement && previouslyFocusedElement.isConnected)
-        previouslyFocusedElement.focus();
+      if (restoreFocus && focusTarget instanceof HTMLElement && focusTarget.isConnected) focusTarget.focus();
     };
-  }, [ initialFocusRef, lockScroll, portalNode, restoreFocus ]);
+  }, [ initialFocusRef, lockScroll, portalNode, restoreFocus, restoreFocusRef ]);
 
   return portalNode ? createPortal(children, portalNode) : null;
 };

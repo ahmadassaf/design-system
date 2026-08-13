@@ -9,7 +9,9 @@
  * @version 1.0.0
  */
 
+'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '../../../utilities/cn';
 
 /**
@@ -37,34 +39,49 @@ const AuroraBackground = ({
   children,
   showRadialGradient = true,
   ...props
-}) => (
-  <div>
-    <div className={ cn('relative flex min-h-dvh flex-col items-center justify-center transition-colors motion-reduce:transition-none', className) }
-      { ...props }
-    >
-      <div
-        aria-hidden='true'
-        data-radial-gradient={ showRadialGradient ? 'true' : 'false' }
-        className='aurora absolute inset-x-0 top-0 h-[48rem] overflow-hidden [mask-image:linear-gradient(to_bottom,black_0%,black_62%,transparent_100%)]'
+}) => {
+  const auroraRef = useRef(null);
+  const [ isActive, setIsActive ] = useState(true);
+
+  useEffect(() => {
+    const aurora = auroraRef.current;
+
+    if (!aurora) return undefined;
+
+    let isIntersecting = true;
+    const syncActivity = () => setIsActive(isIntersecting && document.visibilityState === 'visible');
+    const observer = new IntersectionObserver(([ entry ]) => {
+      isIntersecting = entry.isIntersecting;
+      syncActivity();
+    });
+
+    observer.observe(aurora);
+    document.addEventListener('visibilitychange', syncActivity);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', syncActivity);
+    };
+  }, []);
+
+  return (
+    <div>
+      <div className={ cn('relative flex min-h-dvh flex-col items-center justify-center transition-colors motion-reduce:transition-none', className) }
+        { ...props }
       >
-        {/*
-          * Gradients live in styles.css (aurora-primary/-secondary/-tertiary)
-          * as plain CSS: dark-mode variants must not depend on the consumer's
-          * Tailwind content scanning, which misses symlinked installs.
-          */}
         <div
-          className={ cn('aurora-primary pointer-events-none absolute inset-0', showRadialGradient && '[mask-image:radial-gradient(ellipse_at_100%_0%,black_18%,transparent_42%)]') }
-        ></div>
-        <div
-          className={ cn('aurora-secondary pointer-events-none absolute inset-0', showRadialGradient && '[mask-image:radial-gradient(ellipse_at_95%_5%,black_12%,transparent_36%)]') }
-        ></div>
-        <div
-          className={ cn('aurora-tertiary pointer-events-none absolute inset-0', showRadialGradient && '[mask-image:radial-gradient(ellipse_at_90%_10%,black_12%,transparent_32%)]') }
-        ></div>
+          aria-hidden='true'
+          className='aurora absolute inset-x-0 top-0 h-[48rem] overflow-hidden [mask-image:linear-gradient(to_bottom,black_0%,black_62%,transparent_100%)]'
+          data-animated={ isActive ? 'true' : 'false' }
+          data-radial-gradient={ showRadialGradient ? 'true' : 'false' }
+          ref={ auroraRef }
+        >
+          <div className='aurora-field pointer-events-none absolute'></div>
+        </div>
+        {children}
       </div>
-      {children}
     </div>
-  </div>
-);
+  );
+};
 
 export default AuroraBackground;
