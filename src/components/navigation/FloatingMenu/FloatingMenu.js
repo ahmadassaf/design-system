@@ -99,18 +99,17 @@ const FloatingMenu = ({ className, links }) => {
       aria-hidden={ !mounted || !visible }
       inert={ !mounted || !visible }
       className={ cn(
-        'fixed left-1/2 top-4 z-[var(--ds-z-nav)] flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center justify-center gap-3 overflow-x-auto rounded-full border border-transparent bg-black py-2 pl-4 pr-2 text-white shadow-[var(--ds-shadow-floating)] transition-all duration-200 motion-reduce:transition-none dark:border-white/[0.2] dark:bg-white dark:text-black sm:pl-8', mounted && visible ? 'opacity-100 translate-y-0' : 'pointer-events-none -translate-y-full opacity-0', className
+        'fixed left-1/2 top-3 z-[var(--ds-z-nav)] flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center justify-center gap-3 overflow-x-auto rounded-full border border-white/10 bg-black py-1 pl-4 pr-1 text-white shadow-[var(--ds-shadow-floating)] transition-[opacity,transform] duration-200 ease-out motion-reduce:transition-none dark:border-black/10 dark:bg-white dark:text-black sm:gap-5 sm:pl-5', mounted && visible ? 'opacity-100 translate-y-0' : 'pointer-events-none -translate-y-full opacity-0', className
       ) }
     >
       {navLinks.map((navItem, idx) => (
-        <Link key={ `link=${idx}` } href={ navItem.href } tabIndex={ mounted && visible ? undefined : -1 } className={ cn('relative flex shrink-0 items-center space-x-1 text-white hover:text-blue-600 dark:text-black dark:hover:text-blue-600') }>
-          <span className='block text-sm'>{navItem.title}</span>
+        <Link key={ `link=${idx}` } href={ navItem.href } tabIndex={ mounted && visible ? undefined : -1 } className={ cn('relative flex min-h-10 shrink-0 items-center text-white hover:text-blue-400 dark:text-black dark:hover:text-blue-600') }>
+          <span className='block text-xs font-medium sm:text-sm'>{navItem.title}</span>
         </Link>
       ))}
-      <Button variant='outline' tone='neutral' size='sm' tabIndex={ mounted && visible ? undefined : -1 } onClick={ () => handleScrollTop() } className='relative min-h-11 shrink-0 rounded-full border-neutral-200 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 hover:text-white dark:border-black/[0.2] dark:text-black max-sm:border-none max-sm:px-2' aria-label='Back to top'>
-        <Icon name='ArrowUpCircle' size='md' decorative className='inline mx-2 align-middle max-sm:m-0!'/>
-        <span className='max-sm:hidden'>Back Top</span>
-        <span className='absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-linear-to-r from-transparent via-blue-500 to-transparent h-px' />
+      <Button variant='outline' tone='neutral' size='xs' tabIndex={ mounted && visible ? undefined : -1 } onClick={ () => handleScrollTop() } className='relative h-10 min-h-10 shrink-0 gap-1.5 rounded-full border-white/35 px-3 py-1.5 text-xs font-medium text-white hover:border-white/50 hover:bg-white/10 hover:text-white dark:border-black/20 dark:text-black dark:hover:border-black/30 dark:hover:bg-black/[0.06] dark:hover:text-black max-sm:border-none max-sm:px-2 sm:ml-1' aria-label='Back to top'>
+        <Icon name='ArrowUpCircle' size='sm' decorative />
+        <span className='max-sm:hidden'>Back to top</span>
       </Button>
     </div>
   );
