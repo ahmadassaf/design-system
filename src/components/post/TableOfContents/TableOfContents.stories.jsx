@@ -55,8 +55,8 @@ const toc = [
 const articleSections = toc.flatMap((section) => [ section, ...section.children ]);
 
 const TableOfContentsFixture = (args) => (
-  <div className='grid max-w-full gap-8 p-4 sm:p-6 xl:grid-cols-12'>
-    <article className='min-w-0 space-y-12 xl:col-span-8'>
+  <div className='grid min-w-[80rem] grid-cols-12 gap-8 p-6'>
+    <article className='col-span-8 space-y-12'>
       {articleSections.map((section) => {
         const Heading = section.depth === 1 ? 'h2' : 'h3';
 
@@ -70,7 +70,7 @@ const TableOfContentsFixture = (args) => (
         );
       })}
     </article>
-    <aside className='min-w-0 xl:col-span-4'>
+    <aside className='col-span-4'>
       <TableOfContents { ...args } className='top-6 max-h-[32rem]' />
     </aside>
   </div>

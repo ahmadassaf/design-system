@@ -25,6 +25,7 @@ import { getPreviewImageUrl, NPM_HOSTNAME, usePreviewData } from './usePreviewDa
 export { usePreviewData } from './usePreviewData';
 
 const bodyTextClass = 'text-gray-900 dark:text-gray-100';
+const CONFIRMED_UNAVAILABLE_STATUSES = [ 400, 404, 410 ];
 
 export const PreviewLoadingSkeleton = ({ className = '' }) => (
   <span className={ `inline-flex items-start ${className}` } aria-hidden='true'>
@@ -187,7 +188,7 @@ const Preview = memo(function Preview({
   const [ imageError, setImageError ] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  const { data, loading, error } = usePreviewData(url, title, { previewData, 'skip': isInternal, timeout });
+  const { data, loading, error } = usePreviewData(url, isInternal ? null : title, { previewData, 'skip': false, timeout });
 
   useEffect(() => {
     if (data && !data.error && onLoad) onLoad(data);
@@ -213,6 +214,10 @@ const Preview = memo(function Preview({
     }
   }, [ data?.title, title, url ]);
 
+  // Internal previews use the source link text inline while retaining the
+  // canonical post title inside the richer hover card.
+  const linkTitle = isInternal && title ? title : formattedTitle;
+
   const siteName = useMemo(() => {
     if (data?.siteName) return data.siteName;
 
@@ -232,15 +237,27 @@ const Preview = memo(function Preview({
 
   if (fallback && (error || data?.error || data?.status === 404)) return <>{fallback}</>;
 
-  // Error state - still show the link with error styling
-  if (data?.error) return (
-    <span className={ `inline-flex items-center align-top ${className}` }>
-      <Icon name='LinkSlashIcon' size='sm' decorative className='m-0 mr-1 text-red-500 inline-block align-text-top' />
-      <Link href={ url } tone='red' aria-label={ `${formattedTitle} (link may be unavailable)` }>
-        {formattedTitle}
-      </Link>
-    </span>
-  );
+  if (data?.error) {
+    const isConfirmedUnavailable = CONFIRMED_UNAVAILABLE_STATUSES.includes(Number(data.status));
+
+    return (
+      <span className={ `inline-flex items-center align-top ${className}` }>
+        <Icon
+          name={ isConfirmedUnavailable ? 'LinkSlashIcon' : 'LinkIcon' }
+          size='sm'
+          decorative
+          className={ `m-0 mr-1 inline-block align-text-top ${isConfirmedUnavailable ? 'text-red-500' : 'text-gray-400'}` }
+        />
+        <Link
+          href={ url }
+          tone={ isConfirmedUnavailable ? 'red' : 'blue' }
+          aria-label={ isConfirmedUnavailable ? `${linkTitle} (link may be unavailable)` : linkTitle }
+        >
+          {linkTitle}
+        </Link>
+      </span>
+    );
+  }
 
   if (!data) return (
     <span className={ `inline-flex items-center align-top ${className}` }>
@@ -261,9 +278,9 @@ const Preview = memo(function Preview({
       <Link
         tone='blue'
         href={ url }
-        aria-label={ `${formattedTitle}${data?.siteName ? ` - ${data.siteName}` : ''}` }
+        aria-label={ `${linkTitle}${data?.siteName ? ` - ${data.siteName}` : ''}` }
       >
-        {formattedTitle}
+        {linkTitle}
       </Link>
       {getPlatformIcon(url, data?.type, !!normalizedFavicon)}
       {data?.duration && (

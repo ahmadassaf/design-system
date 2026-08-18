@@ -118,7 +118,6 @@ const TableOfContents = ({ className, toc = [] }) => {
             className={ cn(
               'flex flex-col py-[7px]',
               isActive && 'text-blue-600! dark:text-blue-400!',
-              heading.depth === 1 && 'font-bold!',
               heading.depth === 2 && 'ml-3!',
               heading.depth > 2 ? 'ml-5! font-light text-gray-500 dark:text-gray-400' : 'font-medium text-gray-600 dark:text-gray-300'
             ) }
@@ -143,7 +142,7 @@ const TableOfContents = ({ className, toc = [] }) => {
   const expandAll = level1HeadingsCount <= 4;
 
   return (
-    <nav aria-label='Table of contents' className={ cn('my-6 rounded-md border border-border bg-surface p-4 text-gray-800 dark:border-border-dark dark:bg-surface dark:text-gray-100 xl:sticky xl:top-20 xl:col-span-3 xl:my-0 xl:max-h-[calc(100vh-5rem)] xl:overflow-y-auto', className) }>
+    <nav aria-label='Table of contents' className={ cn('p-4 sticky top-20 text-gray-800 col-span-3 max-xl:hidden max-h-[calc(100vh-5rem)] overflow-y-auto', className) }>
       {renderToc(toc, false, expandAll)}
     </nav>
   );

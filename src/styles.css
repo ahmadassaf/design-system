@@ -58,6 +58,7 @@
     --ds-color-aurora-dark-primary: rgb(30 64 175 / 0.4);
     --ds-color-aurora-dark-secondary: rgb(67 56 202 / 0.28);
     --ds-color-aurora-dark-tertiary: rgb(30 58 138 / 0.22);
+    --ds-font-size-citation: 0.625rem;
 
     /* MDX prose extras (code, citations, footnotes, captions) */
     --ds-color-caption-text: #6b7280;
@@ -69,9 +70,9 @@
     --ds-color-citation-back-hover-bg: #e5e7eb;
     --ds-color-citation-back-hover-border: #d1d5db;
     --ds-color-citation-back-text: #374151;
-    --ds-color-citation-badge-bg: #3b82f6;
-    --ds-color-citation-badge-bg-hover: #2563eb;
-    --ds-color-citation-badge-text: #ffffff;
+    --ds-color-citation-badge-bg: rgba(59, 130, 246, 0.1);
+    --ds-color-citation-badge-bg-hover: rgba(59, 130, 246, 0.18);
+    --ds-color-citation-badge-text: #1d4ed8;
     --ds-color-citation-divider: #e5e7eb;
     --ds-color-citation-entry-text: #374151;
     --ds-color-code-block-bg: #070910;
@@ -161,14 +162,14 @@
     --ds-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
     --ds-prose-font-size: 1rem;
     --ds-prose-max-width: none;
-    --ds-prose-h1-margin-top: 1.25em;
-    --ds-prose-h1-margin-bottom: 0.95em;
-    --ds-prose-h2-margin-top: 1.2em;
-    --ds-prose-h2-margin-bottom: 0.9em;
-    --ds-prose-h3-margin-top: 1.1em;
-    --ds-prose-h3-margin-bottom: 0.8em;
-    --ds-prose-h4-margin-top: 1em;
-    --ds-prose-h4-margin-bottom: 0.7em;
+    --ds-prose-h1-margin-top: 0;
+    --ds-prose-h1-margin-bottom: 0.8888889em;
+    --ds-prose-h2-margin-top: 2em;
+    --ds-prose-h2-margin-bottom: 1em;
+    --ds-prose-h3-margin-top: 1.6em;
+    --ds-prose-h3-margin-bottom: 0.6em;
+    --ds-prose-h4-margin-top: 1.5em;
+    --ds-prose-h4-margin-bottom: 0.5em;
     --ds-radius-card: 0.5rem;
     --ds-radius-control: 0.5rem;
     --ds-radius-pill: 0.125rem;
@@ -297,9 +298,9 @@
     --ds-color-citation-back-hover-bg: #4b5563;
     --ds-color-citation-back-hover-border: #6b7280;
     --ds-color-citation-back-text: #d1d5db;
-    --ds-color-citation-badge-bg: #60a5fa;
-    --ds-color-citation-badge-bg-hover: #93c5fd;
-    --ds-color-citation-badge-text: #111827;
+    --ds-color-citation-badge-bg: rgba(96, 165, 250, 0.12);
+    --ds-color-citation-badge-bg-hover: rgba(96, 165, 250, 0.2);
+    --ds-color-citation-badge-text: #93c5fd;
     --ds-color-citation-divider: #374151;
     --ds-color-citation-entry-text: #d1d5db;
     --ds-color-code-inline-bg: rgba(75, 85, 99, 0.3);
@@ -715,30 +716,36 @@
 
   .prose :where(h1, h2, h3, h4) {
     color: var(--ds-color-text);
-    font-weight: 700;
-    line-height: 1.2;
   }
 
   .prose :where(h1) {
     font-size: 2.25em;
+    font-weight: 800;
+    line-height: 1.1111111;
     margin-bottom: var(--ds-prose-h1-margin-bottom);
     margin-top: var(--ds-prose-h1-margin-top);
   }
 
   .prose :where(h2) {
     font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1.3333333;
     margin-bottom: var(--ds-prose-h2-margin-bottom);
     margin-top: var(--ds-prose-h2-margin-top);
   }
 
   .prose :where(h3) {
     font-size: 1.25em;
+    font-weight: 600;
+    line-height: 1.6;
     margin-bottom: var(--ds-prose-h3-margin-bottom);
     margin-top: var(--ds-prose-h3-margin-top);
   }
 
   .prose :where(h4) {
     font-size: 1.125em;
+    font-weight: 600;
+    line-height: 1.5;
     margin-bottom: var(--ds-prose-h4-margin-bottom);
     margin-top: var(--ds-prose-h4-margin-top);
   }

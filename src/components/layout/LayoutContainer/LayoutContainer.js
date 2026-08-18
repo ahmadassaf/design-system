@@ -88,7 +88,7 @@ export default async function LayoutContainer({ children, footerProps, jsonLd, m
 
       {/* Aurora wraps all content and provides the shared light/dark background treatment. */}
       <Aurora>
-        <ThemeProvider attribute='class' defaultTheme={ theme } enableSystem>
+        <ThemeProvider attribute='class' defaultTheme={ theme } enableSystem disableTransitionOnChange>
           <Analytics />
 
           <SiteConfigProvider metadata={ metadata } navigation={ navigation }>

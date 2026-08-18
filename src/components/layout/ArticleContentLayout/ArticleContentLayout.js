@@ -40,17 +40,17 @@ const ArticleContentLayout = ({
     <div className={ cn('pb-8', className) }>
       <div
         className={ cn(
-          'flex flex-col divide-y divide-gray-200 dark:divide-gray-700 xl:grid xl:gap-x-6 xl:divide-y-0', reserveAsideRail ? 'xl:grid-cols-9' : 'xl:grid-cols-1'
+          'flex flex-col divide-y divide-gray-200 dark:divide-gray-700 lg:grid lg:gap-x-6 lg:divide-y-0', reserveAsideRail ? 'lg:grid-cols-9' : 'lg:grid-cols-1'
         ) }
         style={{ 'gridTemplateRows': 'auto 1fr' }}
       >
-        <div className={ cn('order-2 divide-y divide-gray-200 dark:divide-gray-700 xl:order-none xl:row-span-2 xl:pb-0', reserveAsideRail && 'xl:col-span-6') }>
+        <div className={ cn('order-2 divide-y divide-gray-200 dark:divide-gray-700 lg:order-none lg:row-span-2 lg:pb-0', reserveAsideRail && 'lg:col-span-6') }>
           <div className={ cn('prose max-w-none dark:prose-invert', prosePadding[padding], contentClassName) }>
             {children}
           </div>
         </div>
         {showAsideRail && reserveAsideRail ? (
-          <div className='order-1 border-b border-gray-100 py-3 dark:border-gray-800 xl:order-none xl:col-span-3 xl:border-b-0 xl:pt-8'>
+          <div className='order-1 border-b border-gray-100 py-3 dark:border-gray-800 lg:order-none lg:col-span-3 lg:border-b-0 lg:pt-8'>
             {showAsideToggle ? (
               <Button
                 variant='subtle'

@@ -53,6 +53,7 @@ const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
   const currentPostIndex = series.findIndex((post) => post.slug === slug);
   const completedCount = currentPostIndex >= 0 ? currentPostIndex + 1 : 0;
   const totalCount = series.length;
+  const progressPercentage = totalCount ? (completedCount / totalCount) * 100 : 0;
 
   return (
     <div className={ cn('mb-6 overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-border-dark dark:bg-gray-800', className, classNames.root) }>
@@ -67,15 +68,28 @@ const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
         aria-expanded={ isExpanded }
         aria-controls={ contentId }
       >
-          <div className='flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4'>
+        <div className='flex w-full items-center justify-between gap-4'>
           <div className='flex min-w-0 flex-1 items-center gap-2 sm:gap-3'>
             <Icon name='Square3Stack3DIcon' size='sm' decorative className='text-blue-500' />
-            <span className='min-w-0 break-words text-sm font-medium text-gray-900 [overflow-wrap:anywhere] dark:text-gray-100 sm:text-base'>
+            <span className='truncate text-sm font-medium text-gray-900 dark:text-gray-100'>
               {series[0].series}
             </span>
           </div>
 
-          <div className='flex flex-shrink-0 items-center space-x-2 self-end sm:self-auto'>
+          <div className='flex flex-shrink-0 items-center space-x-2'>
+            <div
+              className='h-1 w-12 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700 sm:w-16'
+              role='progressbar'
+              aria-label='Series progress'
+              aria-valuemin='0'
+              aria-valuemax={ totalCount }
+              aria-valuenow={ completedCount }
+            >
+              <div
+                className='h-full rounded-full bg-green-600 transition-[width] duration-300 motion-reduce:transition-none'
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
             <span className='whitespace-nowrap text-xs text-gray-500 dark:text-gray-400'>
               {completedCount}/{totalCount}
             </span>
@@ -91,19 +105,6 @@ const PostSeriesBox = ({ className, classNames = {}, series, slug }) => {
           </div>
         </div>
       </Button>
-      <div
-        className='h-1 w-full overflow-hidden bg-gray-200 dark:bg-gray-700'
-        role='progressbar'
-        aria-label='Series progress'
-        aria-valuemin='0'
-        aria-valuemax={ totalCount }
-        aria-valuenow={ completedCount }
-      >
-        <div
-          className='h-full bg-blue-600 transition-[width] duration-200 motion-reduce:transition-none dark:bg-blue-400'
-          style={{ width: `${totalCount ? (completedCount / totalCount) * 100 : 0}%` }}
-        />
-      </div>
 
       {/* Expandable Content */}
       <div

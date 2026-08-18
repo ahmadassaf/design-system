@@ -148,7 +148,7 @@ The palette is a cool editorial neutral base with blue as the primary action and
 
 ### Hierarchy
 
-- **Scale**: 0.75rem, 0.875rem, 1rem, 1.125rem, 1.25rem, 1.5rem, 1.875rem, 2rem, 2.25rem, 2.625rem, 3rem, 3.75rem, 4.5rem, and 6rem are the documented size steps. The 2rem and 2.625rem intermediates belong to editorial-index hero titles, where 1.875rem and 3rem create too little or too much contrast with the surrounding archive. Use other intermediate values only by adding them to the system intentionally.
+- **Scale**: 0.625rem, 0.75rem, 0.875rem, 1rem, 1.125rem, 1.25rem, 1.5rem, 1.875rem, 2rem, 2.25rem, 2.625rem, 3rem, 3.75rem, 4.5rem, and 6rem are the documented size steps. The 0.625rem micro step is reserved for fixed-size inline citation numerals; it is not a general interface-text size. The 2rem and 2.625rem intermediates belong to editorial-index hero titles, where 1.875rem and 3rem create too little or too much contrast with the surrounding archive. Use other intermediate values only by adding them to the system intentionally.
 - **Display** (700, variable size, 1.15 line-height): Large page and foundation headings.
 - **Headline** (700, tight line-height): Section headers, post titles, and component docs titles.
 - **Title** (600-700, compact): Card titles, dialog titles, and grouped UI headings.

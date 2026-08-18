@@ -90,11 +90,11 @@ export const typographyVariants = {
     'element': 'p'
   },
   'post-subtitle': {
-    'className': 'w-full text-lg leading-8 text-gray-600 dark:text-gray-300 sm:text-xl sm:leading-9 md:text-2xl md:leading-10',
+    'className': 'w-full break-words text-xl leading-snug tracking-tight text-gray-600 capitalize dark:text-gray-100 md:text-2xl',
     'element': 'p'
   },
   'post-title': {
-    'className': 'w-full text-4xl font-extrabold leading-[1.16] text-gray-900 dark:text-gray-100 sm:text-5xl sm:leading-[1.14] lg:text-6xl lg:leading-[1.12] break-words',
+    'className': 'w-full break-words text-4xl font-extrabold leading-[1.12] tracking-[-0.03em] text-gray-900 dark:text-gray-100 md:text-5xl md:leading-[1.08]',
     'element': 'h1'
   },
   'prose-lead': {

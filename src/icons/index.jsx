@@ -1,4 +1,5 @@
 import { FaLinkedin, FaYoutube } from 'react-icons/fa';
+import { HiSquare3Stack3D } from 'react-icons/hi2';
 import { RiMailOpenFill, RiTwitterXFill } from 'react-icons/ri';
 import { VscGithub } from 'react-icons/vsc';
 import { ArrowRightOnRectangleIcon as HeroArrowRightOnRectangleIcon,
@@ -59,7 +60,6 @@ import Plus from 'lucide-react/dist/esm/icons/plus.js';
 import ScanFace from 'lucide-react/dist/esm/icons/scan-face.js';
 import Search from 'lucide-react/dist/esm/icons/search.js';
 import Shapes from 'lucide-react/dist/esm/icons/shapes.js';
-import SquareStack from 'lucide-react/dist/esm/icons/square-stack.js';
 import Star from 'lucide-react/dist/esm/icons/star.js';
 import Sun from 'lucide-react/dist/esm/icons/sun.js';
 import Tags from 'lucide-react/dist/esm/icons/tags.js';
@@ -177,7 +177,7 @@ export const iconRegistry = {
   'RectangleStackIcon': HeroRectangleStackIcon,
   'Robot': Bot,
   'Search': Search,
-  'Square3Stack3DIcon': SquareStack,
+  'Square3Stack3DIcon': HiSquare3Stack3D,
   'Star': Star,
   'Sun': Sun,
   'SunFill': Sun,
