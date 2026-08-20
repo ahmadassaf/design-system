@@ -378,14 +378,15 @@
 
 .result {
   display: inline-flex;
-  max-width: 10.5rem;
   align-items: center;
   gap: 0.4rem;
+  justify-self: end;
   color: var(--ds-color-success);
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.35;
-  text-align: right;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .result svg {
@@ -487,8 +488,9 @@
 
   .result {
     grid-column: 2;
-    max-width: none;
+    justify-self: start;
     text-align: left;
+    white-space: normal;
   }
 }
 

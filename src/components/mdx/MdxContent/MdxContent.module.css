@@ -9,13 +9,25 @@
   padding: 0.125rem 0.375rem;
 }
 
+/* Shiki token colours are authored for the shared dark code surface. */
+.root :global(code[data-theme]:not(pre code)) {
+  background-color: var(--ds-color-code-block-bg);
+  border-color: color-mix(in srgb, var(--ds-color-code-tab-text) 45%, transparent);
+  color: var(--ds-color-code-tab-text-hover);
+}
+
+/* ANSI "dim" output should remain secondary without dropping below readable contrast. */
+.root :global(code[data-language='ansi'] span[style*='color:#bbbbbb80']) {
+  color: var(--ds-color-code-tab-text) !important;
+}
+
 .root :global(code:not(pre code)::before),
 .root :global(code:not(pre code)::after) {
   content: none;
 }
 
 .root :global(pre) {
-  background-color: var(--ds-color-code-block-bg);
+  background-color: var(--ds-color-code-block-bg) !important;
   color: var(--ds-color-text-inverse);
   margin: 0;
   overflow-x: auto;
@@ -304,4 +316,57 @@
 
 .root :global(figcaption) {
   margin-bottom: 1rem;
+}
+
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-title])),
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-caption])) {
+  background: var(--ds-color-code-block-bg);
+  border-radius: var(--ds-radius-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.root :global(figcaption[data-rehype-pretty-code-title]),
+.root :global(figcaption[data-rehype-pretty-code-caption]) {
+  align-items: center;
+  background: var(--ds-color-code-chrome-bg);
+  border-bottom: 1px solid var(--ds-color-code-chrome-border);
+  color: var(--ds-color-code-tab-text-hover);
+  display: flex;
+  font-family: var(--ds-font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  min-height: 2.75rem;
+  order: -1;
+  overflow-wrap: anywhere;
+  padding: 0.625rem 1rem;
+}
+
+.root :global(figcaption[data-rehype-pretty-code-title]::after),
+.root :global(figcaption[data-rehype-pretty-code-caption]::after) {
+  color: var(--ds-color-code-tab-text-active);
+  content: attr(data-language);
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-left: auto;
+  text-transform: uppercase;
+}
+
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-title]) pre),
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-caption]) pre) {
+  border-radius: 0;
+}
+
+@media (max-width: 32rem) {
+  .root :global(figcaption[data-rehype-pretty-code-title]::after),
+  .root :global(figcaption[data-rehype-pretty-code-caption]::after) {
+    display: none;
+  }
 }

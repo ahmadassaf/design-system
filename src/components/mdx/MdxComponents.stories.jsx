@@ -127,7 +127,7 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
             <tr><Td mono>Links</Td><Td>Write normal markdown links. <InlineCode>remarkLinks</InlineCode> transforms external HTTP links into <InlineCode>{'<Preview>'}</InlineCode>, while <InlineCode>rehypeInternalLinks</InlineCode> transforms matching blog anchors into <InlineCode>{'<Preview internal />'}</InlineCode>.</Td></tr>
             <tr><Td mono>Media</Td><Td><InlineCode>{'<Image>'}</InlineCode>, <InlineCode>{'<Video>'}</InlineCode>, or direct <InlineCode>{'<Preview>'}</InlineCode> for React-only surfaces.</Td></tr>
             <tr><Td mono>Data and diagrams</Td><Td><InlineCode>{'<Chart>'}</InlineCode> variants, markdown tables, <InlineCode>{'<FileTree>'}</InlineCode>, or <InlineCode>{'<Mermaid>'}</InlineCode></Td></tr>
-            <tr><Td mono>Interactive HTML</Td><Td>Use a named component from the interactive MDX catalogue, such as <InlineCode>{'<PipelineDiagram>'}</InlineCode>, <InlineCode>{'<RdfTripleExplorer>'}</InlineCode>, <InlineCode>{'<LinkedDataQualityFramework>'}</InlineCode>, or <InlineCode>{'<GaudiBarLayout>'}</InlineCode>. Articles do not add local imports.</Td></tr>
+            <tr><Td mono>Interactive HTML</Td><Td>Use a named component from the interactive MDX catalogue, such as <InlineCode>{'<PipelineDiagram>'}</InlineCode>, <InlineCode>{'<UnifiedProcessorExplorer>'}</InlineCode>, <InlineCode>{'<RdfTripleExplorer>'}</InlineCode>, <InlineCode>{'<LinkedDataQualityFramework>'}</InlineCode>, or <InlineCode>{'<GaudiBarLayout>'}</InlineCode>. Articles do not add local imports.</Td></tr>
             <tr><Td mono>References</Td><Td>Write <InlineCode>{'[@CitationKey]'}</InlineCode> in prose and list BibTeX files in frontmatter. The blog pipeline emits citation links, reference lists, footnote data, and the Gaudi runtime binds popovers and back-links.</Td></tr>
           </tbody>
         </Table>
@@ -151,6 +151,7 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
           <QuickLink title='Chart' description='Recharts-powered article data visualization.' storyId='mdx-chart--bar' />
           <QuickLink title='Linked Data quality framework' description='Selectable stages for Roomba’s extraction, validation, profiling, and reporting path.' storyId='mdx-linkeddataqualityframework--example' />
           <QuickLink title='Pipeline diagram' description='Responsive HTML workflows with branches and outcomes.' storyId='mdx-pipelinediagram--example' />
+          <QuickLink title='Unified processor explorer' description='Reversible Markdown, MDAST, HAST, and HTML processing routes.' storyId='mdx-unifiedprocessorexplorer--unified' />
           <QuickLink title='RDF triple explorer' description='Selectable subject, predicate, and object roles in one directed statement.' storyId='mdx-interactive-rdf-triple-explorer--example' />
           <QuickLink title='RDF blank node explorer' description='Anonymous graph branches that keep related local facts together.' storyId='mdx-interactive-rdf-blank-node-explorer--example' />
           <QuickLink title='RDF container explorer' description='Interactive Seq, Bag, and Alt semantics with an extensible member set.' storyId='mdx-interactive-rdf-container-explorer--example' />

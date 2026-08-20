@@ -49,14 +49,10 @@ export const gaudiBarRegions = [
   },
   {
     'bar': 'bottom',
-    'description': 'Network and uptime widgets form a compact lower-middle cluster.',
+    'description': 'This secondary region is intentionally empty in the current layout.',
     'id': 'bottom-middle',
     'label': 'Middle region',
-    'widgets': [
-      { 'icon': 'Gauge', 'label': 'Down', 'trend': [ 2, 4, 3, 8, 6, 12, 9, 14 ], 'value': '48 Mb/s' },
-      { 'icon': 'Wifi', 'label': 'Up', 'trend': [ 2, 3, 2, 5, 3, 6, 4, 5 ], 'value': '8 Mb/s' },
-      { 'icon': 'Clock', 'label': 'Uptime', 'tone': 'success', 'value': '9d 4h' }
-    ]
+    'widgets': []
   },
   {
     'bar': 'bottom',

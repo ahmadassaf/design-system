@@ -50,14 +50,38 @@ const CodeGroupTabs = () => {
 
         const tabs = Array.from(group.querySelectorAll('.rcg-tab'));
         const blocks = group.querySelectorAll('.rcg-block');
+        const codeBlocks = Array.from(group.querySelectorAll('.rcg-block pre'));
         let activeTab = group.querySelector('.rcg-tab.active');
         let activeBlock = group.querySelector('.rcg-block.active');
+
+        codeBlocks.forEach((codeBlock) => {
+          if (codeBlock.hasAttribute('tabindex')) return;
+
+          codeBlock.setAttribute('data-code-group-tabindex', 'true');
+          codeBlock.setAttribute('tabindex', '0');
+        });
 
         // Roving tabindex: only the active tab is in the tab order (APG tabs pattern)
         const syncTabIndexes = () => {
           const current = activeTab || tabs[0];
 
           tabs.forEach((tab) => tab.setAttribute('tabindex', tab === current ? '0' : '-1'));
+        };
+
+        const revealTab = (tab) => {
+          const container = tab?.parentElement;
+
+          if (!container) return;
+
+          const tabStart = tab.offsetLeft;
+          const tabEnd = tabStart + tab.offsetWidth;
+          const visibleStart = container.scrollLeft;
+          const visibleEnd = visibleStart + container.clientWidth;
+
+          if (tabStart < visibleStart)
+            container.scrollTo({ 'behavior': 'auto', 'left': tabStart });
+          else if (tabEnd > visibleEnd)
+            container.scrollTo({ 'behavior': 'auto', 'left': tabEnd - container.clientWidth });
         };
 
         // Activate the tab at the given index (selection + roving tabindex)
@@ -86,6 +110,7 @@ const CodeGroupTabs = () => {
           activeTab = tab;
           activeBlock = blocks[index];
           syncTabIndexes();
+          revealTab(tab);
         };
 
         // Create click handler for this group
@@ -139,6 +164,12 @@ const CodeGroupTabs = () => {
           group.removeEventListener('keydown', handleTabKeyDown);
           group.removeAttribute('data-tabs-initialized');
           group.classList.remove(styles.root);
+          codeBlocks.forEach((codeBlock) => {
+            if (codeBlock.getAttribute('data-code-group-tabindex') !== 'true') return;
+
+            codeBlock.removeAttribute('data-code-group-tabindex');
+            codeBlock.removeAttribute('tabindex');
+          });
           delete group._tabsCleanup;
         };
       });

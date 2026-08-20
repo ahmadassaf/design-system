@@ -15,8 +15,6 @@ import Icon from '../../../core/Icon';
 import { gaudiBarRegions, gaudiBarRegionsById } from './GaudiBarLayout.data';
 import styles from './GaudiBarLayout.module.css';
 
-const positions = [ 'left', 'middle', 'right' ];
-
 const sparklinePoints = (values) => {
   const maximum = Math.max(...values);
   const minimum = Math.min(...values);
@@ -33,51 +31,7 @@ const sparklinePoints = (values) => {
 const accessibleRegion = (region) => {
   const widgets = region.widgets.map((widget) => `${widget.label}: ${widget.value}`).join(', ');
 
-  return `${region.bar} primary bar, ${region.label}. ${region.description} Widgets: ${widgets}.`;
-};
-
-const RegionButton = ({ active, readoutId, region, onSelect }) => (
-  <button
-    type='button'
-    className={ styles.region }
-    data-active={ active }
-    aria-controls={ readoutId }
-    aria-pressed={ active }
-    aria-label={ `${region.bar} bar, ${region.label}. ${region.widgets.length} widgets.` }
-    onClick={ onSelect }
-    onFocus={ onSelect }
-    onMouseEnter={ onSelect }
-  >
-    <span className={ styles.regionLabel }>{region.label.replace(' region', '')}</span>
-    <span className={ styles.regionPreview } aria-hidden='true'>
-      {region.widgets.map((widget) => (
-        <span className={ styles.previewWidget } key={ widget.label }>
-          <Icon name={ widget.icon } decorative />
-        </span>
-      ))}
-    </span>
-  </button>
-);
-
-const PrimaryBar = ({ activeRegionId, bar, readoutId, onSelect }) => {
-  const regions = positions.map((position) => gaudiBarRegionsById[`${bar}-${position}`]);
-
-  return (
-    <section className={ styles.primaryBar } data-bar={ bar } aria-label={ `${bar} primary bar` }>
-      <span className={ styles.primaryLabel }>{bar} primary bar</span>
-      <div className={ styles.regionGrid }>
-        {regions.map((region) => (
-          <RegionButton
-            active={ activeRegionId === region.id }
-            key={ region.id }
-            readoutId={ readoutId }
-            region={ region }
-            onSelect={ () => onSelect(region.id) }
-          />
-        ))}
-      </div>
-    </section>
-  );
+  return `${region.bar} primary bar, ${region.label}. ${region.description} ${widgets ? `Widgets: ${widgets}.` : 'No widgets assigned.'}`;
 };
 
 const WidgetPreview = ({ widget }) => (
@@ -112,6 +66,58 @@ const WidgetPreview = ({ widget }) => (
   </span>
 );
 
+const RegionButton = ({ active, readoutId, region, onSelect }) => {
+  const empty = region.widgets.length === 0;
+
+  return (
+    <button
+      type='button'
+      className={ styles.region }
+      data-active={ active }
+      data-empty={ empty }
+      aria-controls={ empty ? undefined : readoutId }
+      aria-pressed={ active }
+      aria-label={ empty
+        ? `${region.bar} bar, ${region.label}. Empty region.`
+        : `${region.bar} bar, ${region.label}. ${region.widgets.length} widgets.` }
+      disabled={ empty }
+      onClick={ empty ? undefined : onSelect }
+      onFocus={ empty ? undefined : onSelect }
+      onMouseEnter={ empty ? undefined : onSelect }
+    >
+      <span className={ styles.regionLabel }>{region.label.replace(' region', '')}</span>
+      <span className={ styles.regionPreview } aria-hidden='true'>
+        {region.widgets.map((widget) => (
+          <span className={ styles.previewWidget } key={ widget.label }>
+            <Icon name={ widget.icon } decorative />
+          </span>
+        ))}
+      </span>
+    </button>
+  );
+};
+
+const PrimaryBar = ({ activeRegionId, bar, readoutId, onSelect }) => {
+  const regions = gaudiBarRegions.filter((region) => region.bar === bar);
+
+  return (
+    <section className={ styles.primaryBar } data-bar={ bar } aria-label={ `${bar} primary bar` }>
+      <span className={ styles.primaryLabel }>{bar} primary bar</span>
+      <div className={ styles.regionGrid }>
+        {regions.map((region) => (
+          <RegionButton
+            active={ activeRegionId === region.id }
+            key={ region.id }
+            readoutId={ readoutId }
+            region={ region }
+            onSelect={ () => onSelect(region.id) }
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
 /**
  * @param {Object} props
  * @param {string} [props.title] - Visible diagram title.
@@ -139,9 +145,7 @@ const GaudiBarLayout = ({
         {gaudiBarRegions.map((region) => <li key={ region.id }>{accessibleRegion(region)}</li>)}
       </ol>
 
-      <p className={ styles.scrollHint }>Scroll horizontally to explore the desktop layout</p>
-
-      <div className={ styles.scrollFrame } role='region' aria-label='Scrollable gaudiBar layout diagram' tabIndex='0'>
+      <div className={ styles.scrollFrame } role='group' aria-label='gaudiBar layout diagram'>
         <div className={ styles.canvas }>
           <div className={ styles.desktop }>
             <div className={ styles.desktopChrome } aria-hidden='true'>
@@ -166,7 +170,7 @@ const GaudiBarLayout = ({
                 </div>
 
                 <div id={ readoutId } className={ styles.inspector } aria-live='polite'>
-                  <div className={ styles.inspectorContent } key={ activeRegion.id }>
+                  <div className={ styles.inspectorContent }>
                     <div className={ styles.inspectorHeader }>
                       <span className={ styles.location }>
                         <Icon name='Panels' decorative />
@@ -197,7 +201,7 @@ const GaudiBarLayout = ({
             </div>
           </div>
 
-          <div className={ styles.hierarchy } aria-label='Selected layout hierarchy'>
+          <div className={ styles.hierarchy } aria-label='Selected layout hierarchy' aria-live='polite'>
             <span>Desktop</span>
             <Icon name='ChevronRight' decorative />
             <span>{activeRegion.bar} primary bar</span>

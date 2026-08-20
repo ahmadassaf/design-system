@@ -46,3 +46,45 @@ export const GeneratedCodeGroup = {
     </div>
   )
 };
+
+export const LongLabelsInNarrowColumn = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const group = canvasElement.querySelector('.rehype-code-group');
+    const tabRail = group.querySelector('.rcg-tab-container');
+    const lastTab = canvas.getByRole('tab', { name: 'Finding Blog Owner Locations' });
+
+    await waitFor(() => expect(group).toHaveAttribute('data-tabs-initialized', 'true'));
+    await userEvent.click(lastTab);
+
+    await expect(lastTab).toHaveAttribute('aria-selected', 'true');
+    await waitFor(() => expect(tabRail.scrollLeft).toBeGreaterThan(0));
+  },
+  render: () => (
+    <div className='max-w-sm p-6'>
+      <CodeGroupTabs />
+      <div className='rehype-code-group'>
+        <div className='rcg-tab-container' role='tablist' aria-label='SPARQL query'>
+          <button id='code-tab-blog-names' className='rcg-tab active' type='button' role='tab' aria-controls='code-panel-blog-names' aria-selected='true'>Finding Blog Names</button>
+          <button id='code-tab-owner-names' className='rcg-tab' type='button' role='tab' aria-controls='code-panel-owner-names' aria-selected='false'>Finding Blog Owners Names</button>
+          <button id='code-tab-owner-locations' className='rcg-tab' type='button' role='tab' aria-controls='code-panel-owner-locations' aria-selected='false'>Finding Blog Owner Locations</button>
+        </div>
+        <div id='code-panel-blog-names' className='rcg-block active' role='tabpanel' aria-labelledby='code-tab-blog-names'>
+          <figure data-rehype-pretty-code-figure=''>
+            <pre><code>{ `SELECT ?name\nWHERE {\n  ?x foaf:name ?name\n}` }</code></pre>
+          </figure>
+        </div>
+        <div id='code-panel-owner-names' className='rcg-block' role='tabpanel' aria-labelledby='code-tab-owner-names' hidden>
+          <figure data-rehype-pretty-code-figure=''>
+            <pre><code>{ `SELECT ?ownerName\nWHERE {\n  ?blog aa:owner ?owner .\n  ?owner foaf:name ?ownerName .\n}` }</code></pre>
+          </figure>
+        </div>
+        <div id='code-panel-owner-locations' className='rcg-block' role='tabpanel' aria-labelledby='code-tab-owner-locations' hidden>
+          <figure data-rehype-pretty-code-figure=''>
+            <pre><code>{ `SELECT ?location\nWHERE {\n  ?owner foaf:based_near ?location .\n}` }</code></pre>
+          </figure>
+        </div>
+      </div>
+    </div>
+  )
+};

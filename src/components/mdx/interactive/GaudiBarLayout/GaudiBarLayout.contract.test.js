@@ -3,14 +3,14 @@ import test from 'node:test';
 
 import { gaudiBarRegions } from './GaudiBarLayout.data.js';
 
-test('GaudiBarLayout exposes three populated regions in each primary bar', () => {
-  for (const bar of [ 'top', 'bottom' ]) {
-    const regions = gaudiBarRegions.filter((region) => region.bar === bar);
+test('GaudiBarLayout preserves three clear regions while leaving the lower middle empty', () => {
+  const topRegions = gaudiBarRegions.filter((region) => region.bar === 'top');
+  const bottomRegions = gaudiBarRegions.filter((region) => region.bar === 'bottom');
 
-    assert.equal(regions.length, 3);
-    assert.deepEqual(regions.map((region) => region.label), [ 'Left region', 'Middle region', 'Right region' ]);
-    assert.ok(regions.every((region) => region.widgets.length > 0));
-  }
+  assert.deepEqual(topRegions.map((region) => region.label), [ 'Left region', 'Middle region', 'Right region' ]);
+  assert.deepEqual(bottomRegions.map((region) => region.label), [ 'Left region', 'Middle region', 'Right region' ]);
+  assert.equal(bottomRegions[1].widgets.length, 0);
+  assert.equal(bottomRegions[2].widgets.length, 5);
 });
 
 test('GaudiBarLayout region and widget labels remain unique within their scope', () => {

@@ -116,5 +116,6 @@ export {
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,
-  RdfTripleExplorer
+  RdfTripleExplorer,
+  UnifiedProcessorExplorer
 } from './interactive';

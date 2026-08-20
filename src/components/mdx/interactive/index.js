@@ -14,6 +14,7 @@ import RdfBlankNodeExplorer from './RdfBlankNodeExplorer';
 import RdfCollectionExplorer from './RdfCollectionExplorer';
 import RdfContainerExplorer from './RdfContainerExplorer';
 import RdfTripleExplorer from './RdfTripleExplorer';
+import UnifiedProcessorExplorer from './UnifiedProcessorExplorer';
 
 export const InteractiveMDXComponents = {
   GaudiBarLayout,
@@ -22,7 +23,8 @@ export const InteractiveMDXComponents = {
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,
-  RdfTripleExplorer
+  RdfTripleExplorer,
+  UnifiedProcessorExplorer
 };
 
 export {
@@ -32,5 +34,6 @@ export {
   RdfBlankNodeExplorer,
   RdfCollectionExplorer,
   RdfContainerExplorer,
-  RdfTripleExplorer
+  RdfTripleExplorer,
+  UnifiedProcessorExplorer
 };
