@@ -17,7 +17,9 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left.js';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right.js';
 import ArrowUp from 'lucide-react/dist/esm/icons/arrow-up.js';
 import ArrowUpCircle from 'lucide-react/dist/esm/icons/arrow-up-circle.js';
+import AppWindow from 'lucide-react/dist/esm/icons/app-window.js';
 import Atom from 'lucide-react/dist/esm/icons/atom.js';
+import BatteryMedium from 'lucide-react/dist/esm/icons/battery-medium.js';
 import BookOpen from 'lucide-react/dist/esm/icons/book-open.js';
 import Bot from 'lucide-react/dist/esm/icons/bot.js';
 import Boxes from 'lucide-react/dist/esm/icons/boxes.js';
@@ -28,11 +30,13 @@ import Check from 'lucide-react/dist/esm/icons/check.js';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.js';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.js';
 import Clock from 'lucide-react/dist/esm/icons/clock.js';
+import CloudSun from 'lucide-react/dist/esm/icons/cloud-sun.js';
 import Code from 'lucide-react/dist/esm/icons/code.js';
 import Code2 from 'lucide-react/dist/esm/icons/code-2.js';
 import Codepen from 'lucide-react/dist/esm/icons/codepen.js';
 import Container from 'lucide-react/dist/esm/icons/container.js';
 import Copy from 'lucide-react/dist/esm/icons/copy.js';
+import Cpu from 'lucide-react/dist/esm/icons/cpu.js';
 import File from 'lucide-react/dist/esm/icons/file.js';
 import FileCode from 'lucide-react/dist/esm/icons/file-code.js';
 import FileJson from 'lucide-react/dist/esm/icons/file-json.js';
@@ -42,6 +46,7 @@ import Folder from 'lucide-react/dist/esm/icons/folder.js';
 import FolderOpen from 'lucide-react/dist/esm/icons/folder-open.js';
 import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js';
 import GitFork from 'lucide-react/dist/esm/icons/git-fork.js';
+import Gauge from 'lucide-react/dist/esm/icons/gauge.js';
 import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3.js';
 import Handshake from 'lucide-react/dist/esm/icons/handshake.js';
 import Home from 'lucide-react/dist/esm/icons/home.js';
@@ -51,6 +56,7 @@ import Link from 'lucide-react/dist/esm/icons/link.js';
 import Link2Off from 'lucide-react/dist/esm/icons/link-2-off.js';
 import List from 'lucide-react/dist/esm/icons/list.js';
 import MailOpen from 'lucide-react/dist/esm/icons/mail-open.js';
+import MemoryStick from 'lucide-react/dist/esm/icons/memory-stick.js';
 import Menu from 'lucide-react/dist/esm/icons/menu.js';
 import MessagesSquare from 'lucide-react/dist/esm/icons/messages-square.js';
 import Minus from 'lucide-react/dist/esm/icons/minus.js';
@@ -59,12 +65,14 @@ import PanelsTopLeft from 'lucide-react/dist/esm/icons/panels-top-left.js';
 import Plus from 'lucide-react/dist/esm/icons/plus.js';
 import ScanFace from 'lucide-react/dist/esm/icons/scan-face.js';
 import Search from 'lucide-react/dist/esm/icons/search.js';
+import Server from 'lucide-react/dist/esm/icons/server.js';
 import Shapes from 'lucide-react/dist/esm/icons/shapes.js';
 import Star from 'lucide-react/dist/esm/icons/star.js';
 import Sun from 'lucide-react/dist/esm/icons/sun.js';
 import Tags from 'lucide-react/dist/esm/icons/tags.js';
 import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert.js';
 import Users from 'lucide-react/dist/esm/icons/users.js';
+import Wifi from 'lucide-react/dist/esm/icons/wifi.js';
 import X from 'lucide-react/dist/esm/icons/x.js';
 
 const safeIconLinkProtocols = new Set([ 'http:', 'https:', 'mailto:', 'tel:' ]);
@@ -102,6 +110,7 @@ const normalizeIconHref = (href) => {
 const isExternalIconHref = (href) => typeof href === 'string' && (/^https?:\/\//i.test(href) || href.startsWith('//'));
 
 export const iconRegistry = {
+  'AppWindow': AppWindow,
   'ArrowDown': ArrowDown,
   'ArrowDownIcon': ArrowDown,
   'ArrowLeft': ArrowLeft,
@@ -112,6 +121,7 @@ export const iconRegistry = {
   'ArrowUp': ArrowUp,
   'ArrowUpCircle': ArrowUpCircle,
   'ArrowUpIcon': ArrowUp,
+  'Battery': BatteryMedium,
   'BookOpen': BookOpen,
   'BookOpenIcon': HeroBookOpenIcon,
   'Calendar': CalendarDays,
@@ -127,11 +137,13 @@ export const iconRegistry = {
   'ChevronRightIcon': ChevronRight,
   'Clock': Clock,
   'ClockIcon': Clock,
+  'CloudSun': CloudSun,
   'Code': Code,
   'CodeBracketIcon': Code2,
   'Codepen': Codepen,
   'Copy': Copy,
   'CopyIcon': Copy,
+  'Cpu': Cpu,
   'Cubes': Boxes,
   'EnvelopeIcon': MailOpen,
   'ExclamationTriangleIcon': TriangleAlert,
@@ -145,6 +157,7 @@ export const iconRegistry = {
   'FolderOpen': FolderOpen,
   'Fork': GitFork,
   'Github': VscGithub,
+  'Gauge': Gauge,
   'Grid': Grid3X3,
   'Grid3X3': Grid3X3,
   'Handshake': Handshake,
@@ -163,6 +176,7 @@ export const iconRegistry = {
   'List': List,
   'MagnifyingGlassIcon': Search,
   'Mail': RiMailOpenFill,
+  'Memory': MemoryStick,
   'Menu': Menu,
   'Minus': Minus,
   'MinusIcon': Minus,
@@ -177,6 +191,7 @@ export const iconRegistry = {
   'RectangleStackIcon': HeroRectangleStackIcon,
   'Robot': Bot,
   'Search': Search,
+  'Server': Server,
   'Square3Stack3DIcon': HiSquare3Stack3D,
   'Star': Star,
   'Sun': Sun,
@@ -189,6 +204,7 @@ export const iconRegistry = {
   'VscFolder': Folder,
   'VscFolderOpened': FolderOpen,
   'Warning': TriangleAlert,
+  'Wifi': Wifi,
   'X': X,
   'Youtube': FaYoutube,
   'css': Code,
