@@ -51,10 +51,10 @@ const PostNavigation = ({ headingLevel = 2, next, prev, type = 'Post' }) => {
   return (
     <div className='divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700'>
       {(next || prev) && (
-        <div className='flex justify-between max-sm:flex-col py-4'>
+        <div className='flex max-sm:flex-col'>
           {prev && (
             <Link
-              className='group block max-sm:py-2'
+              className='group block w-1/2 py-4 pr-4 max-sm:w-full max-sm:px-0 max-sm:py-2'
               href={ `${baseUrl}/${prev.slug}` }
               variant='bare'
             >
@@ -68,7 +68,7 @@ const PostNavigation = ({ headingLevel = 2, next, prev, type = 'Post' }) => {
           )}
           {next && (
             <Link
-              className='group block max-sm:py-2'
+              className={ `group block w-1/2 py-4 pl-4 max-sm:ml-0 max-sm:w-full max-sm:px-0 max-sm:py-2 ${prev ? '' : 'ml-auto'}` }
               href={ `${baseUrl}/${next.slug}` }
               variant='bare'
             >
