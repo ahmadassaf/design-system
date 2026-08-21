@@ -95,7 +95,7 @@ const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsi
       tone='neutral'
       size='sm'
       className={ cn(
-        'cursor-pointer gap-1 rounded-md px-3 py-2 text-base font-medium leading-6 text-gray-950 hover:bg-transparent hover:text-blue-600 lg:text-lg dark:text-gray-100 dark:hover:bg-transparent dark:hover:text-blue-300', mounted && menuDropDownOpen && 'text-blue-600 dark:text-blue-300', className
+        'h-11 min-h-11 cursor-pointer gap-1 rounded-md px-1.5 py-2 text-sm font-medium leading-5 text-gray-950 hover:bg-transparent hover:text-blue-600 dark:text-gray-100 dark:hover:bg-transparent dark:hover:text-blue-300', mounted && menuDropDownOpen && 'text-blue-600 dark:text-blue-300', className
       ) }
       aria-controls={ controlsId }
       aria-expanded={ mounted ? menuDropDownOpen : false }
@@ -105,7 +105,15 @@ const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsi
       onKeyDown={ handleKeyDown }
     >
       { name }
-      <Icon name='ChevronDown' decorative size='xs' className={ `flex-none text-gray-400 transition-transform duration-200 motion-reduce:transition-none ${mounted && menuDropDownOpen ? 'rotate-180' : ''}` } />
+      <Icon
+        name='ChevronDown'
+        decorative
+        size='xs'
+        className={ cn(
+          'flex-none text-gray-400 transition-transform duration-200 motion-reduce:transition-none',
+          mounted && menuDropDownOpen && 'rotate-180 text-blue-500 dark:text-blue-300'
+        ) }
+      />
     </Button>
   );
 };

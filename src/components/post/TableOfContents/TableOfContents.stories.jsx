@@ -54,9 +54,9 @@ const toc = [
 
 const articleSections = toc.flatMap((section) => [ section, ...section.children ]);
 
-const TableOfContentsFixture = (args) => (
-  <div className='grid max-w-full gap-8 p-4 sm:p-6 xl:grid-cols-12'>
-    <article className='min-w-0 space-y-12 xl:col-span-8'>
+const TableOfContentsFixture = ({ showVisuals = false, ...args }) => (
+  <div className='grid min-w-[80rem] grid-cols-12 gap-8 p-6'>
+    <article className='col-span-8 space-y-12'>
       {articleSections.map((section) => {
         const Heading = section.depth === 1 ? 'h2' : 'h3';
 
@@ -69,8 +69,42 @@ const TableOfContentsFixture = (args) => (
           </section>
         );
       })}
+
+      {showVisuals && (
+        <>
+          <figure>
+            <figcaption>
+              <strong>Token relationship map</strong>
+            </figcaption>
+            <svg role='img' aria-label='Three design tokens connected in a graph' viewBox='0 0 480 120'>
+              <path d='M 110 60 H 220 M 260 60 H 370' stroke='currentColor' />
+              <circle cx='80' cy='60' r='28' fill='currentColor' />
+              <circle cx='240' cy='60' r='28' fill='currentColor' opacity='0.65' />
+              <circle cx='400' cy='60' r='28' fill='currentColor' opacity='0.35' />
+            </svg>
+          </figure>
+
+          <table>
+            <caption>Semantic token inventory</caption>
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Role</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Accent</td>
+                <td>Interactive</td>
+                <td>Blue</td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      )}
     </article>
-    <aside className='min-w-0 xl:col-span-4'>
+    <aside className='col-span-4'>
       <TableOfContents { ...args } className='top-6 max-h-[32rem]' />
     </aside>
   </div>
@@ -119,5 +153,17 @@ export const CompactToc = {
     await expect(canvasElement.querySelector('aside a[href="#design-tokens"]')).toBeInTheDocument();
     await expect(canvasElement.querySelector('aside a[href="#component-contracts"]')).toHaveAttribute('href', '#component-contracts');
     await expect(canvasElement.querySelector('aside a[href="#documentation"]')).toHaveAttribute('href', '#documentation');
+  }
+};
+
+export const VisualIndex = {
+  args: {
+    showVisuals: true
+  },
+  render: (args) => <TableOfContentsFixture { ...args } />,
+  play: async ({ canvasElement }) => {
+    await waitFor(() => expect(canvasElement.querySelector('aside a[href="#visual-diagram-token-relationship-map"]')).toBeInTheDocument());
+    await expect(canvasElement.querySelector('aside a[href="#visual-table-semantic-token-inventory"]')).toBeInTheDocument();
+    await expect(canvasElement.querySelector('aside')).toHaveTextContent('1 diagram · 1 table');
   }
 };

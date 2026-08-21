@@ -1,9 +1,25 @@
+import { FaLinkedin, FaYoutube } from 'react-icons/fa';
+import { HiSquare3Stack3D } from 'react-icons/hi2';
+import { RiMailOpenFill, RiTwitterXFill } from 'react-icons/ri';
+import { VscGithub } from 'react-icons/vsc';
+import { ArrowRightOnRectangleIcon as HeroArrowRightOnRectangleIcon,
+  BookOpenIcon as HeroBookOpenIcon,
+  FingerPrintIcon as HeroFingerPrintIcon,
+  HomeIcon as HeroHomeIcon,
+  IdentificationIcon as HeroIdentificationIcon,
+  LightBulbIcon as HeroLightBulbIcon,
+  NewspaperIcon as HeroNewspaperIcon,
+  RectangleGroupIcon as HeroRectangleGroupIcon,
+  RectangleStackIcon as HeroRectangleStackIcon,
+  TagIcon as HeroTagIcon } from '@heroicons/react/24/outline';
 import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down.js';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left.js';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right.js';
 import ArrowUp from 'lucide-react/dist/esm/icons/arrow-up.js';
 import ArrowUpCircle from 'lucide-react/dist/esm/icons/arrow-up-circle.js';
+import AppWindow from 'lucide-react/dist/esm/icons/app-window.js';
 import Atom from 'lucide-react/dist/esm/icons/atom.js';
+import BatteryMedium from 'lucide-react/dist/esm/icons/battery-medium.js';
 import BookOpen from 'lucide-react/dist/esm/icons/book-open.js';
 import Bot from 'lucide-react/dist/esm/icons/bot.js';
 import Boxes from 'lucide-react/dist/esm/icons/boxes.js';
@@ -14,56 +30,50 @@ import Check from 'lucide-react/dist/esm/icons/check.js';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down.js';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right.js';
 import Clock from 'lucide-react/dist/esm/icons/clock.js';
+import CloudSun from 'lucide-react/dist/esm/icons/cloud-sun.js';
 import Code from 'lucide-react/dist/esm/icons/code.js';
 import Code2 from 'lucide-react/dist/esm/icons/code-2.js';
 import Codepen from 'lucide-react/dist/esm/icons/codepen.js';
 import Container from 'lucide-react/dist/esm/icons/container.js';
 import Copy from 'lucide-react/dist/esm/icons/copy.js';
+import Cpu from 'lucide-react/dist/esm/icons/cpu.js';
 import File from 'lucide-react/dist/esm/icons/file.js';
 import FileCode from 'lucide-react/dist/esm/icons/file-code.js';
 import FileJson from 'lucide-react/dist/esm/icons/file-json.js';
 import FileText from 'lucide-react/dist/esm/icons/file-text.js';
-import Fingerprint from 'lucide-react/dist/esm/icons/fingerprint.js';
 import Flame from 'lucide-react/dist/esm/icons/flame.js';
 import Folder from 'lucide-react/dist/esm/icons/folder.js';
 import FolderOpen from 'lucide-react/dist/esm/icons/folder-open.js';
 import GitBranch from 'lucide-react/dist/esm/icons/git-branch.js';
 import GitFork from 'lucide-react/dist/esm/icons/git-fork.js';
-import Github from 'lucide-react/dist/esm/icons/github.js';
+import Gauge from 'lucide-react/dist/esm/icons/gauge.js';
 import Grid3X3 from 'lucide-react/dist/esm/icons/grid-3x3.js';
 import Handshake from 'lucide-react/dist/esm/icons/handshake.js';
 import Home from 'lucide-react/dist/esm/icons/home.js';
-import IdCard from 'lucide-react/dist/esm/icons/id-card.js';
 import Image from 'lucide-react/dist/esm/icons/image.js';
 import Info from 'lucide-react/dist/esm/icons/info.js';
-import Layers from 'lucide-react/dist/esm/icons/layers.js';
-import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb.js';
 import Link from 'lucide-react/dist/esm/icons/link.js';
 import Link2Off from 'lucide-react/dist/esm/icons/link-2-off.js';
-import Linkedin from 'lucide-react/dist/esm/icons/linkedin.js';
 import List from 'lucide-react/dist/esm/icons/list.js';
-import LogOut from 'lucide-react/dist/esm/icons/log-out.js';
 import MailOpen from 'lucide-react/dist/esm/icons/mail-open.js';
+import MemoryStick from 'lucide-react/dist/esm/icons/memory-stick.js';
 import Menu from 'lucide-react/dist/esm/icons/menu.js';
 import MessagesSquare from 'lucide-react/dist/esm/icons/messages-square.js';
 import Minus from 'lucide-react/dist/esm/icons/minus.js';
 import Moon from 'lucide-react/dist/esm/icons/moon.js';
-import Newspaper from 'lucide-react/dist/esm/icons/newspaper.js';
 import PanelsTopLeft from 'lucide-react/dist/esm/icons/panels-top-left.js';
 import Plus from 'lucide-react/dist/esm/icons/plus.js';
 import ScanFace from 'lucide-react/dist/esm/icons/scan-face.js';
 import Search from 'lucide-react/dist/esm/icons/search.js';
+import Server from 'lucide-react/dist/esm/icons/server.js';
 import Shapes from 'lucide-react/dist/esm/icons/shapes.js';
-import SquareStack from 'lucide-react/dist/esm/icons/square-stack.js';
 import Star from 'lucide-react/dist/esm/icons/star.js';
 import Sun from 'lucide-react/dist/esm/icons/sun.js';
-import Tag from 'lucide-react/dist/esm/icons/tag.js';
 import Tags from 'lucide-react/dist/esm/icons/tags.js';
 import TriangleAlert from 'lucide-react/dist/esm/icons/triangle-alert.js';
-import Twitter from 'lucide-react/dist/esm/icons/twitter.js';
 import Users from 'lucide-react/dist/esm/icons/users.js';
+import Wifi from 'lucide-react/dist/esm/icons/wifi.js';
 import X from 'lucide-react/dist/esm/icons/x.js';
-import Youtube from 'lucide-react/dist/esm/icons/youtube.js';
 
 const safeIconLinkProtocols = new Set([ 'http:', 'https:', 'mailto:', 'tel:' ]);
 
@@ -100,18 +110,20 @@ const normalizeIconHref = (href) => {
 const isExternalIconHref = (href) => typeof href === 'string' && (/^https?:\/\//i.test(href) || href.startsWith('//'));
 
 export const iconRegistry = {
+  'AppWindow': AppWindow,
   'ArrowDown': ArrowDown,
   'ArrowDownIcon': ArrowDown,
   'ArrowLeft': ArrowLeft,
   'ArrowLongLeftIcon': ArrowLeft,
   'ArrowLongRightIcon': ArrowRight,
   'ArrowRight': ArrowRight,
-  'ArrowRightOnRectangleIcon': LogOut,
+  'ArrowRightOnRectangleIcon': HeroArrowRightOnRectangleIcon,
   'ArrowUp': ArrowUp,
   'ArrowUpCircle': ArrowUpCircle,
   'ArrowUpIcon': ArrowUp,
+  'Battery': BatteryMedium,
   'BookOpen': BookOpen,
-  'BookOpenIcon': BookOpen,
+  'BookOpenIcon': HeroBookOpenIcon,
   'Calendar': CalendarDays,
   'CalendarDaysIcon': CalendarDays,
   'ChartArea': ChartArea,
@@ -125,11 +137,13 @@ export const iconRegistry = {
   'ChevronRightIcon': ChevronRight,
   'Clock': Clock,
   'ClockIcon': Clock,
+  'CloudSun': CloudSun,
   'Code': Code,
   'CodeBracketIcon': Code2,
   'Codepen': Codepen,
   'Copy': Copy,
   'CopyIcon': Copy,
+  'Cpu': Cpu,
   'Cubes': Boxes,
   'EnvelopeIcon': MailOpen,
   'ExclamationTriangleIcon': TriangleAlert,
@@ -137,77 +151,81 @@ export const iconRegistry = {
   'FaceIdError': ScanFace,
   'File': File,
   'FileText': FileText,
-  'FingerPrintIcon': Fingerprint,
+  'FingerPrintIcon': HeroFingerPrintIcon,
   'Flame': Flame,
   'Folder': Folder,
   'FolderOpen': FolderOpen,
   'Fork': GitFork,
-  'Github': Github,
+  'Github': VscGithub,
+  'Gauge': Gauge,
   'Grid': Grid3X3,
   'Grid3X3': Grid3X3,
   'Handshake': Handshake,
   'HandshakeLine': Handshake,
   'Home': Home,
-  'HomeIcon': Home,
-  'IdentificationIcon': IdCard,
+  'HomeIcon': HeroHomeIcon,
+  'IdentificationIcon': HeroIdentificationIcon,
   'Image': Image,
   'Info': Info,
   'InformationCircleIcon': Info,
-  'LightBulbIcon': Lightbulb,
+  'LightBulbIcon': HeroLightBulbIcon,
   'Link': Link,
   'LinkIcon': Link,
   'LinkSlashIcon': Link2Off,
-  'Linkedin': Linkedin,
+  'Linkedin': FaLinkedin,
   'List': List,
   'MagnifyingGlassIcon': Search,
-  'Mail': MailOpen,
+  'Mail': RiMailOpenFill,
+  'Memory': MemoryStick,
   'Menu': Menu,
   'Minus': Minus,
   'MinusIcon': Minus,
   'Moon': Moon,
   'MoonFill': Moon,
-  'NewspaperIcon': Newspaper,
+  'NewspaperIcon': HeroNewspaperIcon,
   'Panels': PanelsTopLeft,
   'PhotoIcon': Image,
   'Plus': Plus,
   'PlusIcon': Plus,
-  'RectangleGroupIcon': PanelsTopLeft,
-  'RectangleStackIcon': Layers,
+  'RectangleGroupIcon': HeroRectangleGroupIcon,
+  'RectangleStackIcon': HeroRectangleStackIcon,
   'Robot': Bot,
   'Search': Search,
-  'Square3Stack3DIcon': SquareStack,
+  'Server': Server,
+  'Square3Stack3DIcon': HiSquare3Stack3D,
   'Star': Star,
   'Sun': Sun,
   'SunFill': Sun,
-  'TagIcon': Tag,
+  'TagIcon': HeroTagIcon,
   'Tags': Tags,
-  'Twitter': Twitter,
+  'Twitter': RiTwitterXFill,
   'UserGroupIcon': Users,
   'VscFile': File,
   'VscFolder': Folder,
   'VscFolderOpened': FolderOpen,
   'Warning': TriangleAlert,
+  'Wifi': Wifi,
   'X': X,
-  'Youtube': Youtube,
+  'Youtube': FaYoutube,
   'css': Code,
   'docker': Container,
   'file': File,
   'folder': Folder,
   'folder-open': FolderOpen,
   'git': GitBranch,
-  'github': Github,
+  'github': VscGithub,
   'html': FileCode,
   'javascript': Braces,
   'json': FileJson,
-  'linkedin': Linkedin,
-  'mail': MailOpen,
+  'linkedin': FaLinkedin,
+  'mail': RiMailOpenFill,
   'markdown': FileText,
   'node': Boxes,
   'python': Code2,
   'react': Atom,
-  'twitter': Twitter,
+  'twitter': RiTwitterXFill,
   'typescript': FileCode,
-  'youtube': Youtube
+  'youtube': FaYoutube
 };
 
 export const iconLabels = {

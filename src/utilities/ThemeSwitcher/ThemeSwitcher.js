@@ -15,8 +15,6 @@ import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 
 import Icon from '../../components/core/Icon';
-import ThemeProvider from '../ThemeProvider';
-import { useSiteConfig } from '../SiteConfig';
 
 /**
  * Internal provider component that renders the theme toggle button
@@ -41,9 +39,9 @@ function Provider() {
       aria-label='Toggle Dark Mode'
       type='button'
       style={{ 'outline': 'none' }}
-      className='inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-gray-950 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-gray-100 dark:hover:bg-gray-800'
+      className='inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-md text-gray-950 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-gray-100 dark:hover:bg-gray-800'
     >
-      <Icon name='SunFill' decorative className='h-5 w-5' />
+      <Icon name='SunFill' decorative className='h-5 w-5 lg:h-4 lg:w-4' />
     </button>
   );
 
@@ -52,20 +50,18 @@ function Provider() {
       aria-label='Toggle Dark Mode'
       type='button'
       style={{ 'outline': 'none' }}
-      className='inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-gray-950 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-gray-100 dark:hover:bg-gray-800'
+      className='inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-md text-gray-950 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:text-gray-100 dark:hover:bg-gray-800'
       onClick={ () => setTheme(theme === 'dark' ? 'light' : 'dark') }
     >
-      {theme === 'dark' ? <Icon name='MoonFill' decorative className='h-5 w-5' /> : <Icon name='SunFill' decorative className='h-5 w-5' />}
+      {theme === 'dark' ? <Icon name='MoonFill' decorative className='h-5 w-5 lg:h-4 lg:w-4' /> : <Icon name='SunFill' decorative className='h-5 w-5 lg:h-4 lg:w-4' />}
     </button>
   );
 }
 
 /**
- * Main theme switcher component with provider wrapper
+ * Main theme switcher component
  *
- * @description Public component that wraps the theme toggle button with the necessary
- * ThemeProvider context. Configures theme attributes and default settings based on
- * site metadata configuration.
+ * @description Public component that consumes the shared app-level ThemeProvider.
  *
  * @returns {JSX.Element} Complete theme switcher with provider context
  *
@@ -81,18 +77,8 @@ function Provider() {
  *   <ThemeSwitch />
  * </nav>
  */
-function ThemeSwitch({ defaultTheme }) {
-  const { metadata } = useSiteConfig();
-
-  return (
-    <ThemeProvider
-      attribute='class'
-      defaultTheme={ defaultTheme ?? metadata.theme }
-      enableSystem
-    >
-      <Provider />
-    </ThemeProvider>
-  );
+function ThemeSwitch() {
+  return <Provider />;
 }
 
 export default ThemeSwitch;

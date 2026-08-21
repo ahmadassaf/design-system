@@ -451,6 +451,36 @@ const renderMdxExample = (name, componentModule) => {
     return <ExampleFrame><Component id='storybook-mermaid-example' description='A publishing workflow moves from draft to review and then publication.' chart={ `flowchart TD
   A[Draft] --> B[Review]
   B --> C[Publish]` } /></ExampleFrame>;
+  case 'GaudiBarLayout':
+    return <ExampleFrame width='max-w-5xl'><Component /></ExampleFrame>;
+  case 'LinkedDataQualityFramework':
+    return <ExampleFrame width='max-w-5xl'><Component /></ExampleFrame>;
+  case 'PipelineDiagram':
+    return (
+      <ExampleFrame width='max-w-5xl'>
+        <Component
+          title='Continuous deployment with Travis CI'
+          description='Changes move from a local workspace through GitHub and an automated build, validation, and deployment pipeline.'
+          source={{ 'action': 'Push changes', 'label': 'Local changes' }}
+          platform={{
+            'detail': 'Push to a branch or open a pull request',
+            'feedback': 'Link to deployed site',
+            'label': 'GitHub',
+            'success': 'Build passes'
+          }}
+          pipeline={{
+            'label': 'Travis CI',
+            'stages': [
+              { 'failure': 'Broken build', 'label': 'Build' },
+              { 'failure': 'Broken build', 'label': 'Validate' },
+              { 'action': 'Upload', 'label': 'Deploy', 'output': 'Server' }
+            ],
+            'trigger': 'Trigger Travis'
+          }}
+          destination={{ 'label': 'Server' }}
+        />
+      </ExampleFrame>
+    );
   case 'Preview':
     return (
       <ExampleFrame>

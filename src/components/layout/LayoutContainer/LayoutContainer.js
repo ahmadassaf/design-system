@@ -77,7 +77,7 @@ export default async function LayoutContainer({ children, footerProps, jsonLd, m
   const jsonLdMarkup = serializeJsonLd(await resolveJsonLd(jsonLd));
 
   return (
-    <div className='bg-background text-foreground antialiased'>
+    <div className='min-w-[500px] bg-background text-foreground antialiased'>
 
       <a
         href='#main-content'
@@ -88,22 +88,21 @@ export default async function LayoutContainer({ children, footerProps, jsonLd, m
 
       {/* Aurora wraps all content and provides the shared light/dark background treatment. */}
       <Aurora>
+        <ThemeProvider attribute='class' defaultTheme={ theme } enableSystem disableTransitionOnChange>
+          <Analytics />
 
-        <ThemeProvider attribute='class' defaultTheme={ theme } enableSystem/>
-        <Analytics />
-
-        <SiteConfigProvider metadata={ metadata } navigation={ navigation }>
-          <div className='relative w-full sm:w-[95%] xl:w-[90%] isolate xl:max-w-6xl px-4 sm:px-8 dark:z-10'>
-            <div className='flex min-h-dvh flex-col justify-between'>
-              <FloatingMenu/>
-              <Menu { ...menuProps } />
-              {jsonLdMarkup ? <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': jsonLdMarkup }} key='jsonld'/> : null}
-              <main id='main-content' className='mb-4'>{children}</main>
-              <Footer { ...footerProps } />
+          <SiteConfigProvider metadata={ metadata } navigation={ navigation }>
+            <div className='relative w-full sm:w-[95%] xl:w-[90%] isolate xl:max-w-6xl px-4 sm:px-8 dark:z-10'>
+              <div className='flex min-h-dvh flex-col'>
+                <FloatingMenu/>
+                <Menu { ...menuProps } />
+                {jsonLdMarkup ? <script type='application/ld+json' dangerouslySetInnerHTML={{ '__html': jsonLdMarkup }} key='jsonld'/> : null}
+                <main id='main-content' className='mb-4 mt-4 flex-1 lg:mt-6'>{children}</main>
+                <Footer { ...footerProps } />
+              </div>
             </div>
-          </div>
-        </SiteConfigProvider>
-
+          </SiteConfigProvider>
+        </ThemeProvider>
       </Aurora>
 
     </div>

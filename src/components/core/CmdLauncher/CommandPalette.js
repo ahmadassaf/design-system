@@ -12,6 +12,7 @@ import {
 } from 'react';
 
 import DialogPortal from '../DialogPortal';
+import Icon from '../Icon';
 
 const CommandPaletteContext = createContext(null);
 
@@ -127,6 +128,7 @@ const CommandPalette = ({
   onChangeSearch,
   onChangeSelected,
   page = 'root',
+  restoreFocusRef,
   search = '',
   selected = 0
 }) => {
@@ -196,6 +198,13 @@ const CommandPalette = ({
     if (!items.length) return;
 
     const normalizedSelected = Math.min(Math.max(selected, 0), items.length - 1);
+    const list = dialogRef.current?.querySelector('[data-cmdk-list]');
+
+    if (normalizedSelected === 0 && list) {
+      list.scrollTop = 0;
+
+      return;
+    }
 
     items[normalizedSelected]?.scrollIntoView({ 'block': 'nearest' });
   }, [ getSelectableItems, isOpen, selected, page, search ]);
@@ -276,11 +285,16 @@ const CommandPalette = ({
 
   return (
     <CommandPaletteContext.Provider value={ contextValue }>
-      <DialogPortal initialFocusRef={ inputRef }>
+      <DialogPortal initialFocusRef={ inputRef } restoreFocusRef={ restoreFocusRef }>
         <div className={ className }>
           <div className='command-palette'>
-            <div className='command-palette__overlay' onClick={ close } />
-            <div className='command-palette__viewport'>
+            <div aria-hidden='true' className='command-palette__overlay' />
+            <div
+              className='command-palette__viewport'
+              onClick={ (event) => {
+                if (event.target === event.currentTarget) close();
+              } }
+            >
               <div
                 ref={ dialogRef }
                 aria-label='Command launcher'
@@ -289,17 +303,28 @@ const CommandPalette = ({
                 role='dialog'
                 onKeyDown={ handleKeyDown }
               >
-                <input
-                  ref={ inputRef }
-                  aria-label='Search commands'
-                  autoComplete='off'
-                  data-cmdk-input
-                  placeholder='Search'
-                  spellCheck={ false }
-                  type='text'
-                  value={ search }
-                  onChange={ (event) => onChangeSearch?.(event.target.value) }
-                />
+                <div className='command-palette__search'>
+                  <Icon name='Search' size='sm' decorative className='command-palette__search-icon' />
+                  <input
+                    ref={ inputRef }
+                    aria-label='Search commands'
+                    autoComplete='off'
+                    data-cmdk-input
+                    placeholder='Search'
+                    spellCheck={ false }
+                    type='text'
+                    value={ search }
+                    onChange={ (event) => onChangeSearch?.(event.target.value) }
+                  />
+                  <button
+                    type='button'
+                    className='command-palette__close'
+                    aria-label='Close command launcher'
+                    onClick={ close }
+                  >
+                    <Icon name='X' size='sm' decorative />
+                  </button>
+                </div>
                 <div data-cmdk-list>
                   {children}
                 </div>

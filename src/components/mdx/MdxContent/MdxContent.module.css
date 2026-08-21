@@ -9,17 +9,33 @@
   padding: 0.125rem 0.375rem;
 }
 
+/* Shiki token colours are authored for the shared dark code surface. */
+.root :global(code[data-theme]:not(pre code)) {
+  background-color: var(--ds-color-code-block-bg);
+  border-color: color-mix(in srgb, var(--ds-color-code-tab-text) 45%, transparent);
+  color: var(--ds-color-code-tab-text-hover);
+}
+
+/* ANSI "dim" output should remain secondary without dropping below readable contrast. */
+.root :global(code[data-language='ansi'] span[style*='color:#bbbbbb80']) {
+  color: var(--ds-color-code-tab-text) !important;
+}
+
 .root :global(code:not(pre code)::before),
 .root :global(code:not(pre code)::after) {
   content: none;
 }
 
 .root :global(pre) {
-  background-color: var(--ds-color-code-block-bg);
+  background-color: var(--ds-color-code-block-bg) !important;
+  color: var(--ds-color-text-inverse);
   margin: 0;
+  overflow-x: auto;
+  padding: 1rem;
 }
 
 .root :global(pre code) {
+  color: inherit;
   font-size: 0.875rem;
 }
 
@@ -101,11 +117,15 @@
   align-items: center;
   background: var(--ds-color-citation-badge-bg);
   border-radius: 50%;
+  box-sizing: border-box;
   color: var(--ds-color-citation-badge-text);
   cursor: pointer;
   display: inline-flex;
   font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
   justify-content: center;
+  line-height: 1;
+  text-align: center;
   text-decoration: none;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
@@ -124,18 +144,20 @@
 .root :global(a.citation-link:not(.citation-group)),
 .root :global(a[href*='#bib-']:not(.citation-group)),
 .root :global(a.citation-link.citation-group) {
-  font-weight: 700;
+  border-radius: var(--ds-radius-pill);
+  font-size: var(--ds-font-size-citation);
+  font-weight: 600;
   gap: 3px;
-  height: 17px;
+  height: 15px;
   line-height: 1;
   margin: 0 2px;
-  min-height: 17px;
-  min-width: 17px;
-  padding: 0 2px;
+  min-height: 15px;
+  min-width: 15px;
+  padding: 0 3px;
   position: relative;
   scroll-margin-top: 50px;
   vertical-align: baseline;
-  width: 17px;
+  width: auto;
 }
 
 .root :global(a.citation-link.citation-group) {
@@ -145,16 +167,19 @@
   margin: 0 3px;
   min-height: 0;
   min-width: 0;
+  padding: 0;
   width: auto;
 }
 
 .root :global(a.citation-link.citation-group span) {
-  height: 17px;
+  border-radius: var(--ds-radius-pill);
+  font-size: var(--ds-font-size-citation);
+  height: 15px;
   line-height: 1;
-  min-width: 17px;
-  padding: 0 2px;
+  min-width: 15px;
+  padding: 0 3px;
   text-align: center;
-  width: 17px;
+  width: auto;
 }
 
 .root :global(.citation-cluster) {
@@ -291,4 +316,57 @@
 
 .root :global(figcaption) {
   margin-bottom: 1rem;
+}
+
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-title])),
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-caption])) {
+  background: var(--ds-color-code-block-bg);
+  border-radius: var(--ds-radius-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.root :global(figcaption[data-rehype-pretty-code-title]),
+.root :global(figcaption[data-rehype-pretty-code-caption]) {
+  align-items: center;
+  background: var(--ds-color-code-chrome-bg);
+  border-bottom: 1px solid var(--ds-color-code-chrome-border);
+  color: var(--ds-color-code-tab-text-hover);
+  display: flex;
+  font-family: var(--ds-font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  min-height: 2.75rem;
+  order: -1;
+  overflow-wrap: anywhere;
+  padding: 0.625rem 1rem;
+}
+
+.root :global(figcaption[data-rehype-pretty-code-title]::after),
+.root :global(figcaption[data-rehype-pretty-code-caption]::after) {
+  color: var(--ds-color-code-tab-text-active);
+  content: attr(data-language);
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-left: auto;
+  text-transform: uppercase;
+}
+
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-title]) pre),
+.root :global(figure[data-rehype-pretty-code-figure]:has(> figcaption[data-rehype-pretty-code-caption]) pre) {
+  border-radius: 0;
+}
+
+@media (max-width: 32rem) {
+  .root :global(figcaption[data-rehype-pretty-code-title]::after),
+  .root :global(figcaption[data-rehype-pretty-code-caption]::after) {
+    display: none;
+  }
 }

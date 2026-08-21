@@ -5,7 +5,7 @@ import { useId, useState } from 'react';
 import Icon from '../Icon';
 import { cn } from '../../../utilities/cn';
 
-export const Accordion = ({ children, className, defaultValue, type = 'single', value, onValueChange }) => {
+export const Accordion = ({ children, className, defaultValue, type = 'single', value, variant = 'outline', onValueChange }) => {
   const [ internalValue, setInternalValue ] = useState(defaultValue || (type === 'multiple' ? [] : undefined));
   const currentValue = value ?? internalValue;
 
@@ -15,7 +15,12 @@ export const Accordion = ({ children, className, defaultValue, type = 'single', 
   };
 
   return (
-    <div className={ cn('w-full divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white dark:divide-gray-800 dark:border-gray-800 dark:bg-gray-950', className) }>
+    <div className={ cn(
+      variant === 'flush'
+        ? 'w-full divide-y divide-gray-200 bg-transparent dark:divide-gray-800'
+        : 'w-full divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white dark:divide-gray-800 dark:border-gray-800 dark:bg-gray-950',
+      className
+    ) }>
       {typeof children === 'function' ? children({ currentValue, setValue, type }) : children}
     </div>
   );
@@ -56,11 +61,11 @@ export const AccordionContent = ({ children, className, id, isOpen, labelledBy }
   );
 };
 
-export const AccordionGroup = ({ items = [], type = 'single', defaultValue, className }) => {
+export const AccordionGroup = ({ items = [], type = 'single', defaultValue, className, variant = 'outline' }) => {
   const groupId = useId();
 
   return (
-    <Accordion type={ type } defaultValue={ defaultValue || items[0]?.value } className={ className }>
+    <Accordion type={ type } defaultValue={ defaultValue || items[0]?.value } className={ className } variant={ variant }>
       {({ currentValue, setValue }) => items.map((item, index) => {
         const isOpen = type === 'multiple' ? currentValue?.includes(item.value) : currentValue === item.value;
         const triggerId = `${groupId}-trigger-${index}`;
@@ -72,8 +77,18 @@ export const AccordionGroup = ({ items = [], type = 'single', defaultValue, clas
 
         return (
           <AccordionItem key={ item.value } value={ item.value }>
-            <AccordionTrigger id={ triggerId } contentId={ contentId } isOpen={ isOpen } onClick={ () => setValue(nextValue) }>{item.title}</AccordionTrigger>
-            <AccordionContent id={ contentId } labelledBy={ triggerId } isOpen={ isOpen }>{item.content}</AccordionContent>
+            <AccordionTrigger
+              className={ variant === 'flush'
+                ? 'px-0 py-3.5 hover:bg-transparent hover:text-blue-600 dark:hover:bg-transparent dark:hover:text-blue-400'
+                : undefined }
+              id={ triggerId }
+              contentId={ contentId }
+              isOpen={ isOpen }
+              onClick={ () => setValue(nextValue) }
+            >
+              {item.title}
+            </AccordionTrigger>
+            <AccordionContent className={ variant === 'flush' ? 'px-0 pb-1' : undefined } id={ contentId } labelledBy={ triggerId } isOpen={ isOpen }>{item.content}</AccordionContent>
           </AccordionItem>
         );
       })}

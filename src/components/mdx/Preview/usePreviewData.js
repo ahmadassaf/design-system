@@ -106,7 +106,7 @@ const fetchPreviewData = async(url, timeout) => {
 
   try {
     const response = await fetch(`/api/preview?url=${encodeURIComponent(url)}`, {
-      'cache': 'force-cache',
+      'cache': url.startsWith('/') ? 'no-store' : 'force-cache',
       'signal': controller.signal
     });
 

@@ -20,7 +20,7 @@ import { cn } from '../../../utilities/cn';
  * Renders the complete blog post header with metadata and navigation
  *
  * @description Full-featured post header that adapts its width based on table of contents presence.
- * Displays category pills, draft indicators, title/subtitle, timestamps, tags, sharing options,
+ * Displays category metadata, draft indicators, title/subtitle, timestamps, tags, sharing options,
  * and series information when available. Features responsive design for different screen sizes.
  *
  * @param {Object} props - Component props
@@ -56,19 +56,27 @@ import { cn } from '../../../utilities/cn';
  */
 const titleElements = { 1: 'h1', 2: 'h2', 3: 'h3', 4: 'h4', 5: 'h5', 6: 'h6' };
 
+const isValidPostDate = (date) => date && !Number.isNaN(new Date(date).getTime());
+
 const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata = {}, titleLevel = 1, tocControl }) => (
-  <div className={ cn('w-full pt-10 max-xl:w-full sm:pt-12 lg:pt-14', className, classNames.root) }>
+  <div className={ cn('w-full pt-6 max-xl:w-full', className, classNames.root) }>
 
     <div className={ cn('mb-2 flex flex-wrap items-center gap-3', classNames.meta) }>
       {frontMatter.category && (
         <Link
           href={ `/blog/categories/${frontMatter.category.replaceAll(' ', '-').toLowerCase()}` }
-          className={ cn('flex w-fit cursor-pointer items-center gap-2 text-xs text-gray-600 hover:text-gray-800 sm:text-sm dark:text-gray-400 dark:hover:text-gray-200', classNames.category) }
+          className={ cn('flex w-fit cursor-pointer items-center gap-2 text-xs font-normal text-gray-600 hover:text-gray-800 sm:text-sm dark:text-gray-400 dark:hover:text-gray-200', classNames.category) }
         >
           <div className='size-2 flex-shrink-0 rounded-full bg-green-500'></div>
           {frontMatter.category.charAt(0).toUpperCase() + frontMatter.category.slice(1)}
         </Link>
       )}
+      {isValidPostDate(frontMatter.updated || frontMatter.date) ? (
+        <span className='inline-flex items-center gap-3 whitespace-nowrap'>
+          {frontMatter.category ? <span aria-hidden='true' className='text-gray-300 dark:text-gray-600'>·</span> : null}
+          <PostDate date={ frontMatter.updated || frontMatter.date } locale={ siteMetadata.locale } />
+        </span>
+      ) : null}
       {frontMatter.draft && (
         <div className='flex items-center gap-1.5'>
           <div className='w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0'></div>
@@ -83,30 +91,28 @@ const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata
       <Typography variant='post-subtitle' className={ classNames.subtitle }>
         {frontMatter.subtitle}
       </Typography>
-
-      <PostTimestamps
-        action={ tocControl }
-        className={ classNames.timestamps }
-        date={ frontMatter.updated || frontMatter.date }
-        locale={ siteMetadata.locale }
-        readingTime={ frontMatter.readingTime?.text }
-      />
-
     </div>
 
+    {tocControl ? (
+      <PostTimestamps
+        action={ tocControl }
+        className={ cn('mt-4 hidden lg:flex', classNames.timestamps) }
+        readingTime={ frontMatter.readingTime?.text }
+      />
+    ) : null}
+
     {frontMatter.tags ? (
-      <div className={ cn('my-4 flex w-full flex-wrap items-center gap-3', classNames.actions) }>
-        {frontMatter.tags && (
-          <div className={ cn('flex flex-wrap gap-2', classNames.tags) }>
-            {frontMatter.tags.map((tag) => (
-              <Pill key={ tag } href={ `/blog/tags/${tag.replaceAll(' ', '-').toLowerCase()}` } tone='gray' variant='soft' size='sm' radius='md' className={ cn('my-0 mr-0 normal-case tracking-normal capitalize', classNames.tag) }>
-                {tag}
-              </Pill>
-            ))}
-          </div>
-        )}
+      <div className={ cn('my-5 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between', classNames.actions) }>
+        <div className={ cn('flex flex-wrap gap-2', classNames.tags) }>
+          {frontMatter.tags.map((tag) => (
+            <Pill key={ tag } href={ `/blog/tags/${tag.replaceAll(' ', '-').toLowerCase()}` } tone='gray' variant='subtle' size='sm' radius='md' className={ cn('my-0 mr-0 bg-gray-100 text-xs normal-case tracking-normal capitalize dark:bg-gray-800 sm:text-sm', classNames.tag) }>
+              {tag}
+            </Pill>
+          ))}
+        </div>
       </div>
     ) : null}
+
     {frontMatter.seriesPosts && (
       <PostSeriesBox series={ frontMatter.seriesPosts } slug={ frontMatter.slug } className={ classNames.series } />
     )}
@@ -115,6 +121,35 @@ const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata
 );
 
 export default PostHeader;
+
+export const PostDate = ({ className, date, locale }) => {
+  const postDate = new Date(date);
+  const isValidDate = isValidPostDate(date);
+  const formattedDate = isValidDate ? postDate.toLocaleDateString(locale, {
+    'day': 'numeric',
+    'month': 'short',
+    'year': 'numeric'
+  }) : '';
+
+  if (!isValidDate) return null;
+
+  return (
+    <time dateTime={ date } className={ cn('text-xs font-normal tabular-nums text-gray-500 dark:text-gray-400', className) }>
+      {formattedDate}
+    </time>
+  );
+};
+
+export const PostReadingTime = ({ className, readingTime }) => {
+  if (!readingTime) return null;
+
+  return (
+    <span className={ cn('inline-flex items-center gap-2 text-xs font-normal', className) }>
+      <Icon name='BookOpen' size='sm' decorative className='text-gray-400' />
+      <span>{readingTime}</span>
+    </span>
+  );
+};
 
 /**
  * Renders post timestamps including publication date and reading time
@@ -138,28 +173,12 @@ export default PostHeader;
  * />
  */
 export const PostTimestamps = ({ action, className, date, locale, readingTime }) => {
-  const postDate = new Date(date);
-  const isValidDate = date && !Number.isNaN(postDate.getTime());
-  const formattedDate = isValidDate ? postDate.toLocaleDateString(locale, {
-    'day': 'numeric',
-    'month': 'short',
-    'year': 'numeric'
-  }) : '';
-
   return (
-    <div className={ cn('mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-600 dark:text-gray-400', className) }>
-      {isValidDate ? (
-        <time dateTime={ date } className='font-medium'>
-          {formattedDate}
-        </time>
-      ) : null}
+    <div className={ cn('flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-normal text-gray-600 dark:text-gray-400', className) }>
       {action || null}
-      {readingTime ? (
-        <div className='flex items-center gap-1.5'>
-          <Icon name='BookOpen' decorative className='h-3.5 w-3.5 text-gray-400' />
-          <span>{readingTime}</span>
-        </div>
-      ) : null}
+      <PostDate date={ date } locale={ locale } className='text-current' />
+      {date && readingTime ? <span aria-hidden='true' className='text-gray-300 dark:text-gray-600'>·</span> : null}
+      <PostReadingTime readingTime={ readingTime } className='text-current' />
     </div>
   );
 };

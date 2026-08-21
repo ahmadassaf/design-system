@@ -4,6 +4,7 @@ import 'storybook/internal/components';
 import './preview.css';
 
 import { SiteConfigProvider } from '../src/utilities/SiteConfig';
+import ThemeProvider from '../src/utilities/ThemeProvider';
 import tokenData from '../src/tokens/tokens.json';
 import siteMetadata from './fixtures/site/metadata';
 import navigationMetadata from './fixtures/site/navigationMetadata.mjs';
@@ -43,9 +44,13 @@ const preview = {
     (Story, context) => {
       syncStorybookTheme(context.globals.theme);
       return React.createElement(
-        SiteConfigProvider,
-        { metadata: siteMetadata, navigation: navigationMetadata },
-        Story()
+        ThemeProvider,
+        { attribute: 'class', defaultTheme: context.globals.theme, enableSystem: false },
+        React.createElement(
+          SiteConfigProvider,
+          { metadata: siteMetadata, navigation: navigationMetadata },
+          Story()
+        )
       );
     }
   ],

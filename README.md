@@ -49,6 +49,41 @@ The compiled-MDX runtime (`MDXLayoutRenderer`, `useMDXComponent`) has its own en
 import { MDXLayoutRenderer } from '@gaudi/design-system/mdx/runtime';
 ```
 
+Gaudi intentionally exports only reusable MDX primitives. Article-specific diagrams,
+explorers, and other custom interactive work belong to the content bundle. A
+content-owned client boundary can merge its catalogue with Gaudi before rendering
+compiled MDX:
+
+```jsx
+'use client';
+
+import { MDXComponents } from '@gaudi/design-system/mdx';
+import { MDXLayoutRenderer as GaudiMDXLayoutRenderer } from '@gaudi/design-system/mdx/runtime';
+
+import { ContentComponents } from './visualisations';
+
+export default function ContentMDXLayoutRenderer(props) {
+  return (
+    <GaudiMDXLayoutRenderer
+      components={{ ...MDXComponents, ...ContentComponents }}
+      {...props}
+    />
+  );
+}
+```
+
+The merge must happen in a client module because React component maps cannot be
+passed from a server page to a client component. This contract keeps the design
+system reusable while allowing each trusted content repository to ship
+self-contained React, HTML, scoped styles, data, and tests.
+
+### Article navigation
+
+`TableOfContents` renders the heading hierarchy first and then an optional
+“Diagrams & tables” index. It discovers captioned figures and tables inside the
+article, assigns stable fragment identifiers when needed, and tracks the active
+visual as the reader scrolls.
+
 ### Site configuration
 
 Gaudi never imports data from the consuming app. Site-aware components (navigation,

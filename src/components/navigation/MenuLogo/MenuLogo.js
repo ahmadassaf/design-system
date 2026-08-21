@@ -14,7 +14,7 @@
  *
  * @description Custom vector logo that uses currentColor to inherit text color from parent elements,
  * making it theme-aware and adaptable to different navigation contexts (light/dark modes).
- * The logo maintains aspect ratio and is optimized for 50x50px display size.
+ * The logo maintains aspect ratio and is optimized for a compact 44x44px display size.
  * Features a gentle pulse effect on hover.
  *
  * @returns {JSX.Element} SVG logo element with subtle hover animation
@@ -35,11 +35,11 @@ const Logo = ({ className }) => (
   <svg
     version='1.0'
     xmlns='http://www.w3.org/2000/svg'
-    width='50px'
-    height='50px'
+    width='44px'
+    height='44px'
     viewBox='0 0 688.000000 688.000000'
     preserveAspectRatio='xMidYMid meet'
-    className={ cn('block h-[50px] w-[50px] text-gray-950 transition-transform duration-300 ease-out hover:scale-105 dark:text-white', className) }
+    className={ cn('block h-11 w-11 text-gray-950 transition-transform duration-300 ease-out hover:scale-105 dark:text-white', className) }
     aria-hidden='true'
     focusable='false'
   >

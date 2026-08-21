@@ -1,5 +1,9 @@
 'use client';
 
+import { useId, useState } from 'react';
+
+import Icon from '../../core/Icon';
+
 /**
  * Search Component
  *
@@ -15,26 +19,56 @@
  * Subtle search input component for article filtering
  *
  * @param {Object} props - Component props
+ * @param {string} [props.label='Filter articles'] - Accessible input label
+ * @param {string} [props.resultsId] - ID of the filtered results region
  * @param {Function} props.setSearchValue - Callback function to handle search value changes
+ * @param {string} [props.value] - Controlled search value
  * @returns {JSX.Element} Minimal search input that morphs into the page
  *
  * @example
  * const [searchTerm, setSearchTerm] = useState('');
  * <Search setSearchValue={setSearchTerm} />
  */
-const Search = ({ setSearchValue }) => (
-  <div className='relative mt-8 border-none'>
-    <input
-      aria-label='Filter articles'
-      type='search'
-      onChange={ (event) => setSearchValue(event.target.value) }
-      placeholder='Filter articles'
-      className='block w-full rounded-sm border-0 border-b border-transparent bg-transparent px-1 py-3 text-gray-900 placeholder:text-gray-500 focus:placeholder:opacity-70 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-transparent dark:text-gray-100 dark:placeholder:text-gray-400 dark:focus-visible:border-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-gray-950'
-    />
-    <svg aria-hidden='true' className='absolute right-3 top-3.5 h-5 w-5 text-gray-400 dark:text-gray-300 ' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={ 2 } d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
-    </svg>
-  </div>
-);
+const Search = ({ label = 'Filter articles', resultsId, setSearchValue, value }) => {
+  const generatedId = useId();
+  const inputId = `article-filter-${generatedId}`;
+  const [ internalValue, setInternalValue ] = useState('');
+  const currentValue = value ?? internalValue;
+  const handleChange = (nextValue) => {
+    if (value === undefined) setInternalValue(nextValue);
+    setSearchValue(nextValue);
+  };
+
+  return (
+    <div role='search' className='relative'>
+      <label htmlFor={ inputId } className='sr-only'>{label}</label>
+      <Icon
+        name='Search'
+        decorative
+        size='sm'
+        className='pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400'
+      />
+      <input
+        id={ inputId }
+        aria-controls={ resultsId }
+        type='search'
+        value={ currentValue }
+        onChange={ (event) => handleChange(event.target.value) }
+        placeholder={ label }
+        className='block min-h-11 w-full appearance-none rounded-lg border border-gray-200 bg-white/75 py-2.5 pl-10 pr-12 text-base text-gray-900 shadow-sm placeholder:text-gray-500 focus:placeholder:opacity-70 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-800 dark:bg-gray-950/70 dark:text-gray-100 dark:placeholder:text-gray-400 dark:focus-visible:border-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-gray-950'
+      />
+      {currentValue ? (
+        <button
+          type='button'
+          aria-label='Clear article filter'
+          className='absolute right-0 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg text-gray-500 transition-colors hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:text-gray-100 dark:focus-visible:ring-blue-400'
+          onClick={ () => handleChange('') }
+        >
+          <Icon name='X' decorative size='sm' />
+        </button>
+      ) : null}
+    </div>
+  );
+};
 
 export default Search;

@@ -63,3 +63,28 @@ export const Loading = {
     </div>
   )
 };
+
+export const MetadataBlocked = {
+  name: 'Metadata blocked by publisher',
+  play: async ({ canvasElement }) => {
+    const link = await within(canvasElement).findByRole('link', { name: 'Published article' });
+
+    await expect(link).toHaveAttribute('href', 'https://www.igi-global.com/article/example');
+    await expect(link).toHaveClass('text-blue-600');
+    await expect(link).not.toHaveClass('text-red-700');
+  },
+  render: () => (
+    <div className='p-6'>
+      <componentModule.default
+        url='https://www.igi-global.com/article/example'
+        title='Published article'
+        showImage={ false }
+        previewData={ {
+          'error': true,
+          'errorMessage': 'HTTP 429: Too Many Requests',
+          'status': 429
+        } }
+      />
+    </div>
+  )
+};

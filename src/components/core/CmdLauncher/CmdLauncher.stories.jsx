@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ThemeProvider } from 'next-themes';
 
 import { createComponentDocsPage, getComponentDocs } from '../../../../.storybook/stories/ComponentDocs';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
@@ -34,6 +33,7 @@ const sampleData = {
     {
       description: 'Design-system notes, tokens, and reusable interface work.',
       slug: 'gaudi',
+      subtitle: 'Automate and simplify new machine setups.',
       title: 'Gaudi'
     },
     {
@@ -47,7 +47,8 @@ const sampleData = {
       href: '',
       id: 'semantic-search-notes',
       title: 'Semantic Search Notes',
-      venue: 'Gaudi Papers'
+      venue: 'Gaudi Papers',
+      year: 2024
     }
   ],
   tags: [
@@ -73,8 +74,7 @@ const BlogCommandShell = () => {
   const [ open, setOpen ] = useState(false);
 
   return (
-    <ThemeProvider attribute='class' defaultTheme='light' enableSystem={ false }>
-      <div className='min-h-[560px] rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-950'>
+    <div className='min-h-[560px] rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-950'>
         <div className='flex items-center justify-between gap-6'>
           <div className='flex items-center gap-4'>
             <MenuLogo className='h-10 w-10' />
@@ -112,8 +112,7 @@ const BlogCommandShell = () => {
           tags={ sampleData.tags }
           thoughts={ sampleData.thoughts }
         />
-      </div>
-    </ThemeProvider>
+    </div>
   );
 };
 
@@ -148,8 +147,8 @@ export const Default = {
 
     await expect(palette.getByText('Explore content')).toBeInTheDocument();
     await expect(palette.getAllByText('Posts').length).toBeGreaterThan(0);
-    await expect(palette.getByText('to select')).toBeInTheDocument();
-    await expect(palette.getByText('to navigate')).toBeInTheDocument();
+    await expect(palette.getByText('Select')).toBeInTheDocument();
+    await expect(palette.getByText('Navigate')).toBeInTheDocument();
 
     const visibleItems = () => Array.from(dialog.querySelectorAll('.command-palette-list-item'))
       .filter((item) => item.offsetParent !== null);
@@ -171,6 +170,25 @@ export const Default = {
     await expect(await palette.findByText('No results for “no matching command”.')).toBeVisible();
 
     await userEvent.clear(search);
+    const postsCommand = palette
+      .getAllByText('Posts')
+      .find((node) => node.closest('.command-palette-list-item'))
+      ?.closest('.command-palette-list-item');
+
+    await expect(postsCommand).toBeInTheDocument();
+    await userEvent.click(postsCommand);
+
+    const knowledgeGraphsCommand = (await palette.findByText('An Introduction to Knowledge Graphs')).closest('.command-palette-list-item');
+    const knowledgeGraphsCategory = palette.getByText('data');
+
+    await expect(knowledgeGraphsCommand?.querySelector('[data-cmdk-item-meta]')).toBeInTheDocument();
+    await expect(knowledgeGraphsCategory).toHaveAttribute('data-cmdk-item-meta');
+    await expect(knowledgeGraphsCategory).toHaveClass('ml-auto', 'text-right');
+
+    await userEvent.keyboard('{Escape}');
+
+    await expect(await palette.findByText('Explore content')).toBeInTheDocument();
+
     const projectsCommand = palette
       .getAllByText('Projects')
       .find((node) => node.closest('.command-palette-list-item'))
@@ -180,7 +198,38 @@ export const Default = {
     await userEvent.click(projectsCommand);
 
     await expect(await palette.findByText('Gaudi')).toBeInTheDocument();
-    await expect(palette.getByText('Design-system notes, tokens, and reusable interface work.')).toBeInTheDocument();
+    const gaudiSubtitle = palette.getByText('Automate and simplify new machine setups.');
+    await expect(gaudiSubtitle).toBeInTheDocument();
+    await expect(palette.queryByText('Design-system notes, tokens, and reusable interface work.')).not.toBeInTheDocument();
+
+    const projectsHeading = palette.getByRole('heading', { 'name': 'Projects' });
+    const gaudiCommand = palette.getByText('Gaudi').closest('.command-palette-list-item');
+    const commandList = dialog.querySelector('[data-cmdk-list]');
+
+    await expect(projectsHeading).toBeVisible();
+    await expect(commandList).toHaveProperty('scrollTop', 0);
+    await expect(gaudiCommand?.querySelector('svg[aria-hidden="true"]')).not.toBeInTheDocument();
+    await expect(gaudiCommand?.querySelector('[data-cmdk-item-meta]')).not.toBeInTheDocument();
+    await expect(gaudiSubtitle).toHaveClass('mt-0.5');
+    await expect(gaudiSubtitle).not.toHaveClass('capitalize');
+
+    await userEvent.keyboard('{Escape}');
+
+    await expect(await palette.findByText('Explore content')).toBeInTheDocument();
+
+    const publicationsCommand = palette
+      .getAllByText('Publications')
+      .find((node) => node.closest('.command-palette-list-item'))
+      ?.closest('.command-palette-list-item');
+
+    await expect(publicationsCommand).toBeInTheDocument();
+    await userEvent.click(publicationsCommand);
+
+    const publicationYear = await palette.findByText('2024');
+
+    await expect(publicationYear).toHaveAttribute('data-cmdk-item-meta');
+    await expect(publicationYear).toHaveClass('ml-auto', 'text-right');
+    await expect(palette.queryByText('Gaudi Papers')).not.toBeInTheDocument();
 
     await userEvent.keyboard('{Escape}');
 

@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import CommandLauncher from '../../core/CmdLauncher';
@@ -58,10 +58,16 @@ const Menu = ({
   const menuPublications = publicationsProp || [];
   const menuTags = tagsProp || [];
   const blogLink = navigation.links.find((link) => link.href === '/blog' || link.href === '/blog/');
-  const mobileLinks = navigation.links.filter((link) => link !== blogLink);
+  const shouldShowLink = (link) => {
+    if (link.hideInPath === '*') return Boolean(link.showInPath && path.includes(link.showInPath));
+
+    return !link.hideInPath || !path.includes(link.hideInPath);
+  };
+  const mobileLinks = navigation.links.filter((link) => link !== blogLink && shouldShowLink(link));
 
   const [ mobileMenuOpen, setMobileMenuOpen ] = useState(false);
   const [ LauncherOpen, LauncherSetOpen ] = useState(false);
+  const mobileMenuTriggerRef = useRef(null);
 
   useEffect(() => {
     const desktopQuery = window.matchMedia('(min-width: 1024px)');
@@ -75,7 +81,7 @@ const Menu = ({
     return () => desktopQuery.removeEventListener('change', closeOnDesktop);
   }, []);
 
-  return (<nav aria-label='Main navigation' className='flex min-h-20 items-center justify-between gap-5 py-10 lg:py-12'>
+  return (<nav aria-label='Main navigation' className='flex min-h-16 items-center justify-between gap-5 py-5 lg:py-6'>
 
     <Link href='/' aria-label={ metadata.author.name || metadata.title || 'Home' } variant='bare' className='shrink-0 text-gray-950 dark:text-white'>
       <ThemeLogo />
@@ -84,8 +90,7 @@ const Menu = ({
     <div className='flex min-w-0 items-center gap-3 lg:gap-5'>
       <ul className='hidden items-center gap-5 lg:flex xl:gap-7'>
         {navigation.links.map((link) => {
-          if (
-            (link.hideInPath === '*' && !path.includes(link.showInPath)) || path.includes(link.hideInPath)) return null;
+          if (!shouldShowLink(link)) return null;
 
           const isActive = path === link.href || (link.href !== '/' && path.startsWith(`${link.href}/`));
 
@@ -94,7 +99,7 @@ const Menu = ({
               <Link
                 href={ link.href }
                 aria-current={ isActive ? 'page' : undefined }
-                className={ `whitespace-nowrap px-1 py-2 text-base font-medium lg:text-lg ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}` }
+                className={ `inline-flex min-h-11 items-center whitespace-nowrap rounded-md px-1.5 py-2 text-sm font-medium ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}` }
               >
                 {link.title}
               </Link>
@@ -111,7 +116,7 @@ const Menu = ({
       <ThemeSwitch />
 
       <div className='flex lg:hidden'>
-        <Button variant='ghost' tone='neutral' size='sm' className='h-11 w-11 p-0' onClick={ () => setMobileMenuOpen(true) }>
+        <Button ref={ mobileMenuTriggerRef } variant='ghost' tone='neutral' size='sm' className='h-11 w-11 p-0' onClick={ () => setMobileMenuOpen(true) }>
           <span className='sr-only'>Open main menu</span>
           <Icon name='Menu' decorative size='md' />
         </Button>
@@ -133,6 +138,7 @@ const Menu = ({
         thoughts={ thoughts }
         publications={ menuPublications }
         open={ LauncherOpen }
+        restoreFocusRef={ mobileMenuTriggerRef }
         setOpen={ LauncherSetOpen }
       />
     </div>

@@ -42,16 +42,18 @@ const keyLabelMap = {
 };
 
 const kbdVariantConfig = {
-  'base': 'inline-flex min-w-[1.5rem] items-center justify-center border font-semibold shadow-[0_2px_0_0_rgba(0,0,0,0.08)] dark:shadow-[0_2px_0_0_rgba(0,0,0,0.5)]',
+  'base': 'inline-flex items-center justify-center border font-semibold shadow-[0_2px_0_0_rgba(0,0,0,0.08)] dark:shadow-[0_2px_0_0_rgba(0,0,0,0.5)]',
   'defaults': {
     'size': 'md',
     'variant': 'raised'
   },
   'size': {
-    'lg': 'px-2.5 py-1.5 text-sm',
-    'md': 'px-2 py-1 text-xs',
-    'sm': 'px-1.5 py-0.5 text-xs',
-    'xs': 'px-1 py-0.5 text-xs'
+    '3xs': 'h-4 min-w-4 px-0.5 py-0 text-[10px] leading-none',
+    '2xs': 'h-5 min-w-5 px-1 py-0 text-xs leading-none',
+    'lg': 'min-w-6 px-2.5 py-1.5 text-sm',
+    'md': 'min-w-6 px-2 py-1 text-xs',
+    'sm': 'min-w-6 px-1.5 py-0.5 text-xs',
+    'xs': 'min-w-6 px-1 py-0.5 text-xs'
   },
   'variant': {
     'flat': 'rounded-md border-gray-200 bg-gray-50 text-gray-800 shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200',

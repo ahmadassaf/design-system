@@ -108,7 +108,7 @@ Use <Highlight>inline emphasis</Highlight> sparingly inside prose.
 <Faq questions={[
   {
     question: 'Do posts import components?',
-    answer: 'No. The blog maps MDX tags to Gaudi components.'
+    answer: 'No. The blog renderer maps MDX tags to Gaudi primitives and article-owned visualisations.'
   }
 ]} />` }
         />
