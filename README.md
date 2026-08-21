@@ -35,13 +35,16 @@ import Button from '@gaudi/design-system/core/Button';
 import PostHeader from '@gaudi/design-system/post/PostHeader';
 ```
 
-MDX article components are exported from the MDX entrypoint (they are intentionally
-not re-exported from the root entry, so their heavy peer dependencies — recharts,
-framer-motion, mermaid, katex — stay out of apps that don't render articles):
+MDX article components are available individually so consumers do not pull charts,
+Mermaid, or other heavyweight peers into routes that only render one primitive:
 
 ```js
-import { Callout, CitationPopover, CodeGroupTabs, Preview, Table } from '@gaudi/design-system/mdx';
+import Callout from '@gaudi/design-system/mdx/Callout';
+import Preview from '@gaudi/design-system/mdx/Preview';
 ```
+
+The `@gaudi/design-system/mdx` barrel remains available when the complete catalogue
+is intentionally required.
 
 The compiled-MDX runtime (`MDXLayoutRenderer`, `useMDXComponent`) has its own entry:
 
@@ -57,7 +60,8 @@ compiled MDX:
 ```jsx
 'use client';
 
-import { MDXComponents } from '@gaudi/design-system/mdx';
+import Aside from '@gaudi/design-system/mdx/Aside';
+import Callout from '@gaudi/design-system/mdx/Callout';
 import { MDXLayoutRenderer as GaudiMDXLayoutRenderer } from '@gaudi/design-system/mdx/runtime';
 
 import { ContentComponents } from './visualisations';
@@ -65,7 +69,7 @@ import { ContentComponents } from './visualisations';
 export default function ContentMDXLayoutRenderer(props) {
   return (
     <GaudiMDXLayoutRenderer
-      components={{ ...MDXComponents, ...ContentComponents }}
+      components={{ Aside, Callout, ...ContentComponents }}
       {...props}
     />
   );
