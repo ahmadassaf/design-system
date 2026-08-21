@@ -23,13 +23,15 @@ export default {
 export const Example = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const previousLink = canvas.getByRole('link', { name: 'Previous post title' });
-    const nextLink = canvas.getByRole('link', { name: 'Next post title' });
+    const previousLink = canvas.getByRole('link', { name: 'Previous Article Previous post title' });
+    const nextLink = canvas.getByRole('link', { name: 'Next Article Next post title' });
 
     await expect(canvas.getByRole('heading', { name: 'Previous Article' })).toBeVisible();
     await expect(canvas.getByRole('heading', { name: 'Next Article' })).toBeVisible();
     await expect(previousLink).toHaveAttribute('href', '/blog/previous-post');
     await expect(nextLink).toHaveAttribute('href', '/blog/next-post');
+    await expect(previousLink).toHaveClass('block');
+    await expect(nextLink).toHaveClass('block');
   },
   'render': () => renderComponentExample('Post/PostNavigation', componentModule)
 };
@@ -37,7 +39,7 @@ export const Example = {
 export const ThoughtNavigation = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const previousLink = canvas.getByRole('link', { name: 'Previous thought title' });
+    const previousLink = canvas.getByRole('link', { name: 'Previous Thought Previous thought title' });
 
     await expect(canvas.getByRole('heading', { name: 'Previous Thought' })).toBeVisible();
     await expect(previousLink).toHaveAttribute('href', '/thoughts/previous-thought');

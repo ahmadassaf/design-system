@@ -53,24 +53,32 @@ const PostNavigation = ({ headingLevel = 2, next, prev, type = 'Post' }) => {
       {(next || prev) && (
         <div className='flex justify-between max-sm:flex-col py-4'>
           {prev && (
-            <div className='max-sm:py-2 group'>
+            <Link
+              className='group block max-sm:py-2'
+              href={ `${baseUrl}/${prev.slug}` }
+              variant='bare'
+            >
               <Heading className='text-xs uppercase text-gray-500 dark:text-gray-400'>
                 Previous {label}
               </Heading>
               <div className='text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
-                <Link href={ `${baseUrl}/${prev.slug}` }>{prev.title}</Link>
+                {prev.title}
               </div>
-            </div>
+            </Link>
           )}
           {next && (
-            <div className='max-sm:py-2 group'>
+            <Link
+              className='group block max-sm:py-2'
+              href={ `${baseUrl}/${next.slug}` }
+              variant='bare'
+            >
               <Heading className='text-xs uppercase text-gray-500 dark:text-gray-400'>
                 Next {label}
               </Heading>
               <div className='text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
-                <Link href={ `${baseUrl}/${next.slug}` }>{next.title}</Link>
+                {next.title}
               </div>
-            </div>
+            </Link>
           )}
         </div>
       )}
