@@ -1,7 +1,7 @@
 .visualIndex {
-  padding-bottom: 0.85rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid var(--ds-color-border);
+  padding-top: 0.85rem;
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--ds-color-border);
 }
 
 .visualIndexHeader {
@@ -99,8 +99,4 @@
   line-height: 1.35;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-:global([data-content-index-target='true']) {
-  scroll-margin-top: 6rem;
 }

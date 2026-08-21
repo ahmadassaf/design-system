@@ -24,7 +24,6 @@ import Footnote from './Footnote';
 import Highlight from './Highlight';
 import Image from './Image';
 import ImageModal from './ImageModal';
-import { InteractiveMDXComponents } from './interactive';
 import Mermaid from './Mermaid';
 import Preview from './Preview';
 import Quote from './Quote';
@@ -65,7 +64,6 @@ export const MDXComponents = {
   Table,
   Tooltip,
   Video,
-  ...InteractiveMDXComponents,
   'a': CustomLink,
   'table': Table,
   'tbody': TableBody,
@@ -107,15 +105,3 @@ export { AreaChart,
   TableRow,
   Tooltip, Video,
   videoAnimationStyles };
-
-export {
-  GaudiBarLayout,
-  InteractiveMDXComponents,
-  LinkedDataQualityFramework,
-  PipelineDiagram,
-  RdfBlankNodeExplorer,
-  RdfCollectionExplorer,
-  RdfContainerExplorer,
-  RdfTripleExplorer,
-  UnifiedProcessorExplorer
-} from './interactive';

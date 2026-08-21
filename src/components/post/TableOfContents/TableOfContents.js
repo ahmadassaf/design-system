@@ -274,6 +274,8 @@ const TableOfContents = ({ className, toc = [] }) => {
 
   return (
     <nav aria-label='Table of contents' className={ cn('p-4 sticky top-20 text-gray-800 col-span-3 max-xl:hidden max-h-[calc(100vh-5rem)] overflow-y-auto', className) }>
+      {renderToc(toc, false, expandAll)}
+
       {visuals.length > 0 && (
         <details className={ styles.visualIndex }>
           <summary className={ styles.visualIndexHeader }>
@@ -309,8 +311,6 @@ const TableOfContents = ({ className, toc = [] }) => {
           </ul>
         </details>
       )}
-
-      {renderToc(toc, false, expandAll)}
     </nav>
   );
 };

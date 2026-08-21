@@ -1,5 +1,7 @@
 /*
- * CSS mirror of `src/tokens/tokens.cjs` (`dsVariables`) — keep the two in sync.
+ * Exported foundation tokens mirror `src/tokens/tokens.json` (`dsVariables`).
+ * Presentation-only component tokens remain CSS-native in this file because
+ * they are not consumed by the JavaScript or Tailwind token APIs.
  */
 @layer base {
   :root {
@@ -575,7 +577,7 @@
     border: 0;
     color: var(--ds-color-launcher-input-text);
     flex: 1 1 auto;
-    font-size: 15px;
+    font-size: 1rem;
     line-height: 20px;
     min-height: 43px;
     min-width: 0;
@@ -671,10 +673,6 @@
       max-height: min(34rem, calc(100dvh - 4.25rem));
       max-width: calc(100vw - 1.5rem);
       width: calc(100vw - 1.5rem);
-    }
-
-    .gaudi-command-launcher :where([data-cmdk-input]) {
-      font-size: 16px;
     }
 
     .gaudi-command-launcher :where([data-cmdk-list]) {
