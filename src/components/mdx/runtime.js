@@ -18,8 +18,9 @@ import React from 'react';
 import * as _jsx_runtime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
 
-import { MDXComponents } from './index';
 import styles from './MdxContent/MdxContent.module.css';
+
+const EMPTY_GLOBALS = Object.freeze({});
 
 /**
  * Dynamically creates an MDX component from compiled code
@@ -44,23 +45,22 @@ const getMDXComponent = (code, globals = {}) => {
  */
 export const useMDXComponent = (
   code,
-  globals = {}
+  globals = EMPTY_GLOBALS
 ) => React.useMemo(() => getMDXComponent(code, globals), [ code, globals ]);
 
 /**
  * MDX layout renderer component
  *
- * @description Defaults to the full MDXComponents map. The default lives HERE
- * (a client module) on purpose: server pages must not pass the component map
- * as a prop — component objects cannot cross the server→client boundary.
+ * @description The content-owned client boundary supplies its component map so
+ * consumers only bundle the primitives their content actually renders.
  *
  * @param {Object} props - Component props
  * @param {string} props.code - The compiled MDX code to render
- * @param {Object} [props.components=MDXComponents] - Component overrides (client-side callers only)
+ * @param {Object} [props.components={}] - MDX components assembled by the client-side caller
  * @returns {JSX.Element} The rendered MDX content
  * @param {...Object} props.rest - Additional props passed to the MDX component
  */
-export const MDXLayoutRenderer = ({ code, components = MDXComponents, ...rest }) => {
+export const MDXLayoutRenderer = ({ code, components = {}, ...rest }) => {
   const Mdx = useMDXComponent(code);
 
   return (

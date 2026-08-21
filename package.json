@@ -56,6 +56,10 @@
       "import": "./src/components/mdx/index.js",
       "default": "./src/components/mdx/index.js"
     },
+    "./mdx/*": {
+      "import": "./src/components/mdx/*/index.js",
+      "default": "./src/components/mdx/*/index.js"
+    },
     "./mdx/runtime": {
       "import": "./src/components/mdx/runtime.js",
       "default": "./src/components/mdx/runtime.js"
