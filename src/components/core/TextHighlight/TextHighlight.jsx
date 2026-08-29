@@ -1,7 +1,3 @@
-'use client';
-
-import { motion, useReducedMotion } from 'framer-motion';
-
 import { createVariants } from '../../../utilities/variants';
 
 export const textHighlightVariants = createVariants({
@@ -70,23 +66,11 @@ export const textHighlightVariants = createVariants({
 });
 
 export const TextHighlight = ({ animate = true, children, className, radius, tone, variant }) => {
-  const shouldReduceMotion = useReducedMotion();
   const classes = textHighlightVariants({ className, radius, tone, variant });
 
-  if (!animate || shouldReduceMotion) return <span className={ classes }>{children}</span>;
-
-  return (
-    <motion.span
-      initial={{ 'backgroundSize': '0% 100%' }}
-      animate={{ 'backgroundSize': '100% 100%' }}
-      transition={{ 'duration': 0.56, 'ease': [ 0.16, 1, 0.3, 1 ] }}
-      style={{
-        'backgroundPosition': 'left center',
-        'backgroundRepeat': 'no-repeat'
-      }}
-      className={ classes }
-    >
-      {children}
-    </motion.span>
-  );
+  /*
+   * The entrance sweep is pure CSS (ds-text-highlight-sweep in styles.css),
+   * which honors prefers-reduced-motion and keeps this a server component.
+   */
+  return <span className={ animate ? `${classes} ds-text-highlight-animate` : classes }>{children}</span>;
 };
