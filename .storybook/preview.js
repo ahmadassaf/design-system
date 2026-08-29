@@ -136,28 +136,42 @@ const preview = {
       appDirectory: true
     },
     options: {
-      storySort: {
-        includeNames: true,
-        method: 'alphabetical',
-        order: [
-          'Overview', [
-            'Getting Started',
-            'Accessibility',
-            'Colors & Tokens',
-            'Icons',
-            'Indicators',
-            'States & Recovery',
-            'Typography',
-            '*'
-          ],
-          'Core', [ 'Overview', '*' ],
-          'Blocks', [ 'Overview', '*' ],
-          'Navigation', [ 'Overview', '*' ],
-          'MDX', [ 'Overview', '*' ],
-          'Post', [ 'Overview', '*' ],
-          'Layout', [ 'Overview', '*' ],
-          '*'
-        ]
+      /*
+       * Custom sort instead of the object form so every component's Docs entry
+       * comes before its stories. Storybook serializes this function, so it
+       * must stay self-contained (no references to outer variables).
+       */
+      storySort: (a, b) => {
+        const sectionOrder = [ 'Overview', 'Core', 'Blocks', 'Navigation', 'MDX', 'Post', 'Layout' ];
+        const overviewPageOrder = [ 'Getting Started', 'Accessibility', 'Colors & Tokens', 'Icons', 'Indicators', 'States & Recovery', 'Typography' ];
+        const rank = (list, value) => {
+          const index = list.indexOf(value);
+          return index === -1 ? list.length : index;
+        };
+        const [ sectionA, pageA ] = a.title.split('/');
+        const [ sectionB, pageB ] = b.title.split('/');
+
+        if (sectionA !== sectionB) {
+          const sectionDelta = rank(sectionOrder, sectionA) - rank(sectionOrder, sectionB);
+          return sectionDelta || sectionA.localeCompare(sectionB, undefined, { numeric: true });
+        }
+
+        if (a.title !== b.title) {
+          const pageRank = (page) => (sectionA === 'Overview' ? rank(overviewPageOrder, page) : page === 'Overview' ? -1 : 0);
+          const pageDelta = pageRank(pageA) - pageRank(pageB);
+          return pageDelta || a.title.localeCompare(b.title, undefined, { numeric: true });
+        }
+
+        // The top-level Overview section is one title whose pages differ by story name
+        if (a.title === 'Overview') {
+          const overviewDelta = rank(overviewPageOrder, a.name) - rank(overviewPageOrder, b.name);
+          if (overviewDelta) return overviewDelta;
+        }
+
+        // Same component: Docs first, then stories alphabetically
+        if (a.type !== b.type && (a.type === 'docs' || b.type === 'docs')) return a.type === 'docs' ? -1 : 1;
+
+        return a.name.localeCompare(b.name, undefined, { numeric: true });
       }
     }
   }
