@@ -71,7 +71,6 @@ const getFileIcon = (name, isFolder = false, isOpen = false) => {
  * @param {string} props.name - Name of the file/folder
  * @param {boolean} props.isFolder - Whether this is a folder
  * @param {number} props.level - Indentation level
- * @param {boolean} props.isLast - Whether this is the last item in its level
  * @param {Array} props.childrenProp - Child items (for folders)
  * @param {boolean} props.isOpen - Whether the folder is open
  * @returns {JSX.Element}
@@ -102,7 +101,6 @@ const FileTreeItem = ({ name, isFolder = false, level = 0, childrenProp = [], is
               name={ child.name }
               isFolder={ child.isFolder }
               level={ level + 1 }
-              isLast={ index === childrenProp.length - 1 }
               childrenProp={ child.childrenProp || [] }
               isOpen={ child.isOpen !== false }
             />
@@ -129,7 +127,6 @@ const FileTree = ({ data = [], className = '' }) => (
           name={ item.name }
           isFolder={ item.isFolder }
           level={ 0 }
-          isLast={ index === data.length - 1 }
           childrenProp={ item.childrenProp || [] }
           isOpen={ item.isOpen !== false }
         />

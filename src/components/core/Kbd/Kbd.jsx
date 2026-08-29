@@ -1,3 +1,5 @@
+import { cn } from '../../../utilities/cn';
+
 const keyMap = {
   'alt': '⌥',
   'backspace': '⌫',
@@ -62,27 +64,16 @@ const kbdVariantConfig = {
   }
 };
 
-const flattenClasses = (value) => {
-  if (!value) return [];
-  if (Array.isArray(value)) return value.flatMap(flattenClasses);
-  if (typeof value === 'object')
-    return Object.entries(value)
-      .filter(([ , enabled ]) => Boolean(enabled))
-      .map(([ className ]) => className);
-
-  return [ String(value) ];
-};
-
 export const kbdVariants = ({ className, size, variant } = {}) => {
   const resolvedSize = size || kbdVariantConfig.defaults.size;
   const resolvedVariant = variant || kbdVariantConfig.defaults.variant;
 
-  return flattenClasses([
+  return cn(
     kbdVariantConfig.base,
     kbdVariantConfig.size[resolvedSize],
     kbdVariantConfig.variant[resolvedVariant],
     className
-  ]).join(' ');
+  );
 };
 
 kbdVariants.variants = {

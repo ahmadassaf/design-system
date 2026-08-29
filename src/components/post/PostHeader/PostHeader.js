@@ -13,8 +13,10 @@ import Icon from '../../core/Icon';
 import Link from '../../core/Link';
 import Pill from '../../core/Pill';
 import PostSeriesBox from '../PostSeriesBox';
+import DraftBadge from '../DraftBadge';
 import Typography from '../../../foundations/Typography';
 import { cn } from '../../../utilities/cn';
+import { categoryHref, tagHref } from '../../../utilities/taxonomy';
 
 /**
  * Renders the complete blog post header with metadata and navigation
@@ -64,7 +66,7 @@ const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata
     <div className={ cn('mb-2 flex flex-wrap items-center gap-3', classNames.meta) }>
       {frontMatter.category && (
         <Link
-          href={ `/blog/categories/${frontMatter.category.replaceAll(' ', '-').toLowerCase()}` }
+          href={ categoryHref(frontMatter.category) }
           className={ cn('flex w-fit cursor-pointer items-center gap-2 text-xs font-normal text-gray-600 hover:text-gray-800 sm:text-sm dark:text-gray-400 dark:hover:text-gray-200', classNames.category) }
         >
           <div className='size-2 flex-shrink-0 rounded-full bg-green-500'></div>
@@ -77,12 +79,7 @@ const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata
           <PostDate date={ frontMatter.updated || frontMatter.date } locale={ siteMetadata.locale } />
         </span>
       ) : null}
-      {frontMatter.draft && (
-        <div className='flex items-center gap-1.5'>
-          <div className='w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0'></div>
-          <span className='text-xs font-medium text-yellow-700 dark:text-yellow-300'>Draft</span>
-        </div>
-      )}
+      {frontMatter.draft && <DraftBadge />}
     </div>
     <div className={ cn('text-left', classNames.body) }>
       <Typography as={ titleElements[titleLevel] || titleElements[1] } variant='post-title' className={ cn('pb-3', classNames.title) }>
@@ -105,7 +102,7 @@ const PostHeader = ({ className, classNames = {}, frontMatter = {}, siteMetadata
       <div className={ cn('my-5 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between', classNames.actions) }>
         <div className={ cn('flex flex-wrap gap-2', classNames.tags) }>
           {frontMatter.tags.map((tag) => (
-            <Pill key={ tag } href={ `/blog/tags/${tag.replaceAll(' ', '-').toLowerCase()}` } tone='gray' variant='subtle' size='sm' radius='md' className={ cn('my-0 mr-0 bg-gray-100 text-xs normal-case tracking-normal capitalize dark:bg-gray-800 sm:text-sm', classNames.tag) }>
+            <Pill key={ tag } href={ tagHref(tag) } tone='gray' variant='subtle' size='sm' radius='md' className={ cn('my-0 mr-0 bg-gray-100 text-xs normal-case tracking-normal capitalize dark:bg-gray-800 sm:text-sm', classNames.tag) }>
               {tag}
             </Pill>
           ))}

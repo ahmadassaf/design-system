@@ -18,6 +18,26 @@ import Icon from '../../core/Icon';
 import { cn } from '../../../utilities/cn';
 
 /**
+ * Detects clicks outside a boundary element and invokes the callback
+ *
+ * @param {Function} callback - Function to call when an outside click is detected
+ * @param {React.RefObject} boundaryRef - Ref marking the component boundary
+ */
+const useOutsideClick = (callback, boundaryRef) => {
+  React.useEffect(() => {
+    const handleClick = (event) => {
+      if (boundaryRef.current && !boundaryRef.current.contains(event.target)) callback();
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [ boundaryRef, callback ]);
+};
+
+/**
  * Dropdown menu component with outside click detection
  *
  * @description Renders a dropdown button with toggle functionality and automatic closing when clicking outside.
@@ -38,13 +58,7 @@ import { cn } from '../../../utilities/cn';
  * />
  */
 const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsideClickRef, setMenuDropDownOpen }) => {
-  const [ mounted, setMounted ] = React.useState(false);
   const triggerRef = React.useRef(null);
-
-  // Only show dynamic classes after mount to prevent hydration mismatch
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   /**
    * Handles toggling the dropdown open/closed state
@@ -66,26 +80,6 @@ const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsi
     setMenuDropDownOpen(false);
   };
 
-  /**
-   * Custom hook for detecting clicks outside a component
-   *
-   * @param {Function} callback - Function to call when outside click is detected
-   * @returns {React.RefObject} Ref to attach to the component
-   */
-  const useOutsideClick = (callback, boundaryRef) => {
-    React.useEffect(() => {
-      const handleClick = (event) => {
-        if (boundaryRef.current && !boundaryRef.current.contains(event.target)) callback();
-      };
-
-      document.addEventListener('click', handleClick);
-
-      return () => {
-        document.removeEventListener('click', handleClick);
-      };
-    }, [ boundaryRef, callback ]);
-  };
-
   useOutsideClick(handleClickOutside, outsideClickRef || triggerRef);
 
   return (
@@ -95,10 +89,10 @@ const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsi
       tone='neutral'
       size='sm'
       className={ cn(
-        'h-11 min-h-11 cursor-pointer gap-1 rounded-md px-1.5 py-2 text-sm font-medium leading-5 text-gray-950 hover:bg-transparent hover:text-blue-600 dark:text-gray-100 dark:hover:bg-transparent dark:hover:text-blue-300', mounted && menuDropDownOpen && 'text-blue-600 dark:text-blue-300', className
+        'h-11 min-h-11 cursor-pointer gap-1 rounded-md px-1.5 py-2 text-sm font-medium leading-5 text-gray-950 hover:bg-transparent hover:text-blue-600 dark:text-gray-100 dark:hover:bg-transparent dark:hover:text-blue-300', menuDropDownOpen && 'text-blue-600 dark:text-blue-300', className
       ) }
       aria-controls={ controlsId }
-      aria-expanded={ mounted ? menuDropDownOpen : false }
+      aria-expanded={ menuDropDownOpen }
       aria-haspopup='true'
       id={ id }
       onClick={ handlemenuDropDownOpen }
@@ -111,7 +105,7 @@ const MenuDropDown = ({ className, controlsId, id, name, menuDropDownOpen, outsi
         size='xs'
         className={ cn(
           'flex-none text-gray-400 transition-transform duration-200 motion-reduce:transition-none',
-          mounted && menuDropDownOpen && 'rotate-180 text-blue-500 dark:text-blue-300'
+          menuDropDownOpen && 'rotate-180 text-blue-500 dark:text-blue-300'
         ) }
       />
     </Button>

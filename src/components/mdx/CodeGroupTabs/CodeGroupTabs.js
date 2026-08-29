@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import styles from './CodeGroupTabs.module.css';
 
@@ -29,15 +29,7 @@ import styles from './CodeGroupTabs.module.css';
  * <CodeGroupTabs />
  */
 const CodeGroupTabs = () => {
-  const [ isClient, setIsClient ] = useState(false);
-
-  // Ensure this only runs on the client after hydration
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
     const initializeCodeGroups = () => {
       const codeGroups = document.querySelectorAll('.rehype-code-group');
 
@@ -175,41 +167,20 @@ const CodeGroupTabs = () => {
       });
     };
 
-    // Initialize on DOM ready and with multiple fallbacks
-    const initialize = () => {
-      initializeCodeGroups();
-    };
+    /*
+     * Initialization is idempotent (each group is marked data-tabs-initialized),
+     * so one immediate pass plus a MutationObserver for content that streams in
+     * later covers every load path.
+     */
+    initializeCodeGroups();
 
-    // Initialize immediately
-    initialize();
-
-    // Initialize after DOM content loads
-    if (document.readyState === 'loading')
-      document.addEventListener('DOMContentLoaded', initialize);
-
-    // Initialize after a small delay to catch any dynamically loaded content
-    const timeoutId = setTimeout(initialize, 100);
-
-    // Initialize after page fully loads
-    const longerTimeoutId = setTimeout(initialize, 1000);
-
-    // Track observer-scheduled timers so they can be cleared on unmount
-    const mutationTimeoutIds = new Set();
-
-    // Watch for new content being added (for dynamic loading)
     const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-          const hasCodeGroups = Array.from(mutation.addedNodes).some((node) => node.nodeType === 1 && (
-            node.classList?.contains('rehype-code-group') ||
-              node.querySelector?.('.rehype-code-group')
-          ));
+      const hasCodeGroups = mutations.some((mutation) => mutation.type === 'childList' && Array.from(mutation.addedNodes).some((node) => node.nodeType === 1 && (
+        node.classList?.contains('rehype-code-group') ||
+          node.querySelector?.('.rehype-code-group')
+      )));
 
-          if (hasCodeGroups)
-            mutationTimeoutIds.add(setTimeout(initialize, 10));
-
-        }
-      });
+      if (hasCodeGroups) initializeCodeGroups();
     });
 
     observer.observe(document.body, {
@@ -219,11 +190,6 @@ const CodeGroupTabs = () => {
 
     // Cleanup function
     return () => {
-      clearTimeout(timeoutId);
-      clearTimeout(longerTimeoutId);
-      mutationTimeoutIds.forEach((mutationTimeoutId) => clearTimeout(mutationTimeoutId));
-      mutationTimeoutIds.clear();
-      document.removeEventListener('DOMContentLoaded', initialize);
       observer.disconnect();
 
       // Clean up all initialized code groups
@@ -233,7 +199,7 @@ const CodeGroupTabs = () => {
         if (group._tabsCleanup) group._tabsCleanup();
       });
     };
-  }, [ isClient ]); // Run when client state changes
+  }, []);
 
   return null; // This component only attaches behavior and scoped classes to generated code groups
 };

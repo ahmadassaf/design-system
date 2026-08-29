@@ -19,11 +19,8 @@ import DialogPortal from '../../core/DialogPortal';
 import Icon from '../../core/Icon';
 import Link from '../../core/Link';
 import MenuSearch from '../MenuSearch';
+import { formatCategoryTitle } from '../../../utilities/taxonomy';
 
-const formatCategoryTitle = (title) => title
-  .split('-')
-  .map((word) => word.toLowerCase() === 'ai' ? 'AI' : `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
-  .join(' ');
 
 /**
  * Renders a full-screen mobile navigation menu

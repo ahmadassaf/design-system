@@ -72,18 +72,18 @@ export const filterItems = (lists = [], search = '') => {
   }, []);
 };
 
-export const getItemIndex = (lists = [], id, startIndex = 0) => {
+export const getItemIndexMap = (lists = [], startIndex = 0) => {
+  const indexById = new Map();
   let index = startIndex;
 
-  for (const list of lists) {
+  for (const list of lists)
     for (const item of list.items || []) {
-      if (item.id === id) return index;
+      if (!indexById.has(item.id)) indexById.set(item.id, index);
 
       index += 1;
     }
-  }
 
-  return startIndex;
+  return indexById;
 };
 
 const isHidden = (element) => {

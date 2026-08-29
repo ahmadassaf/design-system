@@ -33,50 +33,6 @@ const frontMatter = {
   title: 'Building a Complete Blog Design System'
 };
 
-const toc = [
-  {
-    'children': [
-      { 'children': [], 'depth': 2, 'id': 'design-tokens', 'url': '#design-tokens', 'value': 'Design tokens' },
-      { 'children': [], 'depth': 2, 'id': 'semantic-scales', 'url': '#semantic-scales', 'value': 'Semantic scales' }
-    ],
-    'depth': 1,
-    'id': 'foundations',
-    'url': '#foundations',
-    'value': 'Foundations'
-  },
-  {
-    'children': [
-      { 'children': [], 'depth': 2, 'id': 'component-contracts', 'url': '#component-contracts', 'value': 'Component contracts' },
-      { 'children': [], 'depth': 2, 'id': 'composition-rules', 'url': '#composition-rules', 'value': 'Composition rules' }
-    ],
-    'depth': 1,
-    'id': 'components',
-    'url': '#components',
-    'value': 'Components'
-  },
-  {
-    'children': [
-      { 'children': [], 'depth': 2, 'id': 'keyboard-flow', 'url': '#keyboard-flow', 'value': 'Keyboard flow' },
-      { 'children': [], 'depth': 2, 'id': 'semantic-html', 'url': '#semantic-html', 'value': 'Semantic HTML' }
-    ],
-    'depth': 1,
-    'id': 'accessibility',
-    'url': '#accessibility',
-    'value': 'Accessibility'
-  },
-  {
-    'children': [
-      { 'children': [], 'depth': 2, 'id': 'mdx-registry', 'url': '#mdx-registry', 'value': 'MDX registry' },
-      { 'children': [], 'depth': 2, 'id': 'storybook-coverage', 'url': '#storybook-coverage', 'value': 'Storybook coverage' },
-      { 'children': [], 'depth': 2, 'id': 'release-checks', 'url': '#release-checks', 'value': 'Release checks' },
-      { 'children': [], 'depth': 2, 'id': 'documentation', 'url': '#documentation', 'value': 'Documentation' }
-    ],
-    'depth': 1,
-    'id': 'implementation',
-    'url': '#implementation',
-    'value': 'Implementation'
-  }
-];
 
 export default {
   id: 'post-overview',
@@ -94,7 +50,7 @@ export const Default = {
     >
       <Section title='Article Header' description='Start with the article identity, publication metadata, reading time, and table-of-contents context.'>
         <div className='max-w-5xl'>
-          <PostHeader frontMatter={ frontMatter } siteMetadata={ siteMetadata } titleLevel={ 3 } toc={ toc } />
+          <PostHeader frontMatter={ frontMatter } siteMetadata={ siteMetadata } titleLevel={ 3 } />
         </div>
       </Section>
 

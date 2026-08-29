@@ -1,28 +1,8 @@
 import { forwardRef } from 'react';
 import NextLink from 'next/link';
 
+import { isExternalHref, normalizeHref } from '../../../utilities/href';
 import { createVariants } from '../../../utilities/variants';
-
-const safeExternalProtocols = new Set([ 'http:', 'https:', 'mailto:', 'tel:' ]);
-
-const normalizeHref = (href) => {
-  if (typeof href !== 'string') return href;
-
-  const normalizedHref = href.trim();
-
-  if (!normalizedHref) return null;
-  if (normalizedHref.startsWith('/') || normalizedHref.startsWith('#')) return normalizedHref;
-
-  try {
-    const parsed = normalizedHref.startsWith('//') ? new URL(normalizedHref, 'https:') : new URL(normalizedHref);
-
-    return safeExternalProtocols.has(parsed.protocol) ? normalizedHref : null;
-  } catch {
-    return null;
-  }
-};
-
-const isExternalHref = (href) => typeof href === 'string' && (/^https?:\/\//i.test(href) || href.startsWith('//'));
 
 export const linkVariants = createVariants({
   'base': 'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950',

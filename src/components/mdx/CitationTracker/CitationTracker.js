@@ -13,40 +13,7 @@
 
 import { useEffect } from 'react';
 
-const readCitationKeys = (value) => {
-  if (!value) return [];
-
-  try {
-    const parsed = JSON.parse(value);
-
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
-
-const findBackLink = (citationKey) => {
-  const backLinks = document.querySelectorAll('a.citation-back-link[data-citation-key]');
-
-  return Array.from(backLinks).find((backLink) => backLink.dataset.citationKey === citationKey) || null;
-};
-
-const getStoredCitation = (citationKey) => {
-  try {
-    return window.localStorage.getItem(`citation-last-${citationKey}`);
-  } catch {
-    return null;
-  }
-};
-
-const setStoredCitation = (citationKey, citationId) => {
-  try {
-    window.localStorage.setItem(`citation-last-${citationKey}`, citationId);
-  } catch {
-
-    // Storage can be unavailable in private or restricted browser contexts.
-  }
-};
+import { findBackLink, getStoredCitation, isPopoverClickHandlerActive, readCitationKeys, setStoredCitation } from '../citations';
 
 /**
  * Component that tracks citation clicks and updates back-link targets
@@ -55,9 +22,11 @@ const CitationTracker = () => {
   useEffect(() => {
     const handleCitationClick = (event) => {
 
-      // Handle both direct citation clicks and navigation to bibliography
+      // CitationPopover's richer handler owns clicks while it is mounted
+      if (isPopoverClickHandlerActive()) return;
+
+      // Direct citation clicks only; navigation to the bibliography needs no tracking
       const citationLink = event.target.closest('a[data-citation-popover="true"]');
-      const bibliographyLink = event.target.closest('a[href^="#citation-"]');
 
       if (citationLink) {
 
@@ -83,16 +52,11 @@ const CitationTracker = () => {
               setStoredCitation(key, citationId);
           }
         });
-      } else if (bibliographyLink && !event.target.closest('.citation-back-link')) {
-
-        /*
-         * Navigation from citation to bibliography - don't update tracking
-         * This allows users to click citation numbers in popovers without affecting back-links
-         */
       }
     };
 
     const handlePopoverClick = (event) => {
+      if (isPopoverClickHandlerActive()) return;
       const citationItem = event.target.closest('[data-citation-popover-item="multiple"]');
 
       if (!citationItem) return;

@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import Link from 'next/link';
 
 import { cn } from '../../../utilities/cn';
+import { isExternalHref } from '../../../utilities/href';
 import { createVariants } from '../../../utilities/variants';
 import { buttonToneAliases, buttonToneClasses, buttonTones } from './Button.tones';
 
@@ -45,7 +46,8 @@ export const buttonVariants = createVariants({
 export const buttonSizes = Object.keys(buttonVariants.variants.size);
 export { buttonToneAliases, buttonTones };
 
-const isExternalHref = (href) => href?.startsWith('http') || href?.startsWith('mailto:');
+// mailto also renders as a plain anchor: NextLink client navigation makes no sense for it
+const rendersAsExternalAnchor = (href) => isExternalHref(href) || Boolean(href?.startsWith('mailto:'));
 
 const Button = forwardRef(function Button({
   children,
@@ -68,7 +70,7 @@ const Button = forwardRef(function Button({
     'tabIndex': -1
   } : {};
 
-  if (href && !isExternalHref(href)) return (
+  if (href && !rendersAsExternalAnchor(href)) return (
     <Link ref={ ref } href={ href } className={ classes } { ...rest } { ...disabledLinkProps }>
       {children}
     </Link>

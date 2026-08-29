@@ -5,18 +5,9 @@ import { useTheme } from 'next-themes';
 
 import Icon from '../Icon';
 import Kbd from '../Kbd';
+import { omit } from '../../../utilities/content';
 import { useSiteConfig } from '../../../utilities/SiteConfig';
-import CommandPalette, { filterItems, getItemIndex } from './CommandPalette';
-
-const omit = (item, keys) => {
-  const result = { ...item };
-
-  keys.forEach((key) => {
-    delete result[key];
-  });
-
-  return result;
-};
+import CommandPalette, { filterItems, getItemIndexMap } from './CommandPalette';
 
 const normalizeSlug = (value = '') => String(value).replace(/^\//, '');
 const allowedExternalProtocols = new Set([ 'http:', 'https:', 'mailto:' ]);
@@ -175,16 +166,21 @@ const collectionPageConfig = {
   'thoughts': { 'heading': 'Thoughts', 'inlineMetadata': false, 'label': 'Thoughts', 'type': 'thought' }
 };
 
-const CollectionPage = ({ id, items, search, setPage }) => {
+const CollectionPage = ({ id, items, page, search, setPage }) => {
   const config = collectionPageConfig[id];
+
+  // Only the active page pays for filtering; CommandPalette.Page renders null for the rest anyway
+  if (page !== id) return <CommandPalette.Page id={ id } searchPrefix={ [ 'General', config.label ] } />;
+
   const filtered = filterItems([{ 'heading': config.heading, id, items, 'options': { 'filterOnListHeading': true } }], search);
+  const indexById = getItemIndexMap(filtered);
 
   return (
     <CommandPalette.Page id={ id } searchPrefix={ [ 'General', config.label ] } onEscape={ () => setPage('root') }>
       {filtered.length ? filtered.map((list) => (
         <CommandPalette.List key={ list.id } heading={ list.heading }>
           {list.items.map(({ category, children, count, 'id': itemId, subtitle, title, type, ...rest }) => (
-            <CommandPalette.ListItem key={ itemId } index={ getItemIndex(filtered, itemId) } { ...commandItemProps(rest) }>
+            <CommandPalette.ListItem key={ itemId } index={ indexById.get(itemId) } { ...commandItemProps(rest) }>
               <CmdItem inlineMetadata={ config.inlineMetadata } title={ title } subtitle={ subtitle } category={ category } count={ count } type={ type || config.type }>
                 {children}
               </CmdItem>
@@ -219,7 +215,9 @@ const buildSocialItems = (metadata = {}, social) => {
   return items;
 };
 
-const SocialPage = ({ items = [], search, setPage }) => {
+const SocialPage = ({ items = [], page, search, setPage }) => {
+  if (page !== 'contact') return <CommandPalette.Page id='contact' searchPrefix={ [ 'General', 'Contact' ] } />;
+
   const socialItems = filterItems([
     {
       'heading': 'Contact',
@@ -227,13 +225,14 @@ const SocialPage = ({ items = [], search, setPage }) => {
       items
     }
   ], search);
+  const indexById = getItemIndexMap(socialItems);
 
   return (
     <CommandPalette.Page id='contact' searchPrefix={ [ 'General', 'Contact' ] } onEscape={ () => setPage('root') }>
       {socialItems.length ? socialItems.map((list) => (
         <CommandPalette.List key={ list.id } heading={ list.heading }>
           {list.items.map(({ children, icon, id, title, ...rest }) => (
-            <CommandPalette.ListItem key={ id } index={ getItemIndex(socialItems, id) } { ...commandItemProps(rest) }>
+            <CommandPalette.ListItem key={ id } index={ indexById.get(id) } { ...commandItemProps(rest) }>
               <CmdItem title={ title } icon={ icon }>{children}</CmdItem>
             </CommandPalette.ListItem>
           ))}
@@ -319,7 +318,9 @@ const CommandLauncher = ({
     { 'heading': 'Thoughts', 'hidden': true, 'id': 'thoughts_fullTextSearch', 'items': collections.thoughts, 'options': { 'filterOnListHeading': true } },
     { 'heading': 'Publications', 'hidden': true, 'id': 'publications_fullTextSearch', 'items': collections.publications, 'options': { 'filterOnListHeading': true } },
     { 'heading': 'Tags', 'hidden': true, 'id': 'tags_fullTextSearch', 'items': collections.tags, 'options': { 'filterOnListHeading': true } }
-  ], search), [ collections, resolvedTheme, search, setTheme, socialItems, theme ]);
+  ], page === 'root' ? search : ''), [ collections, page, resolvedTheme, search, setTheme, socialItems, theme ]);
+
+  const rootIndexById = useMemo(() => getItemIndexMap(rootItems), [ rootItems ]);
 
   useEffect(() => {
     const down = (event) => {
@@ -356,7 +357,7 @@ const CommandLauncher = ({
               <div className={ list.hidden && !search.length ? 'hidden' : 'visible' }>
                 <CommandPalette.List key={ `cmdPalette-${list.id}` } heading={ list.heading }>
                   {list.items.map(({ category, children, cmdIcon, count, id, subtitle, title, type, ...rest }) => (
-                    <CommandPalette.ListItem key={ `cmdPaletteItem-${list.id}-${id}` } index={ getItemIndex(rootItems, id) } { ...commandItemProps(rest) }>
+                    <CommandPalette.ListItem key={ `cmdPaletteItem-${list.id}-${id}` } index={ rootIndexById.get(id) } { ...commandItemProps(rest) }>
                       <CmdItem title={ title } subtitle={ subtitle } category={ category } count={ count } type={ type || 'navigation' } icon={ cmdIcon }>
                         {children}
                       </CmdItem>
@@ -367,12 +368,12 @@ const CommandLauncher = ({
             </div>
           )) : <NoResults search={ search } />}
         </CommandPalette.Page>
-        <CollectionPage id='projects' setPage={ setPage } search={ search } items={ collections.projects } />
-        <CollectionPage id='posts' setPage={ setPage } search={ search } items={ collections.posts } />
-        <CollectionPage id='thoughts' setPage={ setPage } search={ search } items={ collections.thoughts } />
-        <CollectionPage id='publications' setPage={ setPage } search={ search } items={ collections.publications } />
-        <CollectionPage id='tags' setPage={ setPage } search={ search } items={ collections.tags } />
-        <SocialPage setPage={ setPage } search={ search } items={ socialItems } />
+        <CollectionPage id='projects' page={ page } setPage={ setPage } search={ search } items={ collections.projects } />
+        <CollectionPage id='posts' page={ page } setPage={ setPage } search={ search } items={ collections.posts } />
+        <CollectionPage id='thoughts' page={ page } setPage={ setPage } search={ search } items={ collections.thoughts } />
+        <CollectionPage id='publications' page={ page } setPage={ setPage } search={ search } items={ collections.publications } />
+        <CollectionPage id='tags' page={ page } setPage={ setPage } search={ search } items={ collections.tags } />
+        <SocialPage page={ page } setPage={ setPage } search={ search } items={ socialItems } />
       </CommandPalette>
     </div>
   );

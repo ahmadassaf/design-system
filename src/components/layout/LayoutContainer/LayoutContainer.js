@@ -77,7 +77,7 @@ export default async function LayoutContainer({ children, footerProps, jsonLd, m
   const jsonLdMarkup = serializeJsonLd(await resolveJsonLd(jsonLd));
 
   return (
-    <div className='min-w-[500px] bg-background text-foreground antialiased'>
+    <div className='bg-background text-foreground antialiased'>
 
       <a
         href='#main-content'

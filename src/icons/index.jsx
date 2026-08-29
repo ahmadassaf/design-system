@@ -75,39 +75,9 @@ import Users from 'lucide-react/dist/esm/icons/users.js';
 import Wifi from 'lucide-react/dist/esm/icons/wifi.js';
 import X from 'lucide-react/dist/esm/icons/x.js';
 
-const safeIconLinkProtocols = new Set([ 'http:', 'https:', 'mailto:', 'tel:' ]);
+import { cn } from '../utilities/cn';
+import { isExternalHref, normalizeHref } from '../utilities/href';
 
-const flattenIconClasses = (value) => {
-  if (!value) return [];
-  if (Array.isArray(value)) return value.flatMap(flattenIconClasses);
-  if (typeof value === 'object')
-    return Object.entries(value)
-      .filter(([ , enabled ]) => Boolean(enabled))
-      .map(([ className ]) => className);
-
-  return [ String(value) ];
-};
-
-const iconClassName = (...values) => flattenIconClasses(values).join(' ');
-
-const normalizeIconHref = (href) => {
-  if (typeof href !== 'string') return null;
-
-  const normalizedHref = href.trim();
-
-  if (!normalizedHref) return null;
-  if (normalizedHref.startsWith('/') || normalizedHref.startsWith('#')) return normalizedHref;
-
-  try {
-    const parsed = normalizedHref.startsWith('//') ? new URL(normalizedHref, 'https:') : new URL(normalizedHref);
-
-    return safeIconLinkProtocols.has(parsed.protocol) ? normalizedHref : null;
-  } catch {
-    return null;
-  }
-};
-
-const isExternalIconHref = (href) => typeof href === 'string' && (/^https?:\/\//i.test(href) || href.startsWith('//'));
 
 export const iconRegistry = {
   'AppWindow': AppWindow,
@@ -293,14 +263,14 @@ const Icon = ({
   if (!IconComponent) return null;
 
   const accessibleLabel = label || title || iconLabels[iconName];
-  const safeHref = normalizeIconHref(href);
+  const safeHref = typeof href === 'string' ? normalizeHref(href) : null;
   const isDecorative = decorative ?? (!safeHref && !accessibleLabel);
   const svg = (
     <IconComponent
       aria-hidden={ isDecorative ? 'true' : ariaHidden }
       aria-label={ !safeHref && !isDecorative ? accessibleLabel : undefined }
       role={ !safeHref && !isDecorative ? 'img' : undefined }
-      className={ iconClassName('shrink-0', iconSizes[size] || iconSizes.md, color ? iconColors[color] : undefined, className) }
+      className={ cn('shrink-0', iconSizes[size] || iconSizes.md, color ? iconColors[color] : undefined, className) }
       { ...props }
     />
   );
@@ -309,9 +279,9 @@ const Icon = ({
 
   return (
     <a
-      className={ iconClassName('inline-flex items-center text-sm text-gray-500 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400', linkClassName) }
-      target={ target || (isExternalIconHref(safeHref) ? '_blank' : undefined) }
-      rel={ rel || (isExternalIconHref(safeHref) ? 'noopener noreferrer' : undefined) }
+      className={ cn('inline-flex items-center text-sm text-gray-500 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400', linkClassName) }
+      target={ target || (isExternalHref(safeHref) ? '_blank' : undefined) }
+      rel={ rel || (isExternalHref(safeHref) ? 'noopener noreferrer' : undefined) }
       href={ safeHref }
       aria-label={ accessibleLabel || iconName }
     >

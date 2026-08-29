@@ -10,9 +10,11 @@
  */
 
 import Typography from '../../../foundations/Typography';
+import { categoryHref } from '../../../utilities/taxonomy';
 import formatDate from '../../../utilities/formatDate';
 import Link from '../../core/Link';
 import Pill from '../../core/Pill';
+import DraftBadge from '../DraftBadge';
 
 /**
  * Enhanced clean post component
@@ -45,7 +47,7 @@ const Post = ({ frontMatter = {}, locale, titleAs = 'h3' }) => {
             {frontMatter.category && (
               <>
                 <span className='text-gray-300 dark:text-gray-600'>·</span>
-                <Pill href={ `/blog/categories/${frontMatter.category.replaceAll(' ', '-').toLowerCase()}` } tone='blue' variant='subtle' size='xs' radius='md' className='my-0 mr-0 normal-case tracking-normal capitalize'>
+                <Pill href={ categoryHref(frontMatter.category) } tone='blue' variant='subtle' size='xs' radius='md' className='my-0 mr-0 normal-case tracking-normal capitalize'>
                   {frontMatter.category}
                 </Pill>
               </>
@@ -54,8 +56,7 @@ const Post = ({ frontMatter = {}, locale, titleAs = 'h3' }) => {
             {frontMatter.draft && (
               <>
                 <span className='text-gray-300 dark:text-gray-600'>·</span>
-                <span className='h-2 w-2 rounded-full bg-yellow-500'></span>
-                <span className='text-xs font-medium text-yellow-600 dark:text-yellow-400'>Draft</span>
+                <DraftBadge />
               </>
             )}
           </div>

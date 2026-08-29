@@ -14,35 +14,11 @@ import { useEffect, useRef, useState } from 'react';
 
 import LatexText from '../LatexText';
 
+import { findBackLink as getBackLink, readCitationKeys as readJsonArray, registerPopoverClickHandler, setStoredCitation } from '../citations';
+
 import styles from './CitationPopover.module.css';
 
 const CITATION_TRIGGER_SELECTOR = '[data-citation-popover="true"]';
-
-const readJsonArray = (value) => {
-  if (!value) return [];
-
-  try {
-    const parsed = JSON.parse(value);
-
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
-
-const getBackLink = (citationKey) => {
-  const backLinks = document.querySelectorAll('a.citation-back-link[data-citation-key]');
-
-  return Array.from(backLinks).find((backLink) => backLink.dataset.citationKey === citationKey) || null;
-};
-
-const setStoredCitation = (citationKey, originCitationId) => {
-  try {
-    window.localStorage.setItem(`citation-last-${citationKey}`, originCitationId);
-  } catch {
-    // Storage can be unavailable in private or restricted browser contexts.
-  }
-};
 
 const normalizeCitationValue = (value, fallback = '') => {
   if (value === null || typeof value === 'undefined') return fallback;
@@ -368,9 +344,13 @@ const CitationPopover = () => {
     document.addEventListener('keydown', handleKeyDown, true);
     window.addEventListener('scroll', handleScroll, true);
 
+    // Tell the globally-mounted CitationTracker to stand down while this handler is live
+    const unregisterClickHandler = registerPopoverClickHandler();
+
     return () => {
       window.clearTimeout(bindTimer);
       observer.disconnect();
+      unregisterClickHandler();
 
       document.removeEventListener('pointerover', handlePointerOver, true);
       document.removeEventListener('pointerout', handlePointerOut, true);
