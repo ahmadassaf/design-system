@@ -1,7 +1,7 @@
 import { Controls, Description, Primary, Subtitle, Title } from '@storybook/addon-docs/blocks';
 
 import { HighlightedCode } from './HighlightedCode';
-import { GaudiLogo, Table } from './StoryDocs';
+import { Table } from './StoryDocs';
 
 const groupDocs = {
   'Blocks': {
@@ -974,7 +974,6 @@ const hasDistinctOverview = (docs) => Boolean(docs.overview && docs.overview.tri
 export const ComponentDocumentation = ({ docs }) => (
   <div className='sb-unstyled ds-docs-page'>
     <div className='ds-docs-title'>
-      <GaudiLogo className='h-8 w-8' />
       <h1>{docs.component}</h1>
     </div>
     <p><InlineText>{docs.description}</InlineText></p>
@@ -1038,7 +1037,6 @@ export const createComponentDocsPage = (docs, options = {}) => {
     <>
       <div className='sb-unstyled ds-docs-page'>
         <div className='ds-docs-title'>
-          <GaudiLogo className='h-8 w-8' />
           <div className='ds-docs-title-copy'><Title /></div>
         </div>
         <Subtitle />

@@ -157,7 +157,7 @@ export const Default = {
   name: 'Typography',
   'render': () => (
     <div className='max-w-6xl space-y-10 p-6 text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
-      <section className='max-w-3xl space-y-3'>
+      <section className='max-w-5xl space-y-3'>
         <Typography as='h1' variant='heading-xl'>Typography</Typography>
         <Typography variant='paragraph-lg'>
           The Gaudi typography scale is optimized for blog posts first: readable titles, calm subtitles, generous prose line-height, metadata that stays quiet, and compact UI text for cards.
@@ -192,20 +192,20 @@ export const Default = {
       </section>
 
       <section className='rounded-md border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900 md:p-8'>
-        <div className='mb-8 max-w-3xl space-y-4'>
+        <div className='mb-8 max-w-5xl space-y-4'>
           <Typography variant='metadata'>Blog Post Composition</Typography>
           <Typography as='h2' variant='post-title'>Design systems keep editorial rhythm predictable</Typography>
           <Typography variant='post-subtitle'>A focused typography stack makes articles easier to scan, read, and maintain across every post template.</Typography>
           <Typography variant='post-meta'>May 20, 2026 · 8 min read · Design Systems</Typography>
         </div>
-        <div className='max-w-3xl space-y-6'>
+        <div className='max-w-5xl space-y-6'>
           <Typography variant='prose-lead'>This is the lead paragraph pattern for article introductions. It should feel editorial, not oversized.</Typography>
           <Typography variant='paragraph-md'>The default paragraph rhythm uses a comfortable line-height for long-form reading. It is intentionally quieter than headings and works well with MDX prose.</Typography>
         </div>
       </section>
 
       <section className='space-y-4 rounded-md border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900'>
-        <div className='max-w-3xl space-y-3'>
+        <div className='max-w-5xl space-y-3'>
           <Typography as='h2' variant='heading-lg'>Canonical Recipes</Typography>
           <Typography variant='paragraph-md'>
             Start with these variants before opening the full catalog: <code>post-title</code> for article titles, <code>paragraph-md</code> for default prose, and <code>metadata</code> for dates, categories, and reading-time rows.
@@ -238,7 +238,7 @@ export const Default = {
       </section>
 
       <section className='space-y-6 rounded-md border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900'>
-        <div className='max-w-3xl space-y-3'>
+        <div className='max-w-5xl space-y-3'>
           <Typography as='h2' variant='heading-lg'>Typography Component API</Typography>
           <Typography variant='paragraph-md'>
             Typography is documented as a foundation because it defines the blog reading system. The importable primitive remains the public rendering API, and this page is the single Storybook source for its variants, tokens, usage, and accessibility expectations.

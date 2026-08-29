@@ -8,22 +8,6 @@ import Typography from '../../src/foundations/Typography';
 
 import { HighlightedCode } from './HighlightedCode';
 
-export const GaudiLogo = ({ className = '', decorative = false }) => (
-  <svg
-    viewBox='0 0 96 96'
-    className={ `block shrink-0 text-gray-950 dark:text-white ${className}` }
-    role={ decorative ? undefined : 'img' }
-    aria-label={ decorative ? undefined : 'Gaudi' }
-    aria-hidden={ decorative ? 'true' : undefined }
-    focusable='false'
-  >
-    <path
-      d='M24 10H88L79 28H24V10ZM8 28H24V62C24 66.4 27.6 70 32 70H72V88H28C16.95 88 8 79.05 8 68V28ZM32 42H88V66H42L32 42Z'
-      fill='currentColor'
-    />
-  </svg>
-);
-
 export const InlineCode = ({ children }) => (
   <code className='rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[0.8em] text-gray-800 dark:bg-gray-800 dark:text-gray-100'>{children}</code>
 );
@@ -80,14 +64,11 @@ const getTableColumnCount = (children) => {
   return columnCount;
 };
 
-export const Page = ({ children, intro, showLogo = true, title }) => (
+export const Page = ({ children, intro, title }) => (
   <div id='page-top' className='min-h-screen scroll-mt-4 bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
-    <div className='mx-auto w-full max-w-7xl space-y-10 px-6 py-8 sm:px-8 lg:px-10'>
-      <header className='max-w-3xl space-y-4'>
-        <div className='flex flex-wrap items-center gap-4'>
-          {showLogo ? <GaudiLogo className='h-16 w-16' /> : null}
-          <Typography as='h1' variant='heading-xl'>{title}</Typography>
-        </div>
+    <div className='mx-auto w-full space-y-10 px-4 py-8 sm:px-6 lg:px-8'>
+      <header className='max-w-5xl space-y-4'>
+        <Typography as='h1' variant='heading-xl'>{title}</Typography>
         {intro ? <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'><InlineText>{intro}</InlineText></p> : null}
       </header>
       {children}
@@ -106,7 +87,7 @@ export const Page = ({ children, intro, showLogo = true, title }) => (
 
 export const Section = ({ children, description, id, title }) => (
   <section id={ id || toSectionId(title) } className='scroll-mt-28 space-y-4'>
-    <div className='max-w-3xl space-y-2'>
+    <div className='max-w-5xl space-y-2'>
       <Typography variant='heading-lg'>{title}</Typography>
       {description ? <p className='text-sm leading-7 text-gray-600 dark:text-gray-300'><InlineText>{description}</InlineText></p> : null}
     </div>
@@ -118,7 +99,7 @@ export const CodeBlock = ({ code, language = 'jsx', wide = false }) => {
   const needsWideMeasure = wide || code.split('\n').some((line) => line.length > 96);
 
   return (
-    <div className={ needsWideMeasure ? 'max-w-full' : 'max-w-3xl' }>
+    <div className={ needsWideMeasure ? 'max-w-full' : 'max-w-5xl' }>
       <HighlightedCode code={ code } language={ language } />
     </div>
   );

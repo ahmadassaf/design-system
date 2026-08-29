@@ -44,7 +44,7 @@ const DemoPre = ({ children }) => (
 );
 
 const DemoCodeGroup = () => (
-  <div className='max-w-3xl'>
+  <div className='max-w-5xl'>
     <CodeGroupTabs />
     <div className='rehype-code-group'>
       <div className='rcg-tab-container' role='tablist' aria-label='Code language'>

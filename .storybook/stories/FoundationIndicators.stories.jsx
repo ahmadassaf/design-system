@@ -125,7 +125,7 @@ export const Default = {
   name: 'Indicators',
   'render': () => (
     <div className='max-w-5xl space-y-8 p-6 text-gray-900 dark:bg-gray-950 dark:text-gray-100'>
-      <section className='max-w-3xl space-y-3'>
+      <section className='max-w-5xl space-y-3'>
         <Typography as='h1' variant='heading-xl'>Indicators</Typography>
         <Typography variant='paragraph-lg'>
           Indicators communicate status. Text carries the meaning; color supports quick scanning.

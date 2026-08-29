@@ -15,7 +15,6 @@ export const Default = {
   name: 'Getting Started',
   'render': () => (
     <Page
-      showLogo
       title='Gaudi Design System'
       intro='Gaudi is the design system for the blog and related interface work. The source repository is ahmadassaf/design-system, while the package import name is @gaudi/design-system.'
     >
@@ -38,7 +37,7 @@ export const Default = {
       </Section>
 
       <Section title='Install And Import' description='The repository distribution targets React 19 and Next.js 15. Import the stylesheet once at the application root.'>
-        <p className='max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
+        <p className='max-w-5xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
           Package v{packageJson.version} installs from the default GitHub branch and exposes the stable <InlineCode>@gaudi/design-system</InlineCode> import name.
         </p>
         <CodeBlock
@@ -74,7 +73,7 @@ export default function RootLayout({ children }) {
             <tr><Td>Styles</Td><Td>Component styles and one intentional global stylesheet.</Td><Td>Page layout around Gaudi components, without copied components or broad overrides.</Td></tr>
           </tbody>
         </Table>
-        <p className='max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
+        <p className='max-w-5xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
           Contributors and agents should read <InlineCode>AGENTS.md</InlineCode>, search Storybook before adding UI, and run the documented checks before committing.
         </p>
       </Section>

@@ -19,8 +19,8 @@
 }
 
 .ds-docs-page {
-  max-width: 1280px;
-  padding: 40px 56px;
+  max-width: none;
+  padding: 40px 32px;
   color: var(--ds-color-text);
 }
 
@@ -161,7 +161,7 @@
   }
 
   .ds-docs-page {
-    padding: 32px 24px;
+    padding: 32px 16px;
   }
 
   .ds-docs-section .sbdocs-preview > div:first-child button,

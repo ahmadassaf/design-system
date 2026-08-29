@@ -97,7 +97,7 @@ export const Default = {
 } from '@gaudi/design-system';
 
 import LayoutContainer from '@gaudi/design-system/layout/LayoutContainer';` } />
-        <p className='max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
+        <p className='max-w-5xl text-sm leading-7 text-gray-600 dark:text-gray-300'>
           Do not add <InlineCode>LayoutContainer</InlineCode> to the shared barrel: it imports <InlineCode>next/headers</InlineCode> and would make otherwise client-safe exports server-only.
         </p>
       </Section>

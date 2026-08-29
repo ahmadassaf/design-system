@@ -351,7 +351,7 @@ const Section = ({ children, collapsible = false, description, id, title }) => {
   if (collapsible) return (
     <details id={ id } className='group scroll-mt-28 border-t border-gray-200 dark:border-gray-800'>
       <summary className='flex min-h-11 cursor-pointer list-none items-start justify-between gap-4 py-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600'>
-        <div className='max-w-3xl space-y-2'>
+        <div className='max-w-5xl space-y-2'>
           <Typography variant='heading-lg'>{title}</Typography>
           {description && <Typography variant='paragraph-md'><InlineText>{description}</InlineText></Typography>}
         </div>
@@ -363,7 +363,7 @@ const Section = ({ children, collapsible = false, description, id, title }) => {
 
   return (
     <section id={ id } className='scroll-mt-28 space-y-4'>
-      <div className='max-w-3xl space-y-2'>
+      <div className='max-w-5xl space-y-2'>
         <Typography variant='heading-lg'>{title}</Typography>
         {description && <Typography variant='paragraph-md'><InlineText>{description}</InlineText></Typography>}
       </div>

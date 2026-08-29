@@ -183,7 +183,7 @@ const chartData = [
   { 'label': 'Fri', 'readTime': 9, 'subscribers': 14, 'views': 194 }
 ];
 
-const ExampleFrame = ({ children, width = 'max-w-3xl' }) => (
+const ExampleFrame = ({ children, width = 'max-w-5xl' }) => (
   <div className={ `${width} rounded-lg border border-gray-200 bg-white p-6 text-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100` }>
     {children}
   </div>
@@ -597,7 +597,7 @@ const renderPostExample = (name, componentModule) => {
   case 'PostNavigation':
     return <ExampleFrame><Component prev={{ 'slug': 'previous-post', 'title': 'Previous post title' }} next={{ 'slug': 'next-post', 'title': 'Next post title' }} /></ExampleFrame>;
   case 'PostSeriesBox':
-    return <ExampleFrame width='max-w-3xl'><Component series={ series } slug='components' /></ExampleFrame>;
+    return <ExampleFrame width='max-w-5xl'><Component series={ series } slug='components' /></ExampleFrame>;
   case 'PostSharing':
     return <ExampleFrame><Component siteMetadata={ siteMetadata } slug='design-systems' title='Design systems keep editorial rhythm predictable' tags={ [ 'design systems', 'react' ] } externalLink='engineering/design-systems' /></ExampleFrame>;
   case 'TableOfContents':
