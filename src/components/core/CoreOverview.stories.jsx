@@ -13,7 +13,7 @@ export default {
 const primaryTasks = [
   [ 'Act and navigate', 'Button, Link, Breadcrumb, Pagination', 'Match the semantic element to the job: buttons change state, links change location.', 'core-button--docs' ],
   [ 'Collect and choose', 'Field, Select, Checkbox, Switch', 'Use persistent labels, visible state, and bounded choices before custom form composition.', 'core-field--docs' ],
-  [ 'Communicate state', 'Banner, Badge, Spinner, Skeleton', 'Use text-first feedback and recovery so color never carries meaning alone.', 'core-banner--docs' ],
+  [ 'Communicate state', 'Banner, Pill, Spinner, Skeleton', 'Use text-first feedback and recovery so color never carries meaning alone.', 'core-banner--docs' ],
   [ 'Organize and reveal', 'Card, Grid, DataTable, Accordion, Popover, CmdLauncher', 'Choose structure, comparison, or disclosure from the smallest component that preserves context.', 'core-card--docs' ]
 ];
 

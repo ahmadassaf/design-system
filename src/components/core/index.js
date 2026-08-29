@@ -1,9 +1,8 @@
 export { default as Accordion, AccordionContent, AccordionGroup, AccordionItem, AccordionTrigger } from './Accordion';
 export { default as Avatar, avatarVariants } from './Avatar';
-export { default as Badge, badgeVariants } from './Badge';
 export { default as Banner, bannerVariants } from './Banner';
 export { default as Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbTrail } from './Breadcrumb';
-export { default as Button, buttonSizes, buttonToneAliases, buttonTones, variants as ButtonVariants, buttonVariants } from './Button';
+export { default as Button, buttonSizes, buttonToneAliases, buttonTones, buttonVariants } from './Button';
 export { default as Card, cardVariants } from './Card';
 export { default as Carousel, carouselCardVariants, carouselSlideVariants, carouselVariants } from './Carousel';
 export { default as Checkbox } from './Checkbox';
@@ -13,7 +12,6 @@ export { default as DataTable } from './DataTable';
 export { default as DialogPortal } from './DialogPortal';
 export { default as Field, FieldDescription, FieldError, FieldInput, FieldLabel } from './Field';
 export { Grid, GridItem, gridItemVariants, gridVariants } from './Grid';
-export { default as HoverCard, HoverCardContent, HoverCardTrigger } from './HoverCard';
 export { default as Icon } from './Icon';
 export { default as Kbd, kbdVariants } from './Kbd';
 export { default as Link, linkVariants } from './Link';

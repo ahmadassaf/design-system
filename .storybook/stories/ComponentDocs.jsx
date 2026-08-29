@@ -117,7 +117,6 @@ const usageExamples = {
   'Core/DataTable': "import { DataTable } from '@gaudi/design-system';\n\n<DataTable\n  columns={[{ key: 'component', header: 'Component' }]}\n  rows={[{ component: 'Button' }]}\n/>",
   'Core/Field': "import { Field, FieldDescription, FieldInput, FieldLabel } from '@gaudi/design-system';\n\n<Field>\n  <FieldLabel htmlFor='email'>Email</FieldLabel>\n  <FieldInput id='email' type='email' />\n  <FieldDescription>Used for article updates only.</FieldDescription>\n</Field>",
   'Core/Grid': "import { Grid, GridItem } from '@gaudi/design-system';\n\n<Grid columns='3' gap='md'>\n  <GridItem title='Tokens' description='Color, type, spacing, and shape definitions.' />\n</Grid>",
-  'Core/HoverCard': "import { Button, HoverCard } from '@gaudi/design-system';\n\n<HoverCard trigger={<Button variant='soft' tone='neutral'>Knowledge graphs</Button>}>\n  Graph-shaped context for concepts and sources.\n</HoverCard>",
   'Core/Icon': "import { Icon } from '@gaudi/design-system';\n\n<Icon name='Info' label='More information' color='primary' size='lg' />",
   'Core/Kbd': "import { Kbd } from '@gaudi/design-system';\n\n<Kbd keys='command,shift,k' size='sm' variant='raised' />",
   'Core/Link': "import { Link } from '@gaudi/design-system';\n\n<Link href='/blog' variant='inline' tone='blue'>Read the blog</Link>",
@@ -614,17 +613,6 @@ const componentDocs = {
       [ 'classNames', '{ root, body, title, description }', '-', 'GridItem slot overrides.' ]
     ]
   },
-  'Core/HoverCard': {
-    'accessibility': 'HoverCard uses Radix hover-card behavior. Trigger content must have a readable name and the panel should contain supporting, non-critical content.',
-    'description': 'HoverCard reveals supplemental content from a labelled trigger.',
-    'props': [
-      [ 'trigger', 'ReactNode', '-', 'Trigger passed to HoverCardTrigger as child.' ],
-      [ 'content', 'ReactNode', '-', 'Convenience panel content for the default export.' ],
-      [ 'children', 'ReactNode', '-', 'Panel content for HoverCardContent or custom composition.' ],
-      [ 'sideOffset', 'number', '8', 'Offset between trigger and panel.' ],
-      [ 'className', 'string', '-', 'Content/root class override depending on slot.' ]
-    ]
-  },
   'Core/Icon': {
     'accessibility': 'Decorative icons are hidden from assistive technology. Informative or icon-only links need a readable label.',
     'decisionRules': [
@@ -708,7 +696,6 @@ const componentDocs = {
     'accessibility': 'Pill includes visible text so status or category meaning is not color-only.',
     'decisionRules': [
       'Use Pill for compact metadata, tags, filters, and status labels.',
-      'Use Badge when the label is a secondary status inside another component.',
       'Keep the visible label as the source of meaning; color only supports scanning.'
     ],
     'description': 'Pill renders compact category and status labels.',
