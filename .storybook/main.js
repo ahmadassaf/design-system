@@ -39,18 +39,16 @@ const storybookCodeSplittingGroups = [
     'priority': 90,
     'test': /[\\/]node_modules[\\/]lucide-react[\\/]/
   },
+  /*
+   * The Storybook runtime carries module state (e.g. the storybook/test
+   * focus accessor installed behind a module-scoped guard), so it must not
+   * be duplicated into per-entry chunk variants: `entriesAware` produced
+   * several copies of the same modules, and a second copy's init read the
+   * first copy's accessor with `this === HTMLElement.prototype`, throwing
+   * "Illegal invocation". Plain size-based splitting keeps every module in
+   * exactly one shared chunk.
+   */
   {
-    'entriesAware': true,
-    'entriesAwareMergeThreshold': 12 * 1024,
-    'maxSize': storybookVendorChunkTarget,
-    'minSize': 0,
-    'name': 'vendor-storybook-blocks',
-    'priority': 80,
-    'test': /[\\/]node_modules[\\/](@storybook[\\/]blocks|storybook[\\/]internal[\\/]blocks)[\\/]/
-  },
-  {
-    'entriesAware': true,
-    'entriesAwareMergeThreshold': 12 * 1024,
     'maxSize': storybookVendorChunkTarget,
     'minSize': 0,
     'name': 'vendor-storybook',

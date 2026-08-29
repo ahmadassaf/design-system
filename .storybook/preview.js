@@ -9,6 +9,39 @@ import tokenData from '../src/tokens/tokens.json';
 import siteMetadata from './fixtures/site/metadata';
 import navigationMetadata from './fixtures/site/navigationMetadata.mjs';
 
+/*
+ * Workaround for a Storybook bug (storybook/test's enhanceContext loader):
+ * it replaces HTMLElement.prototype.focus with an accessor whose getter calls
+ * `this.ownerDocument`. Reading `HTMLElement.prototype.focus` off the
+ * prototype itself (react-aria's focus-visible polyfill, bundled into the
+ * preview via storybook/internal/components, does exactly that) then throws
+ * "TypeError: Illegal invocation" and the story fails to render.
+ *
+ * The loader below runs after Storybook's (project annotations compose
+ * addons first, this file last) and re-wraps the accessor with a getter that
+ * returns the captured native focus for prototype receivers while delegating
+ * element reads to Storybook's instrumentation unchanged.
+ */
+const nativeFocus = typeof HTMLElement !== 'undefined' ? HTMLElement.prototype.focus : undefined;
+
+function makeFocusAccessorPrototypeSafe() {
+  if (typeof HTMLElement === 'undefined') return;
+
+  const descriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'focus');
+
+  if (!descriptor?.get || descriptor.get.__prototypeSafe) return;
+
+  const { get, set } = descriptor;
+  const safeGet = function () {
+    if (this === HTMLElement.prototype) return nativeFocus;
+
+    return get.call(this);
+  };
+
+  safeGet.__prototypeSafe = true;
+  Object.defineProperty(HTMLElement.prototype, 'focus', { configurable: true, get: safeGet, set });
+}
+
 const STORYBOOK_THEME_CLASSES = [ 'dark' ];
 const STORYBOOK_BACKGROUNDS = {
   'dark': tokenData.dsVariables.root['--ds-color-surface-dark'],
@@ -72,6 +105,7 @@ const preview = {
   initialGlobals: {
     theme: 'light'
   },
+  loaders: [ makeFocusAccessorPrototypeSafe ],
   parameters: {
     a11y: {
       options: {
