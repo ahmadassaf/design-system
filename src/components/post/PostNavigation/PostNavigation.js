@@ -9,6 +9,7 @@
  * @version 1.0.0
  */
 
+import Icon from '../../core/Icon';
 import Link from '../../core/Link';
 
 /**
@@ -48,41 +49,43 @@ const PostNavigation = ({ headingLevel = 2, next, prev, type = 'Post' }) => {
   const label = isThought ? 'Thought' : 'Article';
   const Heading = headingElements[headingLevel] || headingElements[2];
 
+  if (!next && !prev) return null;
+
   return (
-    <div className='divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700'>
-      {(next || prev) && (
-        <div className='flex max-sm:flex-col'>
-          {prev && (
-            <Link
-              className='group block w-1/2 py-4 pr-4 max-sm:w-full max-sm:px-0 max-sm:py-2'
-              href={ `${baseUrl}/${prev.slug}` }
-              variant='bare'
-            >
-              <Heading className='text-xs uppercase text-gray-500 dark:text-gray-400'>
-                Previous {label}
-              </Heading>
-              <div className='text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
-                {prev.title}
-              </div>
-            </Link>
-          )}
-          {next && (
-            <Link
-              className={ `group block w-1/2 py-4 pl-4 max-sm:ml-0 max-sm:w-full max-sm:px-0 max-sm:py-2 ${prev ? '' : 'ml-auto'}` }
-              href={ `${baseUrl}/${next.slug}` }
-              variant='bare'
-            >
-              <Heading className='text-xs uppercase text-gray-500 dark:text-gray-400'>
-                Next {label}
-              </Heading>
-              <div className='text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
-                {next.title}
-              </div>
-            </Link>
-          )}
-        </div>
-      )}
-    </div>
+    <nav aria-label={ `${label} navigation` } className='mt-10 border-t border-border-muted pt-2 text-sm font-medium leading-5 dark:border-border-dark'>
+      <div className='flex justify-between gap-6 max-sm:flex-col max-sm:gap-0'>
+        {prev && (
+          <Link
+            className='group block max-w-[46%] py-4 max-sm:max-w-full max-sm:py-3'
+            href={ `${baseUrl}/${prev.slug}` }
+            variant='bare'
+          >
+            <Heading className='mb-1 flex items-center gap-1.5 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+              <Icon name='ArrowLeft' decorative size='xs' className='transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none' />
+              Previous {label}
+            </Heading>
+            <span className='block font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400'>
+              {prev.title}
+            </span>
+          </Link>
+        )}
+        {next && (
+          <Link
+            className='group ml-auto block max-w-[46%] py-4 text-right max-sm:ml-0 max-sm:max-w-full max-sm:py-3 max-sm:text-left'
+            href={ `${baseUrl}/${next.slug}` }
+            variant='bare'
+          >
+            <Heading className='mb-1 flex items-center justify-end gap-1.5 text-xs uppercase tracking-wide text-gray-500 max-sm:justify-start dark:text-gray-400'>
+              Next {label}
+              <Icon name='ArrowRight' decorative size='xs' className='transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none' />
+            </Heading>
+            <span className='block font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400'>
+              {next.title}
+            </span>
+          </Link>
+        )}
+      </div>
+    </nav>
   );
 };
 

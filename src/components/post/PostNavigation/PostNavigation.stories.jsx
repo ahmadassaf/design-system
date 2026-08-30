@@ -32,8 +32,8 @@ export const Example = {
     await expect(nextLink).toHaveAttribute('href', '/blog/next-post');
     await expect(previousLink).toHaveClass('block');
     await expect(nextLink).toHaveClass('block');
-    await expect(previousLink).toHaveClass('w-1/2');
-    await expect(nextLink).toHaveClass('w-1/2');
+    await expect(nextLink).toHaveClass('text-right');
+    await expect(canvasElement.querySelector('nav[aria-label="Article navigation"]')).toBeVisible();
   },
   'render': () => renderComponentExample('Post/PostNavigation', componentModule)
 };
