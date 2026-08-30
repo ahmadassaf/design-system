@@ -52,7 +52,7 @@ const PostNavigation = ({ headingLevel = 2, next, prev, type = 'Post' }) => {
   if (!next && !prev) return null;
 
   return (
-    <nav aria-label={ `${label} navigation` } className='mt-10 border-t border-border-muted pt-2 text-sm font-medium leading-5 dark:border-border-dark'>
+    <nav aria-label={ `${label} navigation` } className='mt-10 text-sm font-medium leading-5'>
       <div className='flex justify-between gap-6 max-sm:flex-col max-sm:gap-0'>
         {prev && (
           <Link
