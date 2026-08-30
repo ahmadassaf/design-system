@@ -1,6 +1,6 @@
 {
   "name": "@gaudi/design-system",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Gaudi design system package for the blog, themes, plugins, and reusable interface work.",
   "type": "module",
   "publishConfig": {
